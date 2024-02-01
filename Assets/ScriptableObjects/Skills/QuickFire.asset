@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26a0f7607b3fe9c4f825e10fd91e95af, type: 3}
+  m_Name: QuickFire
+  m_EditorClassIdentifier: 
+  skillName: Quickfire
+  desc: Shoot an arrow, dealing 15 damage to the first enemy hit.
+  passThrough: 0
+  goThroughWalls: 0
+  projectilePath: 0
+  howManyTiles: 99
