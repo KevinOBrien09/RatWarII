@@ -10,11 +10,10 @@ public class CharacterGraphic : MonoBehaviour
     public GenericDictionary<Job, GenericDictionary<ColourVarient,GameObject>> varients = new GenericDictionary<Job,GenericDictionary<ColourVarient, GameObject>>();
     public GenericDictionary<SpriteRenderer,int> rendDict = new GenericDictionary<SpriteRenderer,int>();
     public Camera cam;
+    public Unit unit;
    
     public void Init(Character c)
     {
-      
-        
         Orginize(c);
         CharacterGraphic iconClone = Instantiate(this);
         iconClone.Orginize(c);
@@ -22,8 +21,16 @@ public class CharacterGraphic : MonoBehaviour
         iconClone.gameObject.name = character.characterName.fullName() + ": IconClone";
         cam = iconClone.cam;
         IconGraphicHolder.inst.Take(iconClone);
-       
-     
+    }
+
+    public void EnemyInit(Enemy e){
+        
+        CharacterGraphic iconClone = Instantiate(this);
+    
+      
+        iconClone.gameObject.name = character.characterName.fullName() + ": IconClone";
+        cam = iconClone.cam;
+        IconGraphicHolder.inst.Take(iconClone);
     }
     public void Orginize(Character c)
     {

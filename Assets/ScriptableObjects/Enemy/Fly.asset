@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71ae1edd25ffbce4cb2dac16f9bb65a2, type: 3}
+  m_Name: Fly
+  m_EditorClassIdentifier: 
+  ID: 2e5bd203-a477-4db1-90e8-2ea96594b7e5
+  names:
+  - Fly
+  tagLine: WORKER FLY
+  startingStats: {fileID: 11400000, guid: b794fe432e7e1234fbd485af6d61b537, type: 2}
+  characterGraphic: {fileID: 1875858896460908558, guid: e2f06924009dac446a053dc5ac0fdcf2,
+    type: 3}

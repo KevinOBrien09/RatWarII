@@ -22,5 +22,5 @@ public class ScriptableObjectIdDrawer : PropertyDrawer {
 
 public class GUIDScriptableObject : ScriptableObject 
 {
-    [ScriptableObjectId] public string Id;
+    [ScriptableObjectId] public string ID;
 }

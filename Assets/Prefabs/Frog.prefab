@@ -202,6 +202,7 @@ MonoBehaviour:
     exp:
       level: 1
     colourVarient: 0
+    skills: []
   jobParents:
     list:
     - Key: 0

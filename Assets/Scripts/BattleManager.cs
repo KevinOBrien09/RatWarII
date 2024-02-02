@@ -11,14 +11,19 @@ public class BattleManager : Singleton<BattleManager>
     public Unit currentUnit;
     public int turn;
     public Queue<Unit> turnOrder = new Queue<Unit>();
-    public CharacterGraphic fly;
-    void Start()
+    public List<Enemy> enemies = new List<Enemy>();
+    IEnumerator Start()
     {
-        CreatePlayerUnit(248);
-        CreatePlayerUnit(239);
-        CreatePlayerUnit(99);
-        CreatePlayerUnit(89);
- 
+        yield return new WaitForEndOfFrame();
+        List<Slot> shuffle = MapManager.inst.StartingRadius();
+      
+        for (int i = 0; i < 4; i++)
+        {CreatePlayerUnit(shuffle[i]);}
+
+        for (int i = 0; i < 4; i++)
+        {CreateEnemyUnit(MapManager.inst.RandomSlot());}
+      
+        ToggleHealthBars(false);
         NewTurn();
     }
 
@@ -72,6 +77,8 @@ public class BattleManager : Singleton<BattleManager>
                 }
                 else
                 {
+                       yield return new WaitForSeconds(.25f);
+                       UnitIteration();
                     //AI
                 }
             }
@@ -89,30 +96,48 @@ public class BattleManager : Singleton<BattleManager>
         return "Turn:" + turn.ToString()+"-"+XD.ToString();
     }
 
-    public Unit CreatePlayerUnit(int slot)
+    public Unit CreatePlayerUnit(Slot slot)
     {
-        Unit u =  CreateUnit(slot);
-        u.side = Side.PLAYER;
+        Unit u =  CreateUnit(slot,CharacterBuilder.inst.Generate(),Side.PLAYER);
+      
         playerUnits.Add(u);
+         MapManager.inst.grid.UpdateGrid();
         return u;
+    }
+
+    public Unit CreateEnemyUnit(Slot slot){
+        Enemy e =enemies[Random.Range(0,enemies.Count)] ;
+        Unit u =  CreateUnit(slot, CharacterBuilder.inst.GenerateEnemy(e),Side.ENEMY);
+        u.enemy = e;
+        enemyUnits.Add(u);
+         MapManager.inst.grid.UpdateGrid();
+        return u;
+    }
+
+    public void ToggleHealthBars(bool state)
+    {
+        foreach (var item in allUnits())
+        {item.healthBar.gameObject.transform.parent.gameObject. SetActive(state);}
     }
 
   
 
-    Unit CreateUnit(int i)
+    Unit CreateUnit(Slot slot,CharacterGraphic characterGraphic,Side side)
     {
         Unit u = Instantiate(unitPrefab);
-        CharacterGraphic characterGraphic = CharacterBuilder.inst.Generate();
+        characterGraphic.unit = u;
+        u.side = side;
+        CharacterBuilder.inst.GenerateStatsAndSkills(  characterGraphic.character);
+      
         u.RecieveGraphic(characterGraphic);
-        u.currentHP = u.stats().hp;
-        // u.character.baseStats = new Stats();
-        // u.character.baseStats.speed = (int)Random.Range(1,10);
-        Slot s = MapManager.inst.slots[i];
-        u.transform.position = new Vector3(s.transform.position.x,u.transform.position.y,s.transform.position.z);
-        u.Reposition(s);
-        s.unit = u;  
+        u.health.Init(u.stats().hp);
+       
+        
+        u.transform.position = new Vector3(slot.transform.position.x,u.transform.position.y,slot.transform.position.z);
+        u.Reposition(slot);
+        slot.unit = u;  
         u.gameObject.name = characterGraphic.character.characterName.fullName();
-        MapManager.inst.grid.UpdateGrid();
+       
         return u;          
     }
 

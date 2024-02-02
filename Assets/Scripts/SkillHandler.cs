@@ -43,6 +43,9 @@ public class SkillHandler : Singleton<SkillHandler>
               
             if(InputManager.inst.player.GetButtonDown("Cancel"))
             { 
+                if(SkillAimer.inst.castDecided){
+                    return;
+                }
                 if(!SkillAimer.inst.aiming )
                 { Close(); }
                 else{ SkillAimer.inst.Leave(); }

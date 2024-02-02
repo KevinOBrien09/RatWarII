@@ -10,8 +10,9 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
     public TextMeshProUGUI charName,hp,speciesClass,level;
     public TextMeshProUGUI speed,moveRange;
     public RawImage icon;
-   public Vector2 shown,hidden;
- public   RectTransform rt;
+    public Vector2 shown,hidden;
+    public RectTransform rt;
+    public HealthBar healthBar;
     void Start()
     {
         Disable();
@@ -29,7 +30,9 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             rt.DOAnchorPos(hidden,0);
             rt.DOAnchorPos(shown,.2f);
             }
-           
+             healthBar.gameObject.SetActive(true);
+            healthBar.health = slot.unit.health;
+            healthBar.Refresh();
 
             if( ! GameManager.inst.checkGameState(GameState.PLAYERUI)) 
             {
@@ -45,9 +48,15 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             Unit u = slot.unit;
             Character c = slot.unit.character;
             charName.text = c.characterName.fullName();
-            hp.text = "HP:"+ u.currentHP.ToString()+ "/" + u.stats().hp.ToString();
+            hp.text = "HP:"+ u.health.currentHealth.ToString()+ "/" + u.stats().hp.ToString();
             level.text = c.exp.level.ToString();
-            speciesClass.text = c.job.ToString() + " "+ c.species.ToString();
+            if(slot.unit.side == Side.PLAYER){
+                speciesClass.text = c.job.ToString() + " "+ c.species.ToString();
+            }
+            else{
+                  speciesClass.text = slot.unit.enemy.tagLine;
+            }
+           
             speed.text = "SPEED:" + u.stats().speed.ToString();
             moveRange.text = "MOVE:" + u.stats().moveRange.ToString();
             icon.gameObject.SetActive(true);
@@ -68,7 +77,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 else
                 {CamFollow.inst.Focus(slot.transform,()=>{});}
             }
-            
+            healthBar.gameObject.SetActive(false);
             charName.text = "Empty Slot";
             hp.text = string.Empty;
             level.text = "0";
@@ -81,10 +90,11 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
     }
 
     public void Disable(){
-          rt.DOAnchorPos(hidden,.2f).OnComplete(()=>{
-
-  gameObject.SetActive(false);
-          });
+        healthBar.health = null;
+        rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
+        {
+            gameObject.SetActive(false);
+        });
 
     }
 

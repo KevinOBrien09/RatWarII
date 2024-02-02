@@ -11,15 +11,20 @@ public class Unit : MonoBehaviour
     public Slot slot;
     public SpriteRenderer spriteRenderer;
     public GameObject activeUnitIndicator;
-    public int currentHP;
+    public Health health;
+    public HealthBar healthBar;
     public Stats statMods;
     public Side side;
+    public Enemy enemy;
     
     public void RecieveGraphic(CharacterGraphic _graphic)
     {
         graphic = _graphic;
         graphic.transform.parent = this.transform;
-        graphic.transform.localPosition = new Vector3(0,-2.25f,0);
+        if(_graphic.unit.side == Side.PLAYER){
+    graphic.transform.localPosition = new Vector3(0,-2.25f,0);
+        }
+    
         graphic.transform.localRotation = Quaternion.Euler(0,0,0);
         character = graphic.character;
     }
@@ -38,9 +43,11 @@ public class Unit : MonoBehaviour
                 {
                     bool movingRight = transform.position.x <= v.x ;
                     if(movingRight)
-                    {transform.localScale = Vector3.one; }
+                    {transform.localScale = Vector3.one; 
+                    healthBar.transform.parent. localScale = new Vector3(1,1,1);}
                     else
-                    { transform.localScale = new Vector3(-1,1,1); }
+                    { transform.localScale = new Vector3(-1,1,1); 
+                    healthBar.transform.parent.localScale = new Vector3(-1,1,1);}
                 }
              
 

@@ -163,7 +163,7 @@ public class Grid_ : MonoBehaviour
 
                 if (n.isBlocked)
                 {
-                    Gizmos.DrawCube(n.vPosition, Vector3.one * (fNodeDiameter - fDistanceBetweenNodes));//Draw the node at the position of the node.
+                    Gizmos.DrawWireCube(n.vPosition, Vector3.one * (fNodeDiameter - fDistanceBetweenNodes));//Draw the node at the position of the node.
                 }
                 else
                 {

@@ -9,8 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d49600c29cad9d145b16f234fda6ce52, type: 3}
+  m_Script: {fileID: 11500000, guid: 2c603b92c96daa24088b1e84b0cbbbdd, type: 3}
   m_Name: Skip
   m_EditorClassIdentifier: 
+  ID: 718ac21d-535f-41ac-856e-cb018cfa695c
   skillName: Wait
-  desc: Skip the turn.
+  desc: Skips the turn.
+  effects:
+  - {fileID: 11400000, guid: cc44ba748b88f2848ac519f7a464d95f, type: 2}
+  side: 0

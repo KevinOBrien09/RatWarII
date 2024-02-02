@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c603b92c96daa24088b1e84b0cbbbdd, type: 3}
-  m_Name: HocusPocus
+  m_Script: {fileID: 11500000, guid: ffa5ff9dd15893c45b0be18781db98f6, type: 3}
+  m_Name: Strike
   m_EditorClassIdentifier: 
-  ID: 35433542-3142-45a9-b3d4-93096ef99883
-  skillName: Hocus Pocus
-  desc: Grant the caster a 15HP shield.
+  ID: d6bf4a4c-6af8-42e8-a16f-6310278651c7
+  skillName: Strike
+  desc: Deal 25 damage to a target.
   effects: []
-  side: 0
+  side: 1
+  radius: 2

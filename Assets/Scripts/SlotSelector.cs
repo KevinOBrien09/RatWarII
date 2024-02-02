@@ -26,6 +26,23 @@ public class SlotSelector : Singleton<SlotSelector>
             if(!SkillAimer.inst.validSlots.Contains(s)){
                 return;
             }
+            else{
+                if(s.unit != null){
+                    if(s.unit.side == Side.ENEMY){
+                    ChangeColour(Color.red); 
+                    }
+                    else{
+                    ChangeColour(Color.cyan); 
+                    }
+              
+                }
+                else{
+                      ChangeColour(Color.white);
+                   
+                }
+            }
+            transform.position = s.border.transform.position;
+            return;
         }
 
         // if(currentSlot != null)

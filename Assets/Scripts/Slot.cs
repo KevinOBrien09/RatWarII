@@ -44,7 +44,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
         return slots;
     }
 
-    public List<Slot> peewee(List<Slot> candidates,List<Slot> slots)
+    public List<Slot> peewee(List<Slot> candidates,List<Slot> slots,bool skill)
     {
         foreach (var item in GetNeighbouringSlots())
         {
@@ -52,11 +52,24 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
             {
                 if(!slots.Contains(item))
                 {
-                    if(item.unit == null && !item.node.isBlocked)
+                    if(skill)
                     {
-                        slots.Add(item);
-                        item.peewee(candidates,slots);
+                        // if(item.unit == null)
+                        // {
+                            slots.Add(item);
+                            item.peewee(candidates,slots,skill);
+                     //   }
+                       
                     }
+                    else
+                    {
+                        if(item.unit == null && !item.node.isBlocked)
+                        {
+                            slots.Add(item);
+                            item.peewee(candidates,slots,skill);
+                        }
+                    }
+                   
                 }
             }
         }
@@ -75,11 +88,17 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
             bool v = item.TryGetComponent<Slot>(out s);
             if(v)  
             {
+                if(!skill){
                 if(!s.node.isBlocked && s.unit == null)
                 {candidateSlots.Add(s);}
+                }
+                else{
+                    candidateSlots.Add(s);
+                }
+               
             }
         }
-        List<Slot> ss = new List<Slot>(peewee(candidateSlots,new List<Slot>()));
+        List<Slot> ss = new List<Slot>(peewee(candidateSlots,new List<Slot>(),skill));
         if(skill)
         {goto end; }
         foreach (var item in MapManager.inst.slots)
@@ -111,6 +130,10 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
             
         }
         end:
+        if(ss.Contains(this)){
+  ss.Remove(this);
+        }
+      
         return ss;
     }
 
@@ -204,21 +227,30 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
     {
         if(GameManager.inst.checkGameState(GameState.UNITMOVE))
         {return;}
+        if(SkillAimer.inst.castDecided)
+        {return;}
 
         if(eventData.button == PointerEventData.InputButton.Left)
         {
-            if(SkillAimer.inst.aiming){
+            if(SkillAimer.inst.aiming)
+            {
+                if(this.unit != null){
                 SkillAimer.inst.RecieveSlot(this);
+                }
+               
             }
             else{
                 if(unit != null)
                 {
-                    if(!GameManager.inst.checkGameState(GameState.PLAYERUI))
+                    if(!GameManager.inst.checkGameState(GameState.PLAYERUI) )
                     {
                         if(!GameManager.inst.checkGameState(GameState.PLAYERSELECT))   
                         {
                             if(unit == BattleManager.inst.currentUnit)
                             {
+                                if(ActionMenu.inst.currentState == ActionMenu.ActionMenuState.ROAM){
+                                    return;
+                                }
                                 if(!ActionMenu.inst.open)
                                 {ActionMenu.inst.Show(this); }
                             }

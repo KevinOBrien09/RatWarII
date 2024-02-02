@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26a0f7607b3fe9c4f825e10fd91e95af, type: 3}
   m_Name: QuickFire
   m_EditorClassIdentifier: 
+  ID: c7c54216-da53-491d-b961-91f8224254c4
   skillName: Quickfire
   desc: Shoot an arrow, dealing 15 damage to the first enemy hit.
+  effects: []
+  side: 1
   passThrough: 0
   goThroughWalls: 0
   projectilePath: 0

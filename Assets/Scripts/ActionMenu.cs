@@ -99,7 +99,9 @@ public class ActionMenu : Singleton<ActionMenu>
             }
             
             if(currentState == ActionMenuState.ROAM && !open){
-                if(InputManager.inst.player.GetButtonDown("Cancel")) {
+                if(InputManager.inst.player.GetButtonDown("Cancel"))
+                {
+                  //  if(SkillAimer.inst.)
                     GameManager.inst.ChangeGameState(GameState.PLAYERUI);
                     Show(slot);
                 }

@@ -9,32 +9,8 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     public GenericDictionary<Species,Names> nameDict = new GenericDictionary<Species,Names>();
     public GenericDictionary<Species,CharacterGraphic> graphicDict = new GenericDictionary<Species, CharacterGraphic>();
     public GenericDictionary<Job,StartingStats> jobDict = new GenericDictionary<Job,StartingStats>();
-    public CharacterGraphic currentChar;
-    public TextMeshProUGUI charNameTxt;
     public Skill skipSkill;
-    public Character character;
-    public bool DEBUG;
-    void Start(){
-        if(DEBUG){
-            character =  Generate().character;
-            charNameTxt.text = character.characterName.fullName();
-        }
-     
-    
-    }
-
-    void Update()
-    {
-        if(DEBUG){
-            if(Input.GetKeyDown(KeyCode.Space)){
-                Destroy(currentChar.gameObject);
-            character =  Generate().character;
-            charNameTxt.text = character.characterName.fullName();
-            }
-        }
-       
-    }
-
+  
     public CharacterGraphic Generate()
     {
         Character character = new Character();
@@ -44,14 +20,32 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         character.exp.level = 1;
         character.gender = GetGender();   
         character.colourVarient = MiscFunctions.RandomEnumValue<ColourVarient>();
-        character.baseStats = genStats(character);
-        character.skills = genSkills(character);
+        //GenerateStatsAndSkills(character);
         CharacterGraphic cg =  Instantiate(graphicDict[character.species],Vector3.zero,Quaternion.identity);
         character.characterName = nameDict[character.species].GenName(character);
         cg.Init(character);
         cg.character = character;
         //currentChar = cg;
         return cg;
+    }
+
+    public CharacterGraphic GenerateEnemy(Enemy e){
+        Character character = new Character();
+        character.exp = new EXP();
+        character.exp.level = 1;
+        character.gender = GetGender(); 
+        CharacterGraphic cg =  Instantiate(e.characterGraphic);
+        character.characterName = new CharacterName();
+        character.characterName.firstName = e.names[Random.Range(0,e.names.Count)];
+        cg.EnemyInit(e);
+        cg.character = character;
+        return cg;
+
+    }
+
+    public void GenerateStatsAndSkills(Character character){
+        character.baseStats = genStats(character);
+        character.skills = genSkills(character);
     }
 
     public Stats genStats(Character c)
@@ -69,10 +63,10 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     {
         List<Skill> skills = new List<Skill>();
         StartingStats ss = jobDict[c.job];
-           skills.Add(jobDict[Job.KNIGHT].bnbSkill);
-              skills.Add(jobDict[Job.WIZARD].bnbSkill);
-                 skills.Add(jobDict[Job.ARCHER].bnbSkill);
-                 skills.Add(skipSkill);
+        skills.Add(jobDict[Job.KNIGHT].bnbSkill);
+        skills.Add(jobDict[Job.WIZARD].bnbSkill);
+        skills.Add(jobDict[Job.ARCHER].bnbSkill);
+        skills.Add(skipSkill);
         // skills.Add(ss.bnbSkill);
         //    skills.Add(ss.bnbSkill);
         return skills;  
