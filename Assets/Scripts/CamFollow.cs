@@ -18,9 +18,15 @@ public class CamFollow : Singleton<CamFollow>
     
 
     public bool STOPMOVING,disableEdgeMovement;
+    public float baseFOV;
 
-  
-    public void ChangeCameraState(CameraState newState){
+    void Start()
+    {
+        baseFOV = Camera.main.fieldOfView;
+    }
+    
+    public void ChangeCameraState(CameraState newState)
+    {
         currentState = newState;
     }
 
@@ -41,8 +47,11 @@ public class CamFollow : Singleton<CamFollow>
                 SlotInfoDisplay.inst.Disable();
                 Focus(target,()=>{ChangeCameraState(CameraState.FREE);});
             }
+            if(!SkillAimer.inst.castDecided){
+  STOPMOVING = InputManager.inst.player.GetButton("Focus");
+            }
             
-            STOPMOVING = InputManager.inst.player.GetButton("Focus");
+          
         }
     }
     
@@ -54,9 +63,16 @@ public class CamFollow : Singleton<CamFollow>
             {FreeRoam();}
             else if(CheckCameraState(CameraState.LOCK))
             {LockOn();}
+            if(!SkillAimer.inst.castDecided){
             Zoom();
+            }
+           
         }
         
+    }
+
+    public void ForceFOV(float fov){
+        Camera.main.DOFieldOfView(fov,.25f);
     }
 
     public void Focus(Transform newTarget,UnityAction a)
@@ -76,7 +92,7 @@ public class CamFollow : Singleton<CamFollow>
 
     public void ZoomOut()
     {
-        Camera.main.DOFieldOfView(40,.25f);
+        Camera.main.DOFieldOfView(baseFOV,.25f);
     }
     
     void Zoom(){
@@ -84,7 +100,7 @@ public class CamFollow : Singleton<CamFollow>
  
         float i =  InputManager.inst.player.GetAxis("ScrollWheel")/10;
         fov -=  i * 55;
-        fov = Mathf.Clamp(fov, 16, 40);
+        fov = Mathf.Clamp(fov, 16, baseFOV);
         Camera.main.fieldOfView = fov;
     }
 

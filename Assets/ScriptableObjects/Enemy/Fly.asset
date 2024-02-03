@@ -16,6 +16,6 @@ MonoBehaviour:
   names:
   - Fly
   tagLine: WORKER FLY
-  startingStats: {fileID: 11400000, guid: b794fe432e7e1234fbd485af6d61b537, type: 2}
+  startingStats: {fileID: 11400000, guid: 44fe959ce9b4d20478f1203f6c47ee87, type: 2}
   characterGraphic: {fileID: 1875858896460908558, guid: e2f06924009dac446a053dc5ac0fdcf2,
     type: 3}

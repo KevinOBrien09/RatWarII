@@ -18,3 +18,5 @@ MonoBehaviour:
   effects:
   - {fileID: 11400000, guid: cc44ba748b88f2848ac519f7a464d95f, type: 2}
   side: 0
+  skillCastBehaviour: {fileID: 4520179443706313989, guid: a52841aef1d331543afa5995bc35a92f,
+    type: 3}

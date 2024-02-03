@@ -288,6 +288,7 @@ MonoBehaviour:
     moveRange: 0
     passable: 0
   side: 0
+  enemy: {fileID: 0}
 --- !u!114 &7819094409353634773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,9 +306,9 @@ MonoBehaviour:
   onDie:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2349106473795105033}
-        m_TargetAssemblyTypeName: HealthBar, Assembly-CSharp
-        m_MethodName: Refresh
+      - m_Target: {fileID: 7819094409353634773}
+        m_TargetAssemblyTypeName: Health, Assembly-CSharp
+        m_MethodName: Die
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

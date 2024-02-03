@@ -6,7 +6,7 @@ using TMPro;
 
 public class ActionMenu : Singleton<ActionMenu>
 {
-    public enum ActionMenuState{SKILL,MOVE,ITEM,ROAM}
+    public enum ActionMenuState{SKILL,MOVE,INTERACT,ROAM}
     public RectTransform rt,border;
     public Vector2 hidden,shown;
     public bool FUCKOFF;
@@ -132,7 +132,7 @@ public class ActionMenu : Singleton<ActionMenu>
             UnitMover.inst.EnterSelectionMode(slot);
             Cursor.lockState = CursorLockMode.Confined;
             break;
-            case ActionMenuState.ITEM:
+            case ActionMenuState.INTERACT:
              
             break;
 
@@ -152,7 +152,7 @@ public class ActionMenu : Singleton<ActionMenu>
         border.DORotate(Vector3.zero,0);
         icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,0),.25f);
         icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,180),.25f);
-        icons[ActionMenuState.ITEM].DOLocalRotate(new Vector3(0,0,-90),.25f);
+        icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,-90),.25f);
         icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,90),.25f);
         center.text = currentState.ToString();
     }
@@ -173,10 +173,10 @@ public class ActionMenu : Singleton<ActionMenu>
             break;
 
             case ActionMenuState.ROAM:
-            ChangeState(ActionMenuState.ITEM);
+            ChangeState(ActionMenuState.INTERACT);
             break;
 
-            case ActionMenuState.ITEM:
+            case ActionMenuState.INTERACT:
             ChangeState(ActionMenuState.SKILL);
             break;
         }
@@ -190,7 +190,7 @@ public class ActionMenu : Singleton<ActionMenu>
         {
             case ActionMenuState.SKILL:
            
-            ChangeState(ActionMenuState.ITEM);
+            ChangeState(ActionMenuState.INTERACT);
             break;
 
             case ActionMenuState.MOVE:
@@ -198,7 +198,7 @@ public class ActionMenu : Singleton<ActionMenu>
             ChangeState(ActionMenuState.SKILL);
             break;
 
-            case ActionMenuState.ITEM:
+            case ActionMenuState.INTERACT:
             
             ChangeState(ActionMenuState.ROAM);
             break;
@@ -230,7 +230,7 @@ public class ActionMenu : Singleton<ActionMenu>
             border.DORotate(Vector3.zero,.25f);
             icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,0),.25f);
             icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,180),.25f);
-            icons[ActionMenuState.ITEM].DOLocalRotate(new Vector3(0,0,-90),.25f);
+            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,-90),.25f);
             icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,90),.25f);
             break;
 
@@ -238,7 +238,7 @@ public class ActionMenu : Singleton<ActionMenu>
             border.DORotate(new Vector3(0,0,90),.25f);
             icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,-90),.25f);
             icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.ITEM].DOLocalRotate(new Vector3(0,0,180),.25f);
+            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,180),.25f);
             icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,0),.25f);
             break;
 
@@ -246,15 +246,15 @@ public class ActionMenu : Singleton<ActionMenu>
             border.DORotate(new Vector3(0,0,180),.25f);
             icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,180),.25f);
             icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,0),.25f);
-            icons[ActionMenuState.ITEM].DOLocalRotate(new Vector3(0,0,90),.25f);
+            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,90),.25f);
             icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,-90),.25f);
             break;
 
-            case ActionMenuState.ITEM:
+            case ActionMenuState.INTERACT:
             border.DORotate(new Vector3(0,0, -90),.25f);
             icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,90),.25f);
             icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,-90),.25f);
-            icons[ActionMenuState.ITEM].DOLocalRotate(new Vector3(0,0,0),.25f);
+            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,0),.25f);
             icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,180),.25f);
             break;
         }

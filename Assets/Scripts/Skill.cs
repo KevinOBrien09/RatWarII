@@ -10,6 +10,7 @@ public class Skill : GUIDScriptableObject
     [TextArea(10,10)]  public string desc;
     public List<Effect> effects = new List<Effect>();
     public Side side;
+    public SkillCastBehaviour skillCastBehaviour;
 
     public void Go()
     {Debug.Log(skillName);}

@@ -39,16 +39,7 @@ public class Unit : MonoBehaviour
                 Slot s= q.Dequeue();
                 Vector3 v =  new Vector3(s.transform.position.x, transform.position.y ,s.transform.position.z);
                 graphic.ChangeSpriteSorting(s.node.iGridY);
-                if( transform.position.x != v.x)
-                {
-                    bool movingRight = transform.position.x <= v.x ;
-                    if(movingRight)
-                    {transform.localScale = Vector3.one; 
-                    healthBar.transform.parent. localScale = new Vector3(1,1,1);}
-                    else
-                    { transform.localScale = new Vector3(-1,1,1); 
-                    healthBar.transform.parent.localScale = new Vector3(-1,1,1);}
-                }
+                Flip(v);
              
 
                 transform.DOMove(v,.1f).OnComplete(()=>
@@ -56,6 +47,63 @@ public class Unit : MonoBehaviour
             }
             else
             { Reposition(finalSlot); }
+        }
+    }
+
+    public bool willUnitDie(int damage){
+        int temp = health.currentHealth - damage;
+        bool dead = temp <= 0;
+         return !dead;
+    }
+
+    public void Hit(int damage)
+    {   int temp = health.currentHealth - damage;
+       bool dead = temp <= 0;
+        graphic.RedFlash(dead,(()=>
+        {
+
+            health.currentHealth-=damage;
+            health.onHit.Invoke();
+        
+            if(dead){
+                health.currentHealth = 0;
+             healthBar.KillTween();
+                Die();
+        
+            }
+       
+
+        }));
+        
+      
+        if(dead){
+            BattleManager.inst.UnitIsDead(this);
+        slot.unit = null;
+        }
+        
+
+       
+     
+    }
+
+    public void Die(){
+        
+        Destroy(gameObject);
+        MapManager.inst.grid.UpdateGrid();
+    }
+
+
+    public void Flip(Vector3 v)
+    {
+        if( transform.position.x != v.x)
+        {
+            bool movingRight = transform.position.x <= v.x ;
+            if(movingRight)
+            {transform.localScale = Vector3.one; 
+            healthBar.transform.parent. localScale = new Vector3(1,1,1);}
+            else
+            { transform.localScale = new Vector3(-1,1,1); 
+            healthBar.transform.parent.localScale = new Vector3(-1,1,1);}
         }
     }
 

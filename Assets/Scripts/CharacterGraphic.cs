@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Events;
+using DG.Tweening;
 public class CharacterGraphic : MonoBehaviour
 { 
     public Character character;
@@ -26,7 +28,11 @@ public class CharacterGraphic : MonoBehaviour
     public void EnemyInit(Enemy e){
         
         CharacterGraphic iconClone = Instantiate(this);
-    
+        foreach (var item in GetComponentsInChildren<SpriteRenderer>().ToList())
+        {
+            if(!rendDict.ContainsKey(item))
+            {rendDict.Add(item,item.sortingOrder);}
+        }
       
         iconClone.gameObject.name = character.characterName.fullName() + ": IconClone";
         cam = iconClone.cam;
@@ -77,6 +83,45 @@ public class CharacterGraphic : MonoBehaviour
           RenderTexture texture = new RenderTexture(250,250,16);
         texture.Create();
         cam.targetTexture = texture;   
+    }
+
+    public void RedFlash(bool dead,UnityAction action){
+        StartCoroutine(q());
+        IEnumerator q()
+        {
+            Vector3 ogPos = transform.position;
+          Tween t =  transform.DOShakePosition(.3f).OnComplete(()=>
+            {
+                if(!dead){
+ transform.position = ogPos;
+                }
+               
+            });
+            foreach (var item in rendDict)
+            {
+                item.Key.DOColor(Color.red,0);
+            }
+            if(!dead){
+             action.Invoke();
+            }
+           
+             
+            yield return new WaitForSeconds(.25f); //This value matters, BattleZoomer:109
+        
+            if(!dead)
+            {
+                foreach (var item in rendDict)
+                {
+                    item.Key.DOColor(Color.white,1f);
+                }
+            }
+            else{
+                  action.Invoke();
+                t.Kill();
+            }
+       
+        }
+        
     }
 
     public void ChangeSpriteSorting(int yAxis)

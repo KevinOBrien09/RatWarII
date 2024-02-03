@@ -44,3 +44,6 @@ TagManager:
   - name: Unit
     uniqueID: 3441766095
     locked: 0
+  - name: Zoom
+    uniqueID: 1328432053
+    locked: 0

@@ -43,14 +43,14 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
 
     }
 
-    public void GenerateStatsAndSkills(Character character){
-        character.baseStats = genStats(character);
-        character.skills = genSkills(character);
-    }
+    public (Stats stats,List<Skill> skills ) GenerateStatsAndSkills(StartingStats ss)
+    {return (genStats(ss), genSkills(ss));}
 
-    public Stats genStats(Character c)
+
+    public Stats genStats(StartingStats ss)
     {
-        StartingStats ss = jobDict[c.job];
+        
+      
         Stats s = new Stats();
         s.hp = (int)Random.Range(ss.hp.x, ss.hp.y);
         s.speed = (int)Random.Range(ss.speed.x, ss.speed.y);
@@ -59,10 +59,12 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         return s;
     }
 
-    public List<Skill> genSkills(Character c)
+    public List<Skill> genSkills(StartingStats startingStats)
     {
         List<Skill> skills = new List<Skill>();
-        StartingStats ss = jobDict[c.job];
+    
+     
+        
         skills.Add(jobDict[Job.KNIGHT].bnbSkill);
         skills.Add(jobDict[Job.WIZARD].bnbSkill);
         skills.Add(jobDict[Job.ARCHER].bnbSkill);

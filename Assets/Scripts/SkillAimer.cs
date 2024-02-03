@@ -13,6 +13,7 @@ public class SkillAimer : Singleton<SkillAimer>
     public List<Unit> validTargets = new List<Unit>();
    public bool castDecided;
    public Skill _skill;
+   public   SkillCastBehaviour skillCastBehaviour;
     public void Leave()
     {
         if(!castDecided){
@@ -40,34 +41,37 @@ public class SkillAimer : Singleton<SkillAimer>
         if(!castDecided){
            
             if(validSlots.Contains(s))
-            {  CamFollow.inst.Focus(slot.transform,()=>
-            {  CamFollow.inst.ChangeCameraState(CameraState.LOCK);
-            });
+            {  
+               
+
+                foreach (var item in MapManager.inst.slots)
+                {
+                    item.indicator.SetActive(false);
+                    item.ChangeColour(UnitMover.inst. baseSlotColour);
+                    
+                }
+                
+            
                 castDecided = true;  
                 BattleTicker.inst.Type(_skill.skillName);
                 SlotSelector.inst.gameObject.SetActive(false);
-                /// do stuff
-                //then here
-                foreach (var item in _skill.effects)
+                CastArgs args = new CastArgs();
+                args.caster = BattleManager.inst.currentUnit ;
+                args.target = s.unit;
+                args.skill = _skill;
+                args.castEffects = ()=>
                 {
-                    item.Go();
+                    foreach (var item in _skill.effects)
+                    {item.Go();}
+                
+                };
+                if(_skill.skillCastBehaviour == null)
+                {Debug.LogAssertion("No SkillCastBehaviour in " + _skill.skillName + "'s scriptable object. Game is now softlocked.");}
+                else
+                {
+                    skillCastBehaviour  = Instantiate( _skill.skillCastBehaviour);
+                    skillCastBehaviour.Go(args);
                 }
-                // switch (currentState)
-                // {
-                //     case Aim.SELF:
-                //     Finish();
-                //     break;
-                //     case Aim.PROJECTILE:
-                //     Finish();
-                //     break;
-                //     case Aim.RADIUS:
-                //     Finish();
-                //     break;
-                    
-                //     default:
-                //     Debug.LogAssertion("DEFAULT CASE");
-                //     break;
-                // }
             }
         }
         
@@ -101,6 +105,8 @@ public class SkillAimer : Singleton<SkillAimer>
         Debug.Log("Finish");
         aiming = false;
         validSlots.Clear();
+        Destroy(skillCastBehaviour.gameObject);
+        skillCastBehaviour = null;
         foreach (var item in MapManager.inst.slots)
         {
             item.indicator.SetActive(false);

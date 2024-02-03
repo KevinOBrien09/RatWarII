@@ -270,9 +270,6 @@ MonoBehaviour:
     ihCost: 0
     offShootStart: 0
     slot: {fileID: 0}
-  startColour:
-    serializedVersion: 2
-    rgba: 2348810240
   indicator: {fileID: 3451229431787622695}
   directions: []
   rayShooter: {fileID: 6716659966055073437}
