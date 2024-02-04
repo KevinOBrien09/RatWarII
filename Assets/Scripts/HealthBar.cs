@@ -8,18 +8,28 @@ public class HealthBar : MonoBehaviour
 {
     public Health health;
     public TextMeshProUGUI hpCount;
-    public Image fill;
+    public Image fill,shieldFill;
     Tween tween;
+void OnEnable(){
+    if(health != null){
+ shieldFill.fillAmount = (float)health.shield/(float)health.maxHealth;
+    }
+    else{
+      //  Debug.Log("XD HEALTH IS HECKIN NULL" + gameObject.name);
+    }
+  
+   
+}
+  
     public void Refresh()
-    {
-        tween =  fill.DOFillAmount((float)health.currentHealth/(float)health.maxHealth,.35f);
+    {  
+        shieldFill.DOFillAmount((float)health.shield/(float)health.maxHealth,.35f);
+        fill.DOFillAmount((float)health.currentHealth/(float)health.maxHealth,.35f);
         if(health.currentHealth < 0){
             health.currentHealth = 0;
         }
         hpCount.text = "HP:"+ health.currentHealth +  "/" +  health.maxHealth ;
     }
 
-    public void KillTween(){
-       tween.Kill(true);
-    }
+   
 }

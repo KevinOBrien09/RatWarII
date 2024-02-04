@@ -9,9 +9,9 @@ using TMPro;
 
 public class BattleZoomer : Singleton<BattleZoomer>
 {
-    public Transform left,right;
-    public HealthBar leftHp,rightHP;
-    public GameObject UI;
+    public Transform left,right,center;
+    public HealthBar leftHp,rightHP,centerHP;
+    public GameObject UI,aimThing;
     public CanvasGroup group;
     public RectTransform handle;
     public Image rightIMG,leftIMG,handleIMG;
@@ -48,13 +48,20 @@ public class BattleZoomer : Singleton<BattleZoomer>
         {handleIMG.color = Color.black;}
         leftHp.health = u.left.health;
         leftHp.Refresh();
-        u.left.health.onHit.AddListener(()=>
-        {leftHp.Refresh();});
+        UnityAction leftHpAction = ()=> {leftHp.Refresh();};
+       
+        u.left.health.onHit.AddListener(leftHpAction);
+
         rightHP.health = u. right.health;
         rightHP.Refresh();
-        u. right.health.onHit.AddListener(()=>
-        { rightHP.Refresh();});
-      
+        UnityAction rightHpAction = ()=> {rightHP.Refresh();};
+
+        u. right.health.onHit.AddListener(rightHpAction);
+        rightHP.gameObject.SetActive(true);
+        leftHp.gameObject.SetActive(true);
+        centerHP.gameObject.SetActive(false);
+        aimThing.gameObject.SetActive(true);
+        handle.gameObject.SetActive(true);
         UI.gameObject.SetActive(true);
         group.DOFade(1,.1f);
      
@@ -144,6 +151,8 @@ public class BattleZoomer : Singleton<BattleZoomer>
                             { CamFollow.inst.ChangeCameraState(CameraState.LOCK); });
                             CamFollow.inst.ForceFOV( CamFollow.inst.baseFOV);
                             yield return new WaitForSeconds(.45f);
+                            u. right.health.onHit.RemoveListener(rightHpAction);
+                            u. left.health.onHit.RemoveListener(leftHpAction);
                             leftHp.health = null;
                             rightHP.health = null;
                             rightIMG.color = Color.black;
@@ -169,6 +178,71 @@ public class BattleZoomer : Singleton<BattleZoomer>
         }
     }
 
+
+
+    public void SoloZoom(CastArgs args,UnityAction action)
+    {
+        Unit u = args.caster;
+        float  ogY = u.transform.position.y;
+        u.transform.SetParent(BattleZoomer.inst.center);
+        u.transform.DOLocalMove(Vector3.zero,.1f);
+        u.activeUnitIndicator.gameObject.SetActive(false);
+
+        centerHP.health = u.health;
+        centerHP.Refresh();
+        UnityAction HpAction = ()=> {centerHP.Refresh();};
+
+        rightHP.gameObject.SetActive(false);
+        leftHp.gameObject.SetActive(false);
+        centerHP.gameObject.SetActive(true);
+        aimThing.gameObject.SetActive(false);
+          handle.gameObject.SetActive(false);
+        UI.gameObject.SetActive(true);
+        group.DOFade(1,.1f);
+
+        foreach (var item in u.graphic.rendDict)
+        {item.Key.sortingLayerName = "Zoom";}
+        CamFollow.inst.ForceFOV(45);
+        StartCoroutine(BeginMove());
+        IEnumerator BeginMove()
+        {
+
+            yield return new WaitForSeconds(.2f);
+            action.Invoke();
+            centerHP.Refresh();
+            yield return new WaitForSeconds(.5f);
+
+            foreach (var item in u.graphic.rendDict)
+            {item.Key.sortingLayerName = "Unit";}
+            u.graphic.ChangeSpriteSorting(u.slot.node.iGridY);
+            u.transform.SetParent(null);
+            u.transform.DOMove(new Vector3(u.slot.transform.position.x,ogY,u.slot.transform.position.z) ,.2f);
+
+            CamFollow.inst.Focus(u.slot.transform,()=>
+            { CamFollow.inst.ChangeCameraState(CameraState.LOCK); });
+            CamFollow.inst.ForceFOV( CamFollow.inst.baseFOV);
+            yield return new WaitForSeconds(.45f);
+            u. health.onHit.RemoveListener(HpAction);
+            if(args.skill.ID == "35433542-3142-45a9-b3d4-93096ef99883")
+            {
+                ParticleSystemRenderer r =   u.transform.Find("shield") .GetComponent<ParticleSystemRenderer>();
+                r.sortingLayerName = "Unit";
+                r.sortingOrder = u.slot.node.iGridY * 10;
+            
+            }
+           
+            centerHP.health = null;
+            group.DOFade(0,.2f).OnComplete(()=>
+            {UI.gameObject.SetActive(false);});
+            SkillAimer.inst.Finish();
+
+
+
+
+        }
+
+
+    }
 
 
 }

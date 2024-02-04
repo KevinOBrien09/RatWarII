@@ -13,6 +13,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
     public Vector2 shown,hidden;
     public RectTransform rt;
     public HealthBar healthBar;
+    Slot sl;
     void Start()
     {
         Disable();
@@ -22,18 +23,19 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
     public void Apply(Slot slot)
     {
         
-       
+        sl = slot;
         if(slot.unit != null)
         { 
-            if(!gameObject.activeSelf){
+       
+            healthBar.health = slot.unit.health;
+            healthBar.gameObject.SetActive(true);
+            healthBar.Refresh();
+     if(!gameObject.activeSelf){
             gameObject.SetActive(true);
             rt.DOAnchorPos(hidden,0);
             rt.DOAnchorPos(shown,.2f);
             }
-             healthBar.gameObject.SetActive(true);
-            healthBar.health = slot.unit.health;
-            healthBar.Refresh();
-
+             
             if( ! GameManager.inst.checkGameState(GameState.PLAYERUI)) 
             {
                 if(ActionMenu.inst.currentState == ActionMenu.ActionMenuState.ROAM){
@@ -60,7 +62,14 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             speed.text = "SPEED:" + u.stats().speed.ToString();
             moveRange.text = "MOVE:" + u.stats().moveRange.ToString();
             icon.gameObject.SetActive(true);
-            icon.texture = u.graphic.cam.activeTexture;
+            if(slot.unit.side == Side.PLAYER){
+                sl.unit.graphic.cam.gameObject.SetActive(true);
+                icon.texture = u.graphic.cam.activeTexture;
+            }
+            else{
+                  icon.texture = slot.unit.enemy.icon;
+            }
+            
         }
         else
         {   
@@ -77,6 +86,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 else
                 {CamFollow.inst.Focus(slot.transform,()=>{});}
             }
+           
             healthBar.gameObject.SetActive(false);
             charName.text = "Empty Slot";
             hp.text = string.Empty;
@@ -89,7 +99,15 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
         }
     }
 
-    public void Disable(){
+    public void Disable()
+    {
+        if(sl != null)
+        {
+            if(sl.unit != null)
+            {   sl.unit .graphic.cam.gameObject.SetActive(false);
+            }
+        }
+        sl = null;
         healthBar.health = null;
         rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
         {

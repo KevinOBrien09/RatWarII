@@ -19,3 +19,4 @@ MonoBehaviour:
   startingStats: {fileID: 11400000, guid: 44fe959ce9b4d20478f1203f6c47ee87, type: 2}
   characterGraphic: {fileID: 1875858896460908558, guid: e2f06924009dac446a053dc5ac0fdcf2,
     type: 3}
+  icon: {fileID: 2800000, guid: 141b2929f5cfd5048b592a46b0ad0d25, type: 3}

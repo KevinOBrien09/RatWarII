@@ -17,3 +17,6 @@ MonoBehaviour:
   desc: Grant the caster a 15HP shield.
   effects: []
   side: 0
+  skillCastBehaviour: {fileID: 1102112955039919310, guid: bb681d181b848c14a95754e16d76a5dc,
+    type: 3}
+  doesntNeedUnitInSlot: 0

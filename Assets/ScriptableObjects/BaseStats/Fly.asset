@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b88a5d64d0797f940b8778d4d285397a, type: 3}
   m_Name: Fly
   m_EditorClassIdentifier: 
-  hp: {x: 50, y: 100}
+  hp: {x: 12, y: 25}
   speed: {x: 1, y: 2}
   moveRange: 1
   bnbSkill: {fileID: 11400000, guid: 110ff04177b4e3d43be40ee0b55812df, type: 2}

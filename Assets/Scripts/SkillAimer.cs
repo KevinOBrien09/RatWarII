@@ -11,13 +11,13 @@ public class SkillAimer : Singleton<SkillAimer>
     Unit caster;
     public    List<Slot> validSlots = new List<Slot>();
     public List<Unit> validTargets = new List<Unit>();
-   public bool castDecided;
-   public Skill _skill;
-   public   SkillCastBehaviour skillCastBehaviour;
+    public bool castDecided;
+    public Skill _skill;
+    public   SkillCastBehaviour skillCastBehaviour;
     public void Leave()
     {
         if(!castDecided){
- Debug.Log("Leave");
+ //Debug.Log("Leave");
         foreach (var item in MapManager.inst.slots)
         {
             item.indicator.SetActive(false);
@@ -57,7 +57,12 @@ public class SkillAimer : Singleton<SkillAimer>
                 SlotSelector.inst.gameObject.SetActive(false);
                 CastArgs args = new CastArgs();
                 args.caster = BattleManager.inst.currentUnit ;
-                args.target = s.unit;
+                if(s.unit != null)
+                {
+                    args.target = s.unit;
+                }
+                
+                args.targetSlot = s;
                 args.skill = _skill;
                 args.castEffects = ()=>
                 {
@@ -102,10 +107,16 @@ public class SkillAimer : Singleton<SkillAimer>
         validTargets.Clear();
         BattleManager.inst.ToggleHealthBars(false);
         MapManager.inst.fuckYouSlots.Clear();
-        Debug.Log("Finish");
+      //  Debug.Log("Finish");
         aiming = false;
         validSlots.Clear();
-        Destroy(skillCastBehaviour.gameObject);
+        if(skillCastBehaviour != null){
+ Destroy(skillCastBehaviour.gameObject);
+        }
+        else{
+            Debug.LogWarning("Skill cast behaviour was already killed.");
+        }
+       
         skillCastBehaviour = null;
         foreach (var item in MapManager.inst.slots)
         {

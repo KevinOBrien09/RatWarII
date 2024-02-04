@@ -10,4 +10,5 @@ public class Enemy : GUIDScriptableObject
     public string tagLine;
     public StartingStats startingStats;
     public CharacterGraphic characterGraphic;
+    public Texture icon;
 }

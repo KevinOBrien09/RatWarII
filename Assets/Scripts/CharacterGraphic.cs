@@ -34,9 +34,18 @@ public class CharacterGraphic : MonoBehaviour
             {rendDict.Add(item,item.sortingOrder);}
         }
       
-        iconClone.gameObject.name = character.characterName.fullName() + ": IconClone";
-        cam = iconClone.cam;
-        IconGraphicHolder.inst.Take(iconClone);
+      
+
+        // RenderTexture texture = new RenderTexture(250,250,16);
+        // texture.Create();
+        // cam.targetTexture = texture;   
+        // cam.gameObject.SetActive(false);
+
+        // iconClone.gameObject.name = character.characterName.fullName() + ": IconClone";
+        // cam = iconClone.cam;
+
+        // IconGraphicHolder.inst.Take(iconClone);
+        // cam.gameObject.SetActive(false);
     }
     public void Orginize(Character c)
     {
@@ -83,6 +92,7 @@ public class CharacterGraphic : MonoBehaviour
           RenderTexture texture = new RenderTexture(250,250,16);
         texture.Create();
         cam.targetTexture = texture;   
+        cam.gameObject.SetActive(false);
     }
 
     public void RedFlash(bool dead,UnityAction action){
@@ -128,6 +138,10 @@ public class CharacterGraphic : MonoBehaviour
     {
         foreach (var item in rendDict)
         {item.Key.sortingOrder = item.Value - yAxis;}
+
+        if(unit.shieldGraphic != null){
+            unit.shieldGraphic.sortingOrder = unit.slot.node.iGridY * 10;
+        }
     }
 
 }

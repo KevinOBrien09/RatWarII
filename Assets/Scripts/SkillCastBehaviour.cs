@@ -17,5 +17,6 @@ public class CastArgs
     public Unit caster;
     public Unit target;
     public Skill skill;
+    public Slot targetSlot;
     public UnityAction castEffects;
 }

@@ -16,7 +16,9 @@ public class Unit : MonoBehaviour
     public Stats statMods;
     public Side side;
     public Enemy enemy;
-    
+
+    public bool facingRight;
+   public  ParticleSystemRenderer shieldGraphic;
     public void RecieveGraphic(CharacterGraphic _graphic)
     {
         graphic = _graphic;
@@ -58,38 +60,27 @@ public class Unit : MonoBehaviour
 
     public void Hit(int damage)
     {   int temp = health.currentHealth - damage;
-       bool dead = temp <= 0;
+        bool dead = temp <= 0;
         graphic.RedFlash(dead,(()=>
-        {
-
-            health.currentHealth-=damage;
-            health.onHit.Invoke();
-        
-            if(dead){
-                health.currentHealth = 0;
-             healthBar.KillTween();
-                Die();
-        
-            }
-       
-
-        }));
-        
-      
-        if(dead){
-            BattleManager.inst.UnitIsDead(this);
-        slot.unit = null;
-        }
-        
-
-       
-     
+        {health.Hit(damage);}));
     }
 
-    public void Die(){
-        
-        Destroy(gameObject);
-        MapManager.inst.grid.UpdateGrid();
+    public void ShieldBreak(){
+        Debug.Log("ShieldBreak");
+    }
+
+    public void Die()
+    {   
+        BattleManager.inst.UnitIsDead(this);
+        slot.unit = null;
+        health.currentHealth = 0;
+        StartCoroutine(q());
+        IEnumerator q()
+        {
+            yield return new WaitForSeconds(.4f);
+            Destroy(gameObject);
+            MapManager.inst.grid.UpdateGrid();
+        }
     }
 
 
@@ -100,12 +91,16 @@ public class Unit : MonoBehaviour
             bool movingRight = transform.position.x <= v.x ;
             if(movingRight)
             {transform.localScale = Vector3.one; 
-            healthBar.transform.parent. localScale = new Vector3(1,1,1);}
+            healthBar.transform.parent. localScale = new Vector3(1,1,1);
+            facingRight = true;}
             else
             { transform.localScale = new Vector3(-1,1,1); 
-            healthBar.transform.parent.localScale = new Vector3(-1,1,1);}
+            healthBar.transform.parent.localScale = new Vector3(-1,1,1);
+            facingRight = false;}
         }
     }
+
+    
 
     
     public void Reposition(Slot newSlot)

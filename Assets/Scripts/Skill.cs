@@ -11,7 +11,7 @@ public class Skill : GUIDScriptableObject
     public List<Effect> effects = new List<Effect>();
     public Side side;
     public SkillCastBehaviour skillCastBehaviour;
-
+    public bool doesntNeedUnitInSlot;
     public void Go()
     {Debug.Log(skillName);}
 

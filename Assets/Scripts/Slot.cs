@@ -234,9 +234,16 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
         {
             if(SkillAimer.inst.aiming)
             {
-                if(this.unit != null){
-                SkillAimer.inst.RecieveSlot(this);
+                if(SkillAimer.inst._skill.doesntNeedUnitInSlot){
+                    SkillAimer.inst.RecieveSlot(this);
                 }
+                else{
+                    if(this.unit != null)
+                    {
+                        SkillAimer.inst.RecieveSlot(this);
+                    }
+                }
+               
                
             }
             else{

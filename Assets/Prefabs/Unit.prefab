@@ -31,7 +31,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5313892688520579244}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -289,6 +289,8 @@ MonoBehaviour:
     passable: 0
   side: 0
   enemy: {fileID: 0}
+  facingRight: 0
+  shieldGraphic: {fileID: 0}
 --- !u!114 &7819094409353634773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,13 +303,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14ca3b58ab2b8d241beb24db705c763d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shield: 0
   maxHealth: 0
   currentHealth: 0
   onDie:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7819094409353634773}
-        m_TargetAssemblyTypeName: Health, Assembly-CSharp
+      - m_Target: {fileID: 2349106473795105033}
+        m_TargetAssemblyTypeName: HealthBar, Assembly-CSharp
+        m_MethodName: Refresh
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4472879287895378447}
+        m_TargetAssemblyTypeName: Unit, Assembly-CSharp
         m_MethodName: Die
         m_Mode: 1
         m_Arguments:
@@ -339,6 +354,21 @@ MonoBehaviour:
       - m_Target: {fileID: 2349106473795105033}
         m_TargetAssemblyTypeName: HealthBar, Assembly-CSharp
         m_MethodName: Refresh
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onShieldBreak:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4472879287895378447}
+        m_TargetAssemblyTypeName: Unit, Assembly-CSharp
+        m_MethodName: ShieldBreak
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -456,6 +486,82 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &6416625356482847996
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1851768278444286776}
+  - component: {fileID: 1279632442088077165}
+  - component: {fileID: 3381965171010226785}
+  m_Layer: 5
+  m_Name: Shield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1851768278444286776
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416625356482847996}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.0027}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5313892688520579244}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -0.0072999895}
+  m_SizeDelta: {x: 0, y: -0.0938}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1279632442088077165
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416625356482847996}
+  m_CullTransparentMesh: 1
+--- !u!114 &3381965171010226785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6416625356482847996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 9699784c0a586a74fb480d767b306ddf, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 0
+  m_FillAmount: 0
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6451058232039050444
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,6 +594,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3705199946502624562}
+  - {fileID: 1851768278444286776}
   - {fileID: 113074956380497912}
   m_Father: {fileID: 6246388041294465404}
   m_RootOrder: 1
@@ -550,6 +657,7 @@ MonoBehaviour:
   health: {fileID: 7819094409353634773}
   hpCount: {fileID: 3004231519162007110}
   fill: {fileID: 1575556971651038075}
+  shieldFill: {fileID: 3381965171010226785}
 --- !u!1 &8274213402679268882
 GameObject:
   m_ObjectHideFlags: 0

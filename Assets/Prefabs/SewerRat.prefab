@@ -171,6 +171,7 @@ MonoBehaviour:
     exp:
       level: 1
     colourVarient: 0
+    skills: []
   jobParents:
     list:
     - Key: 0
@@ -218,6 +219,7 @@ MonoBehaviour:
     list: []
     keyCollision: 0
   cam: {fileID: 5972736710666408591}
+  unit: {fileID: 0}
 --- !u!1001 &2019343460408018031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -488,7 +490,7 @@ PrefabInstance:
     - target: {fileID: 1886809995337432109, guid: 4c5f7cccfb0f2014ca503ee6c11c8394,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1886809995337432109, guid: 4c5f7cccfb0f2014ca503ee6c11c8394,
         type: 3}
@@ -638,7 +640,7 @@ PrefabInstance:
     - target: {fileID: 7787307070006651082, guid: 4c5f7cccfb0f2014ca503ee6c11c8394,
         type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7787307070006651082, guid: 4c5f7cccfb0f2014ca503ee6c11c8394,
         type: 3}
@@ -742,7 +744,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -853201201
   m_SortingLayer: 1
-  m_SortingOrder: 3
+  m_SortingOrder: 2
   m_Sprite: {fileID: -3626900188633221065, guid: 4c5f7cccfb0f2014ca503ee6c11c8394,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
