@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Events;
 
 public class BattleManager : Singleton<BattleManager>
 {
@@ -13,6 +14,7 @@ public class BattleManager : Singleton<BattleManager>
     public Queue<Unit> turnOrder = new Queue<Unit>();
     public List<Enemy> enemies = new List<Enemy>();
     public int howManyPartyMembers,howManyEnemies;
+    bool looping;
     IEnumerator Start()
     {
         yield return new WaitForEndOfFrame();
@@ -65,21 +67,25 @@ public class BattleManager : Singleton<BattleManager>
                 CamFollow.inst.target = currentUnit.slot. transform;
                 if(currentUnit.side == Side.PLAYER)
                 {       
-                    
+                    CamFollow.inst.Focus(currentUnit.slot.transform,()=>{});
+                    currentUnit.activeUnitIndicator.gameObject.SetActive(true);
+                    StatusEffectLoop(currentUnit);
+                    while(looping)
+                    {yield return null;}
+                   
                     
                     ActionMenu.inst.  FUCKOFF = false;
                     GameManager.inst.ChangeGameState(GameState.PLAYERUI);
-                     ActionMenu.inst.Reset();
+                    ActionMenu.inst.Reset();
                     ActionMenu.inst.Show(currentUnit.slot);
                     SkillHandler.inst.NewUnit(currentUnit);
-                    CamFollow.inst.Focus(currentUnit.slot.transform,()=>{});
-                    currentUnit.activeUnitIndicator.gameObject.SetActive(true);
+                   
 
                 }
                 else
                 {
-                       yield return new WaitForSeconds(.25f);
-                       UnitIteration();
+                    yield return new WaitForSeconds(.25f);
+                    UnitIteration();
                     //AI
                 }
             }
@@ -88,7 +94,53 @@ public class BattleManager : Singleton<BattleManager>
                 NewTurn();
             }
         }
-        
+    }
+
+    public void StatusEffectLoop(Unit u)
+    {
+        looping = true;
+        Queue<UnityAction> statusEffects = new Queue<UnityAction>();
+        List<StatusEffect> bin = new List<StatusEffect>();
+        foreach (var item in u.statusEffects)
+        {
+            if(item.tick != null){
+            statusEffects.Enqueue(item.tick);
+            }
+            else{
+               bin.Add(item);
+            }
+         
+        }
+
+        foreach (var item in bin)
+        {
+            item.CheckForRemoval();
+        }
+        if(statusEffects.Count > 0)
+        {
+            Execute(statusEffects.Dequeue());
+            void Execute(UnityAction se)
+            {
+              
+                se.Invoke();
+                StartCoroutine(delay());
+                IEnumerator delay()
+                {
+                    yield return new WaitForSeconds(.75f);
+                    if(statusEffects.Count > 0)
+                    {Execute(statusEffects.Dequeue());}
+                    else
+                    {looping = false;}
+                }
+                
+                
+                
+            }
+        }
+        else
+        {looping = false;}
+       
+
     }
 
     public void UnitIsDead(Unit u){

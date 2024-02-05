@@ -16,9 +16,10 @@ public class Unit : MonoBehaviour
     public Stats statMods;
     public Side side;
     public Enemy enemy;
-
+    public List<StatusEffect> statusEffects = new List<StatusEffect>();
     public bool facingRight;
-   public  ParticleSystemRenderer shieldGraphic;
+   public  ParticleSystemRenderer shieldGraphic,shieldKillRend;
+   public ParticleSystem shieldKill;
     public void RecieveGraphic(CharacterGraphic _graphic)
     {
         graphic = _graphic;
@@ -31,6 +32,25 @@ public class Unit : MonoBehaviour
         character = graphic.character;
     }
     
+
+    public void AddStatusEffect(StatusEffect se)
+    {
+        statusEffects.Add(se);
+        se.add.Invoke();
+    }
+
+    public void RemoveStatusEffect(StatusEffect se)
+    {
+       
+        if(statusEffects.Contains(se)){
+            se.remove.Invoke();
+            statusEffects.Remove(se);
+        }
+        else{
+            Debug.LogWarning("Status Effect not found");
+        }
+      
+    }
     public void MoveAlongPath(Queue<Slot> q,Slot finalSlot)
     {
         loop();
@@ -66,7 +86,14 @@ public class Unit : MonoBehaviour
     }
 
     public void ShieldBreak(){
-        Debug.Log("ShieldBreak");
+        if(shieldGraphic != null){
+ Destroy(shieldGraphic.gameObject);
+        shieldKill.gameObject.SetActive(true);
+        shieldKill.Play();
+        shieldGraphic = null;
+        }
+       
+       
     }
 
     public void Die()

@@ -56,12 +56,15 @@ public class SkillHandler : Singleton<SkillHandler>
               
                 if(hoveredSkill != null)
                 {
-                    if(!SkillAimer.inst.aiming)
+                    if(!SkillAimer.inst.aiming&& !ActionMenu.inst.FUCKOFF)
                     {
+                     
                         BattleManager.inst.StartCoroutine(SkillHandler.inst.SetObject(null));
                         SkillAimer.inst.Go(hoveredSkill);
-                      
+                    
                         ActionMenu.inst.Hide();
+                        
+                       
                     }
                 
                     // Close();

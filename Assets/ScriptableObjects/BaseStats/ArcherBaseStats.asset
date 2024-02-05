@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hp: {x: 75, y: 95}
   speed: {x: 4, y: 6}
-  moveRange: 3
+  moveRange: 5
   bnbSkill: {fileID: 11400000, guid: 1271aaa1c079d034bab516907da76c61, type: 2}

@@ -38,7 +38,32 @@ public class SkillAimer : Singleton<SkillAimer>
 
     public void RecieveSlot(Slot s)
     {
-        if(!castDecided){
+    //    if(!canCast(_skill))
+    //     {
+    //         StartCoroutine(reject());
+    //         IEnumerator reject()
+    //         {
+    //             foreach (var item in MapManager.inst.slots)
+    //             {
+    //                 item.indicator.SetActive(false);
+    //                 item.ChangeColour(UnitMover.inst. baseSlotColour);
+                    
+    //             }
+    //               SlotSelector.inst.gameObject.SetActive(false);
+    //             BattleTicker.inst.Type("Rejected.");
+    //             CamFollow.inst.Focus(BattleManager.inst.currentUnit.slot.transform,()=>
+    //             {   CamFollow.inst.ChangeCameraState(CameraState.LOCK);});
+              
+    //             yield return new WaitForSeconds(1);
+    //             BattleTicker.inst.Type(BattleManager.inst.TurnState());
+    //             Leave();
+    //         }
+          
+    //         return;
+    //     }
+
+        if(!castDecided)
+        { 
            
             if(validSlots.Contains(s))
             {  
@@ -195,7 +220,7 @@ public class SkillAimer : Singleton<SkillAimer>
 
     void Update()
     {
-        if(!castDecided)
+        if(!castDecided && aiming)
         {
             if(currentState == Aim.SELF)
             {
@@ -216,5 +241,20 @@ public class SkillAimer : Singleton<SkillAimer>
             Finish();
 
        }
+    }
+
+
+    public bool canCast(Skill skill)
+    {
+        // switch(skill.ID)
+        // {
+        //     case "35433542-3142-45a9-b3d4-93096ef99883": //barrier
+        //     if(BattleManager.inst.)
+        //     break;
+        //     default:
+        //     return true;
+            
+        // }
+        return false;
     }
 }

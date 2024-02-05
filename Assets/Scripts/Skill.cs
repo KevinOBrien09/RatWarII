@@ -12,6 +12,7 @@ public class Skill : GUIDScriptableObject
     public Side side;
     public SkillCastBehaviour skillCastBehaviour;
     public bool doesntNeedUnitInSlot;
+    public Sprite statusEffectIcon;
     public void Go()
     {Debug.Log(skillName);}
 

@@ -12,6 +12,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
     public RawImage icon;
     public Vector2 shown,hidden;
     public RectTransform rt;
+    public StatusEffectStackHandler stackHandler;
     public HealthBar healthBar;
     Slot sl;
     void Start()
@@ -30,7 +31,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             healthBar.health = slot.unit.health;
             healthBar.gameObject.SetActive(true);
             healthBar.Refresh();
-     if(!gameObject.activeSelf){
+            if(!gameObject.activeSelf){
             gameObject.SetActive(true);
             rt.DOAnchorPos(hidden,0);
             rt.DOAnchorPos(shown,.2f);
@@ -50,7 +51,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             Unit u = slot.unit;
             Character c = slot.unit.character;
             charName.text = c.characterName.fullName();
-            hp.text = "HP:"+ u.health.currentHealth.ToString()+ "/" + u.stats().hp.ToString();
+            //hp.text = "HP:"+ u.health.currentHealth.ToString()+ "/" + u.stats().hp.ToString();
             level.text = c.exp.level.ToString();
             if(slot.unit.side == Side.PLAYER){
                 speciesClass.text = c.job.ToString() + " "+ c.species.ToString();
@@ -58,7 +59,8 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             else{
                   speciesClass.text = slot.unit.enemy.tagLine;
             }
-           
+            stackHandler.Kill();
+           stackHandler.Spawn(u);
             speed.text = "SPEED:" + u.stats().speed.ToString();
             moveRange.text = "MOVE:" + u.stats().moveRange.ToString();
             icon.gameObject.SetActive(true);
@@ -107,6 +109,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             {   sl.unit .graphic.cam.gameObject.SetActive(false);
             }
         }
+        stackHandler.Kill();
         sl = null;
         healthBar.health = null;
         rt.DOAnchorPos(hidden,.2f).OnComplete(()=>

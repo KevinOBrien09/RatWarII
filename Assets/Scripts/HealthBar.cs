@@ -12,7 +12,7 @@ public class HealthBar : MonoBehaviour
     Tween tween;
 void OnEnable(){
     if(health != null){
- shieldFill.fillAmount = (float)health.shield/(float)health.maxHealth;
+ shieldFill.fillAmount = (float)health.shield()/(float)health.maxHealth;
     }
     else{
       //  Debug.Log("XD HEALTH IS HECKIN NULL" + gameObject.name);
@@ -23,12 +23,19 @@ void OnEnable(){
   
     public void Refresh()
     {  
-        shieldFill.DOFillAmount((float)health.shield/(float)health.maxHealth,.35f);
+        shieldFill.DOFillAmount((float)health.shield()/(float)health.maxHealth,.35f);
         fill.DOFillAmount((float)health.currentHealth/(float)health.maxHealth,.35f);
         if(health.currentHealth < 0){
             health.currentHealth = 0;
         }
-        hpCount.text = "HP:"+ health.currentHealth +  "/" +  health.maxHealth ;
+        if(health.shield() > 0){
+   int i = health.currentHealth + health.shield();
+            hpCount.text = "HP:<b>"+ i +  "</b>/" +  health.maxHealth ;
+        }
+        else{
+           hpCount.text = "HP:"+ health.currentHealth +  "/" +  health.maxHealth ;
+        }
+      
     }
 
    

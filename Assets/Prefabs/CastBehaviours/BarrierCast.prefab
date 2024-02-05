@@ -45,3 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shield: {fileID: 8051415790958093302, guid: ca5d9675f961ab145a044d3f58e70afc, type: 3}
+  howManyTurns: 2
+  shieldAmount: 15
