@@ -38,30 +38,6 @@ public class SkillAimer : Singleton<SkillAimer>
 
     public void RecieveSlot(Slot s)
     {
-    //    if(!canCast(_skill))
-    //     {
-    //         StartCoroutine(reject());
-    //         IEnumerator reject()
-    //         {
-    //             foreach (var item in MapManager.inst.slots)
-    //             {
-    //                 item.indicator.SetActive(false);
-    //                 item.ChangeColour(UnitMover.inst. baseSlotColour);
-                    
-    //             }
-    //               SlotSelector.inst.gameObject.SetActive(false);
-    //             BattleTicker.inst.Type("Rejected.");
-    //             CamFollow.inst.Focus(BattleManager.inst.currentUnit.slot.transform,()=>
-    //             {   CamFollow.inst.ChangeCameraState(CameraState.LOCK);});
-              
-    //             yield return new WaitForSeconds(1);
-    //             BattleTicker.inst.Type(BattleManager.inst.TurnState());
-    //             Leave();
-    //         }
-          
-    //         return;
-    //     }
-
         if(!castDecided)
         { 
            
@@ -211,8 +187,20 @@ public class SkillAimer : Singleton<SkillAimer>
     public void SelfCast(SelfSkill skill)
     {
         currentState = Aim.SELF;
-        validSlots = new List<Slot>();
+        validSlots   = new List<Slot>(slot.GetValidSlotsInRadius(skill.radius,true));
         validSlots.Add(slot);
+        foreach (var item in validSlots)
+        {
+            if(item.unit != null)
+            {
+                if(skill.showHealthBars){
+                    if(item.unit.side == skill.side)
+                    {item.unit.healthBar.gameObject.transform.parent.gameObject.SetActive(true);}
+                }
+              
+            }
+            item.ChangeColour(Color.gray);
+        }
         SlotSelector.inst.gameObject.SetActive(true);
         SlotSelector.inst.Attach(slot);
        

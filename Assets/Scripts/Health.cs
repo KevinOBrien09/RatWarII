@@ -77,6 +77,21 @@ public class Health : MonoBehaviour
         {onShieldBreak.Invoke();}
     }
 
+    public void Heal(int amount)
+    {
+        int HealAmount = healAmount(amount);
+        currentHealth += HealAmount;
+        onRefresh.Invoke();
+    }
+
+    public int healAmount(int amount){
+    return (int)Mathf.Min(maxHealth -  currentHealth, amount);
+    }
+
+    public int dmgAmount(int amount){
+    return (int)Mathf.Min(maxHealth, amount);
+    }
+
     public void Hit(int damage)
     {   
         for (int i = 0; i < damage; i++)
@@ -92,6 +107,7 @@ public class Health : MonoBehaviour
             {currentHealth--;}
         }
         onHit.Invoke();  
+        onRefresh.Invoke();
         if(currentHealth <=0)
         {  onDie.Invoke();  }
     }

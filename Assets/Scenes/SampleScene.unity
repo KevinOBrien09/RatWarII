@@ -1917,7 +1917,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28924
+  m_Name: pb_Mesh161894
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6723,6 +6723,7 @@ GameObject:
   - component: {fileID: 1147397651}
   - component: {fileID: 1147397652}
   - component: {fileID: 1147397653}
+  - component: {fileID: 1147397654}
   m_Layer: 0
   m_Name: GM
   m_TagString: Untagged
@@ -6832,7 +6833,7 @@ MonoBehaviour:
   enemies:
   - {fileID: 11400000, guid: 28bf5ffd724f78242a01c09310e0ba01, type: 2}
   howManyPartyMembers: 2
-  howManyEnemies: 0
+  howManyEnemies: 25
 --- !u!114 &1147397651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6881,6 +6882,14 @@ MonoBehaviour:
       Value: {fileID: 11400000, guid: 34354d25b4d2e914a858f216d5f4bc7a, type: 2}
     keyCollision: 0
   skipSkill: {fileID: 11400000, guid: 110ff04177b4e3d43be40ee0b55812df, type: 2}
+  allSkills:
+  - {fileID: 11400000, guid: bc53671835068c249a159a29ce7509e4, type: 2}
+  - {fileID: 11400000, guid: 22799f4785781cf48bcde71b8f1ecaf0, type: 2}
+  - {fileID: 11400000, guid: d4463056ec62a6041959dda12fa528af, type: 2}
+  - {fileID: 11400000, guid: 1271aaa1c079d034bab516907da76c61, type: 2}
+  - {fileID: 11400000, guid: 3df21767c7cc7a343ac0196c5097b2fb, type: 2}
+  - {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
+  - {fileID: 11400000, guid: 8a64f11071c864b42af891eaa38d8c36, type: 2}
 --- !u!114 &1147397652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6912,6 +6921,29 @@ MonoBehaviour:
   castDecided: 0
   _skill: {fileID: 0}
   skillCastBehaviour: {fileID: 0}
+--- !u!114 &1147397654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147397644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 093b66a73e4bb7b48b998e9a92dc2426, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pools:
+  - tag: 0
+    quantity: 99
+    prefab: {fileID: 1664831127718361903, guid: 698eda19307a05d42aa293356d301e74,
+      type: 3}
+  dict:
+    list: []
+    keyCollision: 0
+  Qdict:
+    list: []
+    keyCollision: 0
 --- !u!4 &1156212554 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3698743410085300452, guid: 22a948c133fa75142bc65d01b8c44747,
@@ -7574,7 +7606,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29560
+  m_Name: pb_Mesh162542
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

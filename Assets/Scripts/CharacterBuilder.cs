@@ -10,7 +10,7 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     public GenericDictionary<Species,CharacterGraphic> graphicDict = new GenericDictionary<Species, CharacterGraphic>();
     public GenericDictionary<Job,StartingStats> jobDict = new GenericDictionary<Job,StartingStats>();
     public Skill skipSkill;
-  
+    public List<Skill> allSkills = new List<Skill>();
     public CharacterGraphic Generate()
     {
         Character character = new Character();
@@ -62,12 +62,15 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     public List<Skill> genSkills(StartingStats startingStats)
     {
         List<Skill> skills = new List<Skill>();
-    
+        foreach (var item in allSkills)
+        {
+            skills.Add(item);
+        }
      
         
-        skills.Add(jobDict[Job.KNIGHT].bnbSkill);
-        skills.Add(jobDict[Job.WIZARD].bnbSkill);
-        skills.Add(jobDict[Job.ARCHER].bnbSkill);
+        // skills.Add(jobDict[Job.KNIGHT].bnbSkill);
+        // skills.Add(jobDict[Job.WIZARD].bnbSkill);
+        // skills.Add(jobDict[Job.ARCHER].bnbSkill);
         skills.Add(skipSkill);
         // skills.Add(ss.bnbSkill);
         //    skills.Add(ss.bnbSkill);

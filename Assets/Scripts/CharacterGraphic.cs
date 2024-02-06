@@ -27,7 +27,7 @@ public class CharacterGraphic : MonoBehaviour
 
     public void EnemyInit(Enemy e){
         
-        CharacterGraphic iconClone = Instantiate(this);
+       // CharacterGraphic iconClone = Instantiate(this);
         foreach (var item in GetComponentsInChildren<SpriteRenderer>().ToList())
         {
             if(!rendDict.ContainsKey(item))
@@ -100,10 +100,10 @@ public class CharacterGraphic : MonoBehaviour
         IEnumerator q()
         {
             Vector3 ogPos = transform.position;
-          Tween t =  transform.DOShakePosition(.3f).OnComplete(()=>
+            Tween t =  transform.DOShakePosition(.3f).OnComplete(()=>
             {
                 if(!dead){
- transform.position = ogPos;
+                transform.position = ogPos;
                 }
                
             });
@@ -132,6 +132,26 @@ public class CharacterGraphic : MonoBehaviour
        
         }
         
+    }
+
+    public void GreenFlash(UnityAction action)
+    {
+        StartCoroutine(q());
+        IEnumerator q()
+        {
+            foreach (var item in rendDict)
+            {
+                item.Key.DOColor(Color.green,0);
+            }
+            action.Invoke();
+            yield return new WaitForSeconds(0);
+            foreach (var item in rendDict)
+            {
+                item.Key.DOColor(Color.white,1f);
+            }
+
+        }
+
     }
 
     public void ChangeSpriteSorting(int yAxis)

@@ -20,3 +20,7 @@ MonoBehaviour:
   side: 0
   skillCastBehaviour: {fileID: 4520179443706313989, guid: a52841aef1d331543afa5995bc35a92f,
     type: 3}
+  doesntNeedUnitInSlot: 0
+  statusEffectIcon: {fileID: 0}
+  radius: 0
+  castOnCasterSlot: 0

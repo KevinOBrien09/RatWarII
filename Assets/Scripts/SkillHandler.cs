@@ -58,6 +58,7 @@ public class SkillHandler : Singleton<SkillHandler>
                 {
                     if(!SkillAimer.inst.aiming&& !ActionMenu.inst.FUCKOFF)
                     {
+                        
                      
                         BattleManager.inst.StartCoroutine(SkillHandler.inst.SetObject(null));
                         SkillAimer.inst.Go(hoveredSkill);

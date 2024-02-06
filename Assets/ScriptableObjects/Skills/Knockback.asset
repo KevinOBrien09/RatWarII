@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa5ff9dd15893c45b0be18781db98f6, type: 3}
+  m_Name: Knockback
+  m_EditorClassIdentifier: 
+  ID: b2efc7a3-6579-4b80-9326-a953ef51eddd
+  skillName: Knockback
+  desc: 
+  effects: []
+  side: 1
+  skillCastBehaviour: {fileID: 4096707154808785477, guid: fbdf0dcc1b24a50469a5c3fadce9f559,
+    type: 3}
+  doesntNeedUnitInSlot: 0
+  statusEffectIcon: {fileID: 0}
+  restrictCast: 0
+  radius: 2

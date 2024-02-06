@@ -68,7 +68,9 @@ public class Unit : MonoBehaviour
                 { loop(); });
             }
             else
-            { Reposition(finalSlot); }
+            { Reposition(finalSlot);
+                BattleManager.inst.EndTurn();
+            }
         }
     }
 
@@ -79,10 +81,21 @@ public class Unit : MonoBehaviour
     }
 
     public void Hit(int damage)
-    {   int temp = health.currentHealth - damage;
+    {   int i =health.dmgAmount(damage);
+        ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go(i.ToString(),Color.white,transform.position);
+        int temp = health.currentHealth - damage;
         bool dead = temp <= 0;
         graphic.RedFlash(dead,(()=>
         {health.Hit(damage);}));
+    }
+
+    public void Heal(int amount){
+        graphic.GreenFlash(()=>{
+            int i =health.healAmount(amount);
+
+            ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go(i.ToString(),Color.green,transform.position);
+            health.Heal(amount);
+        });
     }
 
     public void ShieldBreak(){
@@ -147,7 +160,7 @@ public class Unit : MonoBehaviour
         {slot.node.isBlocked = false;}
         slot.unit = this;
         graphic.ChangeSpriteSorting(slot.node.iGridY);
-        BattleManager.inst.EndTurn();
+        
     }
 
     
