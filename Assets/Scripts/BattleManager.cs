@@ -15,6 +15,7 @@ public class BattleManager : Singleton<BattleManager>
     public List<Enemy> enemies = new List<Enemy>();
     public int howManyPartyMembers,howManyEnemies;
     bool looping;
+    public SpikeSlot spikeSlotPrefab;
     IEnumerator Start()
     {
         yield return new WaitForEndOfFrame();
@@ -27,6 +28,15 @@ public class BattleManager : Singleton<BattleManager>
         {CreateEnemyUnit(MapManager.inst.RandomSlot());}
       
         ToggleHealthBars(false);
+
+        for (int i = 0; i < 15; i++)
+        {
+            Slot s = MapManager.inst.RandomSlot();
+            s.MakeSpecial(spikeSlotPrefab);
+        }
+
+
+
         NewTurn();
     }
 
@@ -68,14 +78,84 @@ public class BattleManager : Singleton<BattleManager>
                 yield return new WaitForSeconds(.25f);
               
                 currentUnit = turnOrder.Dequeue();
+                bool terrainShit = false;
+                if(currentUnit.tempTerrainCreated.Count != 0)
+                {
+                    terrainShit = true;
+          
+                    Queue<TempTerrain> TQ = new Queue<TempTerrain>();
+                    foreach (var item in currentUnit.tempTerrainCreated)
+                    {
+                        if(item.turnToDieOn == turn)
+                        {TQ.Enqueue(item);}
+                        
+                    }
+                    if(TQ.Count == 0)
+                    {
+                        terrainShit = false;
+                        MapManager.inst.grid.UpdateGrid();
+                    }
+                    else
+                    {
+                        CamFollow.inst.target = currentUnit.slot. transform;
+                        yield return new WaitForSeconds(.5f);
+                        Loop();
+                        void Loop()
+                        {
+                            Debug.Log("loop");
+                            StartCoroutine(d());
+                            IEnumerator d()
+                            {
+                                if(TQ.Count == 0)
+                                {
+                                    terrainShit = false;
+                                    MapManager.inst.grid.UpdateGrid();
+
+                                }
+                                else
+                                {
+                                    TempTerrain t =  TQ.Dequeue();
+                                    CamFollow.inst.Focus(t.transform,(()=>{}));
+                                    BattleTicker.inst.Type("Removing Terrain");
+                                    yield return new WaitForSeconds(.25f);
+                                    t.Kill();
+                                    yield return new WaitForSeconds(.5f);
+                                    Loop();
+                                }
+                            }
+                        }
+                    }
+
+                    while(terrainShit)
+                    {yield return null;}
+                    yield return new WaitForSeconds(.5f);
+                }
+         
+                if(currentUnit.slot.specialSlot != null)
+                {
+                    BattleTicker.inst.Type(currentUnit.slot.specialSlot.tickerText);
+                    CamFollow.inst.target = currentUnit.slot. transform;
+                    bool willUnitDie = currentUnit.slot.specialSlot.willUnitDie();
+                    yield return new WaitForSeconds(1);
+                    currentUnit.slot.specialSlot.Go();
+                    yield return new WaitForSeconds(1);
+                    if(willUnitDie){
+                        UnitIteration();
+                        yield break;
+                    }
+                   
+                 
+
+                }
+
+
+
                 if( currentUnit.stunned)
                 {
-                     BattleTicker.inst.Type(BattleManager.inst. TurnState());
-
-                    
+                    BattleTicker.inst.Type(BattleManager.inst. TurnState());
                     CamFollow.inst.target = currentUnit.slot. transform;
                     yield return new WaitForSeconds(.5f);
-                    BattleTicker.inst.Type("Stunned.");
+                    BattleTicker.inst.Type("Stunned!");
                     currentUnit.RemoveStun();
                     StatusEffectLoop(currentUnit);
                     while(looping)

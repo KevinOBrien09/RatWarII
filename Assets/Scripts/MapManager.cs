@@ -38,6 +38,17 @@ public class MapManager : Singleton<MapManager>
        
     }
 
+    public bool slotIsValid(Vector2 v)
+    {
+        int maxX = MapManager.inst.grid.iGridSizeX-1;
+        int maxY = MapManager.inst.grid.iGridSizeY-1;
+
+        bool inXRange = v.x <= maxX && v.x >= 0;
+        bool inYRange = v.y <= maxY && v.y >= 0;
+       bool valid = inXRange && inYRange;
+       return valid;
+    }
+
     public List<Slot> StartingRadius()
     {
         Slot center = grid.NodeArray[2,2].slot;

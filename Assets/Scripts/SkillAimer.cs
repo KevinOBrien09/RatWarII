@@ -138,13 +138,28 @@ public class SkillAimer : Singleton<SkillAimer>
    
         Character casterChar = caster.character;
         Cursor.lockState = CursorLockMode.Confined;
-          SlotSelector.inst.gameObject.SetActive(true);
+        SlotSelector.inst.gameObject.SetActive(true);
         CamFollow.inst.ChangeCameraState(CameraState.FREE);
-        validSlots   = new List<Slot>(slot.GetSlotsInPlusShape(skill.howManyTiles,skill));
+
+        switch(skill.projectilePath)
+        {
+            case ProjectileSkill.ProjectilePathShape.PLUS:
+            validSlots   = new List<Slot>(slot.GetSlotsInPlusShape(skill.howManyTiles,skill));
+            break;
+            case ProjectileSkill.ProjectilePathShape.VERT:
+            validSlots   = new List<Slot>(slot.GetVerticalSlots(skill.howManyTiles,skill));
+            break;
+            case ProjectileSkill.ProjectilePathShape.HORI:
+            validSlots   = new List<Slot>(slot.GetHorizontalSlots(skill.howManyTiles,skill));
+            break;
+            default:
+            Debug.LogAssertion("PROJECTILE PATH NOT IMPLEMENTED!!");
+            break;
+
+        }
+      
         foreach (var item in validSlots)
         {item.ChangeColour(Color.gray);}  
-
-
     }
 
     public void RadiusAim(RadiusSkill skill)
@@ -174,6 +189,8 @@ public class SkillAimer : Singleton<SkillAimer>
             else
             {validSlots.Remove(item.slot);}
         }
+   
+      
         foreach (var item in validSlots)
         {
             if(item.unit == null){

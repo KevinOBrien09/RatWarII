@@ -9,18 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c603b92c96daa24088b1e84b0cbbbdd, type: 3}
-  m_Name: Heroic Swing
+  m_Script: {fileID: 11500000, guid: ffa5ff9dd15893c45b0be18781db98f6, type: 3}
+  m_Name: Stun
   m_EditorClassIdentifier: 
-  ID: 96de55b2-7e0f-4bf9-b992-78c05034c4c7
-  skillName: Heroic Slash
-  desc: Deal 15 DMG and knock back all enemies within 1 tile.
+  ID: af5cdad3-ba23-4ba7-8c8e-b680702126ea
+  skillName: Stun
+  desc: Stuns an enemy unit in a 1 tile radius.
   effects: []
   side: 1
-  skillCastBehaviour: {fileID: 8986954494872946150, guid: 63f404df52e8cac44ae85344a87dead9,
+  skillCastBehaviour: {fileID: 3076426531015735721, guid: 28d50aafcc3b4e042b5d0549edab4a74,
     type: 3}
   doesntNeedUnitInSlot: 0
   statusEffectIcon: {fileID: 0}
+  restrictCast: 0
   radius: 1
-  castOnCasterSlot: 0
-  showHealthBars: 1

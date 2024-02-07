@@ -13,7 +13,7 @@ public class Skill : GUIDScriptableObject
     public SkillCastBehaviour skillCastBehaviour;
     public bool doesntNeedUnitInSlot;
     public Sprite statusEffectIcon;
-    public bool restrictCast;
+ 
     public void Go()
     {Debug.Log(skillName);}
 

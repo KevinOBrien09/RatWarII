@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b88a5d64d0797f940b8778d4d285397a, type: 3}
   m_Name: WizardBaseStats
   m_EditorClassIdentifier: 
-  hp: {x: 70, y: 90}
+  hp: {x: 1, y: 1}
   speed: {x: 3, y: 5}
   moveRange: 3
   bnbSkill: {fileID: 11400000, guid: d4463056ec62a6041959dda12fa528af, type: 2}

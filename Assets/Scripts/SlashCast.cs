@@ -42,7 +42,7 @@ public class SlashCast : SkillCastBehaviour
                         if(item.unit.side != args.caster.side)
                         {
                             item.unit .Hit(damage);
-                          
+                            Knockback.Hit(1,args.caster,item.unit);
                         }
                         
                     }

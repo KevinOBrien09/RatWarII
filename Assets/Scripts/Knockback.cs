@@ -75,13 +75,13 @@ public static class Knockback
                 break;
             }
 
-            bool validKnockback = false;
-            int maxX = MapManager.inst.grid.iGridSizeX-1;
-            int maxY = MapManager.inst.grid.iGridSizeY-1;
+            bool validKnockback = MapManager.inst.slotIsValid(v);
+            // int maxX = MapManager.inst.grid.iGridSizeX-1;
+            // int maxY = MapManager.inst.grid.iGridSizeY-1;
 
-            bool inXRange = v.x <= maxX && v.x >= 0;
-            bool inYRange = v.y <= maxY && v.y >= 0;
-            validKnockback = inXRange && inYRange;
+            // bool inXRange = v.x <= maxX && v.x >= 0;
+            // bool inYRange = v.y <= maxY && v.y >= 0;
+            // validKnockback = inXRange && inYRange;
             Debug.Log(targetX+ ":" + targetY);
             Debug.Log(v);
            Unit u = victim; 
@@ -92,47 +92,57 @@ public static class Knockback
                 {
                     if(newSlot.unit == null)
                     {
-                       
-                        float y  = u.transform.position.y;
-                        Vector3 p = newSlot.transform.position;
-                        Vector3 overShoot = new Vector3();
-                        switch (direction)
+                        if(newSlot.tempTerrain == null)
                         {
-                            case 7:
-                            overShoot = new Vector3(p.x-2.5f,y,p.z+2.5f);
-                            break;
-                            case 8:
-                            overShoot = new Vector3(p.x,y,p.z+2.5f);
-                            break;
-                            case 9:
-                            overShoot = new Vector3(p.x+2.5f,y,p.z+2.5f);
-                            break;
-                            case 4:
-                            overShoot = new Vector3(p.x-2.5f,y,p.z);
-                            break;
-                            case 5:
-                            Debug.LogAssertion("SAME SLOT");
-                            break;
-                            case 6:
-                            overShoot = new Vector3(p.x+2.5f,y,p.z);
-                            break;
-                            case 1:
-                            overShoot = new Vector3(p.x-2.5f,y,p.z-2.5f);
-                            break;
-                            case 2:
-                            overShoot = new Vector3(p.x,y,p.z-2.5f);
-                            break;
-                            case 3:
-                            
-                            overShoot = new Vector3(p.x+2.5f,y,p.z-2.5f);
-                            break;
+                            float y  = u.transform.position.y;
+                            Vector3 p = newSlot.transform.position;
+                            Vector3 overShoot = new Vector3();
+                            switch (direction)
+                            {
+                                case 7:
+                                overShoot = new Vector3(p.x-2.5f,y,p.z+2.5f);
+                                break;
+                                case 8:
+                                overShoot = new Vector3(p.x,y,p.z+2.5f);
+                                break;
+                                case 9:
+                                overShoot = new Vector3(p.x+2.5f,y,p.z+2.5f);
+                                break;
+                                case 4:
+                                overShoot = new Vector3(p.x-2.5f,y,p.z);
+                                break;
+                                case 5:
+                                Debug.LogAssertion("SAME SLOT");
+                                break;
+                                case 6:
+                                overShoot = new Vector3(p.x+2.5f,y,p.z);
+                                break;
+                                case 1:
+                                overShoot = new Vector3(p.x-2.5f,y,p.z-2.5f);
+                                break;
+                                case 2:
+                                overShoot = new Vector3(p.x,y,p.z-2.5f);
+                                break;
+                                case 3:
+                                
+                                overShoot = new Vector3(p.x+2.5f,y,p.z-2.5f);
+                                break;
+                            }
+                            u.Reposition(newSlot);
+                            victim.inKnockback = true;
+                            u.transform.DOMove(overShoot,.2f).OnComplete(()=>{
+                            u.transform.DOMove(new Vector3(p.x,y,p.z),.2f);});
+                            Debug.Log("Valid Knockback"); 
+                            return true;
                         }
-                        u.Reposition(newSlot);
-                        victim.inKnockback = true;
-                        u.transform.DOMove(overShoot,.2f).OnComplete(()=>{
-                        u.transform.DOMove(new Vector3(p.x,y,p.z),.2f);});
-                        Debug.Log("Valid Knockback"); 
-                        return true;
+                        else{
+                            Debug.Log("Stun! (Temp Terrain)");
+
+                            Stun();
+                            return false;
+                        }
+                       
+                        
 
                        
                     }

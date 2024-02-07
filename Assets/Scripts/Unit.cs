@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public enum Side{PLAYER,ENEMY}
+public enum Side{PLAYER,ENEMY,NEITHER}
 public class Unit : MonoBehaviour
 {
     public CharacterGraphic graphic;
@@ -25,6 +25,7 @@ public class Unit : MonoBehaviour
    public bool stunned;
    public Material whiteFlash,spriteDefault;
    public GameObject stunIndicator;
+   public List<TempTerrain> tempTerrainCreated = new List<TempTerrain>();
 
     public void RecieveGraphic(CharacterGraphic _graphic)
     {

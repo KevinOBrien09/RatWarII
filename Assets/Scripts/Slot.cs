@@ -8,11 +8,11 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
     public SpriteRenderer border;
     public Unit unit;
     public Node node;
-    
+    public TempTerrain tempTerrain;
     public GameObject indicator;
     public List<Vector3> directions = new List<Vector3>();
     public Transform rayShooter;
-
+    public SpecialSlot specialSlot;
     void Start()
     {
         
@@ -42,6 +42,13 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
             }
         }
         return slots;
+    }
+
+    public void MakeSpecial(SpecialSlot specialSlotPrefab){
+   
+        specialSlot = Instantiate(specialSlotPrefab,transform);
+    
+        specialSlot.slot = this;
     }
 
     public List<Slot> peewee(List<Slot> candidates,List<Slot> slots,bool skill)
@@ -137,89 +144,143 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
         return ss;
     }
 
+    public List<Slot> GetHorizontalSlots(int length,Skill skill = null)
+    {
+        List<Slot> validSlots = new List<Slot>();
+        int maxX = MapManager.inst.grid.iGridSizeX-1;
+        List<Slot> right =   Loop(length, node.iGridX,maxX,true,true,skill);//right
+        List<Slot> left =   Loop(length,node.iGridX,maxX,true,false,skill);//left
+
+
+        foreach (var item in left)
+        {
+            if(!validSlots.Contains(item))
+            {validSlots.Add(item);}
+        }
+
+        foreach (var item in right)
+        {
+            if(!validSlots.Contains(item))
+            {validSlots.Add(item);}
+        }
+
+        return validSlots;
+    }
+
+     public List<Slot> GetVerticalSlots(int length,Skill skill = null)
+    {
+        List<Slot> validSlots = new List<Slot>();
+        int maxY = MapManager.inst.grid.iGridSizeY-1;
+     
+     
+        List<Slot> up = Loop(length,node.iGridY,maxY,false,true,skill);//up
+        List<Slot> down = Loop(length,node.iGridY,maxY,false,false,skill);//down
+
+        foreach (var item in up)
+        {
+            if(!validSlots.Contains(item))
+            {validSlots.Add(item);}
+        }
+
+        foreach (var item in down)
+        {
+            if(!validSlots.Contains(item))
+            {validSlots.Add(item);}
+        }
+        return validSlots;
+    }
+
     public List<Slot> GetSlotsInPlusShape(int length,Skill skill = null)
     {
         List<Slot> validSlots = new List<Slot>();
-        int tiles = length+1;
-        int maxX = MapManager.inst.grid.iGridSizeX-1;
-        int maxY = MapManager.inst.grid.iGridSizeY-1;
-        List<Slot> candidateSlots = new List<Slot>();
-        Loop(node.iGridX,maxX,true,true);//right
-        Loop(node.iGridX,maxX,true,false);//left
-        Loop(node.iGridY,maxY,false,true);//up
-        Loop(node.iGridY,maxY,false,false);//down
-        
-        void Loop(int dir,int clamp,bool X,bool increase)
-        {
-            var projectileSkill = skill as ProjectileSkill;
-            bool PENIS = false;
-            List<Slot>previousSlots = new List<Slot>();
 
-            for (int i = 0; i < tiles; i++)
+        List<Slot> vertical = GetVerticalSlots(length,skill);
+        List<Slot> horizontal = GetHorizontalSlots(length,skill);
+
+        foreach (var item in horizontal)
+        {
+            if(!validSlots.Contains(item))
+            {validSlots.Add(item);}
+        }
+
+        foreach (var item in vertical)
+        {
+            if(!validSlots.Contains(item))
+            {validSlots.Add(item);}
+        }
+        return validSlots;
+    }
+
+    List<Slot> Loop(int length, int dir,int clamp,bool X,bool increase,Skill skill)
+    {
+        List<Slot> candidateSlots = new List<Slot>();
+        int tiles = length+1;
+        var projectileSkill = skill as ProjectileSkill;
+        bool PENIS = false;
+        List<Slot>previousSlots = new List<Slot>();
+
+        for (int i = 0; i < tiles; i++)
+        {
+            if(PENIS)
+            { break; }
+            if(dir <= clamp && dir >= 0 )
             {
-                if(PENIS)
-                { break; }
-                if(dir <= clamp && dir >= 0 )
-                {
-                    Slot s = null;
-                    if(X)
-                    { s = MapManager.inst.grid.NodeArray[dir,(int)node.iGridY].slot; }
-                    else
-                    { s = MapManager.inst.grid.NodeArray[(int)node.iGridX,dir].slot; }
-                    
-                    if(s == null)
-                    { 
-                        if(projectileSkill!= null)
-                        {
-                            if(!projectileSkill.goThroughWalls)
-                            { break; }
-                        }
-                        else
+                Slot s = null;
+                if(X)
+                { s = MapManager.inst.grid.NodeArray[dir,(int)node.iGridY].slot; }
+                else
+                { s = MapManager.inst.grid.NodeArray[(int)node.iGridX,dir].slot; }
+                
+                if(s == null)
+                { 
+                    if(projectileSkill!= null)
+                    {
+                        if(!projectileSkill.goThroughWalls)
                         { break; }
                     }
                     else
-                    {
-                        if(previousSlots.Count > 0)
-                        {
-                            Slot lastSlot = previousSlots.Last();
-                            if(lastSlot != null){
-                                if(lastSlot.unit != null){
-                                    if(!projectileSkill.passThrough){
-                                        PENIS  = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        }   
-                       
-                        AddToCandidateSlots(s); 
-                        if(!previousSlots.Contains(s) && s!= this)
-                        {previousSlots.Add(s);}
-                        
-                    }
+                    { break; }
                 }
                 else
-                { break; }
+                {
+                    if(s. tempTerrain != null){
+                        break;
+                    }
 
-                if(increase)
-                {dir++;}
-                else
-                {dir--;}
-            
+                    if(previousSlots.Count > 0)
+                    {
+                        Slot lastSlot = previousSlots.Last();
+                        if(lastSlot != null){
+                            if(lastSlot.unit != null){
+                                if(!projectileSkill.passThrough){
+                                    PENIS  = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }   
+                    
+                    AddToCandidateSlots(s); 
+                    if(!previousSlots.Contains(s) && s!= this)
+                    {previousSlots.Add(s);}
+                    
+                }
             }
+            else
+            { break; }
+
+            if(increase)
+            {dir++;}
+            else
+            {dir--;}
+        
         }
-
-
-
         void AddToCandidateSlots(Slot s)
         {
             if(s == this){return;}
             
             candidateSlots.Add(s);
         }
-
-        
-
         return candidateSlots;
     }
         

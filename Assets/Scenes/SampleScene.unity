@@ -1917,7 +1917,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh161894
+  m_Name: pb_Mesh97944
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3409,7 +3409,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 846847690}
   m_HandleRect: {fileID: 846847689}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -6108,6 +6108,7 @@ MonoBehaviour:
   rt: {fileID: 925963536}
   stackHandler: {fileID: 1039886819}
   healthBar: {fileID: 1542669068}
+  sl: {fileID: 0}
 --- !u!1 &983639829
 GameObject:
   m_ObjectHideFlags: 0
@@ -6833,7 +6834,9 @@ MonoBehaviour:
   enemies:
   - {fileID: 11400000, guid: 28bf5ffd724f78242a01c09310e0ba01, type: 2}
   howManyPartyMembers: 2
-  howManyEnemies: 25
+  howManyEnemies: 10
+  spikeSlotPrefab: {fileID: 3119150678241855687, guid: 263a027136c805045bbbe43cda3a4eae,
+    type: 3}
 --- !u!114 &1147397651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6890,6 +6893,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3df21767c7cc7a343ac0196c5097b2fb, type: 2}
   - {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
   - {fileID: 11400000, guid: 8a64f11071c864b42af891eaa38d8c36, type: 2}
+  - {fileID: 11400000, guid: 7419948df84a9a24589bc6c406bd8914, type: 2}
+  - {fileID: 11400000, guid: d503c0f2fd05b5e43915de3732ab8466, type: 2}
+  - {fileID: 11400000, guid: fd7d07e3649e5bd4fb569638330b1874, type: 2}
 --- !u!114 &1147397652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7606,7 +7612,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh162542
+  m_Name: pb_Mesh98592
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8187,6 +8193,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1357839841
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1357839842}
+  m_Layer: 0
+  m_Name: SpecialSlot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1357839842
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1357839841}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 24
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1372092599
 GameObject:

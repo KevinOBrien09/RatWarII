@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26a0f7607b3fe9c4f825e10fd91e95af, type: 3}
-  m_Name: QuickFire
+  m_Name: Sticky Snare
   m_EditorClassIdentifier: 
-  ID: c7c54216-da53-491d-b961-91f8224254c4
-  skillName: Quickfire
-  desc: Shoot an arrow dealing 5 DMG, gaining 2 DMG for each tile traveled
+  ID: fe5ca1f6-a2c0-4239-8201-d66fbad0ecf1
+  skillName: Sticky Snare
+  desc: Grab and pull a unit towards the caster.
   effects: []
-  side: 1
-  skillCastBehaviour: {fileID: 6636933160678305289, guid: 27e41a4b6e065ea4b94771691f6f3d94,
+  side: 0
+  skillCastBehaviour: {fileID: 133483409346696746, guid: 680d20cc32f4b7b499e8a50eb92e04d9,
     type: 3}
-  doesntNeedUnitInSlot: 1
+  doesntNeedUnitInSlot: 0
   statusEffectIcon: {fileID: 0}
   passThrough: 0
   goThroughWalls: 0
-  projectilePath: 0
+  projectilePath: 2
   howManyTiles: 99

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa5ff9dd15893c45b0be18781db98f6, type: 3}
+  m_Name: Pillar
+  m_EditorClassIdentifier: 
+  ID: d802dfd8-74e8-4a53-8912-3c9f4a589b5e
+  skillName: Ice Pillar
+  desc: Summon a 1 x1  pillar of ice that lasts for 1 turn.
+  effects: []
+  side: 2
+  skillCastBehaviour: {fileID: 4220685632100824470, guid: ab3a6259f44cfca45ae3c62c661308cf,
+    type: 3}
+  doesntNeedUnitInSlot: 1
+  statusEffectIcon: {fileID: 0}
+  radius: 4
