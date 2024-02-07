@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AOEHeal
   m_EditorClassIdentifier: 
   ID: 1757dcc8-6197-43eb-8e02-f4f6947c5d24
-  skillName: AOEHeal
+  skillName: Respitus Minor
   desc: Heal allies in a 1 tile radius for 15 HP.
   effects: []
   side: 0

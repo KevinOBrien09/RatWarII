@@ -37,7 +37,11 @@ public class BattleManager : Singleton<BattleManager>
         List<Unit> ordered = u.OrderBy(f => f.stats().speed).ToList();
         ordered.Reverse();
         foreach (var item in ordered)
-        {turnOrder.Enqueue(item);}
+        {
+            
+            turnOrder.Enqueue(item);
+             item. movedThisTurn = false;
+        }
 
         UnitIteration();
         turn++;
@@ -46,9 +50,9 @@ public class BattleManager : Singleton<BattleManager>
 
     public void EndTurn(){
     
-           if(BattleManager.inst.turn != 0)
+        if(BattleManager.inst.turn != 0)
         {BattleManager.inst.UnitIteration();    currentUnit.activeUnitIndicator.gameObject.SetActive(false);}
-           MapManager.inst.grid.UpdateGrid();
+        MapManager.inst.grid.UpdateGrid();
         ActionMenu.inst.Hide();
     }
 
@@ -62,32 +66,55 @@ public class BattleManager : Singleton<BattleManager>
                 ActionMenu.inst.FUCKOFF = false;
                 
                 yield return new WaitForSeconds(.25f);
-                BattleTicker.inst.Type(BattleManager.inst. TurnState());
+              
                 currentUnit = turnOrder.Dequeue();
-                CamFollow.inst.target = currentUnit.slot. transform;
-                if(currentUnit.side == Side.PLAYER)
-                {       
-                    CamFollow.inst.Focus(currentUnit.slot.transform,()=>{});
-                    currentUnit.activeUnitIndicator.gameObject.SetActive(true);
+                if( currentUnit.stunned)
+                {
+                     BattleTicker.inst.Type(BattleManager.inst. TurnState());
+
+                    
+                    CamFollow.inst.target = currentUnit.slot. transform;
+                    yield return new WaitForSeconds(.5f);
+                    BattleTicker.inst.Type("Stunned.");
+                    currentUnit.RemoveStun();
                     StatusEffectLoop(currentUnit);
                     while(looping)
                     {yield return null;}
-                   
+           
                     
-                    ActionMenu.inst.  FUCKOFF = false;
-                    GameManager.inst.ChangeGameState(GameState.PLAYERUI);
-                    ActionMenu.inst.Reset();
-                    ActionMenu.inst.Show(currentUnit.slot);
-                    SkillHandler.inst.NewUnit(currentUnit);
-                   
-
+                    yield return new WaitForSeconds(.75f);
+                    UnitIteration();
                 }
                 else
                 {
-                    yield return new WaitForSeconds(.25f);
-                    UnitIteration();
-                    //AI
+                    BattleTicker.inst.Type(BattleManager.inst. TurnState());
+
+                    CamFollow.inst.target = currentUnit.slot. transform;
+                    if(currentUnit.side == Side.PLAYER)
+                    {       
+                        CamFollow.inst.Focus(currentUnit.slot.transform,()=>{});
+                        currentUnit.activeUnitIndicator.gameObject.SetActive(true);
+                        StatusEffectLoop(currentUnit);
+                        while(looping)
+                        {yield return null;}
+                    
+                        
+                        ActionMenu.inst.  FUCKOFF = false;
+                        GameManager.inst.ChangeGameState(GameState.PLAYERUI);
+                        ActionMenu.inst.Reset();
+                        ActionMenu.inst.Show(currentUnit.slot);
+                        SkillHandler.inst.NewUnit(currentUnit);
+                    
+
+                    }
+                    else
+                    {
+                        yield return new WaitForSeconds(.25f);
+                        UnitIteration();
+                        //AI
+                    }
                 }
+                
             }
             else
             {

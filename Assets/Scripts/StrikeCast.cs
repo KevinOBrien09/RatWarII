@@ -16,7 +16,7 @@ public class StrikeCast : SkillCastBehaviour
         {
             args.target.Hit(damage);
 
-        }));
+        }),true);
        
     }
 

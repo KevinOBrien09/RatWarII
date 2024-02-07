@@ -14,11 +14,12 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
     public RectTransform rt;
     public StatusEffectStackHandler stackHandler;
     public HealthBar healthBar;
-    Slot sl;
+   public Slot sl;
     void Start()
     {
-        Disable();
         shown = rt.anchoredPosition;
+        Disable();
+     
     }
 
     public void Apply(Slot slot)
@@ -32,9 +33,12 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             healthBar.gameObject.SetActive(true);
             healthBar.Refresh();
             if(!gameObject.activeSelf){
-            gameObject.SetActive(true);
-            rt.DOAnchorPos(hidden,0);
-            rt.DOAnchorPos(shown,.2f);
+                gameObject.SetActive(true);
+                rt.DOAnchorPos(hidden,0);
+                rt.DOAnchorPos(shown,.2f);
+            }
+            else{      gameObject.SetActive(true);
+                   rt.DOAnchorPos(shown,.2f);
             }
              
             if( ! GameManager.inst.checkGameState(GameState.PLAYERUI)) 
@@ -75,10 +79,13 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
         }
         else
         {   
-     if(!gameObject.activeSelf){
-            gameObject.SetActive(true);
-            rt.DOAnchorPos(hidden,0);
-            rt.DOAnchorPos(shown,.2f);
+       if(!gameObject.activeSelf){
+                gameObject.SetActive(true);
+                rt.DOAnchorPos(hidden,0);
+                rt.DOAnchorPos(shown,.2f);
+            }
+            else{      gameObject.SetActive(true);
+                   rt.DOAnchorPos(shown,.2f);
             }
            
             if( !GameManager.inst.checkGameState(GameState.PLAYERUI)) 
@@ -114,7 +121,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
         healthBar.health = null;
         rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
         {
-            gameObject.SetActive(false);
+           // gameObject.SetActive(false);
         });
 
     }

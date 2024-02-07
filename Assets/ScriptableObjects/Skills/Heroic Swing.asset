@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c603b92c96daa24088b1e84b0cbbbdd, type: 3}
-  m_Name: Slash
+  m_Name: Heroic Swing
   m_EditorClassIdentifier: 
   ID: 96de55b2-7e0f-4bf9-b992-78c05034c4c7
-  skillName: Slash
+  skillName: Heroic Swing
   desc: Deal 15 damage to all enemy units in a 1 tile radius.
   effects: []
   side: 1
@@ -21,6 +21,7 @@ MonoBehaviour:
     type: 3}
   doesntNeedUnitInSlot: 0
   statusEffectIcon: {fileID: 0}
+  restrictCast: 0
   radius: 1
   castOnCasterSlot: 0
   showHealthBars: 1

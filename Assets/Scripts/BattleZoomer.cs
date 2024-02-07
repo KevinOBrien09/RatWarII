@@ -16,11 +16,12 @@ public class BattleZoomer : Singleton<BattleZoomer>
     public RectTransform handle;
     public Image rightIMG,leftIMG,handleIMG;
 
-    public  void ZoomIn(CastArgs args,UnityAction action)
+    public  void ZoomIn(CastArgs args,UnityAction action,bool end)
     {
+        
         float leftY,rightY,casterY,targetY;
         CamFollow.inst.STOPMOVING = true; 
-        
+        Cursor.lockState = CursorLockMode.Locked;
         (Unit left,Unit right) u = leftMostUnit(args.target,args.caster);
         leftY = u.left.transform.position.y;
         rightY = u.right.transform.position.y;
@@ -156,11 +157,14 @@ public class BattleZoomer : Singleton<BattleZoomer>
                             leftHp.health = null;
                             rightHP.health = null;
                             rightIMG.color = Color.black;
-                            leftIMG.color = Color.black;  group.DOFade(0,.2f).OnComplete(()=>
+                            leftIMG.color = Color.black;  
+                            group.DOFade(0,.2f).OnComplete(()=>
                             {UI.gameObject.SetActive(false);});
                           
-
-                            SkillAimer.inst.Finish();
+                            if(end){
+                            SkillAimer.inst.Finish();          
+                            }
+                           
                         }
                     });
                 });
@@ -196,7 +200,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
         leftHp.gameObject.SetActive(false);
         centerHP.gameObject.SetActive(true);
         aimThing.gameObject.SetActive(false);
-          handle.gameObject.SetActive(false);
+        handle.gameObject.SetActive(false);
         UI.gameObject.SetActive(true);
         group.DOFade(1,.1f);
 

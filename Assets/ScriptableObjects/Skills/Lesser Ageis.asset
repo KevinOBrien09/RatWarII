@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lesser Ageis
   m_EditorClassIdentifier: 
   ID: 35433542-3142-45a9-b3d4-93096ef99883
-  skillName: Lesser Ageis
+  skillName: Barricus Minor
   desc: Grant the caster a 15HP shield for 1 turn.
   effects: []
   side: 0
@@ -21,3 +21,7 @@ MonoBehaviour:
     type: 3}
   doesntNeedUnitInSlot: 0
   statusEffectIcon: {fileID: 21300000, guid: d9b16b13c2d3ec246940d1cdddcba2b4, type: 3}
+  restrictCast: 0
+  radius: 0
+  castOnCasterSlot: 0
+  showHealthBars: 0

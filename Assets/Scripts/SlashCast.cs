@@ -39,8 +39,10 @@ public class SlashCast : SkillCastBehaviour
                     
                     if(item.unit != null)
                     {
-                        if(item.unit.side != args.caster.side){
-                        item.unit .Hit(damage);
+                        if(item.unit.side != args.caster.side)
+                        {
+                            item.unit .Hit(damage);
+                          
                         }
                         
                     }
@@ -48,6 +50,8 @@ public class SlashCast : SkillCastBehaviour
                 }
             }
             yield return new WaitForSeconds(.2f);
+
+
             SkillAimer.inst.Skip();
         }
     }

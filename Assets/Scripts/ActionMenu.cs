@@ -124,13 +124,18 @@ public class ActionMenu : Singleton<ActionMenu>
                
             break;
             case ActionMenuState.MOVE:
-           
-            FUCKOFF = true;
+           if(!slot.unit.movedThisTurn){
+   FUCKOFF = true;
             rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
             { FUCKOFF = false; open = false;});
            // SlotInfoDisplay.inst.Disable();
             UnitMover.inst.EnterSelectionMode(slot);
             Cursor.lockState = CursorLockMode.Confined;
+           }
+           else{
+            Debug.Log("Error Noise");
+           }
+         
             break;
             case ActionMenuState.INTERACT:
              

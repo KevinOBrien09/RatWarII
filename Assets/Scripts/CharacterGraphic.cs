@@ -102,7 +102,7 @@ public class CharacterGraphic : MonoBehaviour
             Vector3 ogPos = transform.position;
             Tween t =  transform.DOShakePosition(.3f).OnComplete(()=>
             {
-                if(!dead){
+                if(!dead && !unit.inKnockback){
                 transform.position = ogPos;
                 }
                
@@ -152,6 +152,26 @@ public class CharacterGraphic : MonoBehaviour
 
         }
 
+    }
+
+    public void WhiteFlash(UnityAction a){
+
+        StartCoroutine(q());
+        IEnumerator q()
+        {
+
+            foreach (var item in rendDict)
+            {
+                item.Key.material = unit.whiteFlash;
+            }  
+
+            yield return new WaitForSeconds(.1f);
+            a.Invoke();
+            foreach (var item in rendDict)
+            {
+                item.Key.material = unit.spriteDefault;
+            } 
+        }
     }
 
     public void ChangeSpriteSorting(int yAxis)

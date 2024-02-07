@@ -20,6 +20,12 @@ public class Unit : MonoBehaviour
     public bool facingRight;
    public  ParticleSystemRenderer shieldGraphic,shieldKillRend;
    public ParticleSystem shieldKill;
+   public bool movedThisTurn;
+   public bool inKnockback;
+   public bool stunned;
+   public Material whiteFlash,spriteDefault;
+   public GameObject stunIndicator;
+
     public void RecieveGraphic(CharacterGraphic _graphic)
     {
         graphic = _graphic;
@@ -68,10 +74,33 @@ public class Unit : MonoBehaviour
                 { loop(); });
             }
             else
-            { Reposition(finalSlot);
-                BattleManager.inst.EndTurn();
+            { 
+                Reposition(finalSlot);
+                MapManager.inst.grid.UpdateGrid();
+                movedThisTurn = true;
+                SlotInfoDisplay.inst.sl = finalSlot;
+                GameManager.inst.ChangeGameState(GameState.PLAYERUI);
+                ActionMenu.inst.Reset();
+               
+                ActionMenu.inst.Show(this.slot);
+
+                //BattleManager.inst.EndTurn();
             }
         }
+    }
+
+    public void Stun(){
+        stunned = true;
+        graphic.WhiteFlash(()=>{
+
+   stunIndicator.SetActive(true);
+        });
+     
+    }
+
+    public void RemoveStun(){
+        stunned =  false;
+           stunIndicator.SetActive(false);
     }
 
     public bool willUnitDie(int damage){
@@ -151,7 +180,7 @@ public class Unit : MonoBehaviour
             slot.unit = null;
         }
         SlotInfoDisplay.inst.Disable();
-        SlotSelector.inst.gameObject.SetActive(true);
+        //SlotSelector.inst.gameObject.SetActive(true);
         slot = newSlot;
      
         if(!stats(). passable)
