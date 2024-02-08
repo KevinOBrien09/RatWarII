@@ -18,15 +18,16 @@ public class Unit : MonoBehaviour
     public Enemy enemy;
     public List<StatusEffect> statusEffects = new List<StatusEffect>();
     public bool facingRight;
-   public  ParticleSystemRenderer shieldGraphic,shieldKillRend;
-   public ParticleSystem shieldKill;
-   public bool movedThisTurn;
-   public bool inKnockback;
-   public bool stunned;
-   public Material whiteFlash,spriteDefault;
-   public GameObject stunIndicator;
-   public List<TempTerrain> tempTerrainCreated = new List<TempTerrain>();
-
+    public  ParticleSystemRenderer shieldGraphic,shieldKillRend;
+    public ParticleSystem shieldKill;
+    public bool movedThisTurn;
+    public bool inKnockback;
+    public bool stunned;
+    public Material whiteFlash,spriteDefault;
+    public GameObject stunIndicator;
+    public List<TempTerrain> tempTerrainCreated = new List<TempTerrain>();
+    public EnemyAI enemyAI;
+    public bool moving;
     public void RecieveGraphic(CharacterGraphic _graphic)
     {
         graphic = _graphic;
@@ -61,6 +62,7 @@ public class Unit : MonoBehaviour
     public void MoveAlongPath(Queue<Slot> q,Slot finalSlot)
     {
         loop();
+        moving = true;
         void loop()
         {
             if(q.Count > 0)
@@ -76,14 +78,18 @@ public class Unit : MonoBehaviour
             }
             else
             { 
+                moving = false;
                 Reposition(finalSlot);
                 MapManager.inst.grid.UpdateGrid();
                 movedThisTurn = true;
                 SlotInfoDisplay.inst.sl = finalSlot;
-                GameManager.inst.ChangeGameState(GameState.PLAYERUI);
+                if(side == Side.PLAYER){
+GameManager.inst.ChangeGameState(GameState.PLAYERUI);
                 ActionMenu.inst.Reset();
                
                 ActionMenu.inst.Show(this.slot);
+                }
+                
 
                 //BattleManager.inst.EndTurn();
             }
@@ -180,7 +186,10 @@ public class Unit : MonoBehaviour
             slot.node.isBlocked = false;
             slot.unit = null;
         }
-        SlotInfoDisplay.inst.Disable();
+        if(side == Side.PLAYER ){
+  SlotInfoDisplay.inst.Disable();
+        }
+      
         //SlotSelector.inst.gameObject.SetActive(true);
         slot = newSlot;
      

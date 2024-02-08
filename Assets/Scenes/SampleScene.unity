@@ -6834,7 +6834,7 @@ MonoBehaviour:
   enemies:
   - {fileID: 11400000, guid: 28bf5ffd724f78242a01c09310e0ba01, type: 2}
   howManyPartyMembers: 2
-  howManyEnemies: 10
+  howManyEnemies: 2
   spikeSlotPrefab: {fileID: 3119150678241855687, guid: 263a027136c805045bbbe43cda3a4eae,
     type: 3}
 --- !u!114 &1147397651

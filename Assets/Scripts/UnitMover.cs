@@ -16,27 +16,34 @@ public class UnitMover : Singleton<UnitMover>
     {
         if(!inCoro)
         {
-            SlotInfoDisplay.inst.Apply(sSlot);
-            SlotInfoDisplay.inst.Disable();
-            SlotSelector.inst.gameObject.SetActive(true);
             inCoro = true;
             selectedUnit = sSlot.unit;
             unitStartRot = selectedUnit.transform.rotation;
-            CamFollow.inst.Focus(sSlot.unit.transform,()=>{
-            GameManager.inst.ChangeGameState(GameState.PLAYERSELECT);
-            CamFollow.inst.ChangeCameraState(CameraState.FREE);
-            inCoro = false;
+            CamFollow.inst.Focus(sSlot.unit.transform,()=>
+            {
+                if(selectedUnit.side == Side.PLAYER)
+                {GameManager.inst.ChangeGameState(GameState.PLAYERSELECT);
+                CamFollow.inst.ChangeCameraState(CameraState.FREE);
+                }
+                inCoro = false;
             });
             
             selectedSlot = sSlot;
             validSlots = new List<Slot>(sSlot.GetValidSlotsInRadius(sSlot.unit.stats().moveRange,false));
-            foreach (var item in validSlots)
-            {item.ChangeColour(validSlotColour);}  
+            if(selectedUnit.side == Side.PLAYER){
+            SelectionUI(sSlot);
+            }
+       
         }
-        
-           
-        
+    }
 
+    public void SelectionUI(Slot sSlot)
+    {
+        SlotInfoDisplay.inst.Apply(sSlot);
+        SlotInfoDisplay.inst.Disable();
+        SlotSelector.inst.gameObject.SetActive(true);
+        foreach (var item in validSlots)
+        {item.ChangeColour(validSlotColour);} 
     }
 
     public void NewHover(List<Node> nodes)
@@ -64,7 +71,7 @@ public class UnitMover : Singleton<UnitMover>
         if(CamFollow.inst.CheckCameraState(CameraState.FOCUS))
         {return; }
 
-        if(GameManager.inst.checkGameState(GameState.PLAYERSELECT)||GameManager.inst.checkGameState(GameState.UNITMOVE) && !inCoro)
+        if( GameManager.inst.checkGameState(GameState.ENEMYTURN) || GameManager.inst.checkGameState(GameState.PLAYERSELECT)||GameManager.inst.checkGameState(GameState.UNITMOVE) && !inCoro)
         {
             StartCoroutine(q());
         }
@@ -105,7 +112,7 @@ public class UnitMover : Singleton<UnitMover>
         selectedUnit.activeUnitIndicator.gameObject.SetActive(false);
         selectedUnit.slot.ChangeColour(baseSlotColour);
         List<Node> path = MapManager.inst.aStar.FindPath(UnitMover.inst.selectedSlot.transform.position,
-        SlotSelector.inst.transform.position);
+       slot.transform.position);
         Queue<Slot> q = new Queue<Slot>();
         foreach (var item in path)
         {   q.Enqueue(item.slot); }

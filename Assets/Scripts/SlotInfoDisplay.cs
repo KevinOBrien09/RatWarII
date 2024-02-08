@@ -113,7 +113,11 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
         if(sl != null)
         {
             if(sl.unit != null)
-            {   sl.unit .graphic.cam.gameObject.SetActive(false);
+            {   
+                if(sl.unit.side == Side.PLAYER){
+  sl.unit .graphic.cam.gameObject.SetActive(false);
+                }
+              
             }
         }
         stackHandler.Kill();

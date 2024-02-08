@@ -36,7 +36,7 @@ public class AOEHealCast : SkillCastBehaviour
                     
                 
             }
-            yield return new WaitForSeconds(.33f);
+            yield return new WaitForSeconds(1f);
             SkillAimer.inst.Finish();       
         }
     }

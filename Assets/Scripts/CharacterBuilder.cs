@@ -62,6 +62,7 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     public List<Skill> genSkills(StartingStats startingStats)
     {
         List<Skill> skills = new List<Skill>();
+               skills.Add(skipSkill);
         foreach (var item in allSkills)
         {
             skills.Add(item);
@@ -71,7 +72,7 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         // skills.Add(jobDict[Job.KNIGHT].bnbSkill);
         // skills.Add(jobDict[Job.WIZARD].bnbSkill);
         // skills.Add(jobDict[Job.ARCHER].bnbSkill);
-        skills.Add(skipSkill);
+ 
         // skills.Add(ss.bnbSkill);
         //    skills.Add(ss.bnbSkill);
         return skills;  

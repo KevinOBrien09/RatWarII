@@ -59,6 +59,19 @@ public class Health : MonoBehaviour
       
     }
 
+    public bool healthOverPercent(int percent)
+    {
+       float hpPercentage = ((float) currentHealth / (float)maxHealth) * (float)100;
+       Debug.Log((int)hpPercentage + " hp percent");
+       if((int) hpPercentage >= percent)
+       {
+        return true;
+       }
+       else{
+        return false;
+       }
+    }
+
     public void DeductShield()
     {
         Queue<qwerty> q = new Queue<qwerty>();

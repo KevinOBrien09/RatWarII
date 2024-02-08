@@ -189,8 +189,19 @@ public class BattleManager : Singleton<BattleManager>
                     }
                     else
                     {
+                        SlotInfoDisplay.inst.Apply(currentUnit.slot);
+                        GameManager.inst.ChangeGameState(GameState.ENEMYTURN);
                         yield return new WaitForSeconds(.25f);
-                        UnitIteration();
+                        if(    currentUnit.enemyAI != null){
+                            
+                            currentUnit.enemyAI.ConductTurn();
+                        }
+                        else{
+                            Debug.LogAssertion("NO ENEMY AI FOUND");
+                            UnitIteration();
+                        }
+                        
+                        //
                         //AI
                     }
                 }
@@ -303,7 +314,8 @@ public class BattleManager : Singleton<BattleManager>
         u.health.Init(u.stats().hp);
         u.gameObject.name = graphic.character.characterName.fullName();
         ReposUnit(u,slot);
-
+        u.enemyAI = Instantiate(e.enemyAI,u.transform);
+        u.enemyAI.Init(u);
         enemyUnits.Add(u);
         return u;
     }

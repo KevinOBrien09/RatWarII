@@ -7,8 +7,8 @@ public class SkillAimer : Singleton<SkillAimer>
     public enum Aim{SELF,RADIUS,PROJECTILE}
     public Aim currentState;
     public bool aiming;
-    Slot slot;  
-    Unit caster;
+   public Slot slot;  
+   public Unit caster;
     public    List<Slot> validSlots = new List<Slot>();
     public List<Unit> validTargets = new List<Unit>();
     public bool castDecided;
@@ -134,12 +134,15 @@ public class SkillAimer : Singleton<SkillAimer>
     
     public void ProjectileAim(ProjectileSkill skill)
     {
+        if(BattleManager.inst.currentUnit.side == Side.PLAYER){
         currentState = Aim.PROJECTILE;
-   
-        Character casterChar = caster.character;
-        Cursor.lockState = CursorLockMode.Confined;
         SlotSelector.inst.gameObject.SetActive(true);
         CamFollow.inst.ChangeCameraState(CameraState.FREE);
+        }
+   
+      //  Character casterChar = caster.character;
+        Cursor.lockState = CursorLockMode.Confined;
+       
 
         switch(skill.projectilePath)
         {
@@ -157,9 +160,11 @@ public class SkillAimer : Singleton<SkillAimer>
             break;
 
         }
-      
-        foreach (var item in validSlots)
-        {item.ChangeColour(Color.gray);}  
+        if(BattleManager.inst.currentUnit.side == Side.PLAYER){
+            foreach (var item in validSlots)
+            {item.ChangeColour(Color.gray);} 
+        }
+         
     }
 
     public void RadiusAim(RadiusSkill skill)

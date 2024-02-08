@@ -11,4 +11,5 @@ public class Enemy : GUIDScriptableObject
     public StartingStats startingStats;
     public CharacterGraphic characterGraphic;
     public Texture icon;
+    public EnemyAI enemyAI;
 }

@@ -46,7 +46,7 @@ public class SlashCast : SkillCastBehaviour
                         }
                         
                     }
-                    Debug.Log(item.gameObject.name);
+                  
                 }
             }
             yield return new WaitForSeconds(.2f);
