@@ -7,13 +7,17 @@ public class SpikeSlot : SpecialSlot
 {
     public Transform spikes;
     public int damage = 25;
-    public override void Go(){
+    public override void Go()
+    {
+        
         spikes.DOLocalMoveY(.23f,.05f).OnComplete(()=>
         {
+            AudioManager.inst.GetSoundEffect().Play(sounds[0]);
             StartCoroutine(q());
             IEnumerator q(){
             if(slot.unit != null){
                 slot.unit.Hit(damage);
+                AudioManager.inst.GetSoundEffect().Play(sounds[1]);
             }
             yield return new WaitForSeconds(.5f);
               spikes.DOLocalMoveY(.13f,.3f);

@@ -15,6 +15,7 @@ public class StrikeCast : SkillCastBehaviour
         BattleZoomer.inst.ZoomIn(args,(()=>
         {
             args.target.Hit(damage);
+            PlaySound(0,args.skill);
 
         }),true);
        

@@ -20,4 +20,9 @@ MonoBehaviour:
   skillCastBehaviour: {fileID: 5895357610692576228, guid: 416e7d8f44b6171439d6d5f65a7028ee,
     type: 3}
   doesntNeedUnitInSlot: 0
+  statusEffectIcon: {fileID: 0}
+  sounds:
+  - audioClip: {fileID: 8300000, guid: 1cd9fbc4bb2c19749aa2e61afd72aaaa, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1
   radius: 2

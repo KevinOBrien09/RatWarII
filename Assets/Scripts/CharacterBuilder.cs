@@ -9,6 +9,7 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     public GenericDictionary<Species,Names> nameDict = new GenericDictionary<Species,Names>();
     public GenericDictionary<Species,CharacterGraphic> graphicDict = new GenericDictionary<Species, CharacterGraphic>();
     public GenericDictionary<Job,StartingStats> jobDict = new GenericDictionary<Job,StartingStats>();
+    public GenericDictionary<Species,CharacterSounds> sfxDict = new GenericDictionary<Species, CharacterSounds>();
     public Skill skipSkill;
     public List<Skill> allSkills = new List<Skill>();
     public CharacterGraphic Generate()

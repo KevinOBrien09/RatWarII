@@ -29,8 +29,9 @@ args.target.healthBar.gameObject.transform.parent.gameObject. SetActive(true);
         }
         
         CamFollow.inst.Focus(arrow.transform,(()=>{
- startMoving = true;
- CamFollow.inst.ChangeCameraState(CameraState.LOCK);
+        startMoving = true;
+        PlaySound(0,args.skill);
+        CamFollow.inst.ChangeCameraState(CameraState.LOCK);
         }));
        
         if(args.targetSlot.node.iGridY == args.caster.slot.node.iGridY)

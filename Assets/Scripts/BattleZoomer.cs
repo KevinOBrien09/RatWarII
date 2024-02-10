@@ -15,6 +15,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
     public CanvasGroup group;
     public RectTransform handle;
     public Image rightIMG,leftIMG,handleIMG;
+    public List<SoundData> negativeSounds = new List<SoundData>();
 
     public  void ZoomIn(CastArgs args,UnityAction action,bool end)
     {
@@ -31,7 +32,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
         u.right.transform.SetParent(BattleZoomer.inst.right);
         u.left.transform.DOLocalMove(Vector3.zero,.1f);
         u.right.transform.DOLocalMove(Vector3.zero,.1f);
-
+ AudioManager.inst.GetSoundEffect().Play(negativeSounds[0])   ;
         BattleManager.inst.ToggleHealthBars(false);
         leftHp.gameObject.SetActive(true);
         rightIMG.color = Color.black;
@@ -115,7 +116,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
                 attackerHolder.DOLocalMoveX(b,.1f).OnComplete(()=>
                 {
                     action.Invoke();
-                  
+                
                     handle.transform.DOLocalRotate(new Vector3(0,0,-90),.25f);
                    
                     attackerHolder.DOLocalMove(originalPos,.2f).OnComplete(()=>
@@ -129,7 +130,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
                             bool casterAlive = args.caster.health.currentHealth > 0;
                             Unit target = args.target;
                             Unit caster = args.caster;
-                   
+                    AudioManager.inst.GetSoundEffect().Play(negativeSounds[1])   ;
                             if(casterAlive)
                             {
                                 foreach (var item in caster.graphic.rendDict)

@@ -68,7 +68,11 @@ public class BattleManager : Singleton<BattleManager>
 
     public void UnitIteration()
     {
-        StartCoroutine(q());
+        if(playerLose())
+        {Lose();}
+        else
+        {StartCoroutine(q());}
+        
         IEnumerator q(){
             
             if(turnOrder.Count > 0)
@@ -102,7 +106,7 @@ public class BattleManager : Singleton<BattleManager>
                         Loop();
                         void Loop()
                         {
-                            Debug.Log("loop");
+                            
                             StartCoroutine(d());
                             IEnumerator d()
                             {
@@ -110,7 +114,6 @@ public class BattleManager : Singleton<BattleManager>
                                 {
                                     terrainShit = false;
                                     MapManager.inst.grid.UpdateGrid();
-
                                 }
                                 else
                                 {
@@ -133,6 +136,7 @@ public class BattleManager : Singleton<BattleManager>
          
                 if(currentUnit.slot.specialSlot != null)
                 {
+                    CamFollow.inst.ForceFOV(20);
                     BattleTicker.inst.Type(currentUnit.slot.specialSlot.tickerText);
                     CamFollow.inst.target = currentUnit.slot. transform;
                     bool willUnitDie = currentUnit.slot.specialSlot.willUnitDie();
@@ -149,7 +153,7 @@ public class BattleManager : Singleton<BattleManager>
                 }
 
 
-
+                CamFollow.inst.ForceFOV(CamFollow.inst.baseFOV);
                 if( currentUnit.stunned)
                 {
                     BattleTicker.inst.Type(BattleManager.inst. TurnState());
@@ -177,7 +181,8 @@ public class BattleManager : Singleton<BattleManager>
                         StatusEffectLoop(currentUnit);
                         while(looping)
                         {yield return null;}
-                    
+                        if(currentUnit. sounds != null)
+                        {AudioManager.inst.GetSoundEffect().Play(currentUnit.sounds.turnStart);}
                         
                         ActionMenu.inst.  FUCKOFF = false;
                         GameManager.inst.ChangeGameState(GameState.PLAYERUI);
@@ -212,6 +217,13 @@ public class BattleManager : Singleton<BattleManager>
                 NewTurn();
             }
         }
+    }
+
+    public bool playerLose()
+    {return playerUnits.Count == 0;}
+
+    public void Lose(){
+        BattleTicker.inst.Type("All the adventurers have perished...");
     }
 
     public void StatusEffectLoop(Unit u)
@@ -294,6 +306,11 @@ public class BattleManager : Singleton<BattleManager>
         u.health.Init(u.stats().hp);
         u.gameObject.name = graphic.character.characterName.fullName();
         ReposUnit(u,slot);
+        if(CharacterBuilder.inst.sfxDict.ContainsKey(u.character.species))
+        {
+     u.sounds = CharacterBuilder.inst.sfxDict[u.character.species];
+        }
+   
         playerUnits.Add(u);
         return u;
     }
@@ -315,6 +332,7 @@ public class BattleManager : Singleton<BattleManager>
         u.gameObject.name = graphic.character.characterName.fullName();
         ReposUnit(u,slot);
         u.enemyAI = Instantiate(e.enemyAI,u.transform);
+     //   u.sounds = CharacterBuilder.inst.sfxDict[u.character.species];
         u.enemyAI.Init(u);
         enemyUnits.Add(u);
         return u;

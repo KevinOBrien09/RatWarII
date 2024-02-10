@@ -21,6 +21,10 @@ MonoBehaviour:
     type: 3}
   doesntNeedUnitInSlot: 1
   statusEffectIcon: {fileID: 0}
+  sounds:
+  - audioClip: {fileID: 8300000, guid: c0f309e0d0db9094f9429c9f6cc5ea48, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
   passThrough: 0
   goThroughWalls: 0
   projectilePath: 0

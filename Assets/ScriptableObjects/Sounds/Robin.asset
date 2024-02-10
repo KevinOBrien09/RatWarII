@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf0fd85696f1894eb5b90fc5ebac9f3, type: 3}
+  m_Name: Robin
+  m_EditorClassIdentifier: 
+  ID: 9cf2d3da-7f76-4396-8967-d472279e8a3e
+  turnStart:
+    audioClip: {fileID: 8300000, guid: 13cfd8f31be1d614aaa9f2e16d5b7880, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1
+  move:
+    audioClip: {fileID: 8300000, guid: d6168bf4e4170a049861484a3d3aa1fe, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1
+  die:
+    audioClip: {fileID: 8300000, guid: d6168bf4e4170a049861484a3d3aa1fe, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1

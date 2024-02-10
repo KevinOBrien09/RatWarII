@@ -10,6 +10,9 @@ public class SkillCastBehaviour : MonoBehaviour
         Debug.LogWarning(args.skill.skillName + " was cast");
     }
 
+    public virtual void PlaySound(int i,Skill s)
+    {AudioManager.inst.GetSoundEffect().Play(s.sounds[i]);}
+
   
 }
 

@@ -6,6 +6,7 @@ using DG.Tweening;
 public enum Side{PLAYER,ENEMY,NEITHER}
 public class Unit : MonoBehaviour
 {
+    
     public CharacterGraphic graphic;
     public Character character;
     public Slot slot;
@@ -20,6 +21,7 @@ public class Unit : MonoBehaviour
     public bool facingRight;
     public  ParticleSystemRenderer shieldGraphic,shieldKillRend;
     public ParticleSystem shieldKill;
+    
     public bool movedThisTurn;
     public bool inKnockback;
     public bool stunned;
@@ -28,6 +30,8 @@ public class Unit : MonoBehaviour
     public List<TempTerrain> tempTerrainCreated = new List<TempTerrain>();
     public EnemyAI enemyAI;
     public bool moving;
+     public CharacterSounds sounds;
+
     public void RecieveGraphic(CharacterGraphic _graphic)
     {
         graphic = _graphic;
@@ -61,6 +65,8 @@ public class Unit : MonoBehaviour
     }
     public void MoveAlongPath(Queue<Slot> q,Slot finalSlot)
     {
+        if(sounds != null)
+        {AudioManager.inst.GetSoundEffect().Play(sounds.move);}
         loop();
         moving = true;
         void loop()
@@ -148,6 +154,8 @@ GameManager.inst.ChangeGameState(GameState.PLAYERUI);
     public void Die()
     {   
         BattleManager.inst.UnitIsDead(this);
+        if(sounds != null)
+        {AudioManager.inst.GetSoundEffect().Play(sounds.die);}
         slot.unit = null;
         health.currentHealth = 0;
         StartCoroutine(q());

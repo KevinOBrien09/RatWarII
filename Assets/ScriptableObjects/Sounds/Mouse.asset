@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf0fd85696f1894eb5b90fc5ebac9f3, type: 3}
+  m_Name: Mouse
+  m_EditorClassIdentifier: 
+  ID: 489690c7-b03c-443d-8a45-46a1d447ebbb
+  turnStart:
+    audioClip: {fileID: 8300000, guid: 8d4d4cd52574438478205ca730a77511, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1
+  move:
+    audioClip: {fileID: 8300000, guid: 093d1d269a957c1479fd6fb083692ace, type: 3}
+    pitchRange: {x: 0.8, y: 1.1}
+    volume: 1
+  die:
+    audioClip: {fileID: 8300000, guid: 5c573ddeb6508544d871d81202d1454b, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1

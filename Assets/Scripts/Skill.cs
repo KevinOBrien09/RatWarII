@@ -13,6 +13,7 @@ public class Skill : GUIDScriptableObject
     public SkillCastBehaviour skillCastBehaviour;
     public bool doesntNeedUnitInSlot;
     public Sprite statusEffectIcon;
+    public List<SoundData> sounds = new List<SoundData>();
  
     public void Go()
     {Debug.Log(skillName);}

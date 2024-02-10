@@ -14,6 +14,7 @@ public class SlashCast : SkillCastBehaviour
         {
             ParticleSystem ps =   Instantiate(slashVFXPrefab,args.caster.slot.transform.position,Quaternion.identity);
             ps.Play(); 
+            PlaySound(0,args.skill);
             Vector3 ogRot = args.caster.transform.rotation.eulerAngles;
             StartCoroutine(Rotate(ps.main.duration));
             IEnumerator Rotate(float duration)

@@ -16,4 +16,5 @@ public class Character
     public EXP exp;
     public ColourVarient colourVarient;
     public List<Skill> skills = new List<Skill>();
+   
 }
