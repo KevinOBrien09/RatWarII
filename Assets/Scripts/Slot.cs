@@ -286,7 +286,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
         
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(GameManager.inst.checkGameState(GameState.UNITMOVE))
+        if(GameManager.inst.checkGameState(GameState.UNITMOVE)|GameManager.inst.checkGameState(GameState.ENEMYTURN))
         {return;}
         if(SkillAimer.inst.castDecided)
         {return;}

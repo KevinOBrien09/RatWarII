@@ -44,8 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 112bdadbe6a0c1b43999d9fbeda0c91e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runAwayThreshhold: 20
+  unit: {fileID: 0}
+  aiMove: 0
+  runAwayThreshhold: 30
   enemyState: 0
   poi: {fileID: 0}
   loc: {fileID: 0}
-  strike: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
+  strike: {fileID: 0}
+  reave: {fileID: 11400000, guid: 73fdef37728165749b934cb5441addb6, type: 2}
+  heal: {fileID: 11400000, guid: bf5305eaeb732ea45905eed6a443cc3b, type: 2}

@@ -7,7 +7,7 @@ using DG.Tweening;
 
 public static class Knockback
 {
-    public static bool Hit(int howManyTiles,Unit attacker,Unit victim)
+    public static bool Hit(int howManyTiles,Unit attacker,Unit victim,bool stun)
     {
             int casterX = attacker.slot.node.iGridX;
             int casterY = attacker.slot.node.iGridY;
@@ -137,8 +137,8 @@ public static class Knockback
                         }
                         else{
                             Debug.Log("Stun! (Temp Terrain)");
-
-                            Stun();
+                        
+                            Stun(stun);
                             return false;
                         }
                        
@@ -149,8 +149,11 @@ public static class Knockback
                     else
                     {
                         Debug.Log("Double Stun! (Unit)");
-                        Stun();
-                        newSlot.unit .Stun();
+                        Stun(stun);
+                        if(stun){
+ newSlot.unit .Stun();
+                        }
+                       
                         return false;
                     }
                  
@@ -158,7 +161,7 @@ public static class Knockback
                 else
                 {   Debug.Log("Stun! (Wall)");
 
-                    Stun();
+                    Stun(stun);
                     return false;
                 }
             
@@ -166,12 +169,12 @@ public static class Knockback
             else
             {   Debug.Log("Stun! (Map Border)"); 
 
-                Stun();
+                Stun(stun);
                 return false;
             }
 
     
-    void Stun(){
+    void Stun(bool stun){
         Vector3 overShoot = new Vector3();
                    Vector3 overShoot2 = new Vector3();
                 Vector3  p = u.slot. transform.position;
@@ -247,8 +250,11 @@ public static class Knockback
                 u.transform.DOMove(overShoot,.1f).OnComplete(()=>
                 { BattleManager.inst.StartCoroutine(s());
                     IEnumerator s(){
-                    u.Stun();
-                    yield return new WaitForSeconds(.1f); //wallslam
+                        if(stun){
+                            u.Stun();
+                            yield return new WaitForSeconds(.1f); //wallslam
+                        }
+                  
                   
                     u.transform.DOMove(overShoot2,.2f).OnComplete(()=>
                     {

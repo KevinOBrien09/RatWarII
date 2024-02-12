@@ -124,6 +124,7 @@ args.target.healthBar.gameObject.transform.parent.gameObject. SetActive(true);
                 {
                     damage += 2;
                 }
+                PlaySound(1,castArgs.skill);
                 castArgs.target.Hit(damage);
                 yield return new WaitForSeconds(.75f);
                 CamFollow.inst.Focus(castArgs.caster.slot.transform,()=>

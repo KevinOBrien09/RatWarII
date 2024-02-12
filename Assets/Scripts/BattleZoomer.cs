@@ -187,6 +187,8 @@ public class BattleZoomer : Singleton<BattleZoomer>
 
     public void SoloZoom(CastArgs args,UnityAction action)
     {
+        CamFollow.inst.STOPMOVING = true;
+        CamFollow.inst.target = args.caster.slot.transform;
         Unit u = args.caster;
         float  ogY = u.transform.position.y;
         u.transform.SetParent(BattleZoomer.inst.center);

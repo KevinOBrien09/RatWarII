@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c603b92c96daa24088b1e84b0cbbbdd, type: 3}
+  m_Name: Regenerate
+  m_EditorClassIdentifier: 
+  ID: b5bb7964-4858-4bc1-b8b6-3897c3a3cd79
+  skillName: Regenerate
+  desc: Heal the caster for 25HP.
+  effects: []
+  side: 0
+  skillCastBehaviour: {fileID: 5185063330075656956, guid: 741e7b73ddd27cd48b4d16bb28ccccc6,
+    type: 3}
+  doesntNeedUnitInSlot: 0
+  statusEffectIcon: {fileID: 0}
+  sounds: []
+  value: 19000000
+  radius: 0
+  castOnCasterSlot: 0
+  showHealthBars: 0

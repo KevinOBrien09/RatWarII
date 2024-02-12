@@ -24,7 +24,7 @@ public class KnockbackCast : SkillCastBehaviour
         
             
             // yield return new WaitForSeconds(2f);
-            Knockback.Hit(1,args.caster,args.target);
+            Knockback.Hit(1,args.caster,args.target,true);
             
             
             yield return new WaitForSeconds(.45f);

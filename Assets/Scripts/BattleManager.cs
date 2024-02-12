@@ -136,7 +136,7 @@ public class BattleManager : Singleton<BattleManager>
          
                 if(currentUnit.slot.specialSlot != null)
                 {
-                    CamFollow.inst.ForceFOV(20);
+                   // CamFollow.inst.ForceFOV(20);
                     BattleTicker.inst.Type(currentUnit.slot.specialSlot.tickerText);
                     CamFollow.inst.target = currentUnit.slot. transform;
                     bool willUnitDie = currentUnit.slot.specialSlot.willUnitDie();
@@ -299,7 +299,7 @@ public class BattleManager : Singleton<BattleManager>
         u.character = graphic.character;
         graphic.unit = u;
         u.side = Side.PLAYER;
-       (Stats stats,List<Skill> skills ) statsAndSkills = CharacterBuilder.inst.GenerateStatsAndSkills(CharacterBuilder.inst.jobDict[u.character.job]);
+       (Stats stats,List<Skill> skills ) statsAndSkills = CharacterBuilder.inst.GenerateStatsAndSkills(CharacterBuilder.inst.jobDict[u.character.job],u.character);
         u.character.baseStats = statsAndSkills.stats;
         u.character.skills = new List<Skill>( statsAndSkills.skills);
         u.RecieveGraphic(graphic);
@@ -320,13 +320,14 @@ public class BattleManager : Singleton<BattleManager>
         Enemy e =enemies[Random.Range(0,enemies.Count)];
         CharacterGraphic graphic =  CharacterBuilder.inst.GenerateEnemy(e);
         Unit u =  Instantiate(unitPrefab);
+        u.sounds = e.sounds;
         u.enemy = e;
         u.character = graphic.character;
         graphic.unit = u;
         u.side = Side.ENEMY;
-        (Stats stats,List<Skill> skills ) statsAndSkills = CharacterBuilder.inst.GenerateStatsAndSkills(e.startingStats);
-        u.character.baseStats = statsAndSkills.stats;
-        u.character.skills = new List<Skill>( statsAndSkills.skills);
+       
+        u.character.baseStats = CharacterBuilder.inst.genStats(e.startingStats);
+       // u.character.skills = new List<Skill>( statsAndSkills.skills);
         u.RecieveGraphic(graphic);
         u.health.Init(u.stats().hp);
         u.gameObject.name = graphic.character.characterName.fullName();

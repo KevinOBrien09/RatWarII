@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b88a5d64d0797f940b8778d4d285397a, type: 3}
   m_Name: ArcherBaseStats
   m_EditorClassIdentifier: 
-  hp: {x: 70, y: 90}
+  hp: {x: 60, y: 80}
   speed: {x: 4, y: 6}
-  moveRange: 4
+  moveRange: 3
   bnbSkill: {fileID: 11400000, guid: 1271aaa1c079d034bab516907da76c61, type: 2}
+  otherSkills:
+  - {fileID: 11400000, guid: 9c5002f7d21ac1d408daf22adcaffa93, type: 2}

@@ -105,10 +105,12 @@ public class CamFollow : Singleton<CamFollow>
     }
 
     void LockOn(){
-
-        Vector3 desiredposition = target.position + offset;
+        if(target != null){
+ Vector3 desiredposition = target.position + offset;
         Vector3 smoothedposition = Vector3.Lerp(transform.position, desiredposition, smoothspeed*Time.deltaTime);
         transform.position = smoothedposition;
+        }
+       
     }
 
 

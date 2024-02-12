@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa5ff9dd15893c45b0be18781db98f6, type: 3}
+  m_Name: Fireball
+  m_EditorClassIdentifier: 
+  ID: 1cfe3625-2a98-43c7-b1cc-2715c0f8d003
+  skillName: Fireball
+  desc: 'Shoot a fireball at an enemy '
+  effects: []
+  side: 1
+  skillCastBehaviour: {fileID: 0}
+  doesntNeedUnitInSlot: 1
+  statusEffectIcon: {fileID: 0}
+  sounds: []
+  radius: 4

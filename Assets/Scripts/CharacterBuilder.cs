@@ -9,9 +9,11 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     public GenericDictionary<Species,Names> nameDict = new GenericDictionary<Species,Names>();
     public GenericDictionary<Species,CharacterGraphic> graphicDict = new GenericDictionary<Species, CharacterGraphic>();
     public GenericDictionary<Job,StartingStats> jobDict = new GenericDictionary<Job,StartingStats>();
+    public GenericDictionary<Species,List<Skill>> speciesSkill = new GenericDictionary<Species,List<Skill>>();
     public GenericDictionary<Species,CharacterSounds> sfxDict = new GenericDictionary<Species, CharacterSounds>();
-    public Skill skipSkill;
+    public List<Skill> mandatorySkills = new List<Skill>();
     public List<Skill> allSkills = new List<Skill>();
+    public bool addAllSkills;
     public CharacterGraphic Generate()
     {
         Character character = new Character();
@@ -44,8 +46,8 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
 
     }
 
-    public (Stats stats,List<Skill> skills ) GenerateStatsAndSkills(StartingStats ss)
-    {return (genStats(ss), genSkills(ss));}
+    public (Stats stats,List<Skill> skills ) GenerateStatsAndSkills(StartingStats ss,Character c)
+    {return (genStats(ss), genSkills(ss,c));}
 
 
     public Stats genStats(StartingStats ss)
@@ -60,22 +62,30 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         return s;
     }
 
-    public List<Skill> genSkills(StartingStats startingStats)
+    public List<Skill> genSkills(StartingStats startingStats,Character c)
     {
         List<Skill> skills = new List<Skill>();
-               skills.Add(skipSkill);
-        foreach (var item in allSkills)
+        if(addAllSkills)
         {
-            skills.Add(item);
+            foreach (var item in allSkills)
+            {skills.Add(item); }
         }
-     
+        else
+        {
+            foreach (var item in mandatorySkills)
+            {skills.Add(item);}
+            
+            skills.Add(startingStats.bnbSkill);
+            if(startingStats.otherSkills.Count > 0){
+            skills.Add(startingStats.otherSkills[Random.Range(0,startingStats.otherSkills.Count)]);
+            }
+            
+            if(speciesSkill.ContainsKey(c.species))
+            {
+                skills.Add(speciesSkill[c.species][Random.Range(0,speciesSkill[c.species].Count)]);
+            }
+        }
         
-        // skills.Add(jobDict[Job.KNIGHT].bnbSkill);
-        // skills.Add(jobDict[Job.WIZARD].bnbSkill);
-        // skills.Add(jobDict[Job.ARCHER].bnbSkill);
- 
-        // skills.Add(ss.bnbSkill);
-        //    skills.Add(ss.bnbSkill);
         return skills;  
     }
 

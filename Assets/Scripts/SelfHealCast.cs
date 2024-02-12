@@ -11,7 +11,7 @@ public class SelfHealCast : SkillCastBehaviour
     {
         BattleZoomer.inst.SoloZoom(args,(()=>{
        
-            args.caster.Heal(value);
+            args.caster.Heal(args.skill.value[0]);
         }));
 
 

@@ -11,7 +11,7 @@ public class PillarCast :  SkillCastBehaviour
         IEnumerator q()
         {   
             
-
+            PlaySound(0,args.skill);
             TempTerrain pillar = Instantiate(pillarPrefab, args.targetSlot.transform.position,Quaternion.identity);   
             pillar.transform.DOMoveY(-4,0);
             args.targetSlot.tempTerrain = pillar;

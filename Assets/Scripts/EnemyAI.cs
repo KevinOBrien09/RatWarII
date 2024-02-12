@@ -6,8 +6,8 @@ using System.Linq;
 public class EnemyAI : MonoBehaviour
 {
     public enum EnemyState{CHASING,INRANGE,RETREAT}
-    Unit unit;
-    bool aiMove;
+    public Unit unit;
+    public bool aiMove;
     [Range(0,100)]  public int runAwayThreshhold = 20;
     public EnemyState enemyState;
     public Slot poi,loc;
@@ -25,7 +25,7 @@ public class EnemyAI : MonoBehaviour
             loc = GetSlot();
             yield return new WaitForSeconds(.1f);
             
-        
+
             if(canCast(strike))
             {
                 CastSkill(strike);
@@ -48,36 +48,45 @@ public class EnemyAI : MonoBehaviour
                 
             }
 
-            void CastSkill(Skill s)
-            {
-                if(s is SelfSkill selfSkill)
-                {
-
-                }
-                else if(s is ProjectileSkill proj)
-                {
-                    CamFollow.inst.target = unit.slot.transform;
-                    SkillAimer.inst.validSlots.Add(poi);
-                    SkillAimer.inst._skill = strike;
-                    SkillAimer.inst.RecieveSlot(poi);
-                }
-                else if(s is RadiusSkill radiusSkill)
-                {
-                    CamFollow.inst.target = unit.slot.transform;
-                    SkillAimer.inst.validSlots.Add(poi);
-                    SkillAimer.inst._skill = strike;
-                    SkillAimer.inst.RecieveSlot(poi);
-                }
-            }
+         
         }
     
     }
+
+    public  void CastSkill(Skill s)
+    {
+        if(s is SelfSkill selfSkill)
+        {
+            SkillAimer.inst._skill = s;
+            CamFollow.inst.target = unit.slot.transform;
+       
+        }
+        else if(s is ProjectileSkill proj)
+        {
+            CamFollow.inst.target = unit.slot.transform;
+            SkillAimer.inst.validSlots.Add(poi);
+            SkillAimer.inst._skill = s;
+            SkillAimer.inst.RecieveSlot(poi);
+        }
+        else if(s is RadiusSkill radiusSkill)
+        {
+            CamFollow.inst.target = unit.slot.transform;
+            SkillAimer.inst.validSlots.Add(poi);
+            SkillAimer.inst._skill = s;
+            SkillAimer.inst.RecieveSlot(poi);
+        }
+    }
+
+
 
     public bool canCast(Skill s)
     {
         if(s is SelfSkill selfSkill)
         {
-
+            SkillAimer.inst.slot = unit.slot;
+            SkillAimer.inst.caster = unit;
+            SkillAimer.inst.validSlots.Add(unit.slot);
+            return true;
         }
         else if(s is ProjectileSkill proj)
         {
@@ -124,8 +133,11 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    public Slot GetSlot()
+    public virtual Slot GetSlot(Slot st = null)
     {
+        if(st != null){
+            return st;
+        }
         UnitMover.inst.EnterSelectionMode(BattleManager.inst.currentUnit.slot);
         Slot s = null;
 
@@ -150,7 +162,7 @@ public class EnemyAI : MonoBehaviour
     }
 
 
-    Slot closestSlotToPoint(Transform origin,List<Slot> pointsOfInterest)
+   public Slot closestSlotToPoint(Transform origin,List<Slot> pointsOfInterest)
     {
         List<Slot>  closest = pointsOfInterest.Where(n => n && n != this)
         .OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();

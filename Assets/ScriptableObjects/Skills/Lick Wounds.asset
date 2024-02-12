@@ -21,7 +21,8 @@ MonoBehaviour:
     type: 3}
   doesntNeedUnitInSlot: 0
   statusEffectIcon: {fileID: 0}
-  restrictCast: 0
+  sounds: []
+  value: 0f000000
   radius: 0
   castOnCasterSlot: 0
   showHealthBars: 0

@@ -138,11 +138,12 @@ public class SkillAimer : Singleton<SkillAimer>
         currentState = Aim.PROJECTILE;
         SlotSelector.inst.gameObject.SetActive(true);
         CamFollow.inst.ChangeCameraState(CameraState.FREE);
+            Cursor.lockState = CursorLockMode.Confined;
+       
         }
    
       //  Character casterChar = caster.character;
-        Cursor.lockState = CursorLockMode.Confined;
-       
+    
 
         switch(skill.projectilePath)
         {

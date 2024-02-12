@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 98f3fffa-7cfd-4cbe-8078-7a8720c14ab8
   names:
-  - MANTIS
+  - Mantis
   tagLine: PREYING MANTIS
   startingStats: {fileID: 11400000, guid: 44fe959ce9b4d20478f1203f6c47ee87, type: 2}
   characterGraphic: {fileID: 1547177500389944056, guid: 46f480586324caa4c8611e493622832c,

@@ -14,6 +14,7 @@ public class Skill : GUIDScriptableObject
     public bool doesntNeedUnitInSlot;
     public Sprite statusEffectIcon;
     public List<SoundData> sounds = new List<SoundData>();
+    public List<int> value = new List<int>();
  
     public void Go()
     {Debug.Log(skillName);}

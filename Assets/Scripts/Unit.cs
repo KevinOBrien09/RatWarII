@@ -21,7 +21,7 @@ public class Unit : MonoBehaviour
     public bool facingRight;
     public  ParticleSystemRenderer shieldGraphic,shieldKillRend;
     public ParticleSystem shieldKill;
-    
+    public List<SoundData> systemSounds = new List<SoundData>();
     public bool movedThisTurn;
     public bool inKnockback;
     public bool stunned;
@@ -105,7 +105,7 @@ GameManager.inst.ChangeGameState(GameState.PLAYERUI);
     public void Stun(){
         stunned = true;
         graphic.WhiteFlash(()=>{
-
+        AudioManager.inst.GetSoundEffect().Play(systemSounds[0]);
    stunIndicator.SetActive(true);
         });
      
@@ -128,13 +128,14 @@ GameManager.inst.ChangeGameState(GameState.PLAYERUI);
         int temp = health.currentHealth - damage;
         bool dead = temp <= 0;
         graphic.RedFlash(dead,(()=>
-        {health.Hit(damage);}));
+        {health.Hit(damage);
+        AudioManager.inst.GetSoundEffect().Play(systemSounds[2]);}));
     }
 
     public void Heal(int amount){
         graphic.GreenFlash(()=>{
             int i =health.healAmount(amount);
-
+AudioManager.inst.GetSoundEffect().Play(systemSounds[1]);
             ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go(i.ToString(),Color.green,transform.position);
             health.Heal(amount);
         });

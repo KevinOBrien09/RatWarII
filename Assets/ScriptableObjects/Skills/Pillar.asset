@@ -13,12 +13,16 @@ MonoBehaviour:
   m_Name: Pillar
   m_EditorClassIdentifier: 
   ID: d802dfd8-74e8-4a53-8912-3c9f4a589b5e
-  skillName: Ice Pillar
-  desc: Summon a 1 x1  pillar of ice that lasts for 1 turn.
+  skillName: Earth Pillar
+  desc: Erect a 1 x1 pillar from the earth that lasts for 1 turn.
   effects: []
   side: 2
   skillCastBehaviour: {fileID: 4220685632100824470, guid: ab3a6259f44cfca45ae3c62c661308cf,
     type: 3}
   doesntNeedUnitInSlot: 1
   statusEffectIcon: {fileID: 0}
+  sounds:
+  - audioClip: {fileID: 8300000, guid: 61c0848a701c2114bb6dc5087bc980cd, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1
   radius: 4

@@ -25,6 +25,9 @@ MonoBehaviour:
   - audioClip: {fileID: 8300000, guid: c0f309e0d0db9094f9429c9f6cc5ea48, type: 3}
     pitchRange: {x: 0.9, y: 1.1}
     volume: 1
+  - audioClip: {fileID: 8300000, guid: 1cd9fbc4bb2c19749aa2e61afd72aaaa, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
   passThrough: 0
   goThroughWalls: 0
   projectilePath: 0

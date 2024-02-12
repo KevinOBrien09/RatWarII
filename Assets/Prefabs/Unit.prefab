@@ -99,9 +99,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3537426709883490128}
-  m_LocalRotation: {x: 0.3420201, y: 0, z: 0, w: 0.9396927}
-  m_LocalPosition: {x: 0, y: 0.36, z: -2.43}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
+  m_LocalPosition: {x: 0, y: -5.37, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7811005254211709394}
@@ -109,7 +109,7 @@ Transform:
   - {fileID: 1979693431240771153}
   m_Father: {fileID: 4472879287895378444}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 40, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 20, y: 0, z: 0}
 --- !u!1 &3610194836041941133
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,6 +526,16 @@ MonoBehaviour:
   shieldGraphic: {fileID: 0}
   shieldKillRend: {fileID: 9093413647118144047}
   shieldKill: {fileID: 340193917332450911}
+  systemSounds:
+  - audioClip: {fileID: 8300000, guid: b1d4fa76256db844e980babbc278df20, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1
+  - audioClip: {fileID: 8300000, guid: d8447478a92c7044e8b1d4acebdca90d, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1
+  - audioClip: {fileID: 8300000, guid: 33b0a6c99069ab244b895bc93e9a138a, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1
   movedThisTurn: 0
   inKnockback: 0
   stunned: 0
@@ -533,6 +543,10 @@ MonoBehaviour:
     type: 2}
   spriteDefault: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   stunIndicator: {fileID: 3537426709883490128}
+  tempTerrainCreated: []
+  enemyAI: {fileID: 0}
+  moving: 0
+  sounds: {fileID: 0}
 --- !u!114 &7819094409353634773
 MonoBehaviour:
   m_ObjectHideFlags: 0

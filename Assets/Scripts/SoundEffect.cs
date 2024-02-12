@@ -6,8 +6,8 @@ using UnityEngine;
 public class SoundData
 {
     public AudioClip audioClip;
-    public Vector2 pitchRange = new Vector2();
-    public float volume;
+    public Vector2 pitchRange = new Vector2(.9f,1.1f);
+    public float volume = 1;
 }
 
 
