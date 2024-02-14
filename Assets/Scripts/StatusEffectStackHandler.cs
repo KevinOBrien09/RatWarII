@@ -9,23 +9,28 @@ public class StatusEffectStackHandler : MonoBehaviour
     public RectTransform  statusEffectHolder;
     public StatusEffectStack stackPrefab;
     List<StatusEffectStack> stackList = new List<StatusEffectStack>();
-             Dictionary<string,StatusEffectStack> d = new Dictionary<string, StatusEffectStack>();
+    public GenericDictionary<StatusEffectEnum,Sprite> statusEffectSprites = new GenericDictionary<StatusEffectEnum, Sprite>();
+    Dictionary<StatusEffectEnum,StatusEffectStack> d = new Dictionary<StatusEffectEnum, StatusEffectStack>();
     public void Spawn(Unit u)
     {
-        foreach (var item in u.statusEffects)
+        foreach (var l in  u.statusEffects)
         {
-   
-            if(d.ContainsKey(item.skill.ID))
+            foreach (var item in l.Value)
             {
-                d[item.skill.ID].Stack();
+    
+                if(d.ContainsKey(item.statusEffectEnum))
+                {
+                    d[item.statusEffectEnum].Stack();
+                }
+                else
+                {
+                    StatusEffectStack statusEffectStack = Instantiate(stackPrefab,statusEffectHolder);
+                    statusEffectStack.Init(statusEffectSprites[item.statusEffectEnum]);
+                    stackList.Add(statusEffectStack);
+                    d.Add(item.statusEffectEnum,statusEffectStack);
+                }
             }
-            else
-            {
-                StatusEffectStack statusEffectStack = Instantiate(stackPrefab,statusEffectHolder);
-                statusEffectStack.Init(item.skill);
-                stackList.Add(statusEffectStack);
-                d.Add(item.skill.ID,statusEffectStack);
-            }
+            
         }
     }
 

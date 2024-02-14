@@ -14,15 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: b5bb7964-4858-4bc1-b8b6-3897c3a3cd79
   skillName: Lick Wounds
-  desc: Heal the caster for 15HP.
+  desc: Heal the caster for 10% MAXHP and remove all <color=red>bleed</color> stacks.
   effects: []
   side: 0
-  skillCastBehaviour: {fileID: 5185063330075656956, guid: 741e7b73ddd27cd48b4d16bb28ccccc6,
+  skillCastBehaviour: {fileID: 8737062205045707021, guid: 25991d682d1f03c4faa41d81a75ddd67,
     type: 3}
   doesntNeedUnitInSlot: 0
   statusEffectIcon: {fileID: 0}
-  sounds: []
-  value: 0f000000
+  sounds:
+  - audioClip: {fileID: 8300000, guid: 093d1d269a957c1479fd6fb083692ace, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
+  value: 
   radius: 0
   castOnCasterSlot: 0
   showHealthBars: 0

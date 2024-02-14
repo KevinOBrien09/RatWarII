@@ -8,7 +8,7 @@ using DG.Tweening;
 public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
 {
     public TextMeshProUGUI charName,hp,speciesClass,level;
-    public TextMeshProUGUI speed,moveRange;
+    public TextMeshProUGUI speed,moveRange,strength;
     public RawImage icon;
     public Vector2 shown,hidden;
     public RectTransform rt;
@@ -64,8 +64,9 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                   speciesClass.text = slot.unit.enemy.tagLine;
             }
             stackHandler.Kill();
-           stackHandler.Spawn(u);
+            stackHandler.Spawn(u);
             speed.text = "SPEED:" + u.stats().speed.ToString();
+            strength.text = "STR:" + u.stats().strength.ToString();
             moveRange.text = "MOVE:" + u.stats().moveRange.ToString();
             icon.gameObject.SetActive(true);
             if(slot.unit.side == Side.PLAYER){

@@ -10,8 +10,9 @@ public class StatusEffect
     public int turnToKill;
     public UnityAction add, tick,remove;
     public Skill skill;
+    public StatusEffectEnum statusEffectEnum;
    
-    public void Init(UnityAction _add,UnityAction _tick, UnityAction _remove,Unit u,int killTurn,Skill _skill)
+    public void Init(UnityAction _add,UnityAction _tick, UnityAction _remove,Unit u,int killTurn,Skill _skill,StatusEffectEnum _statusEffectEnum)
     {
         //add.Invoke();
         add = _add;
@@ -20,6 +21,7 @@ public class StatusEffect
         unit = u;
         turnToKill = killTurn;
         skill = _skill;
+        statusEffectEnum = _statusEffectEnum;
     }
 
     public void Tick()
@@ -28,9 +30,15 @@ public class StatusEffect
        
     }
 
-    public void CheckForRemoval(){
+    public void CheckForKill()
+    {
         if(BattleManager.inst.turn == turnToKill)
         {Remove();}
+    }
+    
+
+    public bool willBeDead(){
+        return BattleManager.inst.turn > turnToKill;
     }
 
     public void Remove(){

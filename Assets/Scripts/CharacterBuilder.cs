@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public enum ColourVarient{RED,BLUE,GREEN}
 public class CharacterBuilder : Singleton<CharacterBuilder>
 {
     public GenericDictionary<Species,Names> nameDict = new GenericDictionary<Species,Names>();
-    public GenericDictionary<Species,CharacterGraphic> graphicDict = new GenericDictionary<Species, CharacterGraphic>();
+    public CharacterGraphic characerGraphicPrefab;
     public GenericDictionary<Job,StartingStats> jobDict = new GenericDictionary<Job,StartingStats>();
     public GenericDictionary<Species,List<Skill>> speciesSkill = new GenericDictionary<Species,List<Skill>>();
     public GenericDictionary<Species,CharacterSounds> sfxDict = new GenericDictionary<Species, CharacterSounds>();
@@ -22,9 +21,8 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         character.exp = new EXP();
         character.exp.level = 1;
         character.gender = GetGender();   
-        character.colourVarient = MiscFunctions.RandomEnumValue<ColourVarient>();
-        //GenerateStatsAndSkills(character);
-        CharacterGraphic cg =  Instantiate(graphicDict[character.species],Vector3.zero,Quaternion.identity);
+        character.spriteVarient = characerGraphicPrefab.GetRandomSpriteVar(character);
+        CharacterGraphic cg =  Instantiate(characerGraphicPrefab,Vector3.zero,Quaternion.identity);
         character.characterName = nameDict[character.species].GenName(character);
         cg.Init(character);
         cg.character = character;
@@ -56,6 +54,7 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
       
         Stats s = new Stats();
         s.hp = (int)Random.Range(ss.hp.x, ss.hp.y);
+        s.strength = (int)Random.Range(ss.strength.x,ss.strength.y);
         s.speed = (int)Random.Range(ss.speed.x, ss.speed.y);
         s.moveRange = ss.moveRange;
         s.passable = false;

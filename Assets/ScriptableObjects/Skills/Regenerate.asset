@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: b5bb7964-4858-4bc1-b8b6-3897c3a3cd79
   skillName: Regenerate
-  desc: Heal the caster for 25HP.
+  desc: Heal the caster for 15HP.
   effects: []
   side: 0
-  skillCastBehaviour: {fileID: 5185063330075656956, guid: 741e7b73ddd27cd48b4d16bb28ccccc6,
+  skillCastBehaviour: {fileID: 5185063330075656956, guid: 62fe009137bbdc74f90d871813229937,
     type: 3}
   doesntNeedUnitInSlot: 0
   statusEffectIcon: {fileID: 0}
   sounds: []
-  value: 19000000
+  value: 0f000000
   radius: 0
   castOnCasterSlot: 0
   showHealthBars: 0

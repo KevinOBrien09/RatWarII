@@ -74,10 +74,10 @@ public class BattleZoomer : Singleton<BattleZoomer>
 
         args.caster.activeUnitIndicator.gameObject.SetActive(false);
 
-        foreach (var item in u.left.graphic.rendDict)
-        {item.Key.sortingLayerName = "Zoom";}
-        foreach (var item in u.right.graphic.rendDict)
-        {item.Key.sortingLayerName = "Zoom";}
+        foreach (var item in u.left.graphic.allRenderers)
+        {item.sortingLayerName = "Zoom";}
+        foreach (var item in u.right.graphic.allRenderers)
+        {item.sortingLayerName = "Zoom";}
         CamFollow.inst.ForceFOV(45);
         StartCoroutine(BeginMove());
       
@@ -133,18 +133,13 @@ public class BattleZoomer : Singleton<BattleZoomer>
                     AudioManager.inst.GetSoundEffect().Play(negativeSounds[1])   ;
                             if(casterAlive)
                             {
-                                foreach (var item in caster.graphic.rendDict)
-                                {item.Key.sortingLayerName = "Unit";}
-                                caster.graphic.ChangeSpriteSorting( caster.slot.node.iGridY);
+                                caster.graphic.ChangeSpriteSorting( caster.slot.node);
                                 caster.transform.SetParent(null);
                                 caster.transform.DOMove(new Vector3(caster.slot.transform.position.x,casterY,caster.slot.transform.position.z) ,.2f);
                             }
                             if(targetAlive)
                             {
-                          
-                                foreach (var item in target.graphic.rendDict)
-                                {item.Key.sortingLayerName = "Unit";}
-                                target.graphic.ChangeSpriteSorting( target.slot.node.iGridY);
+                                target.graphic.ChangeSpriteSorting( target.slot.node);
                                 target.transform.SetParent(null);
                                 target.transform.DOMove(new Vector3(target.slot.transform.position.x,targetY,target.slot.transform.position.z) ,.2f);
                             }
@@ -207,8 +202,8 @@ public class BattleZoomer : Singleton<BattleZoomer>
         UI.gameObject.SetActive(true);
         group.DOFade(1,.1f);
 
-        foreach (var item in u.graphic.rendDict)
-        {item.Key.sortingLayerName = "Zoom";}
+        foreach (var item in u.graphic.allRenderers)
+        {item.sortingLayerName = "Zoom";}
         CamFollow.inst.ForceFOV(45);
         StartCoroutine(BeginMove());
         IEnumerator BeginMove()
@@ -219,24 +214,26 @@ public class BattleZoomer : Singleton<BattleZoomer>
             centerHP.Refresh();
             yield return new WaitForSeconds(.5f);
 
-            foreach (var item in u.graphic.rendDict)
-            {item.Key.sortingLayerName = "Unit";}
-            u.graphic.ChangeSpriteSorting(u.slot.node.iGridY);
+           
             u.transform.SetParent(null);
-            u.transform.DOMove(new Vector3(u.slot.transform.position.x,ogY,u.slot.transform.position.z) ,.2f);
+            u.transform.DOMove(new Vector3(u.slot.transform.position.x,ogY,u.slot.transform.position.z) ,.2f).OnComplete(()=>{
+
+              
+                u.graphic.ChangeSpriteSorting(u.slot.node);
+            });
 
             CamFollow.inst.Focus(u.slot.transform,()=>
             { CamFollow.inst.ChangeCameraState(CameraState.LOCK); });
             CamFollow.inst.ForceFOV( CamFollow.inst.baseFOV);
             yield return new WaitForSeconds(.45f);
             u. health.onHit.RemoveListener(HpAction);
-            if(args.skill.ID == "35433542-3142-45a9-b3d4-93096ef99883")
-            {
-                ParticleSystemRenderer r =   u.transform.Find("shield") .GetComponent<ParticleSystemRenderer>();
-                r.sortingLayerName = "Unit";
-                r.sortingOrder = u.slot.node.iGridY * 10;
+            // if(args.skill.ID == "35433542-3142-45a9-b3d4-93096ef99883")
+            // {
+            //     ParticleSystemRenderer r =   u.transform.Find("shield") .GetComponent<ParticleSystemRenderer>();
+            //     r.sortingLayerName = "Unit";
+            //     r.sortingOrder = u.slot.node.iGridY * 10;
             
-            }
+            // }
            
             centerHP.health = null;
             group.DOFade(0,.2f).OnComplete(()=>

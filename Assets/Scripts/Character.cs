@@ -14,7 +14,7 @@ public class Character
     public Job job;
     public Stats baseStats;
     public EXP exp;
-    public ColourVarient colourVarient;
+    public int spriteVarient;
     public List<Skill> skills = new List<Skill>();
    
 }

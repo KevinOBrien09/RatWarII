@@ -56,22 +56,21 @@ MonoBehaviour:
     baseStats:
       hp: 0
       speed: 0
+      strength: 0
       moveRange: 0
       passable: 0
     exp:
       level: 1
-    colourVarient: 0
+    spriteVarient: 0
     skills: []
-  jobParents:
+  female:
     list: []
     keyCollision: 0
-  eyeLiner: {fileID: 0}
-  varients:
+  classVarients:
     list: []
     keyCollision: 0
-  rendDict:
-    list: []
-    keyCollision: 0
+  allRenderers:
+  - {fileID: 7328323460515365484}
   cam: {fileID: 0}
   unit: {fileID: 0}
 --- !u!1 &7328323460515365474
@@ -182,21 +181,19 @@ MonoBehaviour:
     baseStats:
       hp: 0
       speed: 0
+      strength: 0
       moveRange: 0
       passable: 0
     exp:
       level: 1
-    colourVarient: 0
+    spriteVarient: 0
     skills: []
-  jobParents:
+  female:
     list: []
     keyCollision: 0
-  eyeLiner: {fileID: 0}
-  varients:
+  classVarients:
     list: []
     keyCollision: 0
-  rendDict:
-    list: []
-    keyCollision: 0
+  allRenderers: []
   cam: {fileID: 0}
   unit: {fileID: 0}

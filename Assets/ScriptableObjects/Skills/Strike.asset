@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: d6bf4a4c-6af8-42e8-a16f-6310278651c7
   skillName: Strike
-  desc: Deal 25 DMG to an enemy unit in a 2 tile radius.
+  desc: Deal 10+{STR 100%} DMG to an enemy unit in a 2 tile radius.
   effects: []
   side: 1
   skillCastBehaviour: {fileID: 5895357610692576228, guid: 416e7d8f44b6171439d6d5f65a7028ee,
@@ -25,4 +25,5 @@ MonoBehaviour:
   - audioClip: {fileID: 8300000, guid: 1cd9fbc4bb2c19749aa2e61afd72aaaa, type: 3}
     pitchRange: {x: 0.9, y: 1}
     volume: 1
+  value: 
   radius: 2

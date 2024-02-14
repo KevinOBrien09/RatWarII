@@ -15,9 +15,10 @@ MonoBehaviour:
   ID: 98f3fffa-7cfd-4cbe-8078-7a8720c14ab8
   names:
   - Mantis
-  tagLine: PREYING MANTIS
-  startingStats: {fileID: 11400000, guid: 44fe959ce9b4d20478f1203f6c47ee87, type: 2}
+  tagLine: PRAYING MANTIS
+  startingStats: {fileID: 11400000, guid: 3965c945b32e5ac4590f5f2674a64d6e, type: 2}
   characterGraphic: {fileID: 1547177500389944056, guid: 46f480586324caa4c8611e493622832c,
     type: 3}
   icon: {fileID: 2800000, guid: ea37a92d7e1412b49b68f2b02c23f999, type: 3}
   enemyAI: {fileID: 8600280297082065181, guid: 632049caacb7d464c81dd424df19d2e6, type: 3}
+  sounds: {fileID: 0}

@@ -59,7 +59,8 @@ public class EnemyAI : MonoBehaviour
         {
             SkillAimer.inst._skill = s;
             CamFollow.inst.target = unit.slot.transform;
-       
+            SkillAimer.inst.validSlots.Add(unit.slot);
+            SkillAimer.inst.RecieveSlot(unit.slot);
         }
         else if(s is ProjectileSkill proj)
         {
@@ -85,7 +86,7 @@ public class EnemyAI : MonoBehaviour
         {
             SkillAimer.inst.slot = unit.slot;
             SkillAimer.inst.caster = unit;
-            SkillAimer.inst.validSlots.Add(unit.slot);
+           
             return true;
         }
         else if(s is ProjectileSkill proj)

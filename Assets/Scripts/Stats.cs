@@ -8,6 +8,7 @@ public class Stats
 {
     public int hp;
     public int speed;
+    public int strength;
     public int moveRange = 0;
     public bool passable;
     
@@ -16,6 +17,7 @@ public class Stats
     {
         Stats s = new Stats();
         s.hp = hp + statMods.hp;
+        s.strength = strength + statMods.strength;
         s.speed = speed + statMods.speed;
         s.moveRange = moveRange + statMods.moveRange;
         s.passable = passable;

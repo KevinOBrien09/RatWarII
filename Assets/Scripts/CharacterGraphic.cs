@@ -7,10 +7,9 @@ using DG.Tweening;
 public class CharacterGraphic : MonoBehaviour
 { 
     public Character character;
-    public GenericDictionary<Job,GameObject> jobParents = new GenericDictionary<Job, GameObject>();
-    public GameObject eyeLiner;
-    public GenericDictionary<Job, GenericDictionary<ColourVarient,GameObject>> varients = new GenericDictionary<Job,GenericDictionary<ColourVarient, GameObject>>();
-    public GenericDictionary<SpriteRenderer,int> rendDict = new GenericDictionary<SpriteRenderer,int>();
+    public GenericDictionary<Species,Sprite> female = new GenericDictionary<Species, Sprite>();
+    public GenericDictionary<Species,GenericDictionary<Job,List<Sprite>>> classVarients = new GenericDictionary<Species, GenericDictionary<Job, List<Sprite>>>();
+    public List<SpriteRenderer> allRenderers = new List<SpriteRenderer>();
     public Camera cam;
     public Unit unit;
    
@@ -25,104 +24,65 @@ public class CharacterGraphic : MonoBehaviour
         IconGraphicHolder.inst.Take(iconClone);
     }
 
-    public void EnemyInit(Enemy e){
-        
-       // CharacterGraphic iconClone = Instantiate(this);
-        foreach (var item in GetComponentsInChildren<SpriteRenderer>().ToList())
-        {
-            if(!rendDict.ContainsKey(item))
-            {rendDict.Add(item,item.sortingOrder);}
-        }
-      
-      
+    public void EnemyInit(Enemy e){}
 
-        // RenderTexture texture = new RenderTexture(250,250,16);
-        // texture.Create();
-        // cam.targetTexture = texture;   
-        // cam.gameObject.SetActive(false);
-
-        // iconClone.gameObject.name = character.characterName.fullName() + ": IconClone";
-        // cam = iconClone.cam;
-
-        // IconGraphicHolder.inst.Take(iconClone);
-        // cam.gameObject.SetActive(false);
-    }
     public void Orginize(Character c)
     {
-        List<GameObject> fuckYou = new List<GameObject>();
-        GameObject jobParent = jobParents[c.job];
-        jobParent.SetActive(true);
-        foreach (var item in jobParents)
-        {
-            if(item.Key != c.job)
-            {fuckYou.Add(item.Value.gameObject);}
-        }
-
         if(c.gender == Gender.FEMALE)
-        {eyeLiner.SetActive(true); }
-        else
-        {fuckYou.Add(eyeLiner.gameObject);}
-
-        GameObject accessory = varients[c.job][c.colourVarient];
-        accessory.SetActive(true);
-
-        foreach (var item in varients[c.job])
         {
-            if(item.Key != c.colourVarient)
-            {fuckYou.Add(item.Value.gameObject);}
-        }
-
-
-        foreach (var item in GetComponentsInChildren<SpriteRenderer>().ToList())
-        {
-            if(!fuckYou.Contains(item.gameObject))
+            if(c.job == Job.KNIGHT)
             {
-                if(!rendDict.ContainsKey(item)){
-                    rendDict.Add(item,item.sortingOrder);
+                if(c.species != Species.FROG)
+                {
+                    if(c.spriteVarient == 3){
+                        Debug.Log("Female BucketHelm Knights do not have lashes");
+                        return;
+                    }
                 }
-              
-            }
-         
-     
-        }
-       
-        foreach (var item in fuckYou)
-        {Destroy(item);}
 
-          RenderTexture texture = new RenderTexture(250,250,16);
+            }
+            allRenderers[1].gameObject.SetActive(true);
+            allRenderers[1].sprite = female[c.species];
+        }
+        else
+        {allRenderers[1].gameObject.SetActive(false);}
+        allRenderers[0].sprite = classVarients[c.species][c.job][c.spriteVarient];
+        RenderTexture texture = new RenderTexture(250,250,16);
         texture.Create();
         cam.targetTexture = texture;   
         cam.gameObject.SetActive(false);
     }
 
-    public void RedFlash(bool dead,UnityAction action){
+    public int GetRandomSpriteVar(Character c)
+    {return  Random.Range(0,classVarients[c.species][c.job].Count);}
+
+    public void RedFlash(UnityAction action){
         StartCoroutine(q());
         IEnumerator q()
         {
             Vector3 ogPos = transform.position;
             Tween t =  transform.DOShakePosition(.3f).OnComplete(()=>
             {
-                if(!dead && !unit.inKnockback){
-                transform.position = ogPos;
-                }
+                if(!unit.inKnockback && unit.health.currentHealth > 0)
+                {transform.position = ogPos;}
                
             });
-            foreach (var item in rendDict)
+            foreach (var item in allRenderers)
             {
-                item.Key.DOColor(Color.red,0);
+                item.DOColor(Color.red,0);
             }
-            if(!dead){
+            if(unit.health.currentHealth > 0){
              action.Invoke();
             }
            
              
             yield return new WaitForSeconds(.25f); //This value matters, BattleZoomer:109
         
-            if(!dead)
+            if(unit.health.currentHealth > 0)
             {
-                foreach (var item in rendDict)
+                foreach (var item in allRenderers)
                 {
-                    item.Key.DOColor(Color.white,1f);
+                    item.DOColor(Color.white,1f);
                 }
             }
             else{
@@ -139,15 +99,15 @@ public class CharacterGraphic : MonoBehaviour
         StartCoroutine(q());
         IEnumerator q()
         {
-            foreach (var item in rendDict)
+            foreach (var item in allRenderers)
             {
-                item.Key.DOColor(Color.green,0);
+                item.DOColor(Color.green,0);
             }
             action.Invoke();
             yield return new WaitForSeconds(0);
-            foreach (var item in rendDict)
+            foreach (var item in allRenderers)
             {
-                item.Key.DOColor(Color.white,1f);
+                item.DOColor(Color.white,1f);
             }
 
         }
@@ -160,28 +120,30 @@ public class CharacterGraphic : MonoBehaviour
         IEnumerator q()
         {
 
-            foreach (var item in rendDict)
+            foreach (var item in allRenderers)
             {
-                item.Key.material = unit.whiteFlash;
+                item.material = unit.whiteFlash;
             }  
 
             yield return new WaitForSeconds(.1f);
             a.Invoke();
-            foreach (var item in rendDict)
+            foreach (var item in allRenderers)
             {
-                item.Key.material = unit.spriteDefault;
+                item.material = unit.spriteDefault;
             } 
         }
     }
 
-    public void ChangeSpriteSorting(int yAxis)
+    public void ChangeSpriteSorting(Node n)
     {
-        foreach (var item in rendDict)
-        {item.Key.sortingOrder = item.Value - yAxis;}
-
-        if(unit.shieldGraphic != null){
-            unit.shieldGraphic.sortingOrder = unit.slot.node.iGridY * 10;
-        }
+        foreach (var item in allRenderers)
+        { item.sortingLayerName = "Unit"; }
+        
+        foreach (var item in allRenderers)
+        { item.sortingOrder = -n.iGridY; }
+        
+        if(unit.shieldGraphic != null)
+        { unit.shieldGraphic.sortingOrder = -n.iGridY; }
     }
 
 }

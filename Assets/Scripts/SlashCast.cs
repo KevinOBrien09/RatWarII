@@ -41,9 +41,16 @@ public class SlashCast : SkillCastBehaviour
                     if(item.unit != null)
                     {
                         if(item.unit.side != args.caster.side)
-                        {
-                            item.unit .Hit(damage);
-                            Knockback.Hit(1,args.caster,item.unit,true);
+                        {  
+                            Unit i = item.unit;
+                            
+                            if(i.health.willUnitDie(damage)){
+                            
+                            }
+                            Knockback.Hit(1,args.caster,i,true);
+                            i.Hit(damage);
+                          
+                            
                         }
                         
                     }

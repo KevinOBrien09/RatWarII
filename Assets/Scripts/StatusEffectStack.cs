@@ -8,11 +8,10 @@ public class StatusEffectStack : MonoBehaviour
 { 
     public TextMeshProUGUI stackNum;
     public Image pic;
-    Skill s;
     int stacks;
-    public void Init(Skill skill){
-        pic.sprite = skill.statusEffectIcon; 
-        s = skill;
+    public void Init(Sprite sprite){
+        pic.sprite = sprite;
+        
         Stack();
     }
 

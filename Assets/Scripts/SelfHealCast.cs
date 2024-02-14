@@ -6,7 +6,7 @@ using DG.Tweening;
 
 public class SelfHealCast : SkillCastBehaviour
 {
-    public int value;
+  
     public override void Go(CastArgs args)
     {
         BattleZoomer.inst.SoloZoom(args,(()=>{

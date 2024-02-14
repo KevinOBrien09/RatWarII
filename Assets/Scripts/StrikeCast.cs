@@ -13,8 +13,9 @@ public class StrikeCast : SkillCastBehaviour
     public override void Go(CastArgs args)
     {
         BattleZoomer.inst.ZoomIn(args,(()=>
-        {
-            args.target.Hit(damage);
+        { 
+            //float percent = MiscFunctions.GetPercentage(args.caster.stats().strength,100);
+            args.target.Hit(10+args.caster.stats().strength);
             PlaySound(0,args.skill);
 
         }),true);

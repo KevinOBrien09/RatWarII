@@ -11,16 +11,16 @@ public class Unit : MonoBehaviour
     public Character character;
     public Slot slot;
     public SpriteRenderer spriteRenderer;
-    public GameObject activeUnitIndicator;
+    public ParticleSystemRenderer activeUnitIndicator;
     public Health health;
     public HealthBar healthBar;
     public Stats statMods;
     public Side side;
     public Enemy enemy;
-    public List<StatusEffect> statusEffects = new List<StatusEffect>();
+    public GenericDictionary<StatusEffectEnum, List< StatusEffect>> statusEffects = new GenericDictionary<StatusEffectEnum, List< StatusEffect>>();
     public bool facingRight;
     public  ParticleSystemRenderer shieldGraphic,shieldKillRend;
-    public ParticleSystem shieldKill;
+    public ParticleSystem shieldKill,bleedVFX;
     public List<SoundData> systemSounds = new List<SoundData>();
     public bool movedThisTurn;
     public bool inKnockback;
@@ -30,7 +30,14 @@ public class Unit : MonoBehaviour
     public List<TempTerrain> tempTerrainCreated = new List<TempTerrain>();
     public EnemyAI enemyAI;
     public bool moving;
-     public CharacterSounds sounds;
+    public CharacterSounds sounds;
+
+    void Start()
+    {
+        var values = System.Enum.GetValues(typeof(StatusEffectEnum));
+        foreach (StatusEffectEnum item in values)
+        {statusEffects.Add(item,new List<StatusEffect>());}
+    }
 
     public void RecieveGraphic(CharacterGraphic _graphic)
     {
@@ -47,16 +54,18 @@ public class Unit : MonoBehaviour
 
     public void AddStatusEffect(StatusEffect se)
     {
-        statusEffects.Add(se);
+       statusEffects[se.statusEffectEnum].Add(se);
         se.add.Invoke();
     }
 
     public void RemoveStatusEffect(StatusEffect se)
     {
        
-        if(statusEffects.Contains(se)){
+
+        if(statusEffects[se.statusEffectEnum].Contains(se))
+        {
             se.remove.Invoke();
-            statusEffects.Remove(se);
+            statusEffects[se.statusEffectEnum].Remove(se);
         }
         else{
             Debug.LogWarning("Status Effect not found");
@@ -75,7 +84,7 @@ public class Unit : MonoBehaviour
             {
                 Slot s= q.Dequeue();
                 Vector3 v =  new Vector3(s.transform.position.x, transform.position.y ,s.transform.position.z);
-                graphic.ChangeSpriteSorting(s.node.iGridY);
+                graphic.ChangeSpriteSorting(s.node);
                 Flip(v);
              
 
@@ -113,29 +122,40 @@ GameManager.inst.ChangeGameState(GameState.PLAYERUI);
 
     public void RemoveStun(){
         stunned =  false;
-           stunIndicator.SetActive(false);
+        stunIndicator.SetActive(false);
     }
 
-    public bool willUnitDie(int damage){
-        int temp = health.currentHealth - damage;
-        bool dead = temp <= 0;
-         return !dead;
-    }
 
-    public void Hit(int damage)
-    {   int i =health.dmgAmount(damage);
+    public void Hit(int damage,bool bleed = false)
+    {   int i = health.dmgAmount(damage);
         ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go(i.ToString(),Color.white,transform.position);
-        int temp = health.currentHealth - damage;
-        bool dead = temp <= 0;
-        graphic.RedFlash(dead,(()=>
+        graphic.RedFlash(()=>
         {health.Hit(damage);
-        AudioManager.inst.GetSoundEffect().Play(systemSounds[2]);}));
+        if(bleed){
+            bleedVFX.Play();
+        }
+        AudioManager.inst.GetSoundEffect().Play(systemSounds[2]);});
+    }
+
+    public void RemoveStatusEffect(StatusEffectEnum statusEffect){
+        statusEffects[statusEffect].Clear();
+    }
+
+    public void Bleed(int howManyBleeds)
+    {
+        float percent = (10f / 100f) * (float) health.maxHealth;
+        int bleed = 0;
+        for (int i = 0; i < howManyBleeds; i++)
+        {bleed += (int)percent;}
+        
+        Hit(bleed,true);
     }
 
     public void Heal(int amount){
-        graphic.GreenFlash(()=>{
+        graphic.GreenFlash(()=>
+        {
             int i =health.healAmount(amount);
-AudioManager.inst.GetSoundEffect().Play(systemSounds[1]);
+            AudioManager.inst.GetSoundEffect().Play(systemSounds[1]);
             ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go(i.ToString(),Color.green,transform.position);
             health.Heal(amount);
         });
@@ -207,7 +227,7 @@ AudioManager.inst.GetSoundEffect().Play(systemSounds[1]);
         else
         {slot.node.isBlocked = false;}
         slot.unit = this;
-        graphic.ChangeSpriteSorting(slot.node.iGridY);
+        graphic.ChangeSpriteSorting(slot.node);
         
     }
 

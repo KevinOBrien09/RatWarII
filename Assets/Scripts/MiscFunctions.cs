@@ -6,4 +6,9 @@ public static class MiscFunctions{
         var v = System.Enum.GetValues (typeof (T));
         return (T) v.GetValue (rnd.Next(v.Length));
     }
+
+    public static int GetPercentage(int main,float percent){
+        float q = (percent / 100f) * (float)main;
+        return (int)q;
+    }
 }

@@ -16,6 +16,10 @@ public class BattleManager : Singleton<BattleManager>
     public int howManyPartyMembers,howManyEnemies;
     bool looping;
     public SpikeSlot spikeSlotPrefab;
+    public GameObject bloodSplatPrefab;
+    public ParticleSystem bloodExplosion;
+    public List<SoundData> sfx = new List<SoundData>();
+
     IEnumerator Start()
     {
         yield return new WaitForEndOfFrame();
@@ -178,19 +182,28 @@ public class BattleManager : Singleton<BattleManager>
                     {       
                         CamFollow.inst.Focus(currentUnit.slot.transform,()=>{});
                         currentUnit.activeUnitIndicator.gameObject.SetActive(true);
+                        yield return new WaitForSeconds(.25f);
                         StatusEffectLoop(currentUnit);
                         while(looping)
                         {yield return null;}
-                        if(currentUnit. sounds != null)
-                        {AudioManager.inst.GetSoundEffect().Play(currentUnit.sounds.turnStart);}
-                        
-                        ActionMenu.inst.  FUCKOFF = false;
-                        GameManager.inst.ChangeGameState(GameState.PLAYERUI);
-                        ActionMenu.inst.Reset();
-                        ActionMenu.inst.Show(currentUnit.slot);
-                        SkillHandler.inst.NewUnit(currentUnit);
                     
-
+                       
+                        if(0 >= currentUnit.health.currentHealth)
+                        {
+                            Debug.Log("Unit Died from bleed");
+                            UnitIteration();
+                        }
+                        else
+                        {
+                            if(currentUnit. sounds != null)
+                            {AudioManager.inst.GetSoundEffect().Play(currentUnit.sounds.turnStart);}
+                            
+                            ActionMenu.inst.FUCKOFF = false;
+                            GameManager.inst.ChangeGameState(GameState.PLAYERUI);
+                            ActionMenu.inst.Reset();
+                            ActionMenu.inst.Show(currentUnit.slot);
+                            SkillHandler.inst.NewUnit(currentUnit);
+                        }
                     }
                     else
                     {
@@ -222,67 +235,136 @@ public class BattleManager : Singleton<BattleManager>
     public bool playerLose()
     {return playerUnits.Count == 0;}
 
-    public void Lose(){
-        BattleTicker.inst.Type("All the adventurers have perished...");
-    }
+    public void Lose()
+    {BattleTicker.inst.Type("All the adventurers have perished...");}
 
-    public void StatusEffectLoop(Unit u)
+    public void StatusEffectLoop(Unit u) //THIS IS BAAADDDD
     {
         looping = true;
-        Queue<UnityAction> statusEffects = new Queue<UnityAction>();
+        Queue<StatusEffectEnum> statusEffects = new Queue<StatusEffectEnum>();
+        Queue<StatusEffect> holyfuckingshit = new Queue<StatusEffect>();
         List<StatusEffect> bin = new List<StatusEffect>();
-        foreach (var item in u.statusEffects)
+        GenericDictionary<StatusEffectEnum, int> xd = new GenericDictionary<StatusEffectEnum,int>();
+        var values = System.Enum.GetValues(typeof(StatusEffectEnum));
+        foreach (StatusEffectEnum item in values)
+        {xd.Add(item,0);}
+        foreach (var catagory in u.statusEffects)
         {
-            if(item.tick != null){
-            statusEffects.Enqueue(item.tick);
-            }
-            else{
-               bin.Add(item);
-            }
-         
-        }
-
-        foreach (var item in bin)
-        {
-            item.CheckForRemoval();
-        }
-        if(statusEffects.Count > 0)
-        {
-            Execute(statusEffects.Dequeue());
-            void Execute(UnityAction se)
+            foreach (var statusEffect in catagory.Value)
             {
-              
-                se.Invoke();
+                if(BattleManager.inst.turn > statusEffect.turnToKill)
+                {
+                    if(!bin.Contains(statusEffect))
+                    {bin.Add(statusEffect);}
+                }
+                else
+                {
+                    if(statusEffect.tick != null)
+                    {
+                        holyfuckingshit.Enqueue(statusEffect);
+                        if(!statusEffects.Contains(statusEffect.statusEffectEnum))
+                        {
+                            statusEffects.Enqueue(statusEffect.statusEffectEnum);
+                            xd[statusEffect.statusEffectEnum]++;
+                        }
+                        else
+                        {xd[statusEffect.statusEffectEnum]++;}
+                        
+                    }
+                }
+            }
+        }
+        
+        if(statusEffects.Count == 0)
+        { 
+            foreach (var catagory in u.statusEffects)
+            {
+                foreach (var statusEffect in catagory.Value)
+                {
+                    if(BattleManager.inst.turn == statusEffect.turnToKill)
+                    {
+                        if(!bin.Contains(statusEffect))
+                        {bin.Add(statusEffect);}
+                    }
+                }
+            }
+            foreach (var item in bin)
+            { item.Remove(); }
+            looping = false;
+        }
+        else
+        {
+            Execute();
+            void Execute()
+            {
                 StartCoroutine(delay());
                 IEnumerator delay()
                 {
-                    yield return new WaitForSeconds(.75f);
+                    if( 0 >= currentUnit.health.currentHealth)
+                    {
+                        looping = false;
+                        yield break;
+                    }
+
+                   
                     if(statusEffects.Count > 0)
-                    {Execute(statusEffects.Dequeue());}
+                    {
+                        StatusEffectEnum se = statusEffects.Dequeue();
+                        
+                        switch (se)
+                        {
+                            case StatusEffectEnum.BARRIER:
+                            Debug.LogAssertion("BARRIER SHOULD NOT TICK");
+                            break;
+                            case StatusEffectEnum.BLEED:
+                            BattleTicker.inst.Type("Bleed");
+                            currentUnit.Bleed(xd[StatusEffectEnum.BLEED]);
+                            break;
+                            case StatusEffectEnum.BILE:
+                            Debug.LogAssertion("BILE SHOULD NOT TICK");
+                            break;
+                            default:
+                            Debug.LogAssertion("DEFAULT CASE");
+                            break;
+                        }
+                        yield return new WaitForSeconds(.75f);
+                        Execute();
+                    }
                     else
-                    {looping = false;}
+                    {
+                        foreach (var item in bin)
+                        { item.Remove(); }
+                        for (int i = 0; i <  holyfuckingshit.Count; i++)
+                        {
+                            if(holyfuckingshit.Count > 0)
+                            {
+                                StatusEffect  se =  holyfuckingshit.Dequeue();
+                                se.CheckForKill();
+                            }
+                        }
+                      
+                        looping = false;
+                    }
                 }
-                
-                
-                
             }
         }
-        else
-        {looping = false;}
-       
-
     }
 
-    public void UnitIsDead(Unit u){
-        if(u.side == Side.ENEMY){
-            enemyUnits.Remove(u);
-        }
-        else{
-            playerUnits.Remove(u);
-        }
+ 
+
+    public void UnitIsDead(Unit u)
+    {
+        if(u.side == Side.ENEMY)
+        {enemyUnits.Remove(u);}
+        else
+        {playerUnits.Remove(u);}
+        GameObject splat = Instantiate(bloodSplatPrefab,new Vector3(u.slot. transform.position.x,bloodSplatPrefab.transform.position.y,u.slot.transform.position.z),bloodSplatPrefab.transform.rotation);
+        ParticleSystem explosion = Instantiate(bloodExplosion,new Vector3(u.slot. transform.position.x,0,u.slot.transform.position.z),bloodSplatPrefab.transform.rotation);
+        explosion.Play();
+        AudioManager.inst.GetSoundEffect().Play(sfx[0]);
         List<Unit> XD = new List<Unit>();
         XD.Add(u);
-       turnOrder = new Queue<Unit>(turnOrder.Where(x => !XD.Contains(x)));
+        turnOrder = new Queue<Unit>(turnOrder.Where(x => !XD.Contains(x)));
     }
 
     public string TurnState()
@@ -308,7 +390,7 @@ public class BattleManager : Singleton<BattleManager>
         ReposUnit(u,slot);
         if(CharacterBuilder.inst.sfxDict.ContainsKey(u.character.species))
         {
-     u.sounds = CharacterBuilder.inst.sfxDict[u.character.species];
+            u.sounds = CharacterBuilder.inst.sfxDict[u.character.species];
         }
    
         playerUnits.Add(u);

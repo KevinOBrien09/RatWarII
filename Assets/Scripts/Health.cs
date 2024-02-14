@@ -44,8 +44,8 @@ public class Health : MonoBehaviour
                 onRefresh.Invoke();
 
                 if(shield() <= 0){
-                     if(shield() == 0)
-        {onShieldBreak.Invoke();}
+                if(shield() == 0)
+                {onShieldBreak.Invoke();}
                 }
             }
             else{
@@ -103,6 +103,16 @@ public class Health : MonoBehaviour
 
     public int dmgAmount(int amount){
     return (int)Mathf.Min(maxHealth, amount);
+    }
+
+    public bool notFull(){
+        return currentHealth != maxHealth;
+    }
+
+    public bool willUnitDie(int dmg){
+        int i = shield()+currentHealth;
+        int hp = i - dmg;
+        return hp > 0;      
     }
 
     public void Hit(int damage)

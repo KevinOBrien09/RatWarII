@@ -2,22 +2,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
-
+using System.Collections;
 
 public class BloodyReaveCast : SkillCastBehaviour
 {  
     public int damage = 35;
+    public int bleedDuration;
     public override void Go(CastArgs args)
     {
         BattleZoomer.inst.ZoomIn(args,(()=>
-        {
-            if(args.caster.health.maxHealth != args.caster.health.currentHealth){
-            int i = args.target.health.dmgAmount(damage);
-            args.caster.Heal(i/2);
-            }
-          
+        { 
+            StatusEffects.Bleed(args.target,args.skill,bleedDuration);
+            bool dead = args.target.health.willUnitDie(damage);
             args.target.Hit(damage);
             PlaySound(0,args.skill);
+        
+            BattleManager.inst.StartCoroutine(q());
+            IEnumerator q()
+            {
+                Unit i = args.target;
+                yield return new WaitForSeconds(1f);
+                if(i != null)
+                { ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go("<b>BLEED!",Color.red,i.transform.position);}
+             
+            }
+
 
         }),true);
        

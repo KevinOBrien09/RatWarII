@@ -25,16 +25,9 @@ public class BarrierCast : SkillCastBehaviour
                 args.caster.shieldGraphic = s.GetComponent<ParticleSystemRenderer>();
                 args.caster.shieldGraphic.sortingLayerName = "Zoom";
             }
-            StatusEffect barrier = new StatusEffect();
-            int kill = BattleManager.inst.turn + howManyTurns;
-            barrier.Init
-            (
-                _add: ()=>{args.caster.health.GainShield(barrier,shieldAmount,args.caster);},
-                _tick:null,
-                _remove:()=>{args.caster.health.RemoveShield(barrier);},
-                args.caster,kill,args.skill
-            );
-            args.caster.AddStatusEffect(barrier);
+            StatusEffects.Barrier(args.caster,args.skill,howManyTurns,shieldAmount);
+             //StatusEffects.Bleed(args.caster,args.skill,howManyTurns);
+           
            
         }));
     }

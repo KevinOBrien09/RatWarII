@@ -26,11 +26,11 @@ public class SkillBehaviour : Selectable
     public override void OnSelect(BaseEventData eventData)
     {
         base.OnSelect(eventData);
-        BattleTicker.inst.Type(skill.skillName + ":" + skill.desc);
+        BattleTicker.inst.Type(skill.skillName + ":" +SkillParser.Parse( skill.desc,BattleManager.inst.currentUnit) );
         txt.color = color1;
-         bg.color = color2;
-         SkillHandler.inst.hoveredSkill = skill;
-         SkillHandler.inst.hoveredBehaviour = this;
+        bg.color = color2;
+        SkillHandler.inst.hoveredSkill = skill;
+        SkillHandler.inst.hoveredBehaviour = this;
     }
 
       public override void OnDeselect(BaseEventData eventData)
