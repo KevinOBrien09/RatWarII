@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public enum Side{PLAYER,ENEMY,NEITHER}
+public enum Side{PLAYER,ENEMY,NEITHER,BOTH}
 public class Unit : MonoBehaviour
 {
     
@@ -126,13 +126,16 @@ GameManager.inst.ChangeGameState(GameState.PLAYERUI);
     }
 
 
-    public void Hit(int damage,bool bleed = false)
+    public void Hit(int damage,CastArgs castArgs, bool bleed = false)
     {   int i = health.dmgAmount(damage);
         ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go(i.ToString(),Color.white,transform.position);
         graphic.RedFlash(()=>
         {health.Hit(damage);
-        if(bleed){
+        if(bleed)
+        {
+            bleedVFX.gameObject.SetActive(true);
             bleedVFX.Play();
+            AudioManager.inst.GetSoundEffect().Play(systemSounds[3]);
         }
         AudioManager.inst.GetSoundEffect().Play(systemSounds[2]);});
     }
@@ -148,7 +151,7 @@ GameManager.inst.ChangeGameState(GameState.PLAYERUI);
         for (int i = 0; i < howManyBleeds; i++)
         {bleed += (int)percent;}
         
-        Hit(bleed,true);
+        Hit(bleed,null, true);
     }
 
     public void Heal(int amount){

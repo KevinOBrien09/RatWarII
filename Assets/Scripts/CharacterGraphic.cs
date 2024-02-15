@@ -36,7 +36,7 @@ public class CharacterGraphic : MonoBehaviour
                 {
                     if(c.spriteVarient == 3){
                         Debug.Log("Female BucketHelm Knights do not have lashes");
-                        return;
+                        goto spriteSetUp;
                     }
                 }
 
@@ -46,6 +46,8 @@ public class CharacterGraphic : MonoBehaviour
         }
         else
         {allRenderers[1].gameObject.SetActive(false);}
+
+        spriteSetUp:
         allRenderers[0].sprite = classVarients[c.species][c.job][c.spriteVarient];
         RenderTexture texture = new RenderTexture(250,250,16);
         texture.Create();

@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ffa5ff9dd15893c45b0be18781db98f6, type: 3}
-  m_Name: Strike
+  m_Name: FieldAid
   m_EditorClassIdentifier: 
-  ID: d6bf4a4c-6af8-42e8-a16f-6310278651c7
-  skillName: Strike
-  desc: Deal {STR 200%} DMG to an enemy in a 2 tile radius.
+  ID: 34b4e1d0-9929-4bc7-936d-e42b18871bfb
+  skillName: Field Aid
+  desc: Remove all <color=red>bleed</color> stacks from an ally.
   effects: []
-  side: 1
-  skillCastBehaviour: {fileID: 5895357610692576228, guid: 416e7d8f44b6171439d6d5f65a7028ee,
+  side: 0
+  skillCastBehaviour: {fileID: 1210798412692938201, guid: 18b1067acd96ddc40a32f2ae527a9342,
     type: 3}
   doesntNeedUnitInSlot: 0
   statusEffectIcon: {fileID: 0}
   sounds:
-  - audioClip: {fileID: 8300000, guid: 1cd9fbc4bb2c19749aa2e61afd72aaaa, type: 3}
+  - audioClip: {fileID: 8300000, guid: 9f501b0361fa3734aa15c86b6acbda25, type: 3}
     pitchRange: {x: 0.9, y: 1}
     volume: 1
   value: 
   radius: 2
-  canSelfCast: 0
+  canSelfCast: 1
   showHealthBars: 0

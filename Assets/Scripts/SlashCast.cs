@@ -48,7 +48,7 @@ public class SlashCast : SkillCastBehaviour
                             
                             }
                             Knockback.Hit(1,args.caster,i,true);
-                            i.Hit(damage);
+                            i.Hit(damage,args);
                           
                             
                         }

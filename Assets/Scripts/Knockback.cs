@@ -75,16 +75,8 @@ public static class Knockback
                 break;
             }
 
-            bool validKnockback = MapManager.inst.slotIsValid(v);
-            // int maxX = MapManager.inst.grid.iGridSizeX-1;
-            // int maxY = MapManager.inst.grid.iGridSizeY-1;
-
-            // bool inXRange = v.x <= maxX && v.x >= 0;
-            // bool inYRange = v.y <= maxY && v.y >= 0;
-            // validKnockback = inXRange && inYRange;
-            Debug.Log(targetX+ ":" + targetY);
-            Debug.Log(v);
-           Unit u = victim; 
+            bool validKnockback = MapManager.inst.nodeIsValid(v);
+            Unit u = victim; 
             if(validKnockback)
             {  
                 Slot newSlot = MapManager.inst.grid.NodeArray[(int)v.x,(int)v.y].slot;
@@ -248,9 +240,12 @@ public static class Knockback
                 
 
                 u.transform.DOMove(overShoot,.1f).OnComplete(()=>
-                { BattleManager.inst.StartCoroutine(s());
-                    IEnumerator s(){
-                        if(stun){
+                { 
+                    BattleManager.inst.StartCoroutine(s());
+                    IEnumerator s()
+                    {
+                        if(stun)
+                        {
                             u.Stun();
                             yield return new WaitForSeconds(.1f); //wallslam
                         }

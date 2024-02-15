@@ -9,16 +9,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffa5ff9dd15893c45b0be18781db98f6, type: 3}
+  m_Script: {fileID: 11500000, guid: 26a0f7607b3fe9c4f825e10fd91e95af, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
-  ID: 1cfe3625-2a98-43c7-b1cc-2715c0f8d003
+  ID: 0fd488a8-0b00-4a6c-80cc-4e22e1d6c36c
   skillName: Fireball
-  desc: 'Shoot a fireball at an enemy '
+  desc: 'Launch a fireball inflicting 5 DMG to <u>all units</u> in its trajectory.
+    Upon reaching its target it explodes dealing 30 DMG. '
   effects: []
-  side: 1
-  skillCastBehaviour: {fileID: 0}
+  side: 0
+  skillCastBehaviour: {fileID: 852672454136546561, guid: 340d355117f14394a9738fd3932f61bf,
+    type: 3}
   doesntNeedUnitInSlot: 1
   statusEffectIcon: {fileID: 0}
-  sounds: []
-  radius: 4
+  sounds:
+  - audioClip: {fileID: 8300000, guid: daa023bacd834204d80032566b612b06, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1
+  - audioClip: {fileID: 8300000, guid: 5ae96ba93e8b06446abfc81839d51546, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 0.6
+  value: 
+  passThrough: 1
+  goThroughWalls: 0
+  projectilePath: 1
+  howManyTiles: 3

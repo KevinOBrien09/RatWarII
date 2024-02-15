@@ -7,7 +7,7 @@ using UnityEngine;
 public class ProjectileSkill : Skill
 {
    
-    public enum ProjectilePathShape{PLUS,X,HORI,VERT}
+    public enum ProjectilePathShape{PLUS,X,HORI,VERT,ASTERISK}
     public bool passThrough,goThroughWalls;
     public ProjectilePathShape projectilePath;
     public int howManyTiles;

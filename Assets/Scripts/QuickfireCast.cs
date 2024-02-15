@@ -1,11 +1,5 @@
-using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using DG.Tweening;
-using TMPro;
- 
 
 public class QuickfireCast : SkillCastBehaviour
 {
@@ -25,7 +19,7 @@ public class QuickfireCast : SkillCastBehaviour
         arrow.transform.position = args.caster.transform.position;
         CamFollow.inst.target = arrow.transform;
         if(args.target != null){
-args.target.healthBar.gameObject.transform.parent.gameObject. SetActive(true);
+        args.target.healthBar.gameObject.transform.parent.gameObject. SetActive(true);
         }
         
         CamFollow.inst.Focus(arrow.transform,(()=>{
@@ -125,7 +119,7 @@ args.target.healthBar.gameObject.transform.parent.gameObject. SetActive(true);
                     damage += 2;
                 }
                 PlaySound(1,castArgs.skill);
-                castArgs.target.Hit(damage);
+                castArgs.target.Hit(damage,castArgs);
                 yield return new WaitForSeconds(.75f);
                 CamFollow.inst.Focus(castArgs.caster.slot.transform,()=>
                 { 

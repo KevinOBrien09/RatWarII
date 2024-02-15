@@ -38,7 +38,7 @@ public class MapManager : Singleton<MapManager>
        
     }
 
-    public bool slotIsValid(Vector2 v)
+    public bool nodeIsValid(Vector2 v)
     {
         int maxX = MapManager.inst.grid.iGridSizeX-1;
         int maxY = MapManager.inst.grid.iGridSizeY-1;

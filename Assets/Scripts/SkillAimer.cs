@@ -156,6 +156,12 @@ public class SkillAimer : Singleton<SkillAimer>
             case ProjectileSkill.ProjectilePathShape.HORI:
             validSlots   = new List<Slot>(slot.GetHorizontalSlots(skill.howManyTiles,skill));
             break;
+            case ProjectileSkill.ProjectilePathShape.X:
+            validSlots   = new List<Slot>(slot.GetXSlots(skill.howManyTiles,skill));
+            break;
+             case ProjectileSkill.ProjectilePathShape.ASTERISK:
+            validSlots   = new List<Slot>(slot.GetAsteriskSlots(skill.howManyTiles,skill));
+            break;
             default:
             Debug.LogAssertion("PROJECTILE PATH NOT IMPLEMENTED!!");
             break;
@@ -188,13 +194,28 @@ public class SkillAimer : Singleton<SkillAimer>
                 }
             }
         }
+        if(skill.canSelfCast)
+        {
+            if(!validSlots.Contains(caster.slot))
+            {
+                validSlots.Add(caster.slot);
+                validTargets.Add(caster);
+            }
+        }
+
         foreach (var item in validTargets)
         {
             if(item.side == skill.side)
-            {item.healthBar.gameObject.transform.parent.gameObject.SetActive(true);}
+            {
+                if(skill.showHealthBars){
+          item.healthBar.gameObject.transform.parent.gameObject.SetActive(true);
+                }
+      
+            }
             else
             {validSlots.Remove(item.slot);}
         }
+   
    
       
         foreach (var item in validSlots)

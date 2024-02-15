@@ -35,7 +35,7 @@ public class PullTowardsCast : SkillCastBehaviour
                 if(args.caster.slot.node.iGridX > args.target.slot.node.iGridX) //pulled to left
                 {
                     Vector2 v = new Vector2(args.caster.slot.node.iGridX-1,args.caster.slot.node.iGridY);
-                    if(MapManager.inst.slotIsValid(v))
+                    if(MapManager.inst.nodeIsValid(v))
                     {
                         s = MapManager.inst.grid.NodeArray[(int) v.x, (int)v.y].slot;
                         p = new Vector3(s.transform.position.x,args.target.transform.position.y,s.transform.position.z);
@@ -47,7 +47,7 @@ public class PullTowardsCast : SkillCastBehaviour
                 else //pulledToRight
                 {
                     Vector2 v = new Vector2(args.caster.slot.node.iGridX+1,args.caster.slot.node.iGridY);
-                    if(MapManager.inst.slotIsValid(v))
+                    if(MapManager.inst.nodeIsValid(v))
                     {
                         s = MapManager.inst.grid.NodeArray[(int) v.x, (int)v.y].slot;
                         p = new Vector3(s.transform.position.x,args.target.transform.position.y,s.transform.position.z);

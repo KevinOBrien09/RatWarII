@@ -16,7 +16,7 @@ public class SpikeSlot : SpecialSlot
             StartCoroutine(q());
             IEnumerator q(){
             if(slot.unit != null){
-                slot.unit.Hit(damage);
+                slot.unit.Hit(damage,null);
                 AudioManager.inst.GetSoundEffect().Play(sounds[1]);
             }
             yield return new WaitForSeconds(.5f);

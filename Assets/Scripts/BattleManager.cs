@@ -359,7 +359,7 @@ public class BattleManager : Singleton<BattleManager>
         else
         {playerUnits.Remove(u);}
         GameObject splat = Instantiate(bloodSplatPrefab,new Vector3(u.slot. transform.position.x,bloodSplatPrefab.transform.position.y,u.slot.transform.position.z),bloodSplatPrefab.transform.rotation);
-        ParticleSystem explosion = Instantiate(bloodExplosion,new Vector3(u.slot. transform.position.x,0,u.slot.transform.position.z),bloodSplatPrefab.transform.rotation);
+        ParticleSystem explosion = Instantiate(bloodExplosion,new Vector3(u.slot. transform.position.x,bloodExplosion.transform.position.y,u.slot.transform.position.z),bloodSplatPrefab.transform.rotation);
         explosion.Play();
         AudioManager.inst.GetSoundEffect().Play(sfx[0]);
         List<Unit> XD = new List<Unit>();

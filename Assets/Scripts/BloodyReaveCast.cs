@@ -12,12 +12,18 @@ public class BloodyReaveCast : SkillCastBehaviour
     {
         BattleZoomer.inst.ZoomIn(args,(()=>
         { 
-            StatusEffects.Bleed(args.target,args.skill,bleedDuration);
+            bool bleed = Random.Range(0,3) == 1;
+            if(bleed){
+                StatusEffects.Bleed(args.target,args.skill,bleedDuration);
+            }
+            
             bool dead = args.target.health.willUnitDie(damage);
-            args.target.Hit(damage);
+            args.target.Hit(damage,args);
             PlaySound(0,args.skill);
-        
-            BattleManager.inst.StartCoroutine(q());
+            if(bleed){
+ BattleManager.inst.StartCoroutine(q());
+            }
+           
             IEnumerator q()
             {
                 Unit i = args.target;

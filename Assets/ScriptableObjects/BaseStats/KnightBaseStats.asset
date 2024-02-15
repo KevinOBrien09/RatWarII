@@ -17,4 +17,6 @@ MonoBehaviour:
   strength: {x: 10, y: 15}
   moveRange: 2
   bnbSkill: {fileID: 11400000, guid: 3df21767c7cc7a343ac0196c5097b2fb, type: 2}
-  otherSkills: []
+  otherSkills:
+  - {fileID: 11400000, guid: af5cd25b6be886e4b8804ae7a691ae2e, type: 2}
+  - {fileID: 11400000, guid: 22799f4785781cf48bcde71b8f1ecaf0, type: 2}

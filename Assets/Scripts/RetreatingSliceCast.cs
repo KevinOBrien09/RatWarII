@@ -15,7 +15,7 @@ public class RetreatingSliceCast : SkillCastBehaviour
             CamFollow.inst.ChangeCameraState(CameraState.LOCK);
             CamFollow.inst.target = args.caster.transform;
             float percent = MiscFunctions.GetPercentage(args.caster.stats().strength,200);
-            args.target.Hit((int)percent);
+            args.target.Hit((int)percent,args);
             PlaySound(0,args.skill);
          
             Knockback.Hit(1,args.target,args.caster,true);

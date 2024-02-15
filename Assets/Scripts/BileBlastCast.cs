@@ -60,7 +60,7 @@ public class BileBlastCast : SkillCastBehaviour
            
             yield return new WaitForSeconds(.75f);
             PlaySound(1,args.skill);
-            args.target.Hit(baseDamage);
+            args.target.Hit(baseDamage,args);
             yield return new WaitForSeconds(.75f);
             SkillAimer.inst.Finish();
         }

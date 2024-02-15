@@ -226,6 +226,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
             { CamFollow.inst.ChangeCameraState(CameraState.LOCK); });
             CamFollow.inst.ForceFOV( CamFollow.inst.baseFOV);
             yield return new WaitForSeconds(.45f);
+    
             u. health.onHit.RemoveListener(HpAction);
             // if(args.skill.ID == "35433542-3142-45a9-b3d4-93096ef99883")
             // {

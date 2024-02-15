@@ -243,7 +243,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
                 }
                 else
                 {
-                    if(s. tempTerrain != null){
+                    if(s. tempTerrain != null && !projectileSkill.goThroughWalls){
                         break;
                     }
 
@@ -282,6 +282,101 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler
             candidateSlots.Add(s);
         }
         return candidateSlots;
+    }
+
+    public List<Slot> GetAsteriskSlots(int length,Skill skill = null)
+    {
+        List<Slot> candidateSlots = new List<Slot>();
+        List<Slot> X = GetXSlots(length,skill);
+        List<Slot> plus = GetSlotsInPlusShape(length,skill);
+        foreach (var item in X)
+        {
+            if(!candidateSlots.Contains(item))
+            {candidateSlots.Add(item);}
+        }
+         foreach (var item in plus)
+        {
+            if(!candidateSlots.Contains(item))
+            {candidateSlots.Add(item);}
+        }
+
+        return candidateSlots;
+    }
+
+    public List<Slot> GetXSlots(int length,Skill skill = null)
+    {  
+        length++;
+        List<Slot> candidateSlots = new List<Slot>();
+        int x = node.iGridX;
+        int y = node.iGridY;
+        var projectileSkill = skill as ProjectileSkill;
+        XLoop(true,true);
+        XLoop(true,false);
+        XLoop(false,true);
+        XLoop(false,false);
+
+        void XLoop(bool xIncrease,bool yIncrease)
+        {
+            for (int i = 0; i < length; i++) //UpperRight
+            {
+                int side = 0;
+                int up = 0;
+                if(xIncrease)
+                {side = x+i;}
+                else
+                {side = x-i;}
+                if(yIncrease)
+                {up = y+i;}
+                else
+                {up = y-i;}
+
+
+                Vector2 v = new Vector2(side,up);
+                if(MapManager.inst.nodeIsValid(v))
+                {
+                    Slot s = MapManager.inst.grid.NodeArray[(int) v.x,(int)v.y].slot;
+                    if(s==this)
+                    {continue;}
+
+                    if(s!=null)
+                    {
+                       if(!projectileSkill.passThrough)
+                       {
+                            if(s.unit !=null)
+                            {
+                            
+                                candidateSlots.Add(s);
+                                break;
+                            }
+                            else
+                            {
+                                candidateSlots.Add(s);
+                            }
+                        }
+                        else
+                        {
+                            candidateSlots.Add(s);
+                        }
+                        
+                    }
+                    else
+                    {
+                        if(projectileSkill.goThroughWalls)
+                        { continue;}
+                        else
+                        { break; }
+                    }
+            
+                }
+                else
+                { break; }
+            }
+
+        }
+
+
+        return candidateSlots;
+
     }
         
     public void OnPointerClick(PointerEventData eventData)

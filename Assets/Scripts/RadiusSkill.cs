@@ -8,4 +8,5 @@ public class RadiusSkill : Skill
 
 {
     public int radius;
+    public bool canSelfCast,showHealthBars;
 }
