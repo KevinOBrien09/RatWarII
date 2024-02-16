@@ -8,7 +8,7 @@ public class SpecialSlot : MonoBehaviour
 
     public string tickerText;
     public List<SoundData> sounds = new List<SoundData>();
-   public Slot slot;
+    public Slot slot;
     public virtual void Go(){
 
     }

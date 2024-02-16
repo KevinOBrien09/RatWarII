@@ -10,7 +10,7 @@ public class PillarCast :  SkillCastBehaviour
         StartCoroutine(q());
         IEnumerator q()
         {   
-            
+            args.caster.Flip(args.targetSlot.transform.position);
             PlaySound(0,args.skill);
             TempTerrain pillar = Instantiate(pillarPrefab, args.targetSlot.transform.position,Quaternion.identity);   
             pillar.transform.DOMoveY(-4,0);

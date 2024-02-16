@@ -21,8 +21,34 @@ public class SlotSelector : Singleton<SlotSelector>
     {
         if(GameManager.inst.checkGameState(GameState.UNITMOVE))
         {return;}
+        if(GameManager.inst.checkGameState(GameState.INTERACT))
+        {
+            if(InteractHandler.inst.slots.Contains(s))
+            {
+                if(s.unit != null)
+                {
+                    if(s.unit.side == Side.ENEMY)
+                    {
+                    ChangeColour(Color.red); 
+                    }
+                    else{
+                    ChangeColour(Color.cyan); 
+                    }
+                
+                }
+                else{
+                    ChangeColour(Color.white);
+                    
+                }
+                    transform.position = s.border.transform.position;
+               
+            }
+             return;
+        }
+        
 
-        if(SkillAimer.inst.aiming){
+       if(SkillAimer.inst.aiming)
+        {
             if(!SkillAimer.inst.validSlots.Contains(s)){
                 return;
             }
@@ -41,13 +67,15 @@ public class SlotSelector : Singleton<SlotSelector>
                    
                 }
             }
+
+            
             transform.position = s.border.transform.position;
             return;
         }
 
-        // if(currentSlot != null)
-        // {currentSlot.border.gameObject. SetActive(true);}
-        
+      
+
+     
         if(GameManager.inst.checkGameState(GameState.PLAYERSELECT) && !UnitMover.inst.inCoro)
         { 
             if(s.unit == null)
@@ -56,7 +84,7 @@ public class SlotSelector : Singleton<SlotSelector>
         else
         {ChangeColour(selectedColour);}
         
-       // s.border.gameObject.SetActive(false);
+     
         transform.position = s.border.transform.position;
         currentSlot = s;
     }

@@ -28,4 +28,4 @@ MonoBehaviour:
   value: 
   radius: 2
   canSelfCast: 0
-  showHealthBars: 0
+  showHealthBars: 1

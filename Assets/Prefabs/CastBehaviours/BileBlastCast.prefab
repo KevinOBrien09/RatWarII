@@ -44,7 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f20259d9a41967c4cac32b1c6231ec38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDamage: 5
+  baseDamage: 10
   bilePrefab: {fileID: 5243688401237341774, guid: d317205cb11c4cc4aad7d1f1ee6961b5,
     type: 3}
-  bileTrans: {fileID: 0}

@@ -128,7 +128,7 @@ public class ActionMenu : Singleton<ActionMenu>
             break;
             case ActionMenuState.MOVE:
            if(!slot.unit.movedThisTurn){
-   FUCKOFF = true;
+            FUCKOFF = true;
             rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
             { FUCKOFF = false; open = false;});
            // SlotInfoDisplay.inst.Disable();
@@ -141,7 +141,10 @@ public class ActionMenu : Singleton<ActionMenu>
          
             break;
             case ActionMenuState.INTERACT:
-             
+            FUCKOFF = true;
+            rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
+            { FUCKOFF = false; open = false;});
+            InteractHandler.inst.Open();
             break;
 
             case ActionMenuState.ROAM:

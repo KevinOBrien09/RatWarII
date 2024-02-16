@@ -29,7 +29,7 @@ public class UnitMover : Singleton<UnitMover>
             });
             
             selectedSlot = sSlot;
-            validSlots = new List<Slot>(sSlot.GetValidSlotsInRadius(sSlot.unit.stats().moveRange,false));
+            validSlots =sSlot.func.GetRadiusSlots(sSlot.unit.stats().moveRange,false);
             if(selectedUnit.side == Side.PLAYER){
             SelectionUI(sSlot);
             }
@@ -126,7 +126,7 @@ public class UnitMover : Singleton<UnitMover>
     {
         if(GameManager.inst.checkGameState(GameState.PLAYERSELECT) && !inCoro && !ActionMenu.inst.FUCKOFF)
         {
-            if(Input.GetMouseButtonDown(1))
+            if(InputManager.inst.player. GetButtonDown("Cancel"))
             {
                 ExitSelectionMode();
                 MapManager.inst.grid.UpdateGrid();

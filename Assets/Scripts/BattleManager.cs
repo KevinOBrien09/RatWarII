@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
+using DG.Tweening;
 
 public class BattleManager : Singleton<BattleManager>
 {
@@ -17,8 +18,10 @@ public class BattleManager : Singleton<BattleManager>
     bool looping;
     public SpikeSlot spikeSlotPrefab;
     public GameObject bloodSplatPrefab;
+    public Interactable chest;
     public ParticleSystem bloodExplosion;
     public List<SoundData> sfx = new List<SoundData>();
+    public AudioSource music;
 
     IEnumerator Start()
     {
@@ -37,6 +40,12 @@ public class BattleManager : Singleton<BattleManager>
         {
             Slot s = MapManager.inst.RandomSlot();
             s.MakeSpecial(spikeSlotPrefab);
+        }
+
+        for (int i = 0; i < 15; i++)
+        {
+            Slot s = MapManager.inst.RandomSlot();
+            s.MakeInteractable(chest);
         }
 
 
@@ -236,7 +245,10 @@ public class BattleManager : Singleton<BattleManager>
     {return playerUnits.Count == 0;}
 
     public void Lose()
-    {BattleTicker.inst.Type("All the adventurers have perished...");}
+    {
+        BattleTicker.inst.Type("All the adventurers have perished...");
+        music.DOFade(0,1);
+    }
 
     public void StatusEffectLoop(Unit u) //THIS IS BAAADDDD
     {

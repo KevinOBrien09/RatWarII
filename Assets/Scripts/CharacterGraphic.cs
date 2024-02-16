@@ -35,7 +35,8 @@ public class CharacterGraphic : MonoBehaviour
                 if(c.species != Species.FROG)
                 {
                     if(c.spriteVarient == 3){
-                        Debug.Log("Female BucketHelm Knights do not have lashes");
+                        allRenderers[1].gameObject.SetActive(false);   //Female BucketHelm Knights do not have lashes"
+             
                         goto spriteSetUp;
                     }
                 }

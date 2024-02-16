@@ -52,7 +52,7 @@ public class MapManager : Singleton<MapManager>
     public List<Slot> StartingRadius()
     {
         Slot center = grid.NodeArray[2,2].slot;
-        List<Slot> radius = center.GetValidSlotsInRadius(1,true);
+        List<Slot> radius =  center.func.GetRadiusSlots(1,true);
        
         System.Random rng = new System.Random();
         return radius.OrderBy(_ => rng.Next()).ToList();

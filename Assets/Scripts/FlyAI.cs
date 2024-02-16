@@ -44,7 +44,7 @@ public class FlyAI : EnemyAI
 
         IEnumerator Repos(bool furthest)
         {
-            List<Slot> plus = poi.GetSlotsInPlusShape(ps.howManyTiles,shoot).Where(n => n && n != this)
+            List<Slot> plus = poi.func.GetSlotsInPlusShape( ps.howManyTiles,shoot).Where(n => n && n != this)
             .OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();
             IEnumerable<Slot> g = null;
             if(furthest)

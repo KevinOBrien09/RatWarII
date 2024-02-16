@@ -1,0 +1,65 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using DG.Tweening;
+
+public class InteractHandler : Singleton<InteractHandler>
+{
+    bool inCoro;
+  public  List<Slot> slots = new List<Slot>();
+    public void Open()
+    {
+        GameManager.inst.ChangeGameState(GameState.INTERACT);
+        SlotSelector.inst.gameObject.SetActive(true);
+        BattleTicker.inst.Type("Interact");
+        
+        slots =BattleManager.inst.currentUnit.slot.func.GetRadiusSlots(1,true);
+        Cursor.lockState = CursorLockMode.Confined;
+        foreach (var item in slots)
+        {
+            item.ChangeColour(Color.green);
+        }
+    }
+
+    void LateUpdate()
+    {
+        if(GameManager.inst.checkGameState(GameState.INTERACT) && !inCoro && !ActionMenu.inst.FUCKOFF)
+        {
+            if(InputManager.inst.player. GetButtonDown("Cancel"))
+            {
+                ExitSelectionMode();
+                ActionMenu.inst.Show(BattleManager.inst.currentUnit.slot);
+                //CamFollow.inst.ChangeCameraState(CameraState.FREE);
+            }
+        }
+    }
+
+    public void ExitSelectionMode()
+    {
+        if(CamFollow.inst.CheckCameraState(CameraState.FOCUS))
+        {return; }
+
+        if( GameManager.inst.checkGameState(GameState.INTERACT) && !inCoro)
+        {
+            StartCoroutine(q());
+        }
+        IEnumerator q()
+        {        SlotSelector.inst.gameObject.SetActive(false);
+            foreach (var item in slots)
+            {
+                item.ChangeColour(UnitMover.inst. baseSlotColour);
+            }
+            slots.Clear();
+            inCoro = true;
+            yield return new WaitForSeconds(.15f);
+            inCoro = false;
+      
+        }
+    }
+
+
+
+    public void Close(){
+
+    }
+}

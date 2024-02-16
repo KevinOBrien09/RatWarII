@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lesser Ageis
   m_EditorClassIdentifier: 
   ID: 35433542-3142-45a9-b3d4-93096ef99883
-  skillName: Uno Barrio
+  skillName: Minor Barrier
   desc: Grant the caster a 15HP shield for 1 turn.
   effects: []
   side: 0
@@ -25,4 +25,4 @@ MonoBehaviour:
   value: 
   radius: 0
   castOnCasterSlot: 0
-  showHealthBars: 0
+  showHealthBars: 1

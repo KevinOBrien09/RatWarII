@@ -8,7 +8,7 @@
 
 // Use the defines below to globally disable features:
 
-//#define DISABLE_CAMERA_SHAKE
+#define DISABLE_CAMERA_SHAKE
 //#define DISABLE_LIGHTS
 //#define DISABLE_CLEAR_BEHAVIOR
 

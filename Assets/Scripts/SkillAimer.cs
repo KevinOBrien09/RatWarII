@@ -148,19 +148,19 @@ public class SkillAimer : Singleton<SkillAimer>
         switch(skill.projectilePath)
         {
             case ProjectileSkill.ProjectilePathShape.PLUS:
-            validSlots   = new List<Slot>(slot.GetSlotsInPlusShape(skill.howManyTiles,skill));
+            validSlots   = new List<Slot>(slot.func.GetSlotsInPlusShape(skill.howManyTiles,skill));
             break;
             case ProjectileSkill.ProjectilePathShape.VERT:
-            validSlots   = new List<Slot>(slot.GetVerticalSlots(skill.howManyTiles,skill));
+            validSlots   = new List<Slot>( slot.func.GetVerticalSlots(skill.howManyTiles,skill));
             break;
             case ProjectileSkill.ProjectilePathShape.HORI:
-            validSlots   = new List<Slot>(slot.GetHorizontalSlots(skill.howManyTiles,skill));
+            validSlots   = new List<Slot>(slot.func.GetHorizontalSlots(skill.howManyTiles,skill));
             break;
             case ProjectileSkill.ProjectilePathShape.X:
-            validSlots   = new List<Slot>(slot.GetXSlots(skill.howManyTiles,skill));
+            validSlots   = new List<Slot>(slot.func.GetXSlots(skill.howManyTiles,skill));
             break;
              case ProjectileSkill.ProjectilePathShape.ASTERISK:
-            validSlots   = new List<Slot>(slot.GetAsteriskSlots(skill.howManyTiles,skill));
+            validSlots   = new List<Slot>(slot.func.GetAsteriskSlots(skill.howManyTiles,skill));
             break;
             default:
             Debug.LogAssertion("PROJECTILE PATH NOT IMPLEMENTED!!");
@@ -183,7 +183,7 @@ public class SkillAimer : Singleton<SkillAimer>
         Character casterChar = caster.character;
         Cursor.lockState = CursorLockMode.Confined;
         CamFollow.inst.ChangeCameraState(CameraState.FREE);
-        validSlots   = new List<Slot>(slot.GetValidSlotsInRadius(skill.radius,true));
+        validSlots   = slot.func. GetRadiusSlots(skill.radius,true);
        
         foreach (var item in validSlots)
         {
@@ -231,7 +231,7 @@ public class SkillAimer : Singleton<SkillAimer>
     public void SelfCast(SelfSkill skill)
     {
         currentState = Aim.SELF;
-        validSlots   = new List<Slot>(slot.GetValidSlotsInRadius(skill.radius,true));
+        validSlots   = slot.func.GetRadiusSlots(skill.radius,true);
         validSlots.Add(slot);
         foreach (var item in validSlots)
         {
