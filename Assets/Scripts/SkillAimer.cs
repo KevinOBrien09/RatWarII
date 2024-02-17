@@ -19,12 +19,8 @@ public class SkillAimer : Singleton<SkillAimer>
         if(!castDecided){
  //Debug.Log("Leave");
         foreach (var item in MapManager.inst.slots)
-        {
-            item.indicator.SetActive(false);
-            item.ChangeColour(UnitMover.inst. baseSlotColour);
-            
-        }
-        SlotSelector.inst.gameObject.SetActive(false);
+        {item.ChangeColour(UnitMover.inst. baseSlotColour);}
+
         validSlots.Clear();
          validTargets.Clear();
                 _skill = null;
@@ -47,7 +43,7 @@ public class SkillAimer : Singleton<SkillAimer>
 
                 foreach (var item in MapManager.inst.slots)
                 {
-                    item.indicator.SetActive(false);
+                
                     item.ChangeColour(UnitMover.inst. baseSlotColour);
                     
                 }
@@ -55,7 +51,7 @@ public class SkillAimer : Singleton<SkillAimer>
             
                 castDecided = true;  
                 BattleTicker.inst.Type(_skill.skillName);
-                SlotSelector.inst.gameObject.SetActive(false);
+              
                 CastArgs args = new CastArgs();
                 args.caster = BattleManager.inst.currentUnit ;
                 if(s.unit != null)
@@ -77,6 +73,7 @@ public class SkillAimer : Singleton<SkillAimer>
                 {
                     skillCastBehaviour  = Instantiate( _skill.skillCastBehaviour);
                     skillCastBehaviour.Go(args);
+                    Cursor.lockState = CursorLockMode.Locked;
                 }
             }
         }
@@ -88,6 +85,9 @@ public class SkillAimer : Singleton<SkillAimer>
         _skill = s;
         caster = BattleManager.inst.currentUnit;
         slot = caster.slot;
+        if(BattleManager.inst.currentUnit.side == Side.PLAYER){
+            GameManager.inst.ChangeGameState(GameState.PLAYERSELECT);
+        }
         BattleTicker.inst.Type("Preparing " + s.skillName+"...");
         //BattleManager.inst.ToggleHealthBars(true);
         aiming = true;
@@ -120,14 +120,10 @@ public class SkillAimer : Singleton<SkillAimer>
        
         skillCastBehaviour = null;
         foreach (var item in MapManager.inst.slots)
-        {
-            item.indicator.SetActive(false);
-            item.ChangeColour(UnitMover.inst. baseSlotColour);
-            
-        }
+        {item.ChangeColour(UnitMover.inst. baseSlotColour);}
         castDecided = false;
         _skill = null;
-        SlotSelector.inst.gameObject.SetActive(false);
+    
         SkillHandler.inst.  Close();
         BattleManager.inst.EndTurn();
     }
@@ -136,7 +132,7 @@ public class SkillAimer : Singleton<SkillAimer>
     {
         if(BattleManager.inst.currentUnit.side == Side.PLAYER){
         currentState = Aim.PROJECTILE;
-        SlotSelector.inst.gameObject.SetActive(true);
+
         CamFollow.inst.ChangeCameraState(CameraState.FREE);
             Cursor.lockState = CursorLockMode.Confined;
        
@@ -177,8 +173,7 @@ public class SkillAimer : Singleton<SkillAimer>
     public void RadiusAim(RadiusSkill skill)
     {
         currentState = Aim.RADIUS;
-        SlotSelector.inst.gameObject.SetActive(true);
-        SlotSelector.inst.Attach(slot);
+    
        
         Character casterChar = caster.character;
         Cursor.lockState = CursorLockMode.Confined;
@@ -245,8 +240,7 @@ public class SkillAimer : Singleton<SkillAimer>
             }
             item.ChangeColour(Color.gray);
         }
-        SlotSelector.inst.gameObject.SetActive(true);
-        SlotSelector.inst.Attach(slot);
+
        
     }
 

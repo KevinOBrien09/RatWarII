@@ -7,6 +7,7 @@ public class GameManager : Singleton<GameManager>
 {
     public GameState currentGameState;
     
+    
   
     public void ChangeGameState(GameState newGameState)
     {

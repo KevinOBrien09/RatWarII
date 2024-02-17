@@ -35,7 +35,7 @@ public class ActionMenu : Singleton<ActionMenu>
 
         if(!FUCKOFF){
             
-            SlotSelector.inst.gameObject.SetActive(false);
+    
             slot = s;
            
             // CamFollow.inst.ChangeCameraState(CameraState.LOCK);
@@ -43,7 +43,7 @@ public class ActionMenu : Singleton<ActionMenu>
             CamFollow.inst.Focus(s.unit.transform,()=>
             { 
                 if(ActionMenu.inst.currentState !=ActionMenu.ActionMenuState.SKILL){
-  BattleTicker.inst.Type(BattleManager.inst. TurnState());
+                BattleTicker.inst.Type(BattleManager.inst. TurnState());
                 }
               
                  CamFollow.inst.ChangeCameraState(CameraState.LOCK);
@@ -105,6 +105,8 @@ public class ActionMenu : Singleton<ActionMenu>
                 if(InputManager.inst.player.GetButtonDown("Cancel"))
                 {
                   //  if(SkillAimer.inst.)
+                   foreach (var item in MapManager.inst.slots)
+            { item. DisableHover();}
                     GameManager.inst.ChangeGameState(GameState.PLAYERUI);
                     Show(slot);
                 }
@@ -149,11 +151,12 @@ public class ActionMenu : Singleton<ActionMenu>
 
             case ActionMenuState.ROAM:
             BattleTicker.inst.Type("Roaming...");
+        BattleManager.inst.currentUnit.slot.hoverBorderOn();
             CamFollow.inst.ChangeCameraState(CameraState.FREE);
             GameManager.inst.ChangeGameState(GameState.PLAYERHOVER);
             Hide();
             Cursor.lockState = CursorLockMode.Confined;
-            SlotSelector.inst.gameObject.SetActive(true);
+        
             break;
         }
     }
@@ -278,7 +281,10 @@ public class ActionMenu : Singleton<ActionMenu>
         if(!FUCKOFF){
 
             FUCKOFF = true;
-            SlotInfoDisplay.inst.Disable();
+            if(!GameManager.inst.checkGameState(GameState.PLAYERHOVER)){
+    SlotInfoDisplay.inst.Disable();
+            }
+        
             rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
             { 
                

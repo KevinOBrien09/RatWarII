@@ -5,7 +5,6 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
- 
 
 public class BattleZoomer : Singleton<BattleZoomer>
 {

@@ -65,6 +65,12 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             }
             stackHandler.Kill();
             stackHandler.Spawn(u);
+            List<SlotContents> sc = new List<SlotContents>(u.slot.slotContents);
+
+            if(slot.specialSlot != null){
+                sc.Add(slot.specialSlot.slotContents);
+            }
+            stackHandler.SlotContents(sc);
             speed.text = "SPEED:" + u.stats().speed.ToString();
             strength.text = "STR:" + u.stats().strength.ToString();
             moveRange.text = "MOVE:" + u.stats().moveRange.ToString();
@@ -80,7 +86,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
         }
         else
         {   
-       if(!gameObject.activeSelf){
+            if(!gameObject.activeSelf){
                 gameObject.SetActive(true);
                 rt.DOAnchorPos(hidden,0);
                 rt.DOAnchorPos(shown,.2f);
@@ -96,16 +102,29 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 else
                 {CamFollow.inst.Focus(slot.transform,()=>{});}
             }
+            if(slot.specialSlot == null){
+                charName.text = "Empty Slot";
+                icon.texture = null;    
+                icon.gameObject.SetActive(false);
+            }
+            else{
+                charName.text = slot.specialSlot.slotContents.contentName;
+                icon.texture =  slot.specialSlot.slotContents.picture;   
+                icon.gameObject.SetActive(true );
+            }
+            
            
             healthBar.gameObject.SetActive(false);
-            charName.text = "Empty Slot";
+            stackHandler.Kill();
+            stackHandler.SlotContents(slot.slotContents);
+            
             hp.text = string.Empty;
             level.text = "0";
             speciesClass.text = string.Empty;
             speed.text =string.Empty;
+            strength.text =string.Empty;
             moveRange.text = string.Empty;
-            icon.texture = null;    
-            icon.gameObject.SetActive(false);
+           
         }
     }
 

@@ -42,4 +42,37 @@ public static class StatusEffects
     }
 
 
+    public static string StatusEffectInfo(StatusEffectEnum statusEffectEnum, Unit u)
+    {
+        string txt = "";
+   string v = "";
+        switch(statusEffectEnum){
+            case StatusEffectEnum.BARRIER:
+         
+            if(u.health.shields.Count== 1){
+                v = " Barrier ";
+            }
+            else{
+                v = " Barriers ";
+            }
+
+            txt = u.health.shields.Count + v + "shielding<br> " + u.health.shield().ToString() + " HP.";
+            break;
+            case StatusEffectEnum.BLEED:
+          
+            if( u.statusEffects[StatusEffectEnum.BLEED].Count == 1){
+                v = " Bleed ";
+            }
+            else{
+                v = " Bleeds ";
+            }
+            txt = u.statusEffects[StatusEffectEnum.BLEED].Count + v + "dealing " + u.BleedDamage(u.statusEffects[StatusEffectEnum.BLEED].Count) + " DMG SoT.";
+            break;
+
+        }
+
+        return txt;
+    }
+
+
 }

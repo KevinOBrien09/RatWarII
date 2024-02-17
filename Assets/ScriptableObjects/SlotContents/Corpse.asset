@@ -9,12 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b88a5d64d0797f940b8778d4d285397a, type: 3}
-  m_Name: Mantis
+  m_Script: {fileID: 11500000, guid: 10eeb75c3eaa4e143abfefb585cfcf41, type: 3}
+  m_Name: Corpse
   m_EditorClassIdentifier: 
-  hp: {x: 35, y: 50}
-  speed: {x: 4, y: 6}
-  strength: {x: 4, y: 4}
-  moveRange: 4
-  bnbSkill: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
-  otherSkills: []
+  contentName: Corpse
+  picture: {fileID: 2800000, guid: 3332c7f01d8a1934fbd377760beaae90, type: 3}

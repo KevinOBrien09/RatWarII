@@ -44,9 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c95089a3db9ae439446bfc8efc71c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
+  baseDamage: 5
   projectilePrefab: {fileID: 4508468215263952273, guid: f7f5e53881a1b1e4b85fc2ffcaf86161,
     type: 3}
+  arrowSlotContent: {fileID: 11400000, guid: dc4f4b5f06d25a34ab6c37651958a214, type: 2}
   arrowSpeed: 90
   arcHeight: 0.1
   _arrow: {fileID: 0}

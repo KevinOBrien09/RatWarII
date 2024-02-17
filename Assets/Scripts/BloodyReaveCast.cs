@@ -12,7 +12,7 @@ public class BloodyReaveCast : SkillCastBehaviour
     {
         BattleZoomer.inst.ZoomIn(args,(()=>
         { 
-            bool bleed = Random.Range(0,3) == 1;
+            bool bleed = Random.Range(0,2) == 1;
             if(bleed){
                 StatusEffects.Bleed(args.target,args.skill,bleedDuration);
             }

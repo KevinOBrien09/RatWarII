@@ -9,7 +9,7 @@ public class StatusEffectStackHandler : MonoBehaviour
     public RectTransform  statusEffectHolder;
     public StatusEffectStack stackPrefab;
     List<StatusEffectStack> stackList = new List<StatusEffectStack>();
-    public GenericDictionary<StatusEffectEnum,Sprite> statusEffectSprites = new GenericDictionary<StatusEffectEnum, Sprite>();
+    public GenericDictionary<StatusEffectEnum,Texture2D> statusEffectSprites = new GenericDictionary<StatusEffectEnum,Texture2D>();
     Dictionary<StatusEffectEnum,StatusEffectStack> d = new Dictionary<StatusEffectEnum, StatusEffectStack>();
     public void Spawn(Unit u)
     {
@@ -25,13 +25,33 @@ public class StatusEffectStackHandler : MonoBehaviour
                 else
                 {
                     StatusEffectStack statusEffectStack = Instantiate(stackPrefab,statusEffectHolder);
-                    statusEffectStack.Init(statusEffectSprites[item.statusEffectEnum]);
+                    string info = StatusEffects.StatusEffectInfo(item.statusEffectEnum,u);
+                    string n = MiscFunctions.FirstLetterToUpper( item.statusEffectEnum.ToString());
+                    statusEffectStack.Init(statusEffectSprites[item.statusEffectEnum],null,n,info);
                     stackList.Add(statusEffectStack);
                     d.Add(item.statusEffectEnum,statusEffectStack);
                 }
             }
             
         }
+    }
+
+    public void SlotContents(List<SlotContents> slotContents)
+    {
+        Dictionary<SlotContents,StatusEffectStack> c = new Dictionary<SlotContents,StatusEffectStack>();
+        foreach (var l in  slotContents)
+        {
+            if(c.ContainsKey(l))
+            {  c[l].Stack(); }
+            else
+            {   StatusEffectStack statusEffectStack = Instantiate(stackPrefab,statusEffectHolder);
+                statusEffectStack.Init(l.picture,l);
+                stackList.Add(statusEffectStack);
+                c.Add(l,statusEffectStack);
+            }
+        }
+
+      
     }
 
     public void Kill()

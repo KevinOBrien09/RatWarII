@@ -18,7 +18,7 @@ public class BattleManager : Singleton<BattleManager>
     bool looping;
     public SpikeSlot spikeSlotPrefab;
     public GameObject bloodSplatPrefab;
-    public Interactable chest;
+    
     public ParticleSystem bloodExplosion;
     public List<SoundData> sfx = new List<SoundData>();
     public AudioSource music;
@@ -42,11 +42,7 @@ public class BattleManager : Singleton<BattleManager>
             s.MakeSpecial(spikeSlotPrefab);
         }
 
-        for (int i = 0; i < 15; i++)
-        {
-            Slot s = MapManager.inst.RandomSlot();
-            s.MakeInteractable(chest);
-        }
+      
 
 
 
@@ -150,7 +146,7 @@ public class BattleManager : Singleton<BattleManager>
                 if(currentUnit.slot.specialSlot != null)
                 {
                    // CamFollow.inst.ForceFOV(20);
-                    BattleTicker.inst.Type(currentUnit.slot.specialSlot.tickerText);
+                    BattleTicker.inst.Type(currentUnit.slot.specialSlot.slotContents.contentName);
                     CamFollow.inst.target = currentUnit.slot. transform;
                     bool willUnitDie = currentUnit.slot.specialSlot.willUnitDie();
                     yield return new WaitForSeconds(1);

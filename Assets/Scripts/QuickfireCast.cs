@@ -5,6 +5,7 @@ public class QuickfireCast : SkillCastBehaviour
 {
     public int baseDamage = 5;
     public GameObject projectilePrefab;
+    public SlotContents arrowSlotContent;
     bool startMoving;
     Vector3 _startPosition,targetPos;
     float _stepScale;
@@ -17,6 +18,7 @@ public class QuickfireCast : SkillCastBehaviour
         args.caster.Flip(args.targetSlot.transform.position);
         GameObject arrow = Instantiate(projectilePrefab);
         arrow.transform.position = args.caster.transform.position;
+        
         CamFollow.inst.target = arrow.transform;
         if(args.target != null){
         args.target.healthBar.gameObject.transform.parent.gameObject. SetActive(true);
@@ -134,6 +136,7 @@ public class QuickfireCast : SkillCastBehaviour
             Destroy(_arrow.gameObject);
             }
             else{
+                castArgs.targetSlot.AddContent(arrowSlotContent);
                 foreach (var item in _arrow.gameObject.GetComponentsInChildren<SpriteRenderer>())
                 {
                     item.sortingLayerName = "Default";

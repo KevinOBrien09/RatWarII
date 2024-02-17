@@ -144,13 +144,18 @@ GameManager.inst.ChangeGameState(GameState.PLAYERUI);
         statusEffects[statusEffect].Clear();
     }
 
-    public void Bleed(int howManyBleeds)
-    {
-        float percent = (10f / 100f) * (float) health.maxHealth;
+    public int BleedDamage(int howManyBleeds){
+float percent = (10f / 100f) * (float) health.maxHealth;
         int bleed = 0;
         for (int i = 0; i < howManyBleeds; i++)
         {bleed += (int)percent;}
+        return bleed;
+    }
+
+    public void Bleed(int howManyBleeds)
+    {
         
+        int bleed = BleedDamage(howManyBleeds);
         Hit(bleed,null, true);
     }
 

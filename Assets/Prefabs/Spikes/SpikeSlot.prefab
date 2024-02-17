@@ -129,15 +129,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64036089d50e82a4da8a1050549f4af7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tickerText: Spikes of Doom
   sounds:
-  - audioClip: {fileID: 8300000, guid: 32a8896e294dcdf4aa692b55e0b55f15, type: 3}
+  - audioClip: {fileID: 8300000, guid: a7c5f868c00813f488d1ece7dbdfa7bb, type: 3}
     pitchRange: {x: 0.9, y: 1.1}
     volume: 1
   - audioClip: {fileID: 8300000, guid: e4b229d1cd4c5954c982c44b6f42eb27, type: 3}
     pitchRange: {x: 0.9, y: 1.1}
     volume: 1
   slot: {fileID: 0}
+  slotContents: {fileID: 11400000, guid: 959948db2c4430548b24ab3027355dce, type: 2}
   spikes: {fileID: 6365875277305693737}
   damage: 25
 --- !u!1 &3211905450948116610

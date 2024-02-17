@@ -41,7 +41,7 @@ public class UnitMover : Singleton<UnitMover>
     {
         SlotInfoDisplay.inst.Apply(sSlot);
         SlotInfoDisplay.inst.Disable();
-        SlotSelector.inst.gameObject.SetActive(true);
+
         foreach (var item in validSlots)
         {item.ChangeColour(validSlotColour);} 
     }
@@ -53,15 +53,16 @@ public class UnitMover : Singleton<UnitMover>
         if(!inCoro)
         {
            
-                foreach (var item in MapManager.inst.slots)
-                {item.indicator.SetActive(false);}
+
+             DirectionIndicator.inst. GetLayout(nodes);
+              
         
-                foreach (var item in nodes)
-                {
-                    if(item.slot == selectedSlot)
-                    {continue;}
-                    item.slot.indicator.SetActive(true);
-                }
+                // foreach (var item in nodes)
+                // {
+                //     if(item.slot == selectedSlot)
+                //     {continue;}
+                //     item.slot.indicator.SetActive(true);
+                // }
             
         }
     }
@@ -79,9 +80,11 @@ public class UnitMover : Singleton<UnitMover>
         {
             inCoro = true;
             CamFollow.inst.ZoomOut();
+           DirectionIndicator.inst.Reset();
             foreach (var item in MapManager.inst.slots)
             {
-                item.indicator.SetActive(false);
+            
+            
                 item.ChangeColour(baseSlotColour);
               
             }

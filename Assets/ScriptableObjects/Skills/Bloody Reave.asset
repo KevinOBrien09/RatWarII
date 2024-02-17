@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 2c01d3be-98f4-4f4e-9179-208cfd285e4a
   skillName: Bloody Reave
-  desc: Deal 35 DMG to a target, heal for 1/4 of DMG dealt.
+  desc: Deal 35 DMG to a target with a 50% chance of infliciting <color=red>bleed</color>.
   effects: []
   side: 1
   skillCastBehaviour: {fileID: 4511742184525757598, guid: bd730053c5ef0394a99b848e62c47946,
@@ -27,3 +27,5 @@ MonoBehaviour:
     volume: 1
   value: 
   radius: 1
+  canSelfCast: 0
+  showHealthBars: 0

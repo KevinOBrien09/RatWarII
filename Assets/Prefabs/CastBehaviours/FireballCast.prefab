@@ -49,4 +49,4 @@ MonoBehaviour:
   explosion: {fileID: 6147762205742091368, guid: 97f29982657269347aef23f66bf9799b,
     type: 3}
   traDmg: 5
-  explDMG: 25
+  explDMG: 20

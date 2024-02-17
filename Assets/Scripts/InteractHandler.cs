@@ -10,7 +10,7 @@ public class InteractHandler : Singleton<InteractHandler>
     public void Open()
     {
         GameManager.inst.ChangeGameState(GameState.INTERACT);
-        SlotSelector.inst.gameObject.SetActive(true);
+      
         BattleTicker.inst.Type("Interact");
         
         slots =BattleManager.inst.currentUnit.slot.func.GetRadiusSlots(1,true);
@@ -44,7 +44,8 @@ public class InteractHandler : Singleton<InteractHandler>
             StartCoroutine(q());
         }
         IEnumerator q()
-        {        SlotSelector.inst.gameObject.SetActive(false);
+        {      
+            
             foreach (var item in slots)
             {
                 item.ChangeColour(UnitMover.inst. baseSlotColour);
