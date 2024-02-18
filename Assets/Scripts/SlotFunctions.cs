@@ -46,7 +46,7 @@ public class SlotFunctions
                     }
                     else
                     {
-                        if(item.unit == null && !item.node.isBlocked)
+                        if(item.cont.walkable())
                         {
                             slots.Add(item);
                             item.func.FilterUnadjacents(candidates,slots,skill);
@@ -59,7 +59,7 @@ public class SlotFunctions
     }
  
 
-    public List<Slot> GetRadiusSlots(int radius,bool skill)
+    public List<Slot> GetRadiusSlots(int radius,Skill skill,bool fuckItWeBall)
     {
         List<Slot> candidateSlots = new List<Slot>();
         List<Slot> validSlots = new List<Slot>();
@@ -70,45 +70,38 @@ public class SlotFunctions
             bool v = item.TryGetComponent<Slot>(out s);
             if(v)  
             {
-                if(!skill)
-                {
-                    if(!s.node.isBlocked && s.unit == null)
+                if(fuckItWeBall){
+                    if(s.cont.walkable())
                     {candidateSlots.Add(s);}
+                }
+                else if(skill != null)
+                {
+                    if(skill is RadiusSkill rSkill)
+                    {
+                        if(rSkill.cannotCastOnSpecialSlot)
+                        {
+                            if(s.cont.walkable() && s.cont.specialSlot == null)
+                            {
+                                candidateSlots.Add(s);
+                            }
+                        }
+                         else{
+                            candidateSlots.Add(s);
+                        }
+                        
+                    }
+                    else{
+                       candidateSlots.Add(s);
+                    }
+
+                  
                 }
                 else
                 {candidateSlots.Add(s);}
             }
         }
         List<Slot> ss = new List<Slot>(FilterUnadjacents(candidateSlots,new List<Slot>(),skill));
-        if(skill)
-        {goto end; }
-        foreach (var item in MapManager.inst.slots)
-        {
-            if(!ss.Contains(item))
-            {
-                if(item.unit != null)
-                { 
-                    if(item.unit.stats().passable)
-                    {
-                        item.node.isBlocked = false;
-                        MapManager.inst.fuckYouSlots.Add(item);
-                    }
-                    else
-                    { 
-                        item.node.isBlocked = true;
-                        MapManager.inst.fuckYouSlots.Add(item);
-                    }
-                }
-                else
-                {
-                    MapManager.inst.fuckYouSlots.Add(item);
-                    item.node.isBlocked = true;
-                }
-              
-            }
-            
-        }
-        end:
+       
         if(ss.Contains(slot))
         {ss.Remove(slot);}
       
@@ -185,14 +178,11 @@ public class SlotFunctions
         List<Slot> candidateSlots = new List<Slot>();
         int tiles = length+1;
         var projectileSkill = skill as ProjectileSkill;
-        bool PENIS = false;
+       
         List<Slot>previousSlots = new List<Slot>();
 
         for (int i = 0; i < tiles; i++)
-        {
-            if(PENIS)
-            { break; }
-            if(dir <= clamp && dir >= 0 )
+        {if(dir <= clamp && dir >= 0 )
             {
                 Slot s = null;
                 if(X)
@@ -212,22 +202,8 @@ public class SlotFunctions
                 }
                 else
                 {
-                    if(s. tempTerrain != null && !projectileSkill.goThroughWalls){
-                        break;
-                    }
-
-                    if(previousSlots.Count > 0)
-                    {
-                        Slot lastSlot = previousSlots.Last();
-                        if(lastSlot != null){
-                            if(lastSlot.unit != null){
-                                if(!projectileSkill.passThrough){
-                                    PENIS  = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }   
+                    if(s.cont.wall && !projectileSkill.goThroughWalls)
+                    {break;}
                     
                     AddToCandidateSlots(s); 
                     if(!previousSlots.Contains(s) && s!= slot)
@@ -308,33 +284,29 @@ public class SlotFunctions
                     if(s==slot)
                     {continue;}
 
-                    if(s!=null)
-                    {
-                       if(!projectileSkill.passThrough)
-                       {
-                            if(s.unit !=null)
-                            {
-                            
-                                candidateSlots.Add(s);
-                                break;
-                            }
-                            else
-                            {
-                                candidateSlots.Add(s);
-                            }
-                        }
-                        else
-                        {
-                            candidateSlots.Add(s);
-                        }
-                        
-                    }
-                    else
-                    {
+                    if(s.cont.wall)
+                    { 
                         if(projectileSkill.goThroughWalls)
                         { continue;}
                         else
                         { break; }
+                     
+                        
+                    }
+                    else
+                    {
+                        if(!projectileSkill.passThrough)
+                        {
+                            if(s.cont.unit !=null)
+                            {
+                                candidateSlots.Add(s);
+                                break;
+                            }
+                            else
+                            {candidateSlots.Add(s);}
+                        }
+                        else
+                        {candidateSlots.Add(s);}
                     }
             
                 }

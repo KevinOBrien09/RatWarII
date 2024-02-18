@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseDamage: 5
+  tileTravelDamage: 3
   projectilePrefab: {fileID: 4508468215263952273, guid: f7f5e53881a1b1e4b85fc2ffcaf86161,
     type: 3}
   arrowSlotContent: {fileID: 11400000, guid: dc4f4b5f06d25a34ab6c37651958a214, type: 2}

@@ -5,75 +5,69 @@ using UnityEngine.EventSystems;
 using System.Linq;
 public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPointerExitHandler
 {
-    public Node node;
-    public Unit unit;
-    public SpriteRenderer border,hoverBorder;
-    public TempTerrain tempTerrain;
-    public Transform rayShooter;
-    public SpecialSlot specialSlot;
-    public List<SlotContents> slotContents = new List<SlotContents>();
+    public SlotContainer cont = new SlotContainer();
     public SlotFunctions func = new SlotFunctions();
-    void Start()
+    public Node node;
+    public SpriteRenderer border,hoverBorder;
+  //  public TempTerrain tempTerrain;
+    public Transform rayShooter;
+    
+    public Color32 normalColour,moveColour,interactColour,skillColour;
+
+    void Awake()
     {
+        cont.slot = this;
         func.slot = this;
     }
 
     public void ChangeColour(Color32 color)
     {border.color = color;}
     
-    public void MakeSpecial(SpecialSlot specialSlotPrefab)
+    public SpecialSlot MakeSpecial(SpecialSlot specialSlotPrefab)
     {
-        specialSlot = Instantiate(specialSlotPrefab,transform);
-        specialSlot.slot = this;
+        cont.specialSlot = Instantiate(specialSlotPrefab,transform);
+        cont.specialSlot.slot = this;
+        return cont.specialSlot;
     }
 
-    public void AddContent(SlotContents slotc){
-        slotContents.Add(slotc);
+    public void IsWall(){
+        cont.wall = true;
+        cont.invisible = true;
+        border.gameObject.SetActive(false);
+        hoverBorder.gameObject.SetActive(false);
     }
-
     
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if(eventData.button == PointerEventData.InputButton.Left)
-        { SlotSelect(); }
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {SlotHover();}
-
     public void SlotHover()
     {
-        if(!node.isBlocked || unit != null)
+        if(cont.invisible)
+        { return; }
+       
+        if(GameManager.inst.checkGameState(GameState.PLAYERSELECT))
         {
-            if(GameManager.inst.checkGameState(GameState.PLAYERSELECT))
+            if(UnitMover.inst.validSlots.Contains(this))
             {
-                
-                if(UnitMover.inst.validSlots.Contains(this))
+                if(cont.walkable())
                 {
-                   hoverBorderOn();
+                    hoverBorderOn();
                     List<Node> path = MapManager.inst.aStar.FindPath(UnitMover.inst.selectedSlot.transform.position,this.transform.position);
                     UnitMover.inst.NewHover(path);
                 }
-                else if(SkillAimer.inst.validSlots.Contains(this)){
-                      hoverBorderOn();
-                }
+              
             }
-            // else if(GameManager.inst.checkGameState(GameState.PLAYERHOVER)){
-            // hoverBorder.gameObject.SetActive(true);
-            // }
-           
+            else if(SkillAimer.inst.validSlots.Contains(this))
+            { hoverBorderOn(); }
+            else if(GameManager.inst.checkGameState(GameState.INTERACT))
+            {
+                if(InteractHandler.inst.slots.Contains(this))
+                { hoverBorderOn(); }
+            }
         }
-
-       
     }
-
-    public void hoverBorderOn(){
- hoverBorder.gameObject.SetActive(true);
-            border.gameObject.SetActive(false);
-    }
-
+    
     public void SlotSelect()
     {
+        if(cont.invisible)
+        { return; }
         if(SkillAimer.inst.castDecided)
         {return;}
 
@@ -88,7 +82,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
             case GameState.PLAYERSELECT:
             if(SkillAimer.inst.aiming)
             {
-                if(this.unit != null)
+                if(this.cont.unit != null)
                 { SkillAimer.inst.RecieveSlot(this);
                   DisableHover(); }
                 else if(SkillAimer.inst._skill.doesntNeedUnitInSlot)
@@ -128,18 +122,46 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
 
         }
     }
+    
+    public void hoverBorderOn()
+    {
+        if(cont.invisible)
+        { return; }
+        if(cont.unit == null)
+        { hoverBorder.color = Color.white; }
+        else
+        {
+            if(cont.unit.side == Side.ENEMY)
+            {hoverBorder.color = Color.red;}
+            else
+            {hoverBorder.color = Color.blue;}
+        }
+        hoverBorder.gameObject.SetActive(true);
+        border.gameObject.SetActive(false);
+    }
+
+    public void DisableHover()
+    {
+        if(cont.invisible)
+        { return; }
+        hoverBorder.gameObject.SetActive(false);
+        border.gameObject.SetActive(true);
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Left)
+        { SlotSelect();}
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {SlotHover();}
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if(!GameManager.inst.checkGameState(GameState.PLAYERHOVER))
-        {
-            DisableHover();
-        }
-   
+        { DisableHover(); }
     }
 
-   public void DisableHover(){
-   hoverBorder.gameObject.SetActive(false);
-     border.gameObject.SetActive(true);
-    }
+   
 }

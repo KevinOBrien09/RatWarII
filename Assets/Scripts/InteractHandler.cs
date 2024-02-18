@@ -13,11 +13,11 @@ public class InteractHandler : Singleton<InteractHandler>
       
         BattleTicker.inst.Type("Interact");
         
-        slots =BattleManager.inst.currentUnit.slot.func.GetRadiusSlots(1,true);
+        slots =BattleManager.inst.currentUnit.slot.func.GetRadiusSlots(1,null,true);
         Cursor.lockState = CursorLockMode.Confined;
         foreach (var item in slots)
         {
-            item.ChangeColour(Color.green);
+          item .ChangeColour(item.interactColour);
         }
     }
 
@@ -48,7 +48,7 @@ public class InteractHandler : Singleton<InteractHandler>
             
             foreach (var item in slots)
             {
-                item.ChangeColour(UnitMover.inst. baseSlotColour);
+                item.ChangeColour(item.normalColour);
             }
             slots.Clear();
             inCoro = true;

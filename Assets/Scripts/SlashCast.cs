@@ -38,11 +38,11 @@ public class SlashCast : SkillCastBehaviour
                 if(item != args.caster.slot)
                 {
                     
-                    if(item.unit != null)
+                    if(item.cont.unit != null)
                     {
-                        if(item.unit.side != args.caster.side)
+                        if(item.cont.unit.side != args.caster.side)
                         {  
-                            Unit i = item.unit;
+                            Unit i = item.cont.unit;
                             
                             if(i.health.willUnitDie(damage)){
                             

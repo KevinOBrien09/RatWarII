@@ -4,6 +4,7 @@ using UnityEngine;
 public class QuickfireCast : SkillCastBehaviour
 {
     public int baseDamage = 5;
+    public int tileTravelDamage;
     public GameObject projectilePrefab;
     public SlotContents arrowSlotContent;
     bool startMoving;
@@ -118,7 +119,7 @@ public class QuickfireCast : SkillCastBehaviour
                 int damage = baseDamage;
                 for (int i = 0; i < tilesTraveled; i++)
                 {
-                    damage += 2;
+                    damage += tileTravelDamage;
                 }
                 PlaySound(1,castArgs.skill);
                 castArgs.target.Hit(damage,castArgs);
@@ -136,7 +137,7 @@ public class QuickfireCast : SkillCastBehaviour
             Destroy(_arrow.gameObject);
             }
             else{
-                castArgs.targetSlot.AddContent(arrowSlotContent);
+                castArgs.targetSlot.cont.AddContent(arrowSlotContent);
                 foreach (var item in _arrow.gameObject.GetComponentsInChildren<SpriteRenderer>())
                 {
                     item.sortingLayerName = "Default";

@@ -17,9 +17,9 @@ public class UnitMover : Singleton<UnitMover>
         if(!inCoro)
         {
             inCoro = true;
-            selectedUnit = sSlot.unit;
+            selectedUnit = sSlot.cont. unit;
             unitStartRot = selectedUnit.transform.rotation;
-            CamFollow.inst.Focus(sSlot.unit.transform,()=>
+            CamFollow.inst.Focus(sSlot.cont. unit.transform,()=>
             {
                 if(selectedUnit.side == Side.PLAYER)
                 {GameManager.inst.ChangeGameState(GameState.PLAYERSELECT);
@@ -29,7 +29,7 @@ public class UnitMover : Singleton<UnitMover>
             });
             
             selectedSlot = sSlot;
-            validSlots =sSlot.func.GetRadiusSlots(sSlot.unit.stats().moveRange,false);
+            validSlots =sSlot.func.GetRadiusSlots(sSlot.cont. unit.stats().moveRange,null,true);
             if(selectedUnit.side == Side.PLAYER){
             SelectionUI(sSlot);
             }
@@ -43,7 +43,7 @@ public class UnitMover : Singleton<UnitMover>
         SlotInfoDisplay.inst.Disable();
 
         foreach (var item in validSlots)
-        {item.ChangeColour(validSlotColour);} 
+        {item.ChangeColour(item.moveColour);} 
     }
 
     public void NewHover(List<Node> nodes)
@@ -84,8 +84,7 @@ public class UnitMover : Singleton<UnitMover>
             foreach (var item in MapManager.inst.slots)
             {
             
-            
-                item.ChangeColour(baseSlotColour);
+                item.ChangeColour(item.normalColour);
               
             }
             MapManager.inst.fuckYouSlots.Clear();
@@ -94,7 +93,7 @@ public class UnitMover : Singleton<UnitMover>
             // if(!GameManager.inst.checkGameState(GameState.UNITMOVE))
             // {GameManager.inst.ChangeGameState(GameState.PLAYERHOVER);}
            
-            selectedSlot.ChangeColour(baseSlotColour); //??
+            selectedSlot.ChangeColour(selectedSlot.normalColour); //??
             while(GameManager.inst.checkGameState(GameState.UNITMOVE))
             {break;}
             yield return new WaitForSeconds(.15f);
@@ -105,7 +104,7 @@ public class UnitMover : Singleton<UnitMover>
 
     public void InitializeMove(Slot slot)
     {
-        if(slot.unit != null)
+        if(slot.cont.unit != null)
         {return;}
         GameManager.inst.ChangeGameState(GameState.UNITMOVE);
         CamFollow.inst.target =  selectedUnit.transform;
@@ -113,7 +112,7 @@ public class UnitMover : Singleton<UnitMover>
         ExitSelectionMode();
        BattleTicker.inst.Type("Moving..");
         selectedUnit.activeUnitIndicator.gameObject.SetActive(false);
-        selectedUnit.slot.ChangeColour(baseSlotColour);
+        selectedUnit.slot.ChangeColour(selectedUnit.slot.normalColour);
         List<Node> path = MapManager.inst.aStar.FindPath(UnitMover.inst.selectedSlot.transform.position,
        slot.transform.position);
         Queue<Slot> q = new Queue<Slot>();

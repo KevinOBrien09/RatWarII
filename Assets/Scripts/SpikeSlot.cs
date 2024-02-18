@@ -7,7 +7,7 @@ public class SpikeSlot : SpecialSlot
 {
     public Transform spikes;
     public int damage = 25;
-    public override void Go()
+    public override void Tick()
     {
         
         spikes.DOLocalMoveY(.23f,.05f).OnComplete(()=>
@@ -15,8 +15,8 @@ public class SpikeSlot : SpecialSlot
             AudioManager.inst.GetSoundEffect().Play(sounds[0]);
             StartCoroutine(q());
             IEnumerator q(){
-            if(slot.unit != null){
-                slot.unit.Hit(damage,null);
+            if(slot.cont.unit != null){
+                slot.cont.unit.Hit(damage,null);
                 AudioManager.inst.GetSoundEffect().Play(sounds[1]);
             }
             yield return new WaitForSeconds(.5f);
@@ -31,7 +31,7 @@ public class SpikeSlot : SpecialSlot
 
     public override bool willUnitDie()
     {
-        if(slot.unit.health.currentHealth - 25 <= 0){
+        if(slot.cont.unit.health.currentHealth - 25 <= 0){
             return true;
         }
         else{

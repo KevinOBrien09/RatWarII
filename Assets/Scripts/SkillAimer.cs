@@ -19,8 +19,8 @@ public class SkillAimer : Singleton<SkillAimer>
         if(!castDecided){
  //Debug.Log("Leave");
         foreach (var item in MapManager.inst.slots)
-        {item.ChangeColour(UnitMover.inst. baseSlotColour);}
-
+        {item.ChangeColour(item.normalColour);}
+         BattleManager.inst.currentUnit.slot.DisableHover();
         validSlots.Clear();
          validTargets.Clear();
                 _skill = null;
@@ -44,19 +44,19 @@ public class SkillAimer : Singleton<SkillAimer>
                 foreach (var item in MapManager.inst.slots)
                 {
                 
-                    item.ChangeColour(UnitMover.inst. baseSlotColour);
+               item.ChangeColour(item.normalColour);
                     
                 }
                 
-            
+            BattleManager.inst.currentUnit.slot.DisableHover();
                 castDecided = true;  
                 BattleTicker.inst.Type(_skill.skillName);
               
                 CastArgs args = new CastArgs();
                 args.caster = BattleManager.inst.currentUnit ;
-                if(s.unit != null)
+                if(s.cont.unit != null)
                 {
-                    args.target = s.unit;
+                    args.target = s.cont.unit;
                 }
                 
                 args.targetSlot = s;
@@ -82,6 +82,7 @@ public class SkillAimer : Singleton<SkillAimer>
     
     public void Go(Skill s)
     {
+        
         _skill = s;
         caster = BattleManager.inst.currentUnit;
         slot = caster.slot;
@@ -120,7 +121,7 @@ public class SkillAimer : Singleton<SkillAimer>
        
         skillCastBehaviour = null;
         foreach (var item in MapManager.inst.slots)
-        {item.ChangeColour(UnitMover.inst. baseSlotColour);}
+        {item.ChangeColour(item.normalColour);}
         castDecided = false;
         _skill = null;
     
@@ -165,7 +166,7 @@ public class SkillAimer : Singleton<SkillAimer>
         }
         if(BattleManager.inst.currentUnit.side == Side.PLAYER){
             foreach (var item in validSlots)
-            {item.ChangeColour(Color.gray);} 
+            {item.ChangeColour(item.skillColour);} 
         }
          
     }
@@ -178,14 +179,14 @@ public class SkillAimer : Singleton<SkillAimer>
         Character casterChar = caster.character;
         Cursor.lockState = CursorLockMode.Confined;
         CamFollow.inst.ChangeCameraState(CameraState.FREE);
-        validSlots   = slot.func. GetRadiusSlots(skill.radius,true);
+        validSlots   = slot.func. GetRadiusSlots(skill.radius,skill,false);
        
         foreach (var item in validSlots)
         {
-            if(item.unit != null)
+            if(item.cont.unit != null)
             {
-                if(!validTargets.Contains(item.unit)){
-                validTargets.Add(item.unit);
+                if(!validTargets.Contains(item.cont.unit)){
+                validTargets.Add(item.cont.unit);
                 }
             }
         }
@@ -215,10 +216,10 @@ public class SkillAimer : Singleton<SkillAimer>
       
         foreach (var item in validSlots)
         {
-            if(item.unit == null){
+            if(item.cont.unit == null){
                 
             }
-            item.ChangeColour(Color.gray);
+            item.ChangeColour(item.skillColour);
         }  
 
     }
@@ -226,19 +227,20 @@ public class SkillAimer : Singleton<SkillAimer>
     public void SelfCast(SelfSkill skill)
     {
         currentState = Aim.SELF;
-        validSlots   = slot.func.GetRadiusSlots(skill.radius,true);
+        validSlots   = slot.func.GetRadiusSlots(skill.radius,skill,false);
         validSlots.Add(slot);
+        BattleManager.inst.currentUnit.slot.hoverBorderOn();
         foreach (var item in validSlots)
         {
-            if(item.unit != null)
+            if(item.cont.unit != null)
             {
                 if(skill.showHealthBars){
-                    if(item.unit.side == skill.side)
-                    {item.unit.healthBar.gameObject.transform.parent.gameObject.SetActive(true);}
+                    if(item.cont.unit.side == skill.side)
+                    {item.cont.unit.healthBar.gameObject.transform.parent.gameObject.SetActive(true);}
                 }
               
             }
-            item.ChangeColour(Color.gray);
+           item.ChangeColour(item.skillColour);
         }
 
        

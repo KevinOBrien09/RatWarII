@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ffa5ff9dd15893c45b0be18781db98f6, type: 3}
-  m_Name: Pillar
+  m_Name: Earth Pillar
   m_EditorClassIdentifier: 
   ID: d802dfd8-74e8-4a53-8912-3c9f4a589b5e
   skillName: Earth Pillar
@@ -25,4 +25,8 @@ MonoBehaviour:
   - audioClip: {fileID: 8300000, guid: 61c0848a701c2114bb6dc5087bc980cd, type: 3}
     pitchRange: {x: 0.9, y: 1}
     volume: 1
+  value: 
   radius: 4
+  canSelfCast: 0
+  showHealthBars: 0
+  cannotCastOnSpecialSlot: 1

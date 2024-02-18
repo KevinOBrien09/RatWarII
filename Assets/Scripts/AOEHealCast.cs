@@ -26,13 +26,13 @@ public class AOEHealCast : SkillCastBehaviour
             {
                
                     
-                if(item.unit != null)
+                if(item.cont.unit != null)
                 {
-                    if(item.unit.side == args.caster.side)
+                    if(item.cont.unit.side == args.caster.side)
                     {
-                        if(item.unit. health.notFull())
+                        if(item.cont.unit. health.notFull())
                         {
-                            item.unit.Heal(value);
+                            item.cont.unit.Heal(value);
                         }
                     }
                     

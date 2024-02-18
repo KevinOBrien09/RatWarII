@@ -459,7 +459,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32a26193c27990b4f8ee3cf0156d5064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sounds: []
   slot: {fileID: 0}
+  slotContents: {fileID: 11400000, guid: 5aad9d6dbf0a74f459b13e7269b91307, type: 2}
+  createdByUnit: 0
   turnToDieOn: 0
   howManyTurns: 1
   col: {fileID: 7956776098970100417}

@@ -17,16 +17,20 @@ public class BattleManager : Singleton<BattleManager>
     public int howManyPartyMembers,howManyEnemies;
     bool looping;
     public SpikeSlot spikeSlotPrefab;
-    public GameObject bloodSplatPrefab;
-    
-    public ParticleSystem bloodExplosion;
-    public List<SoundData> sfx = new List<SoundData>();
+   
     public AudioSource music;
 
     IEnumerator Start()
     {
         yield return new WaitForEndOfFrame();
         List<Slot> shuffle = MapManager.inst.StartingRadius();
+
+        
+        for (int i = 0; i < 15; i++)
+        {
+            Slot s = MapManager.inst.RandomSlot();
+            s.MakeSpecial(spikeSlotPrefab);
+        }
       
         for (int i = 0; i < howManyPartyMembers; i++)
         {CreatePlayerUnit(shuffle[i]);}
@@ -35,16 +39,6 @@ public class BattleManager : Singleton<BattleManager>
         {CreateEnemyUnit(MapManager.inst.RandomSlot());}
       
         ToggleHealthBars(false);
-
-        for (int i = 0; i < 15; i++)
-        {
-            Slot s = MapManager.inst.RandomSlot();
-            s.MakeSpecial(spikeSlotPrefab);
-        }
-
-      
-
-
 
         NewTurn();
     }
@@ -59,12 +53,11 @@ public class BattleManager : Singleton<BattleManager>
         {
             
             turnOrder.Enqueue(item);
-             item. movedThisTurn = false;
+            item. movedThisTurn = false;
         }
 
         UnitIteration();
         turn++;
-        
     }
 
     public void EndTurn(){
@@ -143,14 +136,14 @@ public class BattleManager : Singleton<BattleManager>
                     yield return new WaitForSeconds(.5f);
                 }
          
-                if(currentUnit.slot.specialSlot != null)
+                if(currentUnit.slot.cont.specialSlot != null)
                 {
                    // CamFollow.inst.ForceFOV(20);
-                    BattleTicker.inst.Type(currentUnit.slot.specialSlot.slotContents.contentName);
+                    BattleTicker.inst.Type(currentUnit.slot.cont.specialSlot.slotContents.contentName);
                     CamFollow.inst.target = currentUnit.slot. transform;
-                    bool willUnitDie = currentUnit.slot.specialSlot.willUnitDie();
+                    bool willUnitDie = currentUnit.slot.cont.specialSlot.willUnitDie();
                     yield return new WaitForSeconds(1);
-                    currentUnit.slot.specialSlot.Go();
+                    currentUnit.slot.cont.specialSlot.Tick();
                     yield return new WaitForSeconds(1);
                     if(willUnitDie){
                         UnitIteration();
@@ -366,10 +359,6 @@ public class BattleManager : Singleton<BattleManager>
         {enemyUnits.Remove(u);}
         else
         {playerUnits.Remove(u);}
-        GameObject splat = Instantiate(bloodSplatPrefab,new Vector3(u.slot. transform.position.x,bloodSplatPrefab.transform.position.y,u.slot.transform.position.z),bloodSplatPrefab.transform.rotation);
-        ParticleSystem explosion = Instantiate(bloodExplosion,new Vector3(u.slot. transform.position.x,bloodExplosion.transform.position.y,u.slot.transform.position.z),bloodSplatPrefab.transform.rotation);
-        explosion.Play();
-        AudioManager.inst.GetSoundEffect().Play(sfx[0]);
         List<Unit> XD = new List<Unit>();
         XD.Add(u);
         turnOrder = new Queue<Unit>(turnOrder.Where(x => !XD.Contains(x)));
@@ -432,7 +421,7 @@ public class BattleManager : Singleton<BattleManager>
     public void ReposUnit(Unit u,Slot slot){
         u.transform.position = new Vector3(slot.transform.position.x,u.transform.position.y,slot.transform.position.z);
         u.Reposition(slot);
-        slot.unit = u;  
+        slot.cont.unit = u;  
         MapManager.inst.grid.UpdateGrid();
     }
 

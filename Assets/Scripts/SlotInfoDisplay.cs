@@ -26,10 +26,10 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
     {
         
         sl = slot;
-        if(slot.unit != null)
+        if(slot.cont.unit != null)
         { 
        
-            healthBar.health = slot.unit.health;
+            healthBar.health = slot.cont.unit.health;
             healthBar.gameObject.SetActive(true);
             healthBar.Refresh();
             if(!gameObject.activeSelf){
@@ -52,35 +52,36 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                
             }
             
-            Unit u = slot.unit;
-            Character c = slot.unit.character;
+            Unit u = slot.cont.unit;
+            Character c = slot.cont.unit.character;
             charName.text = c.characterName.fullName();
             //hp.text = "HP:"+ u.health.currentHealth.ToString()+ "/" + u.stats().hp.ToString();
             level.text = c.exp.level.ToString();
-            if(slot.unit.side == Side.PLAYER){
+            if(slot.cont.unit.side == Side.PLAYER){
                 speciesClass.text = c.job.ToString() + " "+ c.species.ToString();
             }
             else{
-                  speciesClass.text = slot.unit.enemy.tagLine;
+                  speciesClass.text = slot.cont.unit.enemy.tagLine;
             }
             stackHandler.Kill();
             stackHandler.Spawn(u);
-            List<SlotContents> sc = new List<SlotContents>(u.slot.slotContents);
+            List<SlotContents> sc = new List<SlotContents>(u.slot.cont.slotContents);
 
-            if(slot.specialSlot != null){
-                sc.Add(slot.specialSlot.slotContents);
+            if(slot.cont.specialSlot != null){
+                sc.Add(slot.cont.specialSlot.slotContents);
             }
+           
             stackHandler.SlotContents(sc);
             speed.text = "SPEED:" + u.stats().speed.ToString();
             strength.text = "STR:" + u.stats().strength.ToString();
             moveRange.text = "MOVE:" + u.stats().moveRange.ToString();
             icon.gameObject.SetActive(true);
-            if(slot.unit.side == Side.PLAYER){
-                sl.unit.graphic.cam.gameObject.SetActive(true);
+            if(slot.cont.unit.side == Side.PLAYER){
+                sl.cont.unit.graphic.cam.gameObject.SetActive(true);
                 icon.texture = u.graphic.cam.activeTexture;
             }
             else{
-                  icon.texture = slot.unit.enemy.icon;
+                  icon.texture = slot.cont.unit.enemy.icon;
             }
             
         }
@@ -102,21 +103,22 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 else
                 {CamFollow.inst.Focus(slot.transform,()=>{});}
             }
-            if(slot.specialSlot == null){
+            if(slot.cont.specialSlot == null){
                 charName.text = "Empty Slot";
                 icon.texture = null;    
                 icon.gameObject.SetActive(false);
             }
             else{
-                charName.text = slot.specialSlot.slotContents.contentName;
-                icon.texture =  slot.specialSlot.slotContents.picture;   
+                charName.text = slot.cont.specialSlot.slotContents.contentName;
+                icon.texture =  slot.cont.specialSlot.slotContents.picture;   
                 icon.gameObject.SetActive(true );
             }
             
            
             healthBar.gameObject.SetActive(false);
             stackHandler.Kill();
-            stackHandler.SlotContents(slot.slotContents);
+           
+            stackHandler.SlotContents(slot.cont.slotContents);
             
             hp.text = string.Empty;
             level.text = "0";
@@ -132,10 +134,10 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
     {
         if(sl != null)
         {
-            if(sl.unit != null)
+            if(sl.cont.unit != null)
             {   
-                if(sl.unit.side == Side.PLAYER){
-  sl.unit .graphic.cam.gameObject.SetActive(false);
+                if(sl.cont.unit.side == Side.PLAYER){
+  sl.cont.unit .graphic.cam.gameObject.SetActive(false);
                 }
               
             }

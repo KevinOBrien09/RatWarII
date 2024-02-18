@@ -23,11 +23,11 @@ damage = dmg;
             if(slotExists)
             {
                 if(SkillAimer.inst.validSlots.Contains(s)){
- if(s.unit != null)
+ if(s.cont.unit != null)
                 {
-                    if(s.unit != caster){
+                    if(s.cont.unit != caster){
                         //if(s.unit.side != caster.side){
-                            s.unit.Hit(damage,null);
+                            s.cont.unit.Hit(damage,null);
                       //  }
                     }
                    

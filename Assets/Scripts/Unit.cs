@@ -31,7 +31,9 @@ public class Unit : MonoBehaviour
     public EnemyAI enemyAI;
     public bool moving;
     public CharacterSounds sounds;
-
+    public Corpse corpsePrefab;
+    public bool dead;
+    public SoundData footstep;
     void Start()
     {
         var values = System.Enum.GetValues(typeof(StatusEffectEnum));
@@ -82,6 +84,7 @@ public class Unit : MonoBehaviour
         {
             if(q.Count > 0)
             {
+
                 Slot s= q.Dequeue();
                 Vector3 v =  new Vector3(s.transform.position.x, transform.position.y ,s.transform.position.z);
                 graphic.ChangeSpriteSorting(s.node);
@@ -89,7 +92,10 @@ public class Unit : MonoBehaviour
              
 
                 transform.DOMove(v,.1f).OnComplete(()=>
-                { loop(); });
+                { 
+                    AudioManager.inst.GetSoundEffect().Play(footstep);
+                    loop(); 
+                });
             }
             else
             { 
@@ -127,10 +133,21 @@ GameManager.inst.ChangeGameState(GameState.PLAYERUI);
 
 
     public void Hit(int damage,CastArgs castArgs, bool bleed = false)
-    {   int i = health.dmgAmount(damage);
+    {   
+        int i = health.dmgAmount(damage);
         ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go(i.ToString(),Color.white,transform.position);
+        Vector3 v = new Vector3();
+        bool ca = castArgs != null;
+        if(ca){
+           v = castArgs.caster.transform.position;
+        }
+        
         graphic.RedFlash(()=>
-        {health.Hit(damage);
+        {
+            if(ca)
+            {Flip(v);}
+           
+            health.Hit(damage);
         if(bleed)
         {
             bleedVFX.gameObject.SetActive(true);
@@ -181,18 +198,24 @@ float percent = (10f / 100f) * (float) health.maxHealth;
     }
 
     public void Die()
-    {   
-        BattleManager.inst.UnitIsDead(this);
-        if(sounds != null)
-        {AudioManager.inst.GetSoundEffect().Play(sounds.die);}
-        slot.unit = null;
-        health.currentHealth = 0;
-        StartCoroutine(q());
-        IEnumerator q()
+    {  
+        if(!dead)
         {
-            yield return new WaitForSeconds(.4f);
-            Destroy(gameObject);
-            MapManager.inst.grid.UpdateGrid();
+            dead = true;
+            BattleManager.inst.UnitIsDead(this);
+            Corpse c =   Instantiate(corpsePrefab,new Vector3(slot. transform.position.x,0,slot. transform.position.z) ,transform.rotation);
+            c.Spawn(this,this.slot);
+            if(sounds != null)
+            {AudioManager.inst.GetSoundEffect().Play(sounds.die);}
+            slot.cont.unit = null;
+            health.currentHealth = 0;
+            StartCoroutine(q());
+            IEnumerator q()
+            {
+                yield return new WaitForSeconds(.4f);
+                Destroy(gameObject);
+                MapManager.inst.grid.UpdateGrid();
+            }
         }
     }
 
@@ -218,23 +241,13 @@ float percent = (10f / 100f) * (float) health.maxHealth;
     
     public void Reposition(Slot newSlot)
     {
-        if(slot != null)
-        {
-            slot.node.isBlocked = false;
-            slot.unit = null;
-        }
-        if(side == Side.PLAYER ){
-  SlotInfoDisplay.inst.Disable();
-        }
-      
-        //SlotSelector.inst.gameObject.SetActive(true);
+        Slot oldSlot = slot;
+        if(oldSlot != null)
+        {slot.cont.unit = null;}
+        if(side == Side.PLAYER )
+        {SlotInfoDisplay.inst.Disable();}
         slot = newSlot;
-     
-        if(!stats(). passable)
-        {slot.node.isBlocked = true;}
-        else
-        {slot.node.isBlocked = false;}
-        slot.unit = this;
+        slot.cont.unit = this;
         graphic.ChangeSpriteSorting(slot.node);
         
     }

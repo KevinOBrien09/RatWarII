@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c603b92c96daa24088b1e84b0cbbbdd, type: 3}
-  m_Name: Lesser Ageis
+  m_Name: Minor Barrier
   m_EditorClassIdentifier: 
   ID: 35433542-3142-45a9-b3d4-93096ef99883
   skillName: Minor Barrier

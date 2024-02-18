@@ -9,7 +9,7 @@ public class PullTowardsCast : SkillCastBehaviour
    
     public override void Go(CastArgs args)
     {
-        GameObject grabber = Instantiate(grabberPrefab,args.caster.slot.unit.transform);
+        GameObject grabber = Instantiate(grabberPrefab,args.caster.slot.cont.unit.transform);
         Transform tip = grabber.transform. GetChild(0);
         args.caster.Flip(args.targetSlot.transform.position);
         

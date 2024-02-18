@@ -20,5 +20,10 @@ MonoBehaviour:
   characterGraphic: {fileID: 1875858896460908558, guid: e2f06924009dac446a053dc5ac0fdcf2,
     type: 3}
   icon: {fileID: 2800000, guid: 141b2929f5cfd5048b592a46b0ad0d25, type: 3}
+  corpseHead: {fileID: 0}
+  bloodGradient:
+    serializedVersion: 2
+    rgba: 4281506502
+  bloodSplatMat: {fileID: 2100000, guid: 4f15441a137de8443bdcf04935db076b, type: 2}
   enemyAI: {fileID: 9030826205893364487, guid: 4556b83d16967e8479428665ff8a4ed7, type: 3}
   sounds: {fileID: 11400000, guid: 642347a0c3f32fc47b3802e8c5baa4c5, type: 2}

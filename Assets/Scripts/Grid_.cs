@@ -53,7 +53,7 @@ public class Grid_ : MonoBehaviour
         {
             if(item.slot!= null)
             {
-                if(item.slot.unit == null)
+                if(item.slot.cont.unit == null)
                 {
                     item.isBlocked = false;
                     if (Physics.CheckBox(item.vPosition,new Vector3(fNodeRadius,fNodeRadius,fNodeRadius) ,Quaternion.identity, blockage))

@@ -11,6 +11,9 @@ public class Enemy : GUIDScriptableObject
     public StartingStats startingStats;
     public CharacterGraphic characterGraphic;
     public Texture icon;
+    public Sprite corpseHead;
+    public Color32 bloodGradient;
+    public Material bloodSplatMat;
     public EnemyAI enemyAI;
     public CharacterSounds sounds;
 }

@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10eeb75c3eaa4e143abfefb585cfcf41, type: 3}
   m_Name: Corpse
   m_EditorClassIdentifier: 
-  contentName: Corpse
-  picture: {fileID: 2800000, guid: 3332c7f01d8a1934fbd377760beaae90, type: 3}
+  contentName: Bloodstain
+  contentDesc: 
+  picture: {fileID: 2800000, guid: b00dc0b0f4174b14aa9e3caa8d9b0859, type: 3}
+  unStackable: 0

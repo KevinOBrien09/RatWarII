@@ -58,7 +58,7 @@ public class FlyAI : EnemyAI
             for (int i = 0; i < q.Count; i++)
             {
                 Slot c =  q.Dequeue();
-                if(c.unit == null && !c.node.isBlocked && c.tempTerrain == null)
+                if(c.cont.walkable())
                 {
                     loc = c;
                     break;

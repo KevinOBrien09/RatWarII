@@ -42,8 +42,8 @@ public class FireballCast : SkillCastBehaviour
                     Instantiate(explosion,fb.transform.position,Quaternion.identity).Play();
                     Destroy(fb.gameObject);
                     PlaySound(1,args.skill);
-                    if(args.targetSlot.unit != null)
-                    {args.targetSlot.unit.Hit(explDMG,args);}
+                    if(args.targetSlot.cont.unit != null)
+                    {args.targetSlot.cont.unit.Hit(explDMG,args);}
                     yield return new WaitForSeconds(1f);
                     SkillAimer.inst.Finish();
                 }

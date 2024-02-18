@@ -40,7 +40,7 @@ public class ActionMenu : Singleton<ActionMenu>
            
             // CamFollow.inst.ChangeCameraState(CameraState.LOCK);
             // GameManager.inst.ChangeGameState(GameState.PLAYERUI);
-            CamFollow.inst.Focus(s.unit.transform,()=>
+            CamFollow.inst.Focus(s.cont.unit.transform,()=>
             { 
                 if(ActionMenu.inst.currentState !=ActionMenu.ActionMenuState.SKILL){
                 BattleTicker.inst.Type(BattleManager.inst. TurnState());
@@ -129,7 +129,7 @@ public class ActionMenu : Singleton<ActionMenu>
                
             break;
             case ActionMenuState.MOVE:
-           if(!slot.unit.movedThisTurn){
+           if(!slot.cont.unit.movedThisTurn){
             FUCKOFF = true;
             rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
             { FUCKOFF = false; open = false;});

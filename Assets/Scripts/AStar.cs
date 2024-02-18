@@ -48,7 +48,7 @@ public class AStar : MonoBehaviour {
 
             foreach (Node NeighborNode in GridReference.GetNeighboringNodes(CurrentNode))
             {
-                if (NeighborNode.isBlocked || ClosedList.Contains(NeighborNode))
+                if (!NeighborNode.slot.cont.walkable() || ClosedList.Contains(NeighborNode))
                 {
                     continue;//Skip it
                 }
