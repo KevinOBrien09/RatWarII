@@ -58,6 +58,16 @@ public class MapManager : Singleton<MapManager>
 
     }
 
+    public List<Slot> HostageSlots()
+    {
+        Slot center = grid.NodeArray[2,2].slot;
+        List<Slot> radius =  center.func.GetRadiusSlots(1,CharacterBuilder.inst.mandatorySkills[0],false);
+        radius.Add(center);
+        System.Random rng = new System.Random();
+        return radius.OrderBy(_ => rng.Next()).ToList();
+
+    }
+
     public Slot RandomSlot()
     {
         List<Slot> Xd = new List<Slot>(slots);
@@ -66,9 +76,12 @@ public class MapManager : Singleton<MapManager>
         
         foreach (var item in Xd.OrderBy(_ => rng.Next()).ToList())
         {
-            if(item.cont.walkable()){
+            if(item.cont.specialSlot == null){
+if(item.cont.walkable()){
                 return item;
             }
+            }
+            
             
         }
 

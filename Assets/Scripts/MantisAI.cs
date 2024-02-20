@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
-public class MantisAI : EnemyAI
+public class MantisAI : CharacterAI
 {
     public Skill reave,heal;
     public override void ConductTurn()

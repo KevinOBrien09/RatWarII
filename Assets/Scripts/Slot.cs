@@ -8,10 +8,8 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public SlotContainer cont = new SlotContainer();
     public SlotFunctions func = new SlotFunctions();
     public Node node;
-    public SpriteRenderer border,hoverBorder;
-  //  public TempTerrain tempTerrain;
+    public SpriteRenderer border,hoverBorder,areaIndicator;
     public Transform rayShooter;
-    
     public Color32 normalColour,moveColour,interactColour,skillColour;
 
     void Awake()
@@ -26,6 +24,9 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public SpecialSlot MakeSpecial(SpecialSlot specialSlotPrefab)
     {
         cont.specialSlot = Instantiate(specialSlotPrefab,transform);
+        if(cont.specialSlot.interactable != null){
+            cont.specialSlot.interactable.slot = this;
+        }
         cont.specialSlot.slot = this;
         return cont.specialSlot;
     }
@@ -54,13 +55,15 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
                 }
               
             }
+           
             else if(SkillAimer.inst.validSlots.Contains(this))
             { hoverBorderOn(); }
-            else if(GameManager.inst.checkGameState(GameState.INTERACT))
-            {
-                if(InteractHandler.inst.slots.Contains(this))
-                { hoverBorderOn(); }
-            }
+        }
+        else if(GameManager.inst.checkGameState(GameState.INTERACT))
+        {
+            if(InteractHandler.inst.slots.Contains(this))
+            { hoverBorderOn();
+            SlotInfoDisplay.inst.Apply(this); }
         }
     }
     
@@ -104,10 +107,10 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
             break;
          
             case GameState.INTERACT:
-            // if(interactable != null)
-            // {  DisableHover();
-            //     interactable.Go(BattleManager.inst.currentUnit);
-            // }
+            if(InteractHandler.inst.slots.Contains(this)){
+                InteractHandler.inst.TakeInteraction(this);
+            }
+     
             break;
 
             case GameState.ENEMYTURN:
@@ -129,13 +132,22 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
         { return; }
         if(cont.unit == null)
         { hoverBorder.color = Color.white; }
-        else
+       
+        else if(cont.unit != null )
         {
             if(cont.unit.side == Side.ENEMY)
             {hoverBorder.color = Color.red;}
             else
             {hoverBorder.color = Color.blue;}
         }
+        else if(cont.specialSlot != null && cont.unit == null)
+        {
+            if(cont.specialSlot.interactable != null){
+                hoverBorder.color = Color.magenta;
+            }
+        }
+
+       
         hoverBorder.gameObject.SetActive(true);
         border.gameObject.SetActive(false);
     }

@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71ae1edd25ffbce4cb2dac16f9bb65a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1460983a89d450149bcb7177ce59b1c3, type: 3}
   m_Name: Mantis
   m_EditorClassIdentifier: 
-  ID: 98f3fffa-7cfd-4cbe-8078-7a8720c14ab8
+  ID: 95145682-ed88-4a91-8151-0ea44cd75139
   names:
   - Mantis
   tagLine: PRAYING MANTIS
@@ -23,7 +23,7 @@ MonoBehaviour:
   corpseHead: {fileID: 0}
   bloodGradient:
     serializedVersion: 2
-    rgba: 4285621797
-  bloodSplatMat: {fileID: 2100000, guid: 336a16208ebb8484bba971cf1014eceb, type: 2}
-  enemyAI: {fileID: 8600280297082065181, guid: 632049caacb7d464c81dd424df19d2e6, type: 3}
+    rgba: 0
+  bloodSplatMat: {fileID: 2100000, guid: 31348add57830e1418ad7d43a6abb92b, type: 2}
+  charAI: {fileID: 8600280297082065181, guid: 632049caacb7d464c81dd424df19d2e6, type: 3}
   sounds: {fileID: 0}

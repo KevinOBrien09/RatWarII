@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
-public class FlyAI : EnemyAI
+public class FlyAI : CharacterAI
 {
     public Skill shoot;
     public override void ConductTurn()

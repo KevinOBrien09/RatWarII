@@ -19,10 +19,16 @@ public class UnitMover : Singleton<UnitMover>
             inCoro = true;
             selectedUnit = sSlot.cont. unit;
             unitStartRot = selectedUnit.transform.rotation;
+            if(selectedUnit.side == Side.PLAYER)
+            {
+                BattleTicker.inst.Type("Preparing Move...");
+            }
             CamFollow.inst.Focus(sSlot.cont. unit.transform,()=>
             {
                 if(selectedUnit.side == Side.PLAYER)
-                {GameManager.inst.ChangeGameState(GameState.PLAYERSELECT);
+                {
+                    BattleTicker.inst.Type("Preparing Move...");
+                    GameManager.inst.ChangeGameState(GameState.PLAYERSELECT);
                 CamFollow.inst.ChangeCameraState(CameraState.FREE);
                 }
                 inCoro = false;

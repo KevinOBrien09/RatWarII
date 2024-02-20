@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1460983a89d450149bcb7177ce59b1c3, type: 3}
+  m_Name: FarmerMouse
+  m_EditorClassIdentifier: 
+  ID: a4ddbbda-fc24-4aa6-9cbd-9195a7c84494
+  names:
+  - Chesetus
+  - Jimmy
+  - Frank
+  tagLine: FARMER MOUSE
+  startingStats: {fileID: 11400000, guid: e1f85b3cfce1bc44c80febf3fa5ba1c9, type: 2}
+  characterGraphic: {fileID: 67992320614507942, guid: 5f3db27b908bcef438ae089fce769297,
+    type: 3}
+  icon: {fileID: 2800000, guid: 9210f001a9d07ab4f95d4ef056f79f05, type: 3}
+  corpseHead: {fileID: 0}
+  bloodGradient:
+    serializedVersion: 2
+    rgba: 0
+  bloodSplatMat: {fileID: 0}
+  charAI: {fileID: 71382567851657979, guid: 1bba636107fc6ff4ead9d32d569a3d36, type: 3}
+  sounds: {fileID: 11400000, guid: 42fc0b4ac68faf148a9d2ab506c4030d, type: 2}

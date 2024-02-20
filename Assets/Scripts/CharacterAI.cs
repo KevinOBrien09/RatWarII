@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Linq;
-public class EnemyAI : MonoBehaviour
+public class CharacterAI : MonoBehaviour
 {
     public enum EnemyState{CHASING,INRANGE,RETREAT}
     public Unit unit;

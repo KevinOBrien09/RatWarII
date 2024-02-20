@@ -179,8 +179,8 @@ public class SlotFunctions
         int tiles = length+1;
         var projectileSkill = skill as ProjectileSkill;
        
-        List<Slot>previousSlots = new List<Slot>();
-
+      
+        bool breakNextOne = false;
         for (int i = 0; i < tiles; i++)
         {if(dir <= clamp && dir >= 0 )
             {
@@ -202,12 +202,18 @@ public class SlotFunctions
                 }
                 else
                 {
-                    if(s.cont.wall && !projectileSkill.goThroughWalls)
+                    bool wallAndDontPass = s.cont.wall && !projectileSkill.goThroughWalls;
+                    bool unitInSlotNoPass = s.cont.unit != null && !projectileSkill.passThrough && s != slot;
+                    if(wallAndDontPass)
                     {break;}
+                    if(unitInSlotNoPass){
+                        breakNextOne = true;
+                    }
                     
                     AddToCandidateSlots(s); 
-                    if(!previousSlots.Contains(s) && s!= slot)
-                    {previousSlots.Add(s);}
+                 
+                    if(breakNextOne)
+                    {break;}
                     
                 }
             }
@@ -290,8 +296,6 @@ public class SlotFunctions
                         { continue;}
                         else
                         { break; }
-                     
-                        
                     }
                     else
                     {

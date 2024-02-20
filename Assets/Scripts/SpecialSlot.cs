@@ -9,7 +9,7 @@ public class SpecialSlot : MonoBehaviour
     public Slot slot;
     public SlotContents slotContents;
     public bool createdByUnit;
-
+    public Interactable interactable;
     
     public virtual void Tick(){
 

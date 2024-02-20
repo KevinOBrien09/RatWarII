@@ -24,7 +24,7 @@ public class CharacterGraphic : MonoBehaviour
         IconGraphicHolder.inst.Take(iconClone);
     }
 
-    public void EnemyInit(Enemy e){}
+    public void EnemyInit(DefinedCharacter e){}
 
     public void Orginize(Character c)
     {

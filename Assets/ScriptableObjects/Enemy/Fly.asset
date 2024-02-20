@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71ae1edd25ffbce4cb2dac16f9bb65a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1460983a89d450149bcb7177ce59b1c3, type: 3}
   m_Name: Fly
   m_EditorClassIdentifier: 
-  ID: 2e5bd203-a477-4db1-90e8-2ea96594b7e5
+  ID: b56e1980-2320-4634-aa28-0084ef77919e
   names:
   - Fly
-  tagLine: WORKER FLY
+  tagLine: BLUEBOTTLE FLY
   startingStats: {fileID: 11400000, guid: 44fe959ce9b4d20478f1203f6c47ee87, type: 2}
   characterGraphic: {fileID: 1875858896460908558, guid: e2f06924009dac446a053dc5ac0fdcf2,
     type: 3}
@@ -23,7 +23,7 @@ MonoBehaviour:
   corpseHead: {fileID: 0}
   bloodGradient:
     serializedVersion: 2
-    rgba: 4281506502
-  bloodSplatMat: {fileID: 2100000, guid: 4f15441a137de8443bdcf04935db076b, type: 2}
-  enemyAI: {fileID: 9030826205893364487, guid: 4556b83d16967e8479428665ff8a4ed7, type: 3}
-  sounds: {fileID: 11400000, guid: 642347a0c3f32fc47b3802e8c5baa4c5, type: 2}
+    rgba: 0
+  bloodSplatMat: {fileID: 2100000, guid: 31348add57830e1418ad7d43a6abb92b, type: 2}
+  charAI: {fileID: 9030826205893364487, guid: 4556b83d16967e8479428665ff8a4ed7, type: 3}
+  sounds: {fileID: 0}

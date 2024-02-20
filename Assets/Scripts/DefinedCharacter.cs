@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(menuName = "Enemy")]
-public class Enemy : GUIDScriptableObject
+[CreateAssetMenu(menuName = "DefinedCharacter")]
+public class DefinedCharacter : GUIDScriptableObject
 {
     public List<string> names = new List<string>();
     public string tagLine;
@@ -14,6 +14,6 @@ public class Enemy : GUIDScriptableObject
     public Sprite corpseHead;
     public Color32 bloodGradient;
     public Material bloodSplatMat;
-    public EnemyAI enemyAI;
+    public CharacterAI charAI;
     public CharacterSounds sounds;
 }

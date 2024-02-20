@@ -7,39 +7,19 @@ using DG.Tweening;
 
 public class BattleManager : Singleton<BattleManager>
 {
-    public Unit unitPrefab;
     public List<Unit> playerUnits = new List<Unit>();
     public List<Unit> enemyUnits = new List<Unit>();
+    public List<Unit> neutralUnits = new List<Unit>();
     public Unit currentUnit;
     public int turn;
     public Queue<Unit> turnOrder = new Queue<Unit>();
-    public List<Enemy> enemies = new List<Enemy>();
-    public int howManyPartyMembers,howManyEnemies;
     bool looping;
-    public SpikeSlot spikeSlotPrefab;
-   
     public AudioSource music;
-
-    IEnumerator Start()
+    public bool gameOver;
+    public string lossReason = "REASON UNCLEAR";
+    public void Begin()
     {
-        yield return new WaitForEndOfFrame();
-        List<Slot> shuffle = MapManager.inst.StartingRadius();
-
-        
-        for (int i = 0; i < 15; i++)
-        {
-            Slot s = MapManager.inst.RandomSlot();
-            s.MakeSpecial(spikeSlotPrefab);
-        }
-      
-        for (int i = 0; i < howManyPartyMembers; i++)
-        {CreatePlayerUnit(shuffle[i]);}
-
-        for (int i = 0; i < howManyEnemies; i++)
-        {CreateEnemyUnit(MapManager.inst.RandomSlot());}
-      
         ToggleHealthBars(false);
-
         NewTurn();
     }
 
@@ -61,19 +41,28 @@ public class BattleManager : Singleton<BattleManager>
     }
 
     public void EndTurn(){
-    
+        if(currentUnit != null) 
+        currentUnit.activeUnitIndicator.gameObject.SetActive(false);
         if(BattleManager.inst.turn != 0)
-        {BattleManager.inst.UnitIteration();    currentUnit.activeUnitIndicator.gameObject.SetActive(false);}
+        {BattleManager.inst.UnitIteration();}
         MapManager.inst.grid.UpdateGrid();
         ActionMenu.inst.Hide();
     }
 
+    public void Win(){
+        BattleTicker.inst.Type("Win");
+    }
+
     public void UnitIteration()
     {
-        if(playerLose())
+        if(playerLose()|gameOver)
         {Lose();}
         else
-        {StartCoroutine(q());}
+        {
+            if(!ObjectiveManager.inst.CheckIfComplete())
+            {StartCoroutine(q());}
+        }
+        
         
         IEnumerator q(){
             
@@ -197,6 +186,7 @@ public class BattleManager : Singleton<BattleManager>
                             {AudioManager.inst.GetSoundEffect().Play(currentUnit.sounds.turnStart);}
                             
                             ActionMenu.inst.FUCKOFF = false;
+                            InteractHandler.inst.bleh = false;
                             GameManager.inst.ChangeGameState(GameState.PLAYERUI);
                             ActionMenu.inst.Reset();
                             ActionMenu.inst.Show(currentUnit.slot);
@@ -208,20 +198,16 @@ public class BattleManager : Singleton<BattleManager>
                         SlotInfoDisplay.inst.Apply(currentUnit.slot);
                         GameManager.inst.ChangeGameState(GameState.ENEMYTURN);
                         yield return new WaitForSeconds(.25f);
-                        if(    currentUnit.enemyAI != null){
+                        if(    currentUnit.charAI != null){
                             
-                            currentUnit.enemyAI.ConductTurn();
+                            currentUnit.charAI.ConductTurn();
                         }
                         else{
                             Debug.LogAssertion("NO ENEMY AI FOUND");
                             UnitIteration();
                         }
-                        
-                        //
-                        //AI
                     }
                 }
-                
             }
             else
             {
@@ -231,11 +217,18 @@ public class BattleManager : Singleton<BattleManager>
     }
 
     public bool playerLose()
-    {return playerUnits.Count == 0;}
+    {
+        bool b = playerUnits.Count == 0;
+        if(b){
+  lossReason = "The adventurers have perished...";
+        }
+      
+        return b;
+    }
 
     public void Lose()
     {
-        BattleTicker.inst.Type("All the adventurers have perished...");
+        BattleTicker.inst.Type(lossReason);
         music.DOFade(0,1);
     }
 
@@ -351,8 +344,18 @@ public class BattleManager : Singleton<BattleManager>
         }
     }
 
- 
-
+    public void AddNewUnit(Unit u,Side side)
+    {
+        if(side == Side.ENEMY)
+        {enemyUnits.Add(u);}
+        else
+        {playerUnits.Add(u);}
+        u.side = side;
+        // List<Unit> XD = new List<Unit>();
+        // XD.Add(u);
+        // turnOrder = new Queue<Unit>(turnOrder.Where(x => !XD.Contains(x)));
+    }
+    
     public void UnitIsDead(Unit u)
     {
         if(u.side == Side.ENEMY)
@@ -369,69 +372,13 @@ public class BattleManager : Singleton<BattleManager>
         int XD = turnOrder.Count+1;
         return "Turn:" + turn.ToString()+"-"+XD.ToString();
     }
-
-    public Unit CreatePlayerUnit(Slot slot)
-    {
-
-        Unit u =  Instantiate(unitPrefab);
-        CharacterGraphic graphic =  CharacterBuilder.inst.Generate();
-        u.character = graphic.character;
-        graphic.unit = u;
-        u.side = Side.PLAYER;
-       (Stats stats,List<Skill> skills ) statsAndSkills = CharacterBuilder.inst.GenerateStatsAndSkills(CharacterBuilder.inst.jobDict[u.character.job],u.character);
-        u.character.baseStats = statsAndSkills.stats;
-        u.character.skills = new List<Skill>( statsAndSkills.skills);
-        u.RecieveGraphic(graphic);
-        u.health.Init(u.stats().hp);
-        u.gameObject.name = graphic.character.characterName.fullName();
-        ReposUnit(u,slot);
-        if(CharacterBuilder.inst.sfxDict.ContainsKey(u.character.species))
-        {
-            u.sounds = CharacterBuilder.inst.sfxDict[u.character.species];
-        }
-   
-        playerUnits.Add(u);
-        return u;
-    }
-
-    public Unit CreateEnemyUnit(Slot slot)
-    {
-        Enemy e =enemies[Random.Range(0,enemies.Count)];
-        CharacterGraphic graphic =  CharacterBuilder.inst.GenerateEnemy(e);
-        Unit u =  Instantiate(unitPrefab);
-        u.sounds = e.sounds;
-        u.enemy = e;
-        u.character = graphic.character;
-        graphic.unit = u;
-        u.side = Side.ENEMY;
-       
-        u.character.baseStats = CharacterBuilder.inst.genStats(e.startingStats);
-       // u.character.skills = new List<Skill>( statsAndSkills.skills);
-        u.RecieveGraphic(graphic);
-        u.health.Init(u.stats().hp);
-        u.gameObject.name = graphic.character.characterName.fullName();
-        ReposUnit(u,slot);
-        u.enemyAI = Instantiate(e.enemyAI,u.transform);
-     //   u.sounds = CharacterBuilder.inst.sfxDict[u.character.species];
-        u.enemyAI.Init(u);
-        enemyUnits.Add(u);
-        return u;
-    }
-
-    public void ReposUnit(Unit u,Slot slot){
-        u.transform.position = new Vector3(slot.transform.position.x,u.transform.position.y,slot.transform.position.z);
-        u.Reposition(slot);
-        slot.cont.unit = u;  
-        MapManager.inst.grid.UpdateGrid();
-    }
-
+    
     public void ToggleHealthBars(bool state)
     {
         foreach (var item in allUnits())
         {item.healthBar.gameObject.transform.parent.gameObject. SetActive(state);}
     }
-
-
+    
     public List<Unit> allUnits()
     {
         List<Unit> u = new List<Unit>();

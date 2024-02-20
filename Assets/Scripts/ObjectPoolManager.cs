@@ -10,7 +10,7 @@ public class ObjectPool
     public int quantity;
     public PoolableObject prefab;
 }
-public enum ObjectPoolTag{BATTLENUMBER}
+public enum ObjectPoolTag{BATTLENUMBER,CORPSE}
 public class ObjectPoolManager : Singleton<ObjectPoolManager>
 {
     public List<ObjectPool> pools = new List<ObjectPool>();

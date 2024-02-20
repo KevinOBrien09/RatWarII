@@ -11,18 +11,13 @@ public class SlotContainer
      public SpecialSlot specialSlot;
      public bool wall;
      public bool invisible;
-
      
      public void AddContent(SlotContents slotc)
-     {
-          slotContents.Add(slotc);
-     }
-
-   
-
+     {slotContents.Add(slotc);}
+     
      public bool walkable()
      {
-          if(slot.node.isBlocked)
+          if(slot.node.isBlocked | slot.cont.wall)
           { return false; }
           else if(unit != null)
           { return unit.stats().passable; }

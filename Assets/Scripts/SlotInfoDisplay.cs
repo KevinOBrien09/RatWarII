@@ -41,7 +41,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                    rt.DOAnchorPos(shown,.2f);
             }
              
-            if( ! GameManager.inst.checkGameState(GameState.PLAYERUI)) 
+            if( ! GameManager.inst.checkGameState(GameState.PLAYERUI) && ! GameManager.inst.checkGameState(GameState.INTERACT)) 
             {
                 if(ActionMenu.inst.currentState == ActionMenu.ActionMenuState.ROAM){
                 CamFollow.inst.Focus(slot.transform,()=>{CamFollow.inst.ChangeCameraState(CameraState.FREE);});
@@ -55,9 +55,9 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             Unit u = slot.cont.unit;
             Character c = slot.cont.unit.character;
             charName.text = c.characterName.fullName();
-            //hp.text = "HP:"+ u.health.currentHealth.ToString()+ "/" + u.stats().hp.ToString();
+          
             level.text = c.exp.level.ToString();
-            if(slot.cont.unit.side == Side.PLAYER){
+            if(slot.cont.unit.side == Side.PLAYER && !sl.cont.unit.isHostage){
                 speciesClass.text = c.job.ToString() + " "+ c.species.ToString();
             }
             else{
@@ -76,9 +76,17 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             strength.text = "STR:" + u.stats().strength.ToString();
             moveRange.text = "MOVE:" + u.stats().moveRange.ToString();
             icon.gameObject.SetActive(true);
-            if(slot.cont.unit.side == Side.PLAYER){
-                sl.cont.unit.graphic.cam.gameObject.SetActive(true);
+            if(slot.cont.unit.side == Side.PLAYER)
+            {
+               if(slot.cont.unit.isHostage) 
+               {
+ icon.texture = slot.cont.unit.enemy.icon;
+               }
+               else{
+ sl.cont.unit.graphic.cam.gameObject.SetActive(true);
                 icon.texture = u.graphic.cam.activeTexture;
+               }
+               
             }
             else{
                   icon.texture = slot.cont.unit.enemy.icon;
@@ -96,7 +104,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                    rt.DOAnchorPos(shown,.2f);
             }
            
-            if( !GameManager.inst.checkGameState(GameState.PLAYERUI)) 
+            if( !GameManager.inst.checkGameState(GameState.PLAYERUI)&& ! GameManager.inst.checkGameState(GameState.INTERACT)) 
             {
                 if(ActionMenu.inst.currentState == ActionMenu.ActionMenuState.ROAM)
                 {CamFollow.inst.Focus(slot.transform,()=>{CamFollow.inst.ChangeCameraState(CameraState.FREE);});}
@@ -136,7 +144,8 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
         {
             if(sl.cont.unit != null)
             {   
-                if(sl.cont.unit.side == Side.PLAYER){
+                if(sl.cont.unit.side == Side.PLAYER && !sl.cont.unit.isHostage)
+                {
   sl.cont.unit .graphic.cam.gameObject.SetActive(false);
                 }
               

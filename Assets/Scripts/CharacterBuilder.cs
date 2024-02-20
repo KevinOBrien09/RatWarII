@@ -30,7 +30,7 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         return cg;
     }
 
-    public CharacterGraphic GenerateEnemy(Enemy e){
+    public CharacterGraphic GenerateEnemy(DefinedCharacter e){
         Character character = new Character();
         character.exp = new EXP();
         character.exp.level = 1;

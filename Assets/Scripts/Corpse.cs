@@ -7,7 +7,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine.Rendering.Universal;
 
-public class Corpse : MonoBehaviour
+public class Corpse : PoolableObject
 {
 
     public SlotContents contents;
@@ -20,7 +20,10 @@ public class Corpse : MonoBehaviour
     Slot slot;
     public void Spawn(Unit u,Slot s)
     {
+        gameObject.SetActive(true);
+   
         slot = s;
+        transform.position = slot.transform.position;
         if(u.side == Side.ENEMY)
         {
             if(u.enemy.corpseHead == null){

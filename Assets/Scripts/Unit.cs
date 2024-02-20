@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour
     public HealthBar healthBar;
     public Stats statMods;
     public Side side;
-    public Enemy enemy;
+    public DefinedCharacter enemy;
     public GenericDictionary<StatusEffectEnum, List< StatusEffect>> statusEffects = new GenericDictionary<StatusEffectEnum, List< StatusEffect>>();
     public bool facingRight;
     public  ParticleSystemRenderer shieldGraphic,shieldKillRend;
@@ -28,12 +28,13 @@ public class Unit : MonoBehaviour
     public Material whiteFlash,spriteDefault;
     public GameObject stunIndicator;
     public List<TempTerrain> tempTerrainCreated = new List<TempTerrain>();
-    public EnemyAI enemyAI;
+    public CharacterAI charAI;
     public bool moving;
     public CharacterSounds sounds;
     public Corpse corpsePrefab;
     public bool dead;
     public SoundData footstep;
+    public bool isHostage;
     void Start()
     {
         var values = System.Enum.GetValues(typeof(StatusEffectEnum));
@@ -46,11 +47,12 @@ public class Unit : MonoBehaviour
         graphic = _graphic;
         graphic.transform.parent = this.transform;
         if(_graphic.unit.side == Side.PLAYER){
-    graphic.transform.localPosition = new Vector3(0,-2.25f,0);
+        graphic.transform.localPosition = new Vector3(0,-2.25f,0);
         }
     
         graphic.transform.localRotation = Quaternion.Euler(0,0,0);
         character = graphic.character;
+        healthBar.gameObject.transform.parent.gameObject.SetActive(false);
     }
     
 
@@ -104,11 +106,24 @@ public class Unit : MonoBehaviour
                 MapManager.inst.grid.UpdateGrid();
                 movedThisTurn = true;
                 SlotInfoDisplay.inst.sl = finalSlot;
-                if(side == Side.PLAYER){
-GameManager.inst.ChangeGameState(GameState.PLAYERUI);
-                ActionMenu.inst.Reset();
-               
-                ActionMenu.inst.Show(this.slot);
+                if(side == Side.PLAYER)
+                {
+                    if(isHostage)
+                    {
+                        if(!ObjectiveManager.inst.CheckIfComplete())
+                        {
+                            GameManager.inst.ChangeGameState(GameState.PLAYERUI);
+                            ActionMenu.inst.Reset();
+                            ActionMenu.inst.Show(this.slot);
+                        }
+                    }
+                    else
+                    {
+                        GameManager.inst.ChangeGameState(GameState.PLAYERUI);
+                        ActionMenu.inst.Reset();
+                        ActionMenu.inst.Show(this.slot);
+                    }
+                   
                 }
                 
 
@@ -201,9 +216,20 @@ float percent = (10f / 100f) * (float) health.maxHealth;
     {  
         if(!dead)
         {
+            if(isHostage)
+            {
+                BattleManager.inst.lossReason = "The hostage has died.";
+                BattleManager.inst.gameOver = true;
+            }
+            if(side == Side.ENEMY){
+                if(ObjectiveManager.inst.objective.objectiveEnum == Objective.ObjectiveEnum.CLEARAREA){
+   ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" + BattleManager.inst.enemyUnits.Count + " Left!" );
+                }
+            }
             dead = true;
             BattleManager.inst.UnitIsDead(this);
-            Corpse c =   Instantiate(corpsePrefab,new Vector3(slot. transform.position.x,0,slot. transform.position.z) ,transform.rotation);
+            Corpse c =  ObjectPoolManager.inst.Get<Corpse>(ObjectPoolTag.CORPSE);
+             //Instantiate(corpsePrefab,new Vector3(slot. transform.position.x,0,slot. transform.position.z) ,transform.rotation);
             c.Spawn(this,this.slot);
             if(sounds != null)
             {AudioManager.inst.GetSoundEffect().Play(sounds.die);}
@@ -246,6 +272,7 @@ float percent = (10f / 100f) * (float) health.maxHealth;
         {slot.cont.unit = null;}
         if(side == Side.PLAYER )
         {SlotInfoDisplay.inst.Disable();}
+        
         slot = newSlot;
         slot.cont.unit = this;
         graphic.ChangeSpriteSorting(slot.node);

@@ -31,7 +31,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
         u.right.transform.SetParent(BattleZoomer.inst.right);
         u.left.transform.DOLocalMove(Vector3.zero,.1f);
         u.right.transform.DOLocalMove(Vector3.zero,.1f);
- AudioManager.inst.GetSoundEffect().Play(negativeSounds[0])   ;
+        AudioManager.inst.GetSoundEffect().Play(negativeSounds[0])   ;
         BattleManager.inst.ToggleHealthBars(false);
         leftHp.gameObject.SetActive(true);
         rightIMG.color = Color.black;

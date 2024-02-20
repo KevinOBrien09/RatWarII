@@ -138,6 +138,8 @@ MonoBehaviour:
     volume: 1
   slot: {fileID: 0}
   slotContents: {fileID: 11400000, guid: 959948db2c4430548b24ab3027355dce, type: 2}
+  createdByUnit: 0
+  interactable: {fileID: 0}
   spikes: {fileID: 6365875277305693737}
   damage: 25
 --- !u!1 &3211905450948116610

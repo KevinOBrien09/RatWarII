@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Corpse
   m_EditorClassIdentifier: 
   contentName: Bloodstain
-  contentDesc: 
+  contentDesc: A fresh, red bloodstain.
   picture: {fileID: 2800000, guid: b00dc0b0f4174b14aa9e3caa8d9b0859, type: 3}
   unStackable: 0
