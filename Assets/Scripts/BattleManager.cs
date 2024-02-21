@@ -45,7 +45,7 @@ public class BattleManager : Singleton<BattleManager>
         currentUnit.activeUnitIndicator.gameObject.SetActive(false);
         if(BattleManager.inst.turn != 0)
         {BattleManager.inst.UnitIteration();}
-        MapManager.inst.grid.UpdateGrid();
+        MapManager.inst.currentRoom.grid.UpdateGrid();
         ActionMenu.inst.Hide();
     }
 
@@ -88,7 +88,7 @@ public class BattleManager : Singleton<BattleManager>
                     if(TQ.Count == 0)
                     {
                         terrainShit = false;
-                        MapManager.inst.grid.UpdateGrid();
+                        MapManager.inst.currentRoom.grid.UpdateGrid();
                     }
                     else
                     {
@@ -104,7 +104,7 @@ public class BattleManager : Singleton<BattleManager>
                                 if(TQ.Count == 0)
                                 {
                                     terrainShit = false;
-                                    MapManager.inst.grid.UpdateGrid();
+                                    MapManager.inst.currentRoom.grid.UpdateGrid();
                                 }
                                 else
                                 {

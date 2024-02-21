@@ -6,41 +6,59 @@ using System.Linq;
 
 public class MapManager : Singleton<MapManager>
 {
-    public AStar aStar;
-    public Grid_ grid;
-    public Slot slotPrefab;
-    public List<Slot> slots = new List<Slot>();
+
+    public Room currentRoom;
+    public Transform gridHolder;
+    public List<Room> rooms = new List<Room>();
+    public Room roomPrefab;
+    public Door doorPrefab;
+    float padding =5;
     
-
-    public List<Slot> fuckYouSlots = new List<Slot>();
-  
-
-   public void SpawnSlots()
+    public Vector3 SpawnRoom(Vector3 v)
     {
-        GameObject g = new GameObject("grid");
-        g.transform.SetParent(grid.transform);
-        foreach(var item in grid.NodeArray)
-        {
-            Slot s = Instantiate(slotPrefab,item.vPosition,Quaternion.identity);
-            item.slot = s;
-            s.node = item;
-            s.gameObject.name = item.iGridX + ":" + item.iGridY;
-            slots.Add(s);
-            s.transform.SetParent(g.transform);
-            if(item.isBlocked)
-            {s.IsWall(); }
-        }
+        string roomName = "Room:" + rooms.Count;
+        Room room = Instantiate(roomPrefab);
+
+        v = new Vector3(v.x,v.y,v.z);
+      
+   
+        room.transform.position = v;
+      
+        room.transform.SetParent(gridHolder);
+
+        room.Create(roomName);
+          
+
+      
+
+        float yC = room.grid.CenterNode().vPosition.z-5;
+        float xC = room.grid.NodeArray[room.grid.iGridSizeX-1,0].vPosition.x+5;
+        Vector3 d = new Vector3(xC,room.transform.position.y,yC );
+        Door door = Instantiate(doorPrefab,d,Quaternion.identity);
+        door.MakeDoor(room.grid);
+        rooms.Add(room);
+
+        return new Vector3(xC,room.transform.position.y,room.transform.position.z);
      
-       
-        grid.UpdateGrid();
       
        
     }
 
+    public void ChangeRoom(Room newRoom){
+       
+        currentRoom = newRoom;
+       
+    }
+
+    public bool slotBelongsToGrid(Slot s)
+    {
+        return currentRoom.slots.Contains(s);
+    }
+
     public bool nodeIsValid(Vector2 v)
     {
-        int maxX = MapManager.inst.grid.iGridSizeX-1;
-        int maxY = MapManager.inst.grid.iGridSizeY-1;
+        int maxX = MapManager.inst.currentRoom.grid.iGridSizeX-1;
+        int maxY = MapManager.inst.currentRoom.grid.iGridSizeY-1;
 
         bool inXRange = v.x <= maxX && v.x >= 0;
         bool inYRange = v.y <= maxY && v.y >= 0;
@@ -50,7 +68,7 @@ public class MapManager : Singleton<MapManager>
 
     public List<Slot> StartingRadius()
     {
-        Slot center = grid.NodeArray[2,2].slot;
+        Slot center = currentRoom.grid.NodeArray[2,2].slot;
         List<Slot> radius =  center.func.GetRadiusSlots(1,null,true);
        
         System.Random rng = new System.Random();
@@ -60,7 +78,7 @@ public class MapManager : Singleton<MapManager>
 
     public List<Slot> HostageSlots()
     {
-        Slot center = grid.NodeArray[2,2].slot;
+        Slot center = currentRoom.grid.NodeArray[2,2].slot;
         List<Slot> radius =  center.func.GetRadiusSlots(1,CharacterBuilder.inst.mandatorySkills[0],false);
         radius.Add(center);
         System.Random rng = new System.Random();
@@ -70,7 +88,7 @@ public class MapManager : Singleton<MapManager>
 
     public Slot RandomSlot()
     {
-        List<Slot> Xd = new List<Slot>(slots);
+        List<Slot> Xd = new List<Slot>(currentRoom.slots);
        
         System.Random rng = new System.Random();
         

@@ -79,6 +79,6 @@ e = dc;
         u.transform.position = new Vector3(slot.transform.position.x,u.transform.position.y,slot.transform.position.z);
         u.Reposition(slot);
         slot.cont.unit = u;  
-        MapManager.inst.grid.UpdateGrid();
+        MapManager.inst.currentRoom.grid.UpdateGrid();
     }
 }

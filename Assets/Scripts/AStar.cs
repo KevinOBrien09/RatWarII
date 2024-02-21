@@ -4,24 +4,16 @@ using UnityEngine;
 
 public class AStar : MonoBehaviour {
 
-    Grid_ GridReference;//For referencing the grid class
-    public Transform StartPosition;//Starting position to pathfind from
-    public Transform TargetPosition;//Starting position to pathfind to
+   public Grid_ GridReference;//For referencing the grid class
+    public Transform StartPosition;
+    public Transform TargetPosition;
+    
+   
 
-    void Awake()//When the program starts
+    public List<Node> FindPath(Node n1, Node n2)
     {
-        GridReference = GetComponent<Grid_>();//Get a reference to the game manager
-    }
-
-    // private void Update()//Every frame
-    // {
-    //     FindPath(StartPosition.position, TargetPosition.position);
-    // }
-
-    public List<Node> FindPath(Vector3 a_StartPos, Vector3 a_TargetPos)
-    {
-        Node StartNode = GridReference.NodeFromWorldPoint(a_StartPos);
-        Node TargetNode = GridReference.NodeFromWorldPoint(a_TargetPos);
+        Node StartNode = n1;
+        Node TargetNode = n2;
 
         List<Node> OpenList = new List<Node>();
         HashSet<Node> ClosedList = new HashSet<Node>();

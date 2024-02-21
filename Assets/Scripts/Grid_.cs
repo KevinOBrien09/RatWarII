@@ -5,7 +5,7 @@ using UnityEngine;
 public class Grid_ : MonoBehaviour
 {
     public LayerMask blockage;
-
+    public AStar aStar;
     public Vector2 vGridWorldSize;
     public float fNodeRadius;
     public float fDistanceBetweenNodes;
@@ -13,20 +13,14 @@ public class Grid_ : MonoBehaviour
     public List<Node> FinalPath;
     float fNodeDiameter;
     public int iGridSizeX, iGridSizeY;
-    
 
-
-    void Awake()
+   
+   public void CreateGrid()
     {
         fNodeDiameter = fNodeRadius * 2;
         iGridSizeX = Mathf.RoundToInt(vGridWorldSize.x / fNodeDiameter);
         iGridSizeY = Mathf.RoundToInt(vGridWorldSize.y / fNodeDiameter);
-        CreateGrid();//Draw the grid
-        MapManager.inst.SpawnSlots();
-    }
 
-    void CreateGrid()
-    {
         NodeArray = new Node[iGridSizeX, iGridSizeY];
         Vector3 bottomLeft = transform.position - Vector3.right * vGridWorldSize.x / 2 - Vector3.forward * vGridWorldSize.y / 2;//Get the real world position of the bottom left of the grid.
         for (int x = 0; x < iGridSizeX; x++)
@@ -44,6 +38,10 @@ public class Grid_ : MonoBehaviour
                 NodeArray[x, y] = new Node(isBlocked, worldPoint, x, y);
             }
         }
+    }
+
+    public Node CenterNode(){
+        return  NodeArray[iGridSizeX/2,iGridSizeY/2];
     }
 
   
@@ -117,7 +115,7 @@ public class Grid_ : MonoBehaviour
 
         return NeighborList;
     }
-    public Node NodeFromWorldPoint(Vector3 a_vWorldPos)
+    public Node NodeFromWorldPoint(Vector3 a_vWorldPos)//BROKEN
     {
         float ixPos = ((a_vWorldPos.x + vGridWorldSize.x / 2) / vGridWorldSize.x);
         float iyPos = ((a_vWorldPos.z + vGridWorldSize.y / 2) / vGridWorldSize.y);

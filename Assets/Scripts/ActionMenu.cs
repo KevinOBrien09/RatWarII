@@ -105,7 +105,7 @@ public class ActionMenu : Singleton<ActionMenu>
                 if(InputManager.inst.player.GetButtonDown("Cancel"))
                 {
                   //  if(SkillAimer.inst.)
-                   foreach (var item in MapManager.inst.slots)
+                   foreach (var item in MapManager.inst.currentRoom.slots)
             { item. DisableHover();}
                     GameManager.inst.ChangeGameState(GameState.PLAYERUI);
                     Show(slot);

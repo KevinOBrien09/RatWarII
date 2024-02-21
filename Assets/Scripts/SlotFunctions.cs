@@ -68,7 +68,7 @@ public class SlotFunctions
         {
             Slot s = null;
             bool v = item.TryGetComponent<Slot>(out s);
-            if(v)  
+            if(v && MapManager.inst.slotBelongsToGrid(s))  
             {
                 if(fuckItWeBall){
                     if(s.cont.walkable())
@@ -111,7 +111,7 @@ public class SlotFunctions
     public List<Slot> GetHorizontalSlots(int length,Skill skill = null)
     {
         List<Slot> validSlots = new List<Slot>();
-        int maxX = MapManager.inst.grid.iGridSizeX-1;
+        int maxX = MapManager.inst.currentRoom.grid.iGridSizeX-1;
         List<Slot> right =   Loop(length, slot.node.iGridX,maxX,true,true,skill);//right
         List<Slot> left =   Loop(length,slot.node.iGridX,maxX,true,false,skill);//left
         foreach (var item in left)
@@ -132,7 +132,7 @@ public class SlotFunctions
     public List<Slot> GetVerticalSlots(int length,Skill skill = null)
     {
         List<Slot> validSlots = new List<Slot>();
-        int maxY = MapManager.inst.grid.iGridSizeY-1;
+        int maxY = MapManager.inst.currentRoom.grid.iGridSizeY-1;
      
      
         List<Slot> up = Loop(length,slot.node.iGridY,maxY,false,true,skill);//up
@@ -186,9 +186,9 @@ public class SlotFunctions
             {
                 Slot s = null;
                 if(X)
-                { s = MapManager.inst.grid.NodeArray[dir,(int)slot.node.iGridY].slot; }
+                { s = MapManager.inst.currentRoom.grid.NodeArray[dir,(int)slot.node.iGridY].slot; }
                 else
-                { s = MapManager.inst.grid.NodeArray[(int)slot.node.iGridX,dir].slot; }
+                { s = MapManager.inst.currentRoom.grid.NodeArray[(int)slot.node.iGridX,dir].slot; }
                 
                 if(s == null)
                 { 
@@ -286,7 +286,7 @@ public class SlotFunctions
                 Vector2 v = new Vector2(side,up);
                 if(MapManager.inst.nodeIsValid(v))
                 {
-                    Slot s = MapManager.inst.grid.NodeArray[(int) v.x,(int)v.y].slot;
+                    Slot s = MapManager.inst.currentRoom.grid.NodeArray[(int) v.x,(int)v.y].slot;
                     if(s==slot)
                     {continue;}
 

@@ -20,6 +20,8 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
 
     public void ChangeColour(Color32 color)
     {border.color = color;}
+
+   
     
     public SpecialSlot MakeSpecial(SpecialSlot specialSlotPrefab)
     {
@@ -50,7 +52,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
                 if(cont.walkable())
                 {
                     hoverBorderOn();
-                    List<Node> path = MapManager.inst.aStar.FindPath(UnitMover.inst.selectedSlot.transform.position,this.transform.position);
+                    List<Node> path = MapManager.inst.currentRoom.grid. aStar.FindPath(UnitMover.inst.selectedSlot.node,node);
                     UnitMover.inst.NewHover(path);
                 }
               
@@ -77,7 +79,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
         switch(GameManager.inst.currentGameState)
         {
             case GameState.PLAYERHOVER:
-            foreach (var item in MapManager.inst.slots)
+            foreach (var item in MapManager.inst.currentRoom.slots)
             { item. DisableHover();}
             SlotInfoDisplay.inst.Apply(this);
             hoverBorderOn();

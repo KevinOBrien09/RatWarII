@@ -15,7 +15,8 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
     public void GenerateObjective()
     {
         objective = new Objective();
-        Objective.ObjectiveEnum oe = MiscFunctions.RandomEnumValue<Objective.ObjectiveEnum>();
+        Objective.ObjectiveEnum oe = Objective.ObjectiveEnum.CLEARAREA;
+        // MiscFunctions.RandomEnumValue<Objective.ObjectiveEnum>();
         switch (oe)
         {
             case Objective.ObjectiveEnum.CLEARAREA:

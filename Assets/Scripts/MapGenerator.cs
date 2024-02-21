@@ -8,26 +8,30 @@ using DG.Tweening;
 
 public class MapGenerator : Singleton<MapGenerator>
 {
-    
+    public AStar generatorAstar;
+    public Grid_ mapGrid;
     public int howManyPartyMembers,howManyEnemies;
     public SpikeSlot spikeSlotPrefab;
-    IEnumerator Start()
-    {
-        BlackFade.inst.FadeOut();
+
+   protected override void Awake(){
+        base.Awake();
        
-        yield return new WaitForEndOfFrame();
-        ObjectiveManager.inst.GenerateObjective();
-        CreateStartingUnits();
-        for (int i = 0; i < 15; i++)
-        {
-            Slot s = MapManager.inst.RandomSlot();
-            s.MakeSpecial(spikeSlotPrefab);
-        }
-       
-        BattleManager.inst.Begin();
+        mapGrid.CreateGrid();
+      
     }
 
-    void CreateStartingUnits(){
+    public void MakeMap()
+    {
+       Vector3 source = MapManager.inst.SpawnRoom(mapGrid.NodeArray[0,0].vPosition);
+ MapManager.inst.SpawnRoom(new Vector3( source.x + MapManager.inst.rooms[0].grid.vGridWorldSize.x/2 +2.5f ,source.y,source.z));
+  
+    }
+
+
+
+  
+
+   public void CreateStartingUnits(){
         List<Slot> shuffle = MapManager.inst.StartingRadius();
         for (int i = 0; i < howManyPartyMembers; i++)
         { UnitFactory.inst. CreatePlayerUnit(shuffle[i]);}

@@ -103,7 +103,7 @@ public class Unit : MonoBehaviour
             { 
                 moving = false;
                 Reposition(finalSlot);
-                MapManager.inst.grid.UpdateGrid();
+                MapManager.inst.currentRoom.grid.UpdateGrid();
                 movedThisTurn = true;
                 SlotInfoDisplay.inst.sl = finalSlot;
                 if(side == Side.PLAYER)
@@ -223,7 +223,8 @@ float percent = (10f / 100f) * (float) health.maxHealth;
             }
             if(side == Side.ENEMY){
                 if(ObjectiveManager.inst.objective.objectiveEnum == Objective.ObjectiveEnum.CLEARAREA){
-   ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" + BattleManager.inst.enemyUnits.Count + " Left!" );
+                    int i =BattleManager.inst.enemyUnits.Count-1 ;
+   ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" + i + " Left!" );
                 }
             }
             dead = true;
@@ -240,7 +241,7 @@ float percent = (10f / 100f) * (float) health.maxHealth;
             {
                 yield return new WaitForSeconds(.4f);
                 Destroy(gameObject);
-                MapManager.inst.grid.UpdateGrid();
+                MapManager.inst.currentRoom.grid.UpdateGrid();
             }
         }
     }

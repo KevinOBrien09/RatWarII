@@ -79,7 +79,7 @@ public static class Knockback
             Unit u = victim; 
             if(validKnockback)
             {  
-                Slot newSlot = MapManager.inst.grid.NodeArray[(int)v.x,(int)v.y].slot;
+                Slot newSlot = MapManager.inst. currentRoom.grid.NodeArray[(int)v.x,(int)v.y].slot;
                 if(newSlot.cont.wall)
                 {
                     Stun(stun);

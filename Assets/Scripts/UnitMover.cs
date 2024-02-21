@@ -87,13 +87,13 @@ public class UnitMover : Singleton<UnitMover>
             inCoro = true;
             CamFollow.inst.ZoomOut();
            DirectionIndicator.inst.Reset();
-            foreach (var item in MapManager.inst.slots)
+            foreach (var item in MapManager.inst.currentRoom.slots)
             {
             
                 item.ChangeColour(item.normalColour);
               
             }
-            MapManager.inst.fuckYouSlots.Clear();
+           
             selectedUnit.transform.rotation = unitStartRot;
             validSlots.Clear();
             // if(!GameManager.inst.checkGameState(GameState.UNITMOVE))
@@ -119,8 +119,8 @@ public class UnitMover : Singleton<UnitMover>
        BattleTicker.inst.Type("Moving..");
         selectedUnit.activeUnitIndicator.gameObject.SetActive(false);
         selectedUnit.slot.ChangeColour(selectedUnit.slot.normalColour);
-        List<Node> path = MapManager.inst.aStar.FindPath(UnitMover.inst.selectedSlot.transform.position,
-       slot.transform.position);
+        List<Node> path = MapManager.inst.currentRoom.grid. aStar.FindPath(UnitMover.inst.selectedSlot.node,
+       slot.node);
         Queue<Slot> q = new Queue<Slot>();
         foreach (var item in path)
         {   q.Enqueue(item.slot); }
@@ -137,7 +137,7 @@ public class UnitMover : Singleton<UnitMover>
             if(InputManager.inst.player. GetButtonDown("Cancel"))
             {
                 ExitSelectionMode();
-                MapManager.inst.grid.UpdateGrid();
+                MapManager.inst.currentRoom.grid.UpdateGrid();
                 ActionMenu.inst.Show(selectedSlot);
                 //CamFollow.inst.ChangeCameraState(CameraState.FREE);
             }
