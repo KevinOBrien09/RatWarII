@@ -40,10 +40,20 @@ public class AStar : MonoBehaviour {
 
             foreach (Node NeighborNode in GridReference.GetNeighboringNodes(CurrentNode))
             {
-                if (!NeighborNode.slot.cont.walkable() || ClosedList.Contains(NeighborNode))
+                if(NeighborNode.slot != null)
                 {
-                    continue;//Skip it
+                    if (!NeighborNode.slot.cont.walkable() || ClosedList.Contains(NeighborNode))
+                    {
+                        continue;//Skip it
+                    }
                 }
+                else{
+                    if (NeighborNode.isBlocked || ClosedList.Contains(NeighborNode))
+                    {
+                        continue;//Skip it
+                    }
+                }
+               
                 int MoveCost = CurrentNode.igCost + GetManhattenDistance(CurrentNode, NeighborNode);
 
                 if (MoveCost < NeighborNode.igCost || !OpenList.Contains(NeighborNode))

@@ -839,11 +839,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c23c6d83c7c9c64d9f3687e2bf4c11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomSizeDict:
+    list: []
+    keyCollision: 0
   blockage:
     serializedVersion: 2
     m_Bits: 64
   aStar: {fileID: 56964770}
-  vGridWorldSize: {x: 500, y: 500}
+  vGridWorldSize: {x: 250, y: 250}
   fNodeRadius: 25
   fDistanceBetweenNodes: 0
   FinalPath: []
@@ -897,6 +900,19 @@ MonoBehaviour:
   howManyEnemies: 3
   spikeSlotPrefab: {fileID: 3119150678241855687, guid: 263a027136c805045bbbe43cda3a4eae,
     type: 3}
+  placeholder: {fileID: 6998329089859767902, guid: 7b06755d6eb9d494a92dca4801c180d9,
+    type: 3}
+  blockage: {fileID: 3177572613690716978, guid: 17a5b3a65d5b6874181deade3972aeb1,
+    type: 3}
+  plane: {fileID: 7545540679654556103, guid: 116a6e37b187d6f4b8633449d6c2a0da, type: 3}
+  offshootTarget: {fileID: 4895545534671510243, guid: 950d7963f37547f4dade3b24560c0bfd,
+    type: 3}
+  dungeonNodePrefab: {fileID: 5183120452575869949, guid: 8bb086fb9ea9d294b98d584a1dc96075,
+    type: 3}
+  blockagePercentRange: {x: 40, y: 50}
+  showVisual: 0
+  generating: 0
+  dungeonNodes: []
 --- !u!1 &75574672
 GameObject:
   m_ObjectHideFlags: 0
@@ -12579,7 +12595,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2053783854
 Transform:
   m_ObjectHideFlags: 0

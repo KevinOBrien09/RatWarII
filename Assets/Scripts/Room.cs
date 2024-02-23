@@ -8,8 +8,9 @@ public class Room : MonoBehaviour
     public Slot slotPrefab;
     public List<Slot> slots = new List<Slot>();
 
-    public void Create(string roomName)
+    public void Create(string roomName,GenerationRoomType roomType)
     {
+        grid.AssignRoomSize(roomType);
         grid.CreateGrid();
         foreach(var item in grid.NodeArray)
         {

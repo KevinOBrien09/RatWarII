@@ -14,28 +14,18 @@ public class MapManager : Singleton<MapManager>
     public Door doorPrefab;
     float padding =5;
     
-    public Vector3 SpawnRoom(Vector3 v)
+    public Vector3 SpawnRoom(DungeonNode dungeonNode)
     {
         string roomName = "Room:" + rooms.Count;
         Room room = Instantiate(roomPrefab);
-
-        v = new Vector3(v.x,v.y,v.z);
-      
-   
-        room.transform.position = v;
-      
+        room.transform.position = dungeonNode.transform.position;
         room.transform.SetParent(gridHolder);
-
-        room.Create(roomName);
-          
-
-      
-
+        room.Create(roomName,dungeonNode.roomType);
         float yC = room.grid.CenterNode().vPosition.z-5;
         float xC = room.grid.NodeArray[room.grid.iGridSizeX-1,0].vPosition.x+5;
         Vector3 d = new Vector3(xC,room.transform.position.y,yC );
-        Door door = Instantiate(doorPrefab,d,Quaternion.identity);
-        door.MakeDoor(room.grid);
+        // Door door = Instantiate(doorPrefab,d,Quaternion.identity);
+        // door.MakeDoor(room.grid);
         rooms.Add(room);
 
         return new Vector3(xC,room.transform.position.y,room.transform.position.z);

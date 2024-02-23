@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Grid_ : MonoBehaviour
 {
+    public GenericDictionary<GenerationRoomType,Vector2> roomSizeDict = new GenericDictionary<GenerationRoomType, Vector2>();
     public LayerMask blockage;
     public AStar aStar;
     public Vector2 vGridWorldSize;
@@ -13,6 +15,10 @@ public class Grid_ : MonoBehaviour
     public List<Node> FinalPath;
     float fNodeDiameter;
     public int iGridSizeX, iGridSizeY;
+
+    public void AssignRoomSize(GenerationRoomType generationRoomType){
+        vGridWorldSize = roomSizeDict[generationRoomType];
+    }
 
    
    public void CreateGrid()
@@ -44,22 +50,31 @@ public class Grid_ : MonoBehaviour
         return  NodeArray[iGridSizeX/2,iGridSizeY/2];
     }
 
+    public List<Node> ShuffledNodes()
+    {
+        List<Node> Xd = new List<Node>();
+        foreach (var item in NodeArray)
+        {
+            Xd.Add(item);
+        }
+        System.Random rng = new System.Random();
+        return Xd.OrderBy(_ => rng.Next()).ToList();
+
+        
+    }
+
   
     public void UpdateGrid()
     {
         foreach (var item in NodeArray)
         {
-            if(item.slot!= null)
-            {
-                if(item.slot.cont.unit == null)
-                {
+         
                     item.isBlocked = false;
                     if (Physics.CheckBox(item.vPosition,new Vector3(fNodeRadius,fNodeRadius,fNodeRadius) ,Quaternion.identity, blockage))
                     {
                         item.isBlocked = true;
                     } 
-                }
-            }
+           
            
             
         }

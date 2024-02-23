@@ -15,13 +15,21 @@ public class GameManager : Singleton<GameManager>
 
     void GameInit()
     {
-        //MapManager.inst.grid.InitGrid();
-        MapGenerator.inst.MakeMap();
-         MapManager.inst.  ChangeRoom(    MapManager.inst.rooms[0]);
-        ObjectiveManager.inst.GenerateObjective();
-        MapGenerator.inst. CreateStartingUnits();
-        BattleManager.inst.Begin();
-        BlackFade.inst.FadeOut();
+       // MapManager.inst.grid.InitGrid();
+        MapGenerator.inst.Generate();
+        StartCoroutine(q());
+        IEnumerator q()
+        {
+            while(MapGenerator.inst.generating)
+            {yield return null;}
+            MapManager.inst.  ChangeRoom(    MapManager.inst.rooms[0]);
+            ObjectiveManager.inst.GenerateObjective();
+            MapGenerator.inst. CreateStartingUnits();
+            BattleManager.inst.Begin();
+            BlackFade.inst.FadeOut();
+       }
+      
+      
     }
 
 

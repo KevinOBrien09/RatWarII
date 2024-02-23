@@ -46,6 +46,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c23c6d83c7c9c64d9f3687e2bf4c11e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roomSizeDict:
+    list:
+    - Key: 0
+      Value: {x: 50, y: 50}
+    - Key: 1
+      Value: {x: 100, y: 100}
+    - Key: 2
+      Value: {x: 50, y: 25}
+    - Key: 3
+      Value: {x: 25, y: 50}
+    keyCollision: 0
   blockage:
     serializedVersion: 2
     m_Bits: 64

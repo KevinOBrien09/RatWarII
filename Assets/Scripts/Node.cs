@@ -27,5 +27,29 @@ public class Node
         iGridX = a_igridX;
         iGridY = a_igridY;
     }
+
+
+   public List<Node> FilterUnadjacents(List<Node> candidates,List<Node> slots,Grid_ g)
+    {
+        foreach (var item in g.GetNeighboringNodes(this))
+        {
+            if(candidates.Contains(item))
+            {
+                if(!slots.Contains(item))
+                {
+                    
+                    if(!item.isBlocked)
+                    {
+                        slots.Add(item);
+                        item.FilterUnadjacents(candidates,slots,g);
+                    }
+                    
+                }
+            }
+        }
+        return slots;
+    }
+
+    
    
 }
