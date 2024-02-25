@@ -103,7 +103,7 @@ public class Unit : MonoBehaviour
             { 
                 moving = false;
                 Reposition(finalSlot);
-                MapManager.inst.currentRoom.grid.UpdateGrid();
+                 MapManager.inst.map.UpdateGrid();
                 movedThisTurn = true;
                 SlotInfoDisplay.inst.sl = finalSlot;
                 if(side == Side.PLAYER)
@@ -241,7 +241,7 @@ float percent = (10f / 100f) * (float) health.maxHealth;
             {
                 yield return new WaitForSeconds(.4f);
                 Destroy(gameObject);
-                MapManager.inst.currentRoom.grid.UpdateGrid();
+                MapManager.inst.map.UpdateGrid();
             }
         }
     }

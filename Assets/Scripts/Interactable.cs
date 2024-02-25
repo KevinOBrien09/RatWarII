@@ -19,7 +19,7 @@ public class Interactable : MonoBehaviour
         slot.cont.specialSlot = null;
         if(slot.cont.wall)
         {slot.cont.wall = false;}
-        MapManager.inst.currentRoom.grid .UpdateGrid();
+         MapManager.inst.map.UpdateGrid();
         Destroy(gameObject);
     }
 

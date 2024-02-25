@@ -56,6 +56,10 @@ MonoBehaviour:
       Value: {x: 50, y: 25}
     - Key: 3
       Value: {x: 25, y: 50}
+    - Key: 4
+      Value: {x: 100, y: 50}
+    - Key: 5
+      Value: {x: 50, y: 100}
     keyCollision: 0
   blockage:
     serializedVersion: 2

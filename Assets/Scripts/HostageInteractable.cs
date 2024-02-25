@@ -14,7 +14,7 @@ public class HostageInteractable : Interactable
         Kill();
         foreach (var item in MapManager.inst.HostageSlots())
         {
-            item.areaIndicator.gameObject.SetActive(true);
+            item.ActivateAreaIndicator(Color.cyan);
         }
         BattleManager.inst. StartCoroutine(q());
         IEnumerator q()

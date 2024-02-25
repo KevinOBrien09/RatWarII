@@ -6,19 +6,25 @@ using System.Linq;
 using UnityEngine.Events;
 using DG.Tweening;
 
-public enum GenerationRoomType{NORMAL,BIG,SIDEHALL,VERTHALL}
+
 public class MapGenerator : Singleton<MapGenerator>
 {
+    public GenericDictionary<GenerationRoomType,Vector2> roomSizeDict = new GenericDictionary<GenerationRoomType, Vector2>();
     public AStar generatorAstar;
     public Grid_ mapGrid;
+ 
     public int howManyPartyMembers,howManyEnemies;
     public SpikeSlot spikeSlotPrefab;
-    public GameObject placeholder,blockage,plane,offshootTarget;
+    public GameObject placeholder,blockage,plane,offshootTarget,roomSpacerPrefab;
+    public GameObject wall;
     public DungeonNode dungeonNodePrefab;
     public Vector2 blockagePercentRange;
     public bool showVisual;
     public bool generating;
+    public LayerMask reAlignMask;
+    Dictionary<Vector2,DungeonNode> dungDict = new Dictionary<Vector2, DungeonNode>();
    public List<DungeonNode> dungeonNodes = new List<DungeonNode>();
+    public Slot slotPrefab;
     protected override void Awake(){
         base.Awake();
        
@@ -29,7 +35,11 @@ public class MapGenerator : Singleton<MapGenerator>
     public void Generate()
     {
         (List<Node> path,Node startNode,Node endNode) layout = DrawLayout();
-        ParseLayout(layout.path,layout.startNode,layout.endNode);
+        SpawnDungeonNodes(layout.path);
+        //RoomPadding();
+        ParseLayout(layout.startNode,layout.endNode);
+        SpawnSpacers();
+        //MakeMap();
     }
 
     public (List<Node>,Node startNode,Node endNode) DrawLayout()
@@ -113,45 +123,74 @@ public class MapGenerator : Singleton<MapGenerator>
         }
     }
 
-    public void ParseLayout(List<Node> layout,Node start,Node end)
-    {   
-        
-        Dictionary<Vector2,DungeonNode> dungDict = new Dictionary<Vector2, DungeonNode>();
-        foreach (var item in layout)
+
+    public void SpawnDungeonNodes(List<Node> layout){
+   foreach (var item in layout)
         {
             DungeonNode dn = Instantiate(dungeonNodePrefab,item.vPosition,Quaternion.identity);
             dn.originalNode = item;
             dungDict.Add(new Vector2( dn.originalNode.iGridX, dn.originalNode.iGridY),dn );
             dungeonNodes.Add(dn);
         }
+    }
+
+    public void ParseLayout(Node start,Node end)
+    {   
+        
+        
+     
 
         foreach (var item in dungeonNodes)
         {item.GetNeighbours();}
         
         List<List<Node>> XDD = new List<List<Node>>();
         List<DungeonNode> dinner = new List<DungeonNode>();
-if(sideHallway()){
-            Debug.Log("made hallways");
-        }
-        else{
-            Debug.Log("no hallways");
-        }
+        List<Vector2> lunch = new List<Vector2>();
+        
+        if(sideHallway())
+        {Debug.Log("made hallways");}
+        else
+        {Debug.Log("no hallways");}
+        foreach (var item in lunch)
+        {dungDict.Remove(item);}
         if(bigRoom())
         {Debug.Log("Created BigRoom");}
         else{Debug.Log("No big room");}
         Clear();
-        
-
+        vertDoubleRoom();
+        Clear();
         bool sideHallway()
         {
             bool foundHallway = false;
             foreach(var item in dungeonNodes)
             {
+                
                 Vector2 up = new Vector2( item.originalNode.iGridX, item.originalNode.iGridY+1);
                 Vector2 down =  new Vector2( item.originalNode.iGridX, item.originalNode.iGridY-1);
                 Vector2 left = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY);
                 Vector2 right = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY);
                 Vector2 og = new Vector2( item.originalNode.iGridX, item.originalNode.iGridY);
+                if(dungDict.ContainsKey(left))
+                {
+                    if(dungDict[left].isHall)
+                    {continue;}
+                }
+                if(dungDict.ContainsKey(up))
+                {
+                    if(dungDict[up].isHall)
+                    {continue;}
+                }
+                if(dungDict.ContainsKey(down))
+                {
+                    if(dungDict[down].isHall)
+                    {continue;}
+                }
+                if(dungDict.ContainsKey(right))
+                {
+                    if(dungDict[right].isHall)
+                    {continue;}
+                }
+
                 bool canMakeSideHallway = dungDict.ContainsKey(og) && 
                 dungDict.ContainsKey(left) && dungDict.ContainsKey(right) && !dungDict.ContainsKey(up) && !dungDict.ContainsKey(down);
 
@@ -160,25 +199,21 @@ if(sideHallway()){
 
                 if(canMakeSideHallway)
                 {
-                    if(dungDict[left].roomType != GenerationRoomType.VERTHALL && dungDict[right].roomType != GenerationRoomType.VERTHALL)
-                    {
-                        dungDict[og].MarkAsSideHallway();
-
-                        dungDict.Remove(og);
-                        foundHallway = true;
-                    }
+                   
+                    dungDict[og].MarkAsSideHallway();
+                    lunch.Add(og);
+                    
+                    foundHallway = true;
+                    
                 
                 }
 
                 if(canMakeVertHallway)
                 {
-                    if(dungDict[up].roomType != GenerationRoomType.SIDEHALL && dungDict[down].roomType != GenerationRoomType.SIDEHALL)
-                    {
-                        dungDict[og].MarkAsVertHallway();
-
-                        dungDict.Remove(og);
-                        foundHallway = true;
-                    }
+                    dungDict[og].MarkAsVertHallway();
+                    lunch.Add(og);
+                    foundHallway = true;
+                    
                 }
 
 
@@ -200,9 +235,10 @@ if(sideHallway()){
                 Vector2 left = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY);
                 Vector2 downLeft = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY-1);
                 Vector2 downRight = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY-1);
+                
                 bool botLeft = dungDict.ContainsKey(og) && 
                 dungDict.ContainsKey(up) 
-                &&  dungDict.ContainsKey(upRight)
+                && dungDict.ContainsKey(upRight)
                 && dungDict.ContainsKey(right);
 
                 bool botRight = dungDict.ContainsKey(og) && 
@@ -214,17 +250,14 @@ if(sideHallway()){
                 dungDict.ContainsKey(down) 
                 &&  dungDict.ContainsKey(left) 
                 && dungDict.ContainsKey(downLeft);
-
-                
                 bool topLeft = dungDict.ContainsKey(og) &&
                 dungDict.ContainsKey(down)
                 &&  dungDict.ContainsKey(right)
                 && dungDict.ContainsKey(downRight);
                 bool possibleBigRoom = botLeft | botRight | topRight | topLeft;
+
                 if(possibleBigRoom)
                 {
-                
-                    Debug.Log("LEBIGROOM X^D");
                     if(botLeft)
                     {
                         dinner.Add(dungDict[up]);
@@ -275,9 +308,98 @@ if(sideHallway()){
                         dungDict.Remove(right);
                         dungDict.Remove(downRight); 
                     }
-                    return true;
+                  return true;
                 }
             }  
+            return false;
+        }
+
+
+        bool vertDoubleRoom(){
+            foreach(var item in dungeonNodes)
+            {
+                Vector2 og = new Vector2( item.originalNode.iGridX, item.originalNode.iGridY);
+                Vector2 up = new Vector2( item.originalNode.iGridX, item.originalNode.iGridY+1);
+                Vector2 down =  new Vector2( item.originalNode.iGridX, item.originalNode.iGridY-1);
+                Vector2 upRight = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY+1);
+                Vector2 right = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY);
+                Vector2 upLeft = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY+1);
+                Vector2 left = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY);
+                Vector2 downLeft = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY-1);
+                Vector2 downRight = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY-1);
+
+               
+                if(dungDict.ContainsKey(left) && dungDict.ContainsKey(og)) 
+                {
+                    if(item.roomType == GenerationRoomType.NORMAL)
+                    {
+                        if(dungDict[og].roomType == GenerationRoomType.NORMAL && dungDict[left].roomType == GenerationRoomType.NORMAL)
+                        {
+                            if(Random.Range(0,3 ) ==1){
+                                 dungDict[og].MarkAsHORIDouble(dungDict[left]);
+                            dinner.Add(dungDict[left]);
+                            dungDict.Remove(og);
+                            dungDict.Remove(left);
+                            }
+                           
+                        }
+                    }
+
+                }
+
+                if(dungDict.ContainsKey(right) && dungDict.ContainsKey(og)) 
+                {
+                    if(item.roomType == GenerationRoomType.NORMAL)
+                    {
+                        if(dungDict[og].roomType == GenerationRoomType.NORMAL && dungDict[right].roomType == GenerationRoomType.NORMAL)
+                        {
+                            if(Random.Range(0,3 ) ==1){
+                            dungDict[og].MarkAsHORIDouble(dungDict[right]);
+                            dinner.Add(dungDict[right]);
+                            dungDict.Remove(og);
+                            dungDict.Remove(right);
+                            }
+                        }
+                    }
+
+                }
+
+
+                if(dungDict.ContainsKey(up) && dungDict.ContainsKey(og)) 
+                {
+                    if(item.roomType == GenerationRoomType.NORMAL)
+                    {
+                        if(dungDict[og].roomType == GenerationRoomType.NORMAL && dungDict[up].roomType == GenerationRoomType.NORMAL)
+                        {
+                            if(Random.Range(0,3 ) ==1){
+                            dungDict[og].MarkAsVERTDouble(dungDict[up]);
+                            dinner.Add(dungDict[up]);
+                            dungDict.Remove(og);
+                            dungDict.Remove(up);
+                            }
+                        }
+                    }
+
+                }
+
+                 if(dungDict.ContainsKey(down) && dungDict.ContainsKey(og)) 
+                {
+                    if(item.roomType == GenerationRoomType.NORMAL)
+                    {
+                        if(dungDict[og].roomType == GenerationRoomType.NORMAL && dungDict[down].roomType == GenerationRoomType.NORMAL)
+                        {
+                            if(Random.Range(0,3 ) ==1){
+                            dungDict[og].MarkAsVERTDouble(dungDict[down]);
+                            dinner.Add(dungDict[down]);
+                            dungDict.Remove(og);
+                            dungDict.Remove(down);
+                            }
+                        }
+                    }
+
+                }
+            }
+
             return false;
         }
        
@@ -285,55 +407,119 @@ if(sideHallway()){
         {
             foreach (var item in dinner)
             {
-                dungeonNodes.Remove(item);
+                dungeonNodes.
+                Remove(item);
                 Destroy(item. gameObject);
             }
         }
        
            
-
-        MakeMap();
+    
+        
     }
 
-    public void MakeMap()
+    public void SpawnSpacers()
     {
-        //List<Vector3> v = new List<Vector3>();
-        // Dictionary<int,int> xPaddingDict = new Dictionary<int, int>();
-        // Dictionary<int,int> zPaddingDict = new Dictionary<int, int>();
-        // int zPadding = 0;
-        // int xPadding = 0;
-        // for (int i = 0; i < mapGrid.iGridSizeX; i++)
-        // {
-        //     xPaddingDict.Add(i,xPadding);
-        //     xPadding += 5;
-        // }
-
-   
-        // for (int i = 0; i < mapGrid.iGridSizeY; i++)
-        // {
-        //     zPaddingDict.Add(i,zPadding);
-        //     zPadding += 5;
-        // }
-        
-        // for (int i = 0; i < layout.Count; i++)
-        // {
-        //     Vector3 v3 = new Vector3(
-        //     layout[i].vPosition.x + xPaddingDict[layout[i].iGridX],
-        //     layout[i].vPosition.y,
-        //     layout[i].vPosition.z + zPaddingDict[layout[i].iGridY]);  
-        //     v.Add(v3);
-        //     //padding += 5;
-        // }
-  
-        
-
+        List<GameObject> spacers = new List<GameObject>();
+        Dictionary<GameObject,Room> dict = new Dictionary<GameObject, Room>();
         foreach (var item in dungeonNodes)
         {
-            MapManager.inst.SpawnRoom(item);
+            GameObject spacer = Instantiate(roomSpacerPrefab,item.spawnPoint.position,Quaternion.identity);
+            Room r = new Room();
+            r.roomType = item.roomType;
+            dict.Add(spacer,r);
+            spacers.Add(spacer);
+            Vector2 v = roomSizeDict[item.roomType];
+            spacer.transform.localScale = new Vector3(v.x,1,v.y);
         }
-        generating = false;
+        mapGrid.enabled = false;
+        MapManager.inst.map.vGridWorldSize = mapGrid.vGridWorldSize;
+        MapManager.inst.map.CreateGrid();
+        List<Node> n = new List<Node>();
+        StartCoroutine(q());
+        IEnumerator q(){
+        yield return new WaitForEndOfFrame();
+            
+        foreach (var item in  MapManager.inst.map.NodeArray)
+        {
+            var g = Physics.OverlapSphere(item.vPosition,.1f,layerMask:reAlignMask);
+            Debug.Log(g.Length + " g length");
+            if(g.Length == 1)
+            {
+                Slot s = Instantiate(slotPrefab,item.vPosition,Quaternion.identity);
+                dict[g[0].gameObject].slots.Add(s);
+                MapManager.inst.allSlots.Add(s);
+              //  r.slots.Add(s);
+                item.slot = s;
+                s.node = item;
+
+            }
+            else if(g.Length > 1)
+            {
+                Debug.LogAssertion("TWO COLLIDERS FOUND, ITS OVER!!!");
+            }
+            else
+            {Instantiate(wall,item.vPosition,Quaternion.identity);}
+        }
+
+
+            foreach (var item in spacers)
+            {Destroy(item.gameObject);}
+                 yield return new WaitForEndOfFrame();
+            MapManager.inst.map.UpdateGrid();
+            foreach (var item in dict)
+            {MapManager.inst.map.rooms. Add(item.Value);}
+            generating = false;
+        }
+     
+       
+    }
+
+    public void RoomPadding()
+    {
+        List<Vector3> v = new List<Vector3>();
+        Dictionary<int,int> xPaddingDict = new Dictionary<int, int>();
+        Dictionary<int,int> zPaddingDict = new Dictionary<int, int>();
+        int zPadding = 0;
+        int xPadding = 0;
+        for (int i = 0; i < mapGrid.iGridSizeX; i++)
+        {
+            xPaddingDict.Add(i,xPadding);
+            xPadding += 5;
+        }
+
+   
+        for (int i = 0; i < mapGrid.iGridSizeY; i++)
+        {
+            zPaddingDict.Add(i,zPadding);
+            zPadding += 5;
+        }
+        
+        for (int i = 0; i < dungeonNodes.Count; i++)
+        {
+            Vector3 v3 = new Vector3(
+            dungeonNodes[i].originalNode. vPosition.x + xPaddingDict[ dungeonNodes[i].originalNode.iGridX],
+            dungeonNodes[i].originalNode.vPosition.y,
+            dungeonNodes[i].originalNode.vPosition.z + zPaddingDict[ dungeonNodes[i].originalNode.iGridY]);  
+            dungeonNodes[i].transform.position = v3;
+            //v.Add(v3);
+            //padding += 5;
+        }
   
-    }   
+    }
+
+    // public void MakeMap()
+    // {
+       
+        
+
+    //     foreach (var item in dungeonNodes)
+    //     {
+    //         MapManager.inst.SpawnRoom(item);
+    //     }
+    //     generating = false;
+  
+    // }   
 
     
 

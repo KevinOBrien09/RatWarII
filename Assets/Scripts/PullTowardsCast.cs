@@ -37,7 +37,7 @@ public class PullTowardsCast : SkillCastBehaviour
                     Vector2 v = new Vector2(args.caster.slot.node.iGridX-1,args.caster.slot.node.iGridY);
                     if(MapManager.inst.nodeIsValid(v))
                     {
-                        s = MapManager.inst.currentRoom.grid.NodeArray[(int) v.x, (int)v.y].slot;
+                        s =  MapManager.inst.map.NodeArray[(int) v.x, (int)v.y].slot;
                         p = new Vector3(s.transform.position.x,args.target.transform.position.y,s.transform.position.z);
                         overShoot = new Vector3(p.x+2.5f,p.y,p.z);
 
@@ -49,7 +49,7 @@ public class PullTowardsCast : SkillCastBehaviour
                     Vector2 v = new Vector2(args.caster.slot.node.iGridX+1,args.caster.slot.node.iGridY);
                     if(MapManager.inst.nodeIsValid(v))
                     {
-                        s = MapManager.inst.currentRoom.grid.NodeArray[(int) v.x, (int)v.y].slot;
+                        s =  MapManager.inst.map.NodeArray[(int) v.x, (int)v.y].slot;
                         p = new Vector3(s.transform.position.x,args.target.transform.position.y,s.transform.position.z);
                         overShoot = new Vector3(p.x-2.5f,p.y,p.z);
                         

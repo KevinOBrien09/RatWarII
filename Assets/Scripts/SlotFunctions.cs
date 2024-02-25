@@ -99,6 +99,13 @@ public class SlotFunctions
                 else
                 {candidateSlots.Add(s);}
             }
+            else
+            {
+                // if ( !MapManager.inst.slotBelongsToGrid(s) )  {
+                //     Debug.LogAssertion("Slot Does not belong to room");
+                // }
+               
+            }
         }
         List<Slot> ss = new List<Slot>(FilterUnadjacents(candidateSlots,new List<Slot>(),skill));
        
@@ -111,19 +118,29 @@ public class SlotFunctions
     public List<Slot> GetHorizontalSlots(int length,Skill skill = null)
     {
         List<Slot> validSlots = new List<Slot>();
-        int maxX = MapManager.inst.currentRoom.grid.iGridSizeX-1;
+        int maxX =  MapManager.inst.map.iGridSizeX-1;
         List<Slot> right =   Loop(length, slot.node.iGridX,maxX,true,true,skill);//right
         List<Slot> left =   Loop(length,slot.node.iGridX,maxX,true,false,skill);//left
         foreach (var item in left)
         {
             if(!validSlots.Contains(item))
-            {validSlots.Add(item);}
+            {
+                if(MapManager.inst.slotBelongsToGrid(item)){
+                    validSlots.Add(item);
+                }
+                
+            }
         }
 
         foreach (var item in right)
         {
             if(!validSlots.Contains(item))
-            {validSlots.Add(item);}
+            {
+                if(MapManager.inst.slotBelongsToGrid(item))
+                {
+                    validSlots.Add(item);
+                }
+            }
         }
 
         return validSlots;
@@ -132,22 +149,32 @@ public class SlotFunctions
     public List<Slot> GetVerticalSlots(int length,Skill skill = null)
     {
         List<Slot> validSlots = new List<Slot>();
-        int maxY = MapManager.inst.currentRoom.grid.iGridSizeY-1;
+        int maxY = MapManager.inst.map.iGridSizeY-1;
      
      
         List<Slot> up = Loop(length,slot.node.iGridY,maxY,false,true,skill);//up
         List<Slot> down = Loop(length,slot.node.iGridY,maxY,false,false,skill);//down
 
-        foreach (var item in up)
+          foreach (var item in up)
         {
             if(!validSlots.Contains(item))
-            {validSlots.Add(item);}
+            {
+                if(MapManager.inst.slotBelongsToGrid(item)){
+                    validSlots.Add(item);
+                }
+                
+            }
         }
 
         foreach (var item in down)
         {
             if(!validSlots.Contains(item))
-            {validSlots.Add(item);}
+            {
+                if(MapManager.inst.slotBelongsToGrid(item))
+                {
+                    validSlots.Add(item);
+                }
+            }
         }
         return validSlots;
     }
@@ -186,9 +213,9 @@ public class SlotFunctions
             {
                 Slot s = null;
                 if(X)
-                { s = MapManager.inst.currentRoom.grid.NodeArray[dir,(int)slot.node.iGridY].slot; }
+                { s =  MapManager.inst.map.NodeArray[dir,(int)slot.node.iGridY].slot; }
                 else
-                { s = MapManager.inst.currentRoom.grid.NodeArray[(int)slot.node.iGridX,dir].slot; }
+                { s =  MapManager.inst.map.NodeArray[(int)slot.node.iGridX,dir].slot; }
                 
                 if(s == null)
                 { 
@@ -286,40 +313,58 @@ public class SlotFunctions
                 Vector2 v = new Vector2(side,up);
                 if(MapManager.inst.nodeIsValid(v))
                 {
-                    Slot s = MapManager.inst.currentRoom.grid.NodeArray[(int) v.x,(int)v.y].slot;
+                    Slot s =  MapManager.inst.map.NodeArray[(int) v.x,(int)v.y].slot;
                     if(s==slot)
                     {continue;}
 
-                    if(s.cont.wall)
+                    if(s == null)
                     { 
-                        if(projectileSkill.goThroughWalls)
-                        { continue;}
+                        if(projectileSkill!= null)
+                        {
+                            if(!projectileSkill.goThroughWalls)
+                            { break; }
+                        }
                         else
                         { break; }
                     }
                     else
                     {
-                        if(!projectileSkill.passThrough)
-                        {
-                            if(s.cont.unit !=null)
-                            {
-                                candidateSlots.Add(s);
-                                break;
-                            }
+                        if(s.cont.wall)
+                        { 
+                            if(projectileSkill.goThroughWalls)
+                            { continue;}
                             else
-                            {candidateSlots.Add(s);}
+                            { break; }
                         }
                         else
-                        {candidateSlots.Add(s);}
+                        {
+                            if(!projectileSkill.passThrough)
+                            {
+                                if(s.cont.unit !=null)
+                                {
+                                    AddToCandidateSlots(s);
+                                    break;
+                                }
+                                else
+                                {  AddToCandidateSlots(s);}
+                            }
+                            else
+                            {  AddToCandidateSlots(s);}
+                        }
                     }
-            
                 }
                 else
                 { break; }
             }
 
         }
-
+        void AddToCandidateSlots(Slot s)
+        {
+            if(MapManager.inst.slotBelongsToGrid(s))
+            {
+                candidateSlots.Add(s);
+            }
+        }
 
         return candidateSlots;
 

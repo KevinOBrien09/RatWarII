@@ -5,9 +5,7 @@ using UnityEngine;
 public class AStar : MonoBehaviour {
 
    public Grid_ GridReference;//For referencing the grid class
-    public Transform StartPosition;
-    public Transform TargetPosition;
-    
+ 
    
 
     public List<Node> FindPath(Node n1, Node n2)

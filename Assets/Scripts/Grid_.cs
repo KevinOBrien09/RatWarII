@@ -5,7 +5,7 @@ using System.Linq;
 
 public class Grid_ : MonoBehaviour
 {
-    public GenericDictionary<GenerationRoomType,Vector2> roomSizeDict = new GenericDictionary<GenerationRoomType, Vector2>();
+   
     public LayerMask blockage;
     public AStar aStar;
     public Vector2 vGridWorldSize;
@@ -17,7 +17,7 @@ public class Grid_ : MonoBehaviour
     public int iGridSizeX, iGridSizeY;
 
     public void AssignRoomSize(GenerationRoomType generationRoomType){
-        vGridWorldSize = roomSizeDict[generationRoomType];
+        vGridWorldSize = MapGenerator.inst. roomSizeDict[generationRoomType];
     }
 
    
@@ -69,11 +69,11 @@ public class Grid_ : MonoBehaviour
         foreach (var item in NodeArray)
         {
          
-                    item.isBlocked = false;
-                    if (Physics.CheckBox(item.vPosition,new Vector3(fNodeRadius,fNodeRadius,fNodeRadius) ,Quaternion.identity, blockage))
-                    {
-                        item.isBlocked = true;
-                    } 
+            item.isBlocked = false;
+            if (Physics.CheckBox(item.vPosition,new Vector3(fNodeRadius,fNodeRadius,fNodeRadius) ,Quaternion.identity, blockage))
+            {
+                item.isBlocked = true;
+            } 
            
            
             
@@ -148,7 +148,9 @@ public class Grid_ : MonoBehaviour
     //Function that draws the wireframe
     private void OnDrawGizmos()
     {
-
+        if(!enabled){
+            return;
+        }
         Gizmos.DrawWireCube(transform.position, new Vector3(vGridWorldSize.x, 1, vGridWorldSize.y));
 
         if (NodeArray != null)

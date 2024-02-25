@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 using UnityEngine.EventSystems;
 using System.Linq;
 public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPointerExitHandler
@@ -11,6 +12,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public SpriteRenderer border,hoverBorder,areaIndicator;
     public Transform rayShooter;
     public Color32 normalColour,moveColour,interactColour,skillColour;
+    public bool dormant;
 
     void Awake()
     {
@@ -20,6 +22,18 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
 
     public void ChangeColour(Color32 color)
     {border.color = color;}
+
+    public void ActivateAreaIndicator(Color32 color){
+        areaIndicator.gameObject.SetActive(true);
+        areaIndicator.color = color;
+        
+    }
+
+    public void DectivateAreaIndicator(){
+        areaIndicator.gameObject.SetActive(false);
+      
+    }
+
 
    
     
@@ -52,7 +66,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
                 if(cont.walkable())
                 {
                     hoverBorderOn();
-                    List<Node> path = MapManager.inst.currentRoom.grid. aStar.FindPath(UnitMover.inst.selectedSlot.node,node);
+                    List<Node> path =  MapManager.inst.map.aStar.FindPath(UnitMover.inst.selectedSlot.node,node);
                     UnitMover.inst.NewHover(path);
                 }
               
@@ -71,10 +85,14 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     
     public void SlotSelect()
     {
+        
         if(cont.invisible)
         { return; }
         if(SkillAimer.inst.castDecided)
         {return;}
+        if(!MapManager.inst.slotBelongsToGrid(this)){
+            return;
+        }
 
         switch(GameManager.inst.currentGameState)
         {
@@ -103,7 +121,8 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
                       DisableHover();}
                 }
                 else
-                {SlotInfoDisplay.inst.Apply(this);
+                {
+                    SlotInfoDisplay.inst.Apply(this);
                   DisableHover();}
             }
             break;
@@ -156,6 +175,8 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
 
     public void DisableHover()
     {
+        if(dormant)
+        {return;}
         if(cont.invisible)
         { return; }
         hoverBorder.gameObject.SetActive(false);

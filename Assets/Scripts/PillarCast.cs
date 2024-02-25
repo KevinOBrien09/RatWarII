@@ -26,7 +26,7 @@ public class PillarCast :  SkillCastBehaviour
             { 
                 CamFollow.inst.ChangeCameraState(CameraState.LOCK);
                 pillar.transform.DOMoveY(0,.25F);
-                MapManager.inst.currentRoom.grid.UpdateGrid();
+                MapManager.inst.map.UpdateGrid();
             
             });
 
@@ -36,7 +36,7 @@ public class PillarCast :  SkillCastBehaviour
                 Destroy( tt.col.gameObject);
                 tt.slot.cont.wall = false;
                // pillar.slot.cont.slotContents.Remove(pillar.slotContents);
-                MapManager.inst.currentRoom.grid.UpdateGrid();
+                 MapManager.inst.map.UpdateGrid();
                 tt.gameObject.transform.DOMoveY(-4,.25f).OnComplete(()=>{
                 Destroy(tt.gameObject);
                 });

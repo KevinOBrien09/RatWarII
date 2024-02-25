@@ -119,7 +119,7 @@ public class UnitMover : Singleton<UnitMover>
        BattleTicker.inst.Type("Moving..");
         selectedUnit.activeUnitIndicator.gameObject.SetActive(false);
         selectedUnit.slot.ChangeColour(selectedUnit.slot.normalColour);
-        List<Node> path = MapManager.inst.currentRoom.grid. aStar.FindPath(UnitMover.inst.selectedSlot.node,
+        List<Node> path =  MapManager.inst.map.aStar. FindPath(UnitMover.inst.selectedSlot.node,
        slot.node);
         Queue<Slot> q = new Queue<Slot>();
         foreach (var item in path)
@@ -137,7 +137,7 @@ public class UnitMover : Singleton<UnitMover>
             if(InputManager.inst.player. GetButtonDown("Cancel"))
             {
                 ExitSelectionMode();
-                MapManager.inst.currentRoom.grid.UpdateGrid();
+                 MapManager.inst.map.UpdateGrid();
                 ActionMenu.inst.Show(selectedSlot);
                 //CamFollow.inst.ChangeCameraState(CameraState.FREE);
             }

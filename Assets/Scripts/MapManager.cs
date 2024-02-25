@@ -7,36 +7,48 @@ using System.Linq;
 public class MapManager : Singleton<MapManager>
 {
 
-    public Room currentRoom;
+    public Map map;
+    public List<Slot> allSlots = new List<Slot>();
     public Transform gridHolder;
-    public List<Room> rooms = new List<Room>();
+    public Room currentRoom;
     public Room roomPrefab;
     public Door doorPrefab;
     float padding =5;
     
-    public Vector3 SpawnRoom(DungeonNode dungeonNode)
-    {
-        string roomName = "Room:" + rooms.Count;
-        Room room = Instantiate(roomPrefab);
-        room.transform.position = dungeonNode.transform.position;
-        room.transform.SetParent(gridHolder);
-        room.Create(roomName,dungeonNode.roomType);
-        float yC = room.grid.CenterNode().vPosition.z-5;
-        float xC = room.grid.NodeArray[room.grid.iGridSizeX-1,0].vPosition.x+5;
-        Vector3 d = new Vector3(xC,room.transform.position.y,yC );
-        // Door door = Instantiate(doorPrefab,d,Quaternion.identity);
-        // door.MakeDoor(room.grid);
-        rooms.Add(room);
+    // public void SpawnRoom(DungeonNode dungeonNode)
+    // {
+    //     string roomName = "Room:" + rooms.Count;
+    //     Room room = Instantiate(roomPrefab);
+    //     room.transform.name = roomName;
+    //     room.transform.position = dungeonNode.spawnPoint.position;
+    //     room.transform.SetParent(gridHolder);
+    //     //room.Create(roomName,dungeonNode.roomType);
+    //     rooms.Add(room);
 
-        return new Vector3(xC,room.transform.position.y,room.transform.position.z);
-     
+       
       
        
-    }
+    // }
 
-    public void ChangeRoom(Room newRoom){
+    public void ChangeRoom(Room newRoom)
+    {
        
         currentRoom = newRoom;
+        foreach (var item in map.rooms)
+        {
+            foreach (var s in item.slots)
+            {  s.ActivateAreaIndicator(new Color32(0,0,0,200));
+                s.border.gameObject.SetActive(false);
+                s.dormant = true;
+            }
+              
+        }
+        foreach (var s in currentRoom.slots)
+        {
+            s.DectivateAreaIndicator();
+            s.border.gameObject.SetActive(true);
+            s.dormant = false;
+        }
        
     }
 
@@ -47,8 +59,8 @@ public class MapManager : Singleton<MapManager>
 
     public bool nodeIsValid(Vector2 v)
     {
-        int maxX = MapManager.inst.currentRoom.grid.iGridSizeX-1;
-        int maxY = MapManager.inst.currentRoom.grid.iGridSizeY-1;
+        int maxX =  MapManager.inst.map.iGridSizeX-1;
+        int maxY = MapManager.inst.map.iGridSizeY-1;
 
         bool inXRange = v.x <= maxX && v.x >= 0;
         bool inYRange = v.y <= maxY && v.y >= 0;
@@ -58,8 +70,13 @@ public class MapManager : Singleton<MapManager>
 
     public List<Slot> StartingRadius()
     {
-        Slot center = currentRoom.grid.NodeArray[2,2].slot;
-        List<Slot> radius =  center.func.GetRadiusSlots(1,null,true);
+        Slot center = MapManager.inst.map.NodeArray[2,2].slot;
+        List<Slot> radius =  new List<Slot>();
+        for (int i = 0; i < 5; i++)
+        {
+            radius.Add(RandomSlot());
+        }
+        //center.func.GetRadiusSlots(1,null,true);
        
         System.Random rng = new System.Random();
         return radius.OrderBy(_ => rng.Next()).ToList();
@@ -68,7 +85,7 @@ public class MapManager : Singleton<MapManager>
 
     public List<Slot> HostageSlots()
     {
-        Slot center = currentRoom.grid.NodeArray[2,2].slot;
+        Slot center =MapManager.inst.map.NodeArray[2,2].slot;
         List<Slot> radius =  center.func.GetRadiusSlots(1,CharacterBuilder.inst.mandatorySkills[0],false);
         radius.Add(center);
         System.Random rng = new System.Random();
