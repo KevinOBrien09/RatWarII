@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8954197523828559651
+--- !u!1 &933221020458423256
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8954197523828559655}
-  - component: {fileID: 8954197523828559652}
-  - component: {fileID: 6716664992404773423}
+  - component: {fileID: 933221020458423255}
+  - component: {fileID: 933221020458423253}
+  - component: {fileID: 933221020458423254}
   m_Layer: 0
-  m_Name: Door
+  m_Name: DoorInteractable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8954197523828559655
+--- !u!4 &933221020458423255
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8954197523828559651}
+  m_GameObject: {fileID: 933221020458423256}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -33,31 +33,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &8954197523828559652
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8954197523828559651}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 5, y: 1, z: 5}
-  m_Center: {x: 0, y: -1.74, z: 0}
---- !u!114 &6716664992404773423
+--- !u!114 &933221020458423253
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8954197523828559651}
+  m_GameObject: {fileID: 933221020458423256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfe8cd5afcc577d4cb590549123cd925, type: 3}
+  m_Script: {fileID: 11500000, guid: c0704fedeb120da44b9845a544f07bd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid_: {fileID: 0}
-  doorSlot: {fileID: 21754696798584905, guid: a8d92b3ec8da71447ac6cf7d2e60fbba, type: 3}
-  wall: {fileID: 1230687870562983188, guid: c127386aa4bad3440b6863977477bdb6, type: 3}
+  sounds: []
+  slot: {fileID: 0}
+  slotContents: {fileID: 11400000, guid: dc4f4b5f06d25a34ab6c37651958a214, type: 2}
+  createdByUnit: 0
+  interactable: {fileID: 933221020458423254}
+--- !u!114 &933221020458423254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933221020458423256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b523d2fa15e57504c944ab3a53f850a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slot: {fileID: 0}
+  border: {fileID: 0}

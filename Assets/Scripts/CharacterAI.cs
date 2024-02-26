@@ -174,7 +174,10 @@ public class CharacterAI : MonoBehaviour
             poi = closestPOI;
             List<Slot>  closestSlot =  UnitMover.inst.validSlots.Where(n => n && n != this)
             .OrderBy(n => (n.transform.position - closestPOI.transform. position).sqrMagnitude).ToList();
-            dest = closestSlot[0];
+            if(closestSlot.Count > 0){
+                dest = closestSlot[0];
+            }
+           
         }
         if(dest != null){
                

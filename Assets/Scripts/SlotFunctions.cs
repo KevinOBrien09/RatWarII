@@ -6,6 +6,67 @@ using System.Linq;
 public class SlotFunctions
 {
    public Slot slot;
+    public List<Direction> CheckIfSideSlot()
+    {
+        Dictionary<Direction,Vector3> dirDict = new Dictionary<Direction, Vector3>();
+        List<Slot> slots = new List<Slot>();
+        List<Direction> directions = new List<Direction>();
+        dirDict.Add(Direction.UP,  slot.rayShooter.forward);
+        dirDict.Add(Direction.DOWN,-slot.rayShooter.forward);
+        dirDict.Add(Direction.RIGHT,slot.rayShooter.right);
+        dirDict.Add(Direction.LEFT,-slot.rayShooter.right);
+
+        foreach (var item in dirDict)
+        {
+            RaycastHit hit ;
+            if(Physics.Raycast(slot. rayShooter.position,item.Value * 5,maxDistance: 5,hitInfo: out hit))  
+            {
+                Slot s = null;
+                if(hit.collider.gameObject !=null)
+                {
+                    if(hit.collider.gameObject.TryGetComponent<Slot>(out s))
+                    { slots.Add(s); }
+                }
+                else
+                {
+                    directions.Add(item.Key);
+                }
+            }
+            else{
+                directions.Add(item.Key);
+            }
+        }
+        
+        return directions;
+        
+    }
+
+    public List<Wall> WallChecker(){
+        List<Wall> walls = new List<Wall>();
+        List<Vector3> directions = new List<Vector3>();
+        directions.Add(slot.rayShooter.forward);
+        directions.Add(-slot.rayShooter.forward);
+        directions.Add(slot.rayShooter.right);
+        directions.Add(-slot.rayShooter.right);
+        foreach (var item in directions)
+        {
+            RaycastHit hit ;
+            if(Physics.Raycast(new Vector3(slot. rayShooter.position.x,slot. rayShooter.position.y+1,slot. rayShooter.position.z) ,item * 5,maxDistance: 5,hitInfo: out hit))  
+            {
+                Wall w = null;
+                if(hit.collider.gameObject !=null)
+                {
+                    if(hit.collider.gameObject.TryGetComponent<Wall>(out w))
+                    { walls.Add(w); }
+                }
+            }
+        }
+
+
+        return walls;
+
+    }
+
    public List<Slot> GetNeighbouringSlots()
     {
         List<Slot> slots = new List<Slot>();

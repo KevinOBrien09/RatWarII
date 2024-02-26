@@ -10,6 +10,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public SlotFunctions func = new SlotFunctions();
     public Node node;
     public SpriteRenderer border,hoverBorder,areaIndicator;
+    public Room room;
     public Transform rayShooter;
     public Color32 normalColour,moveColour,interactColour,skillColour;
     public bool dormant;
@@ -34,6 +35,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
       
     }
 
+   
 
    
     

@@ -7,8 +7,10 @@ using UnityEngine.Events;
 using DG.Tweening;
 
 
+
 public class MapGenerator : Singleton<MapGenerator>
 {
+       public  GenericDictionary<int,Border> borderDict = new   GenericDictionary<int,Border>();
     public GenericDictionary<GenerationRoomType,Vector2> roomSizeDict = new GenericDictionary<GenerationRoomType, Vector2>();
     public AStar generatorAstar;
     public Grid_ mapGrid;
@@ -16,7 +18,9 @@ public class MapGenerator : Singleton<MapGenerator>
     public int howManyPartyMembers,howManyEnemies;
     public SpikeSlot spikeSlotPrefab;
     public GameObject placeholder,blockage,plane,offshootTarget,roomSpacerPrefab;
-    public GameObject wall;
+    public Wall wall;
+    public Door doorPrefab;
+    public Border borderPrefab;
     public DungeonNode dungeonNodePrefab;
     public Vector2 blockagePercentRange;
     public bool showVisual;
@@ -25,6 +29,7 @@ public class MapGenerator : Singleton<MapGenerator>
     Dictionary<Vector2,DungeonNode> dungDict = new Dictionary<Vector2, DungeonNode>();
    public List<DungeonNode> dungeonNodes = new List<DungeonNode>();
     public Slot slotPrefab;
+    List<GameObject> gos = new List<GameObject>();
     protected override void Awake(){
         base.Awake();
        
@@ -47,7 +52,7 @@ public class MapGenerator : Singleton<MapGenerator>
         generating = true;
         List<Node>  rngNodes =  mapGrid.ShuffledNodes();
         List<Node> ogList = new List<Node>(rngNodes);
-        List<GameObject> gos = new List<GameObject>();
+        
         List<Node> startEndCandidates = new List<Node>();
         List<Node> bin = new List<Node>();
 
@@ -422,107 +427,185 @@ public class MapGenerator : Singleton<MapGenerator>
     {
         List<GameObject> spacers = new List<GameObject>();
         Dictionary<GameObject,Room> dict = new Dictionary<GameObject, Room>();
+        int i = 1;
         foreach (var item in dungeonNodes)
         {
             GameObject spacer = Instantiate(roomSpacerPrefab,item.spawnPoint.position,Quaternion.identity);
-            Room r = new Room();
+            Room r = item.gameObject.AddComponent<Room>();
+            r.Init(i);
             r.roomType = item.roomType;
             dict.Add(spacer,r);
             spacers.Add(spacer);
             Vector2 v = roomSizeDict[item.roomType];
             spacer.transform.localScale = new Vector3(v.x,1,v.y);
+            i++;
         }
         mapGrid.enabled = false;
         MapManager.inst.map.vGridWorldSize = mapGrid.vGridWorldSize;
         MapManager.inst.map.CreateGrid();
         List<Node> n = new List<Node>();
         StartCoroutine(q());
-        IEnumerator q(){
-        yield return new WaitForEndOfFrame();
-            
-        foreach (var item in  MapManager.inst.map.NodeArray)
+        IEnumerator q()
         {
-            var g = Physics.OverlapSphere(item.vPosition,.1f,layerMask:reAlignMask);
-            Debug.Log(g.Length + " g length");
-            if(g.Length == 1)
-            {
-                Slot s = Instantiate(slotPrefab,item.vPosition,Quaternion.identity);
-                dict[g[0].gameObject].slots.Add(s);
-                MapManager.inst.allSlots.Add(s);
-              //  r.slots.Add(s);
-                item.slot = s;
-                s.node = item;
-
-            }
-            else if(g.Length > 1)
-            {
-                Debug.LogAssertion("TWO COLLIDERS FOUND, ITS OVER!!!");
-            }
-            else
-            {Instantiate(wall,item.vPosition,Quaternion.identity);}
-        }
-
-
+            yield return new WaitForEndOfFrame();
+            SpawnSlots(dict);
+            PerimeterSlots();
+             //yield return new WaitForEndOfFrame();
+            
+            BorderSlots();
             foreach (var item in spacers)
             {Destroy(item.gameObject);}
-                 yield return new WaitForEndOfFrame();
+            foreach (var item in gos)
+            {Destroy(item.gameObject);}
+            yield return new WaitForEndOfFrame();
             MapManager.inst.map.UpdateGrid();
-            foreach (var item in dict)
-            {MapManager.inst.map.rooms. Add(item.Value);}
             generating = false;
         }
      
        
     }
 
-    public void RoomPadding()
+    void SpawnSlots(  Dictionary<GameObject,Room> dict)
     {
-        List<Vector3> v = new List<Vector3>();
-        Dictionary<int,int> xPaddingDict = new Dictionary<int, int>();
-        Dictionary<int,int> zPaddingDict = new Dictionary<int, int>();
-        int zPadding = 0;
-        int xPadding = 0;
-        for (int i = 0; i < mapGrid.iGridSizeX; i++)
+        foreach (var item in  MapManager.inst.map.NodeArray)
         {
-            xPaddingDict.Add(i,xPadding);
-            xPadding += 5;
+            var g = Physics.OverlapSphere(item.vPosition,.1f,layerMask:reAlignMask);
+            
+            if(g.Length == 1)
+            {
+                Slot s = Instantiate(slotPrefab,item.vPosition,Quaternion.identity);
+                Room r = dict[g[0].gameObject];
+                r.slots.Add(s);
+                s.gameObject.name = r.roomID +"|"+r.slots.Count;
+                s.room = r;
+                MapManager.inst.allSlots.Add(s);
+                item.slot = s;
+                s.node = item;
+                s.transform.SetParent(dict[g[0].gameObject].transform);
+
+            }
+            else if(g.Length > 1)
+            {Debug.LogAssertion("TWO COLLIDERS FOUND, ITS OVER!!!");}
+            else
+            {//Instantiate(wall,item.vPosition,Quaternion.identity);
+            }
         }
 
-   
-        for (int i = 0; i < mapGrid.iGridSizeY; i++)
-        {
-            zPaddingDict.Add(i,zPadding);
-            zPadding += 5;
-        }
-        
-        for (int i = 0; i < dungeonNodes.Count; i++)
-        {
-            Vector3 v3 = new Vector3(
-            dungeonNodes[i].originalNode. vPosition.x + xPaddingDict[ dungeonNodes[i].originalNode.iGridX],
-            dungeonNodes[i].originalNode.vPosition.y,
-            dungeonNodes[i].originalNode.vPosition.z + zPaddingDict[ dungeonNodes[i].originalNode.iGridY]);  
-            dungeonNodes[i].transform.position = v3;
-            //v.Add(v3);
-            //padding += 5;
-        }
-  
+        foreach (var item in dict)
+        {MapManager.inst.map.rooms. Add(item.Value);}
     }
 
-    // public void MakeMap()
-    // {
-       
+
+    void PerimeterSlots()
+    {
+        List<Slot> perimeterSlots = new List<Slot>();
+        foreach (var item in  MapManager.inst.allSlots)
+        {
+            List<Direction> dirs = item.func.CheckIfSideSlot();
+            if(dirs.Count > 0)
+            {
+                if(!perimeterSlots.Contains(item))
+                {
+                    if(dirs.Count == 1){
+                        perimeterSlots.Add(item);
+                        item.IsWall();
+                        Wall w = Instantiate(wall,item.transform.position,Quaternion.identity);
+                        item.room.wallDict[dirs[0]].Add(w);
+                        w.transform.SetParent(item.room.transform);
+                        item.gameObject.SetActive(false);
+                        
+                    }
+                }
+            }
+        }
         
+        foreach (var item in  MapManager.inst.allSlots)
+        {
+            List<Direction> dirs = item.func.CheckIfSideSlot();
+            if(dirs.Count > 0)
+            {   item.IsWall();
+                Wall w = Instantiate(wall,item.transform.position,Quaternion.identity);
+                perimeterSlots.Add(item); w.transform.SetParent(item.room.transform);
+                item.gameObject.SetActive(false);
+            }
+        }
+        // foreach(var item in perimeterSlots) //remove cornerSlots
+        // { 
+        //     foreach (var rm in MapManager.inst.map.rooms)
+        //     {
+        //         if(rm.slots.Contains(item))
+        //         {rm.slots.Remove(item);}
+        //     }
+        //     MapManager.inst.allSlots.Remove(item);
+        //    // Destroy(item.gameObject);
+        // }
+    }
 
-    //     foreach (var item in dungeonNodes)
-    //     {
-    //         MapManager.inst.SpawnRoom(item);
-    //     }
-    //     generating = false;
-  
-    // }   
 
+    void BorderSlots()
+    {
+        List<Slot> borderSlots = new List<Slot>();
+        foreach (var item in MapManager.inst.map.rooms)
+        {item.GetBorderRooms();}
+
+        foreach (var room in MapManager.inst.map.rooms)
+        {
+            foreach (var bRoom in room.borderRooms)
+            {
+                int a =  Mathf.Min(room.roomID,bRoom.roomID);
+                int b = Mathf.Max(room.roomID,bRoom.roomID);
+                int id = int.Parse(a.ToString()+b.ToString());
+                if(!borderDict.ContainsKey(id))
+                {
+                    Border border =  Instantiate(borderPrefab);
+                    border.borderID = id;
+                    border.roomA = room;
+                    border.roomB = bRoom;
+                    border.name = "Border of Rooms " + room.roomID +" and " + bRoom.roomID;
+                    borderDict.Add(border.borderID,border);
+                    border.GetBorderSlots();
+                }
+
+              
+               
+                
+            }
+        }
+        
+        foreach (var item in borderDict)
+        {
+            Border border = item.Value;
+            List<Transform> t = new List<Transform>();
+            foreach (var st in border.slots)
+            {
+                t.Add(st.transform);
+            }
+            border.transform.position = MiscFunctions.FindCenterOfTransforms(t);
+            
+            List<Slot> s = new List<Slot>(border.slots);
+            int i = s.Count/2;
+            Slot doorSlotA = s[ i];
+            Slot doorSlotB = s[i-1 ];
+            t.Clear();
+            t.Add(doorSlotA.transform);
+            t.Add(doorSlotB.transform);
+          
+            s.Remove(doorSlotA);
+            s.Remove(doorSlotB);
+            foreach (var slot in s)
+            {
+                Wall w = Instantiate(wall,slot.transform.position,Quaternion.identity);
+                border.walls.Add(w);
+                slot.IsWall();
+            }
+
+
+              Door door =  Instantiate(doorPrefab,MiscFunctions.FindCenterOfTransforms(t),Quaternion.identity);
+            door.Init(border,doorSlotA,doorSlotB);
+            border.doors.Add(door);
+        }
+    }
     
-
     public  (Node,Node) FurthestTwoNodes(List<Node> nodeList)
     {
         float FurthestDistance = 0;
@@ -543,15 +626,8 @@ public class MapGenerator : Singleton<MapGenerator>
         }
         return (n1,n2);
     }
-
-
     
-
-
-
-  
-
-   public void CreateStartingUnits(){
+    public void CreateStartingUnits(){
         List<Slot> shuffle = MapManager.inst.StartingRadius();
         for (int i = 0; i < howManyPartyMembers; i++)
         { UnitFactory.inst. CreatePlayerUnit(shuffle[i]);}
