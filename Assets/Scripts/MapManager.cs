@@ -13,6 +13,7 @@ public class MapManager : Singleton<MapManager>
     public Room currentRoom;
     public Room roomPrefab;
     public Door doorPrefab;
+    public SoundData enemySpawnHit;
     float padding =5;
     
     // public void SpawnRoom(DungeonNode dungeonNode)
@@ -30,15 +31,109 @@ public class MapManager : Singleton<MapManager>
        
     // }
 
-    public void ChangeRoom(Room newRoom)
+    public void InitStartRoom(){
+        currentRoom = map.startRoom;
+        currentRoom.lockDown = false;
+        foreach (var item in currentRoom.borders)
+        {
+            foreach (var d in item.doors)
+            {
+                d.metalFence.gameObject.SetActive(false);
+            }
+        }
+        MusicManager.inst.ChangeMusic( MusicManager.inst.peace);
+        HideInactiveRooms();
+    }
+
+    public void  ChangeRoom(Room newRoom,Door d)
     {
-       
         currentRoom = newRoom;
+       
+        
+        for (int i = 0; i < BattleManager.inst.playerUnits.Count; i++)
+        {
+            Slot s = d.landingSlots[newRoom][i];
+            Unit u = BattleManager.inst.playerUnits[i];
+            u.Reposition(s);
+            Vector3 v =  new Vector3(s.transform.position.x,u. transform.position.y ,s.transform.position.z);
+            u.transform.position = v;
+
+        }
+        HideInactiveRooms();
+        StartCoroutine(q());
+        IEnumerator q()
+        {
+
+            yield return new WaitForSeconds(.65f);
+            CamFollow.inst.enabled = true;
+            DoorInteractable di = d.currentSpecialSlot.interactable as DoorInteractable;
+            AudioManager.inst.GetSoundEffect().Play(di.close);
+            for (int i = 0; i < BattleManager.inst.playerUnits.Count; i++)
+            {BattleManager.inst.playerUnits[i].graphic.gameObject.SetActive(true);}
+            
+            yield return new WaitForSeconds(.3f);
+
+            if(currentRoom.roomContent == Room.Content.ENEMY)
+            {
+                CamFollow.inst.Focus(currentRoom.transform,(()=>
+                {
+                  
+                    StartCoroutine(spawnEnemies());
+                    IEnumerator spawnEnemies()
+                    {  
+                       
+                        LockDownRooms();
+                        BattleManager.inst.roomLockDown = true;
+                        BattleTicker.inst.Type("Enemies have appeared!");
+                        foreach (var item in currentRoom.enemySpawnData)
+                        {UnitFactory.inst. CreateEnemyUnit(item.spawnSlot,item.enemy);}
+                        
+                        AudioManager.inst.GetSoundEffect().Play(enemySpawnHit);
+                        MusicManager.inst.ChangeMusic( MusicManager.inst.battle);
+                        yield return new WaitForSeconds(1f);
+                        BattleManager.inst.ResetTurnOrder();
+                        BattleManager.inst.EndTurn();
+                    }
+                    
+                
+                }));
+            }
+            else if(currentRoom.roomContent == Room.Content.EMPTY)
+            {
+                BattleManager.inst.EndTurn();
+            }
+        }
+    }
+
+    public void LockDownRooms(){
+        foreach (var item in currentRoom.borders)
+        {
+            foreach (var dr in item.doors)
+            {
+                dr.metalFence.gameObject.SetActive(true);
+                dr.LockDown();
+            }
+        }
+    }
+
+    public void OpenRoomsFromLockdown(){
+        foreach (var item in currentRoom.borders)
+        {
+            foreach (var dr in item.doors)
+            {
+                dr.metalFence.gameObject.SetActive(true);
+                dr.OpenFromLockDown();
+            }
+        }
+    }
+
+    public void HideInactiveRooms(){
         foreach (var item in map.rooms)
         {
             foreach (var s in item.slots)
             {  s.ActivateAreaIndicator(new Color32(0,0,0,200));
                 s.border.gameObject.SetActive(false);
+                    s.DisableHover();
                 s.dormant = true;
             }
               
@@ -47,9 +142,9 @@ public class MapManager : Singleton<MapManager>
         {
             s.DectivateAreaIndicator();
             s.border.gameObject.SetActive(true);
+        
             s.dormant = false;
         }
-       
     }
 
     public bool slotBelongsToGrid(Slot s)

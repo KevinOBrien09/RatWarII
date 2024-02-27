@@ -35,7 +35,12 @@ public class UnitMover : Singleton<UnitMover>
             });
             
             selectedSlot = sSlot;
-            validSlots =sSlot.func.GetRadiusSlots(sSlot.cont. unit.stats().moveRange,null,true);
+            int moveRange = 0;
+            if(BattleManager.inst.roomLockDown)
+            {moveRange =sSlot.cont. unit.stats().moveRange;}
+            else
+            {moveRange = 99;}
+            validSlots =sSlot.func.GetRadiusSlots(moveRange,null,true);
             if(selectedUnit.side == Side.PLAYER){
             SelectionUI(sSlot);
             }

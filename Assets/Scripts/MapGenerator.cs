@@ -450,9 +450,10 @@ public class MapGenerator : Singleton<MapGenerator>
             yield return new WaitForEndOfFrame();
             SpawnSlots(dict);
             PerimeterSlots();
-             //yield return new WaitForEndOfFrame();
-            
-            BorderSlots();
+            AssignStartEndRooms();
+            yield return new WaitForEndOfFrame();
+            BordersAndDoors();
+            RoomContent();
             foreach (var item in spacers)
             {Destroy(item.gameObject);}
             foreach (var item in gos)
@@ -529,20 +530,44 @@ public class MapGenerator : Singleton<MapGenerator>
                 item.gameObject.SetActive(false);
             }
         }
-        // foreach(var item in perimeterSlots) //remove cornerSlots
-        // { 
-        //     foreach (var rm in MapManager.inst.map.rooms)
-        //     {
-        //         if(rm.slots.Contains(item))
-        //         {rm.slots.Remove(item);}
-        //     }
-        //     MapManager.inst.allSlots.Remove(item);
-        //    // Destroy(item.gameObject);
-        // }
     }
 
 
-    void BorderSlots()
+    void AssignStartEndRooms()
+    {
+        Dictionary<Room,Slot>randomSlotFromEachRoom = new  Dictionary<Room,Slot>();
+        Room startRoom = null;
+        Room endRoom = null;
+        List<Node> n = new List<Node>();
+        foreach (var item in MapManager.inst.map.rooms)
+        {randomSlotFromEachRoom.Add(item,item.slots[Random.Range(0,item.slots.Count)]) ;}
+
+        foreach (var aRoom in randomSlotFromEachRoom)
+        {
+            foreach (var bRoom in randomSlotFromEachRoom)
+            {
+                if(aRoom.Value != bRoom.Value)
+                {
+                    List<Node> a = MapManager.inst.map.aStar.FindPath(aRoom.Value.node,bRoom.Value.node);
+                    if(a.Count > n.Count){
+                        n = new List<Node>(a);
+                        startRoom = aRoom.Value.room;
+                        endRoom = bRoom.Value.room;
+                    }
+                }
+            }
+        }
+
+        MapManager.inst.map.AssignStartEnd(startRoom,endRoom);
+        if(showVisual)
+        {
+            Instantiate(placeholder,startRoom.transform.position,Quaternion.identity).GetComponent<MeshRenderer>().material.color = Color.blue;
+            Instantiate(placeholder,endRoom.transform.position,Quaternion.identity);
+        }
+    }
+
+
+    void BordersAndDoors()
     {
         List<Slot> borderSlots = new List<Slot>();
         foreach (var item in MapManager.inst.map.rooms)
@@ -561,14 +586,12 @@ public class MapGenerator : Singleton<MapGenerator>
                     border.borderID = id;
                     border.roomA = room;
                     border.roomB = bRoom;
+                    room.borders.Add(border);
+                    bRoom.borders.Add(border);
                     border.name = "Border of Rooms " + room.roomID +" and " + bRoom.roomID;
                     borderDict.Add(border.borderID,border);
                     border.GetBorderSlots();
                 }
-
-              
-               
-                
             }
         }
         
@@ -598,12 +621,17 @@ public class MapGenerator : Singleton<MapGenerator>
                 border.walls.Add(w);
                 slot.IsWall();
             }
-
-
-              Door door =  Instantiate(doorPrefab,MiscFunctions.FindCenterOfTransforms(t),Quaternion.identity);
+            Door door =  Instantiate(doorPrefab,MiscFunctions.FindCenterOfTransforms(t),Quaternion.identity);
             door.Init(border,doorSlotA,doorSlotB);
             border.doors.Add(door);
         }
+    }
+
+    public void RoomContent()
+    {
+        foreach (var item in MapManager.inst.map.rooms)
+        {item.AddRoomContent();}
+
     }
     
     public  (Node,Node) FurthestTwoNodes(List<Node> nodeList)
@@ -632,8 +660,8 @@ public class MapGenerator : Singleton<MapGenerator>
         for (int i = 0; i < howManyPartyMembers; i++)
         { UnitFactory.inst. CreatePlayerUnit(shuffle[i]);}
 
-        for (int i = 0; i < howManyEnemies; i++)
-        {UnitFactory.inst. CreateEnemyUnit(MapManager.inst.RandomSlot());}
+        // for (int i = 0; i < howManyEnemies; i++)
+        // {UnitFactory.inst. CreateEnemyUnit(MapManager.inst.RandomSlot());}
     }
    
 }

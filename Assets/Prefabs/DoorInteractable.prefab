@@ -47,9 +47,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds: []
   slot: {fileID: 0}
-  slotContents: {fileID: 11400000, guid: dc4f4b5f06d25a34ab6c37651958a214, type: 2}
+  slotContents: {fileID: 11400000, guid: 8156283415b32b64c977321030e3e88b, type: 2}
   createdByUnit: 0
   interactable: {fileID: 933221020458423254}
+  sotTrigger: 0
 --- !u!114 &933221020458423254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,4 +64,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slot: {fileID: 0}
-  border: {fileID: 0}
+  door: {fileID: 0}
+  open:
+    audioClip: {fileID: 8300000, guid: 361857cdd6c236743a8dd8458fef7105, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
+  close:
+    audioClip: {fileID: 8300000, guid: 861718aaad37338479dfca95f7e79c78, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1

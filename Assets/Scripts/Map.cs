@@ -7,4 +7,10 @@ using System.Linq;
 public class Map : Grid_
 {
     public List<Room> rooms = new List<Room>();
+    public Room startRoom,endRoom;
+
+    public void AssignStartEnd(Room a, Room b){
+        startRoom = a;
+        endRoom = b;
+    }
 }

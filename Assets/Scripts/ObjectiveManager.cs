@@ -41,6 +41,9 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
 
     public bool CheckIfComplete()
     {
+        if(GameManager.inst.doNotGenObjective){
+            return false;
+        }
         bool b = objective.CheckIfComplete();
         if(b){
             BattleManager.inst.Win();

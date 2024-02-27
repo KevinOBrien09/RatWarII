@@ -13,9 +13,8 @@ public class BattleManager : Singleton<BattleManager>
     public Unit currentUnit;
     public int turn;
     public Queue<Unit> turnOrder = new Queue<Unit>();
-    bool looping;
-    public AudioSource music;
-    public bool gameOver;
+    public bool roomLockDown,gameOver,looping;
+    public SoundData roomUnlockSting;
     public string lossReason = "REASON UNCLEAR";
     public void Begin()
     {
@@ -26,6 +25,14 @@ public class BattleManager : Singleton<BattleManager>
     public void NewTurn()
     {
         BattleTicker.inst.Type(BattleManager.inst. TurnState());
+        ResetTurnOrder();
+
+        UnitIteration();
+        turn++;
+    }
+
+    public void ResetTurnOrder(){
+        turnOrder.Clear();
         List<Unit> u = new List<Unit>(allUnits());
         List<Unit> ordered = u.OrderBy(f => f.stats().speed).ToList();
         ordered.Reverse();
@@ -35,9 +42,6 @@ public class BattleManager : Singleton<BattleManager>
             turnOrder.Enqueue(item);
             item. movedThisTurn = false;
         }
-
-        UnitIteration();
-        turn++;
     }
 
     public void EndTurn(){
@@ -63,7 +67,7 @@ public class BattleManager : Singleton<BattleManager>
             {StartCoroutine(q());}
         }
         
-        
+        CheckForUnlock();
         IEnumerator q(){
             
             if(turnOrder.Count > 0)
@@ -127,17 +131,20 @@ public class BattleManager : Singleton<BattleManager>
          
                 if(currentUnit.slot.cont.specialSlot != null)
                 {
-                   // CamFollow.inst.ForceFOV(20);
-                    BattleTicker.inst.Type(currentUnit.slot.cont.specialSlot.slotContents.contentName);
-                    CamFollow.inst.target = currentUnit.slot. transform;
-                    bool willUnitDie = currentUnit.slot.cont.specialSlot.willUnitDie();
-                    yield return new WaitForSeconds(1);
-                    currentUnit.slot.cont.specialSlot.Tick();
-                    yield return new WaitForSeconds(1);
-                    if(willUnitDie){
-                        UnitIteration();
-                        yield break;
+                    if(currentUnit.slot.cont.specialSlot.sotTrigger){
+                        BattleTicker.inst.Type(currentUnit.slot.cont.specialSlot.slotContents.contentName);
+                        CamFollow.inst.target = currentUnit.slot. transform;
+                        bool willUnitDie = currentUnit.slot.cont.specialSlot.willUnitDie();
+                        yield return new WaitForSeconds(1);
+                        currentUnit.slot.cont.specialSlot.Tick();
+                        yield return new WaitForSeconds(1);
+                        if(willUnitDie){
+                            UnitIteration();
+                            yield break;
+                        }
                     }
+                   // CamFollow.inst.ForceFOV(20);
+                   
                    
                  
 
@@ -216,6 +223,17 @@ public class BattleManager : Singleton<BattleManager>
         }
     }
 
+    void CheckForUnlock(){
+        if(enemyUnits.Count ==0 && roomLockDown)
+        {
+            MapManager.inst.OpenRoomsFromLockdown();
+            MusicManager.inst.ChangeMusic(MusicManager.inst.peace);
+            AudioManager.inst.GetSoundEffect().Play(roomUnlockSting);
+            roomLockDown = false;
+           
+        }
+    }
+
     public bool playerLose()
     {
         bool b = playerUnits.Count == 0;
@@ -229,7 +247,7 @@ public class BattleManager : Singleton<BattleManager>
     public void Lose()
     {
         BattleTicker.inst.Type(lossReason);
-        music.DOFade(0,1);
+        MusicManager.inst.source.DOFade(0,1);
     }
 
     public void StatusEffectLoop(Unit u) //THIS IS BAAADDDD

@@ -10,6 +10,7 @@ public class SpecialSlot : MonoBehaviour
     public SlotContents slotContents;
     public bool createdByUnit;
     public Interactable interactable;
+    public bool sotTrigger;
     
     public virtual void Tick(){
 

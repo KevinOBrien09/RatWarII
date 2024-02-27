@@ -6,7 +6,7 @@ public enum GameState{PLAYERHOVER,PLAYERUI,PLAYERSELECT, UNITMOVE,ENEMYTURN,INTE
 public class GameManager : Singleton<GameManager>
 {
     public GameState currentGameState;
-    
+    public bool doNotGenObjective;
     public void Start()
     {
         GameInit();
@@ -22,19 +22,17 @@ public class GameManager : Singleton<GameManager>
         {
             while(MapGenerator.inst.generating)
             {yield return null;}
-           MapManager.inst.  ChangeRoom(   MapManager.inst.map.rooms[0]);
-            ObjectiveManager.inst.GenerateObjective();
+           MapManager.inst.InitStartRoom();
+            if(!doNotGenObjective){
+                ObjectiveManager.inst.GenerateObjective();
+            }
+            
             MapGenerator.inst. CreateStartingUnits();
             BattleManager.inst.Begin();
             BlackFade.inst.FadeOut();
        }
-      
-      
     }
-
-
     
-  
     public void ChangeGameState(GameState newGameState)
     {
         currentGameState = newGameState;

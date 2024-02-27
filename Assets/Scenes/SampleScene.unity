@@ -372,7 +372,7 @@ MonoBehaviour:
     keyCollision: 0
   generatorAstar: {fileID: 56964770}
   mapGrid: {fileID: 56964769}
-  howManyPartyMembers: 2
+  howManyPartyMembers: 3
   howManyEnemies: 3
   spikeSlotPrefab: {fileID: 3119150678241855687, guid: 263a027136c805045bbbe43cda3a4eae,
     type: 3}
@@ -2973,6 +2973,7 @@ GameObject:
   m_Component:
   - component: {fileID: 606008523}
   - component: {fileID: 606008524}
+  - component: {fileID: 606008525}
   m_Layer: 0
   m_Name: Music
   m_TagString: Untagged
@@ -3006,7 +3007,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 4fe648304d2f42747a571e2213bb0880, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.4
   m_Pitch: 1
   Loop: 1
@@ -3091,6 +3092,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &606008525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606008522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e906b623dd63725449da99da1f1c73da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battle: {fileID: 8300000, guid: 4fe648304d2f42747a571e2213bb0880, type: 3}
+  peace: {fileID: 8300000, guid: 0205a8e916ec0ba4abd77a54b239f71c, type: 3}
+  source: {fileID: 606008524}
 --- !u!1 &607998140
 GameObject:
   m_ObjectHideFlags: 0
@@ -3958,6 +3974,8 @@ MonoBehaviour:
   iGridSizeX: 0
   iGridSizeY: 0
   rooms: []
+  startRoom: {fileID: 0}
+  endRoom: {fileID: 0}
 --- !u!1 &754081148
 GameObject:
   m_ObjectHideFlags: 0
@@ -5442,6 +5460,10 @@ MonoBehaviour:
   roomPrefab: {fileID: 0}
   doorPrefab: {fileID: 6716664992404773423, guid: 0f79c616be813194a93256b870deba75,
     type: 3}
+  enemySpawnHit:
+    audioClip: {fileID: 8300000, guid: ce7665f6162a3b04bbf676ed5dc9a0a4, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 1
 --- !u!4 &1147397646
 Transform:
   m_ObjectHideFlags: 0
@@ -5496,6 +5518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentGameState: 1
+  doNotGenObjective: 1
 --- !u!114 &1147397649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5525,8 +5548,13 @@ MonoBehaviour:
   neutralUnits: []
   currentUnit: {fileID: 0}
   turn: 0
-  music: {fileID: 606008524}
+  roomLockDown: 0
   gameOver: 0
+  looping: 0
+  roomUnlockSting:
+    audioClip: {fileID: 8300000, guid: ce7665f6162a3b04bbf676ed5dc9a0a4, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 0.8
   lossReason: REASON UNCLEAR
 --- !u!114 &1147397651
 MonoBehaviour:

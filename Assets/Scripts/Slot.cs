@@ -13,7 +13,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public Room room;
     public Transform rayShooter;
     public Color32 normalColour,moveColour,interactColour,skillColour;
-    public bool dormant;
+    public bool dormant,marked;
 
     void Awake()
     {

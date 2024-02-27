@@ -177,7 +177,7 @@ public class Unit : MonoBehaviour
     }
 
     public int BleedDamage(int howManyBleeds){
-float percent = (10f / 100f) * (float) health.maxHealth;
+float percent = (5f / 100f) * (float) health.maxHealth;
         int bleed = 0;
         for (int i = 0; i < howManyBleeds; i++)
         {bleed += (int)percent;}

@@ -2,17 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
+
+public class EnemySpawnData{
+    public DefinedCharacter enemy;
+    public Slot spawnSlot;
+}
 
 [System.Serializable]
 public class Room : MonoBehaviour
 {
+    public enum Content{EMPTY, ENEMY}
     public int roomID;
     public GenerationRoomType roomType;
     public List<Slot> slots = new List<Slot>();
     public List<Border> borders = new List<Border>();
     public List<Room> borderRooms = new List<Room>();
     TextMeshPro tmp;
+    public bool lockDown;
+    public Room.Content roomContent;
+    public List<EnemySpawnData> enemySpawnData = new List<EnemySpawnData>();
     public GenericDictionary<Direction,List<Wall>> wallDict = new GenericDictionary<Direction, List<Wall>>();
+    bool contentMade;
     public void Init(int i)
     {
         wallDict.Add(Direction.UP,new List<Wall>());
@@ -26,6 +37,61 @@ public class Room : MonoBehaviour
         transform.SetParent(MapManager.inst.map.transform);
 
     }
+    
+    public void AddRoomContent()
+    {
+        if(roomType == GenerationRoomType.SIDEHALL | roomType == GenerationRoomType.VERTHALL)
+        {roomContent = Room.Content.EMPTY;}
+        else
+        {AddEnemies();}
+    }
+
+
+    void AddEnemies(){
+        roomContent = Room.Content.ENEMY;
+        int howManyEnemies = 0;
+        switch (roomType)
+        {
+            case GenerationRoomType.NORMAL:
+            howManyEnemies = 3;
+            break;
+            case GenerationRoomType.BIG:
+            howManyEnemies = 9;
+            break;
+            case GenerationRoomType.HORIDOUBLE:
+            howManyEnemies = 6;
+            break;
+            case GenerationRoomType.VERTDOUBLE:
+            howManyEnemies = 6;
+            break;
+            
+            default:
+            howManyEnemies = 0;
+            Debug.LogAssertion("DEFAULT CASE!!!");
+            break;
+        }
+        List<Slot> enemySlots = new List<Slot>();
+        List<Slot> Xd = new List<Slot>(slots);
+       
+        System.Random rng = new System.Random();
+        foreach (var item in Xd.OrderBy(_ => rng.Next()).ToList())
+        {
+            if(item.cont.specialSlot == null)
+            {
+                if(item.cont.walkable() && !item.marked)
+                {enemySlots.Add(item); }
+            }
+        }
+
+        for (int i = 0; i < howManyEnemies; i++)
+        {
+            EnemySpawnData esd = new EnemySpawnData();
+            esd.enemy = UnitFactory.inst.enemies[Random.Range(0, UnitFactory.inst.enemies.Count)];
+            esd.spawnSlot = enemySlots[i];
+            enemySpawnData.Add(esd);
+        }
+    }
+
     public void GetBorderRooms()
     {
         foreach (var item in slots)
@@ -43,21 +109,30 @@ public class Room : MonoBehaviour
         }
     }
 
-    // public void GetBorderRooms()
-    // {
-    //     foreach (var item in slots)
-    //     {
-    //         foreach (var slot in item.func.GetNeighbouringSlots())
-    //         {
-    //             if(slot.room != this)
-    //             {
-    //                 if(!borderRooms.Contains(slot.room))
-    //                 {
-    //                     borderRooms.Add(slot.room);
-    //                 }
-    //             }
-    //         }  
-    //     }
-    // }
+
+    public Slot RandomSlot()
+    {
+        List<Slot> Xd = new List<Slot>(slots);
+       
+        System.Random rng = new System.Random();
+        
+        foreach (var item in Xd.OrderBy(_ => rng.Next()).ToList())
+        {
+            if(item.cont.specialSlot == null){
+                if(item.cont.walkable() && !item.marked)
+                {
+                    return item;
+                }
+            }
+            
+            
+        }
+
+        return null;
+
+        
+    }
+
+   
   
 }
