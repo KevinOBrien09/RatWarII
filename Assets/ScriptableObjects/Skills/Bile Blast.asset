@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 474ee8e8-de55-4970-be05-94668f74df69
   skillName: Bile Blast
-  desc: 
+  desc: Deals 5 DMG and <i>weakens</i> the targert.
   effects: []
   side: 0
   skillCastBehaviour: {fileID: 3133317868190428679, guid: c1b48f8e1132f9143a2306ddc07a0469,

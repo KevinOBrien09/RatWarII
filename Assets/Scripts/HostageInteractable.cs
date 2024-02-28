@@ -12,10 +12,7 @@ public class HostageInteractable : Interactable
         BattleTicker.inst.Type("Freed Hostage!");
          ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" + "Escort the hostage to safety!" );
         Kill();
-        foreach (var item in MapManager.inst.HostageSlots())
-        {
-            item.ActivateAreaIndicator(Color.cyan);
-        }
+       
         BattleManager.inst. StartCoroutine(q());
         IEnumerator q()
         {

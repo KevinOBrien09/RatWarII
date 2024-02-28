@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unit: {fileID: 0}
   aiMove: 0
-  runAwayThreshhold: 30
+  runAwayThreshhold: 50
   enemyState: 0
   poi: {fileID: 0}
   loc: {fileID: 0}

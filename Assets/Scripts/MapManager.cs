@@ -6,41 +6,24 @@ using System.Linq;
 
 public class MapManager : Singleton<MapManager>
 {
-
     public Map map;
     public List<Slot> allSlots = new List<Slot>();
-    public Transform gridHolder;
     public Room currentRoom;
-    public Room roomPrefab;
-    public Door doorPrefab;
     public SoundData enemySpawnHit;
-    float padding =5;
+    public bool doNotSpawnEnemies;
+   
     
-    // public void SpawnRoom(DungeonNode dungeonNode)
-    // {
-    //     string roomName = "Room:" + rooms.Count;
-    //     Room room = Instantiate(roomPrefab);
-    //     room.transform.name = roomName;
-    //     room.transform.position = dungeonNode.spawnPoint.position;
-    //     room.transform.SetParent(gridHolder);
-    //     //room.Create(roomName,dungeonNode.roomType);
-    //     rooms.Add(room);
 
-       
-      
-       
-    // }
-
-    public void InitStartRoom(){
+    public void InitStartRoom()
+    {
         currentRoom = map.startRoom;
         currentRoom.lockDown = false;
         foreach (var item in currentRoom.borders)
         {
             foreach (var d in item.doors)
-            {
-                d.metalFence.gameObject.SetActive(false);
-            }
+            {d.metalFence.gameObject.SetActive(false); }
         }
+        currentRoom.roomClear = true;
         MusicManager.inst.ChangeMusic( MusicManager.inst.peace);
         HideInactiveRooms();
     }
@@ -63,6 +46,21 @@ public class MapManager : Singleton<MapManager>
         StartCoroutine(q());
         IEnumerator q()
         {
+            if(ObjectiveManager.inst.objective.objectiveEnum == Objective.ObjectiveEnum.HOSTAGE)
+            {
+                if(ObjectiveManager.inst.hostageInPlayerPossession())
+                {
+                    if(currentRoom == map.startRoom)
+                    {
+                        foreach (var item in HostageSlots())
+                        {
+                            item.ActivateAreaIndicator( new Color32(0,255,255,55));
+                        }
+                    }
+                 
+                }
+         
+            }
 
             yield return new WaitForSeconds(.65f);
             CamFollow.inst.enabled = true;
@@ -72,31 +70,40 @@ public class MapManager : Singleton<MapManager>
             {BattleManager.inst.playerUnits[i].graphic.gameObject.SetActive(true);}
             
             yield return new WaitForSeconds(.3f);
+           
 
+            
             if(currentRoom.roomContent == Room.Content.ENEMY)
             {
-                CamFollow.inst.Focus(currentRoom.transform,(()=>
+                if(!currentRoom.roomClear && !doNotSpawnEnemies)
                 {
-                  
-                    StartCoroutine(spawnEnemies());
-                    IEnumerator spawnEnemies()
-                    {  
-                       
-                        LockDownRooms();
-                        BattleManager.inst.roomLockDown = true;
-                        BattleTicker.inst.Type("Enemies have appeared!");
-                        foreach (var item in currentRoom.enemySpawnData)
-                        {UnitFactory.inst. CreateEnemyUnit(item.spawnSlot,item.enemy);}
-                        
-                        AudioManager.inst.GetSoundEffect().Play(enemySpawnHit);
-                        MusicManager.inst.ChangeMusic( MusicManager.inst.battle);
-                        yield return new WaitForSeconds(1f);
-                        BattleManager.inst.ResetTurnOrder();
-                        BattleManager.inst.EndTurn();
-                    }
+                    CamFollow.inst.Focus(currentRoom.transform,(()=>
+                    {
                     
-                
-                }));
+                        StartCoroutine(spawnEnemies());
+                        IEnumerator spawnEnemies()
+                        {  
+                        
+                            LockDownRooms();
+                            BattleManager.inst.roomLockDown = true;
+                            BattleTicker.inst.Type("Enemies have appeared!");
+                            foreach (var item in currentRoom.enemySpawnData)
+                            {UnitFactory.inst. CreateEnemyUnit(item.spawnSlot,item.enemy);}
+                            
+                            AudioManager.inst.GetSoundEffect().Play(enemySpawnHit);
+                            MusicManager.inst.ChangeMusic( MusicManager.inst.battle);
+                            yield return new WaitForSeconds(1f);
+                            BattleManager.inst.ResetTurnOrder();
+                            BattleManager.inst.EndTurn();
+                        }
+                            
+                        
+                    }));
+                }
+                else{
+                    currentRoom.roomClear = true;
+                    BattleManager.inst.EndTurn();
+                }
             }
             else if(currentRoom.roomContent == Room.Content.EMPTY)
             {
@@ -148,9 +155,7 @@ public class MapManager : Singleton<MapManager>
     }
 
     public bool slotBelongsToGrid(Slot s)
-    {
-        return currentRoom.slots.Contains(s);
-    }
+    {return currentRoom.slots.Contains(s); }
 
     public bool nodeIsValid(Vector2 v)
     {
@@ -180,9 +185,19 @@ public class MapManager : Singleton<MapManager>
 
     public List<Slot> HostageSlots()
     {
-        Slot center =MapManager.inst.map.NodeArray[2,2].slot;
-        List<Slot> radius =  center.func.GetRadiusSlots(1,CharacterBuilder.inst.mandatorySkills[0],false);
-        radius.Add(center);
+      
+        Collider[] c = Physics.OverlapSphere(MapManager.inst.map.startRoom.transform.position,3);
+        Slot s = null;
+        foreach (var item in c)
+        {
+            if(item.TryGetComponent<Slot>(out s))
+            {break;}
+        }
+        if(s == null)
+        {s = MapManager.inst.map.startRoom.RandomSlot();}
+    
+        List<Slot> radius = s.func.GetRadiusSlots(2,CharacterBuilder.inst.mandatorySkills[0],false);
+        radius.Add(s);
         System.Random rng = new System.Random();
         return radius.OrderBy(_ => rng.Next()).ToList();
 
@@ -196,17 +211,13 @@ public class MapManager : Singleton<MapManager>
         
         foreach (var item in Xd.OrderBy(_ => rng.Next()).ToList())
         {
-            if(item.cont.specialSlot == null){
-if(item.cont.walkable()){
-                return item;
+            if(item.cont.specialSlot == null)
+            {
+                if(item.cont.walkable() && item.cont.unit == null && !item.marked){
+                    return item;
+                }
             }
-            }
-            
-            
         }
-
         return null;
-
-        
     }
 }

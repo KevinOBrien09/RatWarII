@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/GenTest.unity
     guid: 77d42f1f3cab2ed408c4770ba5c04578
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/Arena.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects: {}

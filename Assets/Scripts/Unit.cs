@@ -116,6 +116,9 @@ public class Unit : MonoBehaviour
                             ActionMenu.inst.Reset();
                             ActionMenu.inst.Show(this.slot);
                         }
+                        else{
+                            BattleManager.inst.Win();
+                        }
                     }
                     else
                     {
@@ -223,8 +226,9 @@ float percent = (5f / 100f) * (float) health.maxHealth;
             }
             if(side == Side.ENEMY){
                 if(ObjectiveManager.inst.objective.objectiveEnum == Objective.ObjectiveEnum.CLEARAREA){
+                    ObjectiveManager.inst.CheckIfComplete();
                     int i =BattleManager.inst.enemyUnits.Count-1 ;
-   ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" + i + " Left!" );
+                    ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" + i + " Left!" );
                 }
             }
             dead = true;

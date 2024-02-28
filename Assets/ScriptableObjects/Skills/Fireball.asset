@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: 0fd488a8-0b00-4a6c-80cc-4e22e1d6c36c
   skillName: Fireball
   desc: 'Launch a fireball inflicting 5 DMG to <u>all units</u> in its trajectory.
-    Upon reaching its target it explodes dealing 20 DMG. '
+    Upon reaching its target it explodes dealing 15 DMG. '
   effects: []
   side: 0
   skillCastBehaviour: {fileID: 852672454136546561, guid: 340d355117f14394a9738fd3932f61bf,

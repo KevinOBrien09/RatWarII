@@ -19,7 +19,7 @@ public class Room : MonoBehaviour
     public List<Border> borders = new List<Border>();
     public List<Room> borderRooms = new List<Room>();
     TextMeshPro tmp;
-    public bool lockDown;
+    public bool lockDown,roomClear;
     public Room.Content roomContent;
     public List<EnemySpawnData> enemySpawnData = new List<EnemySpawnData>();
     public GenericDictionary<Direction,List<Wall>> wallDict = new GenericDictionary<Direction, List<Wall>>();
@@ -41,7 +41,8 @@ public class Room : MonoBehaviour
     public void AddRoomContent()
     {
         if(roomType == GenerationRoomType.SIDEHALL | roomType == GenerationRoomType.VERTHALL)
-        {roomContent = Room.Content.EMPTY;}
+        {roomContent = Room.Content.EMPTY;
+        roomClear = true;}
         else
         {AddEnemies();}
     }
@@ -67,6 +68,7 @@ public class Room : MonoBehaviour
             
             default:
             howManyEnemies = 0;
+            roomClear = true;
             Debug.LogAssertion("DEFAULT CASE!!!");
             break;
         }

@@ -16,6 +16,10 @@ public class BattleManager : Singleton<BattleManager>
     public bool roomLockDown,gameOver,looping;
     public SoundData roomUnlockSting;
     public string lossReason = "REASON UNCLEAR";
+
+    public void Start(){
+        GameManager.inst.GameInit();
+    }
     public void Begin()
     {
         ToggleHealthBars(false);
@@ -63,11 +67,12 @@ public class BattleManager : Singleton<BattleManager>
         {Lose();}
         else
         {
+            CheckForUnlock();
             if(!ObjectiveManager.inst.CheckIfComplete())
             {StartCoroutine(q());}
         }
         
-        CheckForUnlock();
+     
         IEnumerator q(){
             
             if(turnOrder.Count > 0)
@@ -227,6 +232,7 @@ public class BattleManager : Singleton<BattleManager>
         if(enemyUnits.Count ==0 && roomLockDown)
         {
             MapManager.inst.OpenRoomsFromLockdown();
+            MapManager.inst.currentRoom.roomClear = true;
             MusicManager.inst.ChangeMusic(MusicManager.inst.peace);
             AudioManager.inst.GetSoundEffect().Play(roomUnlockSting);
             roomLockDown = false;

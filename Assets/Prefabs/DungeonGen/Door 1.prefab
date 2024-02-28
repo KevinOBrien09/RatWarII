@@ -181,7 +181,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1382260240876057745
 Transform:
   m_ObjectHideFlags: 0
@@ -421,6 +421,8 @@ MonoBehaviour:
   doorHolder: {fileID: 283650602811933435}
   triggerSlots: []
   metalFence: {fileID: 4026344334407370420}
+  currentSpecialSlot: {fileID: 0}
+  spawnVisual: 0
 --- !u!1 &6371734491113479763
 GameObject:
   m_ObjectHideFlags: 0

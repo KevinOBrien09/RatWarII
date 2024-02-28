@@ -12,11 +12,16 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
     public List<HostageData> hostageDatas = new List<HostageData>();
     public List<RetrevialData> retrevialDatas = new List<RetrevialData>();
     public SpecialSlot hostageInteractablePrefab;
+    public bool predecideObjective;
+    public Objective.ObjectiveEnum predecidedObjective;
     public void GenerateObjective()
     {
         objective = new Objective();
-        Objective.ObjectiveEnum oe = Objective.ObjectiveEnum.CLEARAREA;
-        // MiscFunctions.RandomEnumValue<Objective.ObjectiveEnum>();
+        Objective.ObjectiveEnum oe;
+        if(predecideObjective)
+        {oe = predecidedObjective;}
+        else
+        {oe =  MiscFunctions.RandomEnumValue<Objective.ObjectiveEnum>();}
         switch (oe)
         {
             case Objective.ObjectiveEnum.CLEARAREA:
@@ -41,14 +46,17 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
 
     public bool CheckIfComplete()
     {
-        if(GameManager.inst.doNotGenObjective){
-            return false;
-        }
+        if(GameManager.inst.doNotGenObjective)
+        { return false;}
         bool b = objective.CheckIfComplete();
         if(b){
             BattleManager.inst.Win();
         }
         return b;
+    }
+
+    public bool hostageInPlayerPossession(){
+       return BattleManager.inst.playerUnits.Contains(ObjectiveManager.inst.objective.hostageUnit);
     }
 }
 

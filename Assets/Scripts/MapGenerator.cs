@@ -204,13 +204,9 @@ public class MapGenerator : Singleton<MapGenerator>
 
                 if(canMakeSideHallway)
                 {
-                   
                     dungDict[og].MarkAsSideHallway();
                     lunch.Add(og);
-                    
                     foundHallway = true;
-                    
-                
                 }
 
                 if(canMakeVertHallway)
@@ -218,7 +214,6 @@ public class MapGenerator : Singleton<MapGenerator>
                     dungDict[og].MarkAsVertHallway();
                     lunch.Add(og);
                     foundHallway = true;
-                    
                 }
 
 
@@ -340,16 +335,15 @@ public class MapGenerator : Singleton<MapGenerator>
                     {
                         if(dungDict[og].roomType == GenerationRoomType.NORMAL && dungDict[left].roomType == GenerationRoomType.NORMAL)
                         {
-                            if(Random.Range(0,3 ) ==1){
-                                 dungDict[og].MarkAsHORIDouble(dungDict[left]);
-                            dinner.Add(dungDict[left]);
-                            dungDict.Remove(og);
-                            dungDict.Remove(left);
+                            if(Random.Range(0,3 ) ==1)
+                            {
+                                dungDict[og].MarkAsHORIDouble(dungDict[left]);
+                                dinner.Add(dungDict[left]);
+                                dungDict.Remove(og);
+                                dungDict.Remove(left);
                             }
-                           
                         }
                     }
-
                 }
 
                 if(dungDict.ContainsKey(right) && dungDict.ContainsKey(og)) 
@@ -366,10 +360,8 @@ public class MapGenerator : Singleton<MapGenerator>
                             }
                         }
                     }
-
                 }
-
-
+                
                 if(dungDict.ContainsKey(up) && dungDict.ContainsKey(og)) 
                 {
                     if(item.roomType == GenerationRoomType.NORMAL)
@@ -387,7 +379,7 @@ public class MapGenerator : Singleton<MapGenerator>
 
                 }
 
-                 if(dungDict.ContainsKey(down) && dungDict.ContainsKey(og)) 
+                if(dungDict.ContainsKey(down) && dungDict.ContainsKey(og)) 
                 {
                     if(item.roomType == GenerationRoomType.NORMAL)
                     {
@@ -417,10 +409,6 @@ public class MapGenerator : Singleton<MapGenerator>
                 Destroy(item. gameObject);
             }
         }
-       
-           
-    
-        
     }
 
     public void SpawnSpacers()
@@ -462,8 +450,6 @@ public class MapGenerator : Singleton<MapGenerator>
             MapManager.inst.map.UpdateGrid();
             generating = false;
         }
-     
-       
     }
 
     void SpawnSlots(  Dictionary<GameObject,Room> dict)

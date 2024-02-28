@@ -9,11 +9,11 @@ public class GameManager : Singleton<GameManager>
     public bool doNotGenObjective;
     public void Start()
     {
-        GameInit();
+        //GameInit();
        
     }
 
-    void GameInit()
+    public void GameInit()
     {
        // MapManager.inst.grid.InitGrid();
         MapGenerator.inst.Generate();

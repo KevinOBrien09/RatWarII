@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 
 [System.Serializable]
 public class Objective 
@@ -10,7 +10,7 @@ public class Objective
     public ObjectiveEnum objectiveEnum;
     public int currentRetrevial,targetRetrevial;
     public Unit hostageUnit;
-    List<Slot> hostageUnitDestSlots = new List<Slot>();
+   public List<Slot> hostageUnitDestSlots = new List<Slot>();
     public void SetUp(ObjectiveData objectiveData)
     {
         objectiveEnum = objectiveData.objectiveEnum;
@@ -20,7 +20,8 @@ public class Objective
             break;
             case ObjectiveEnum.HOSTAGE:
             HostageData hd = objectiveData as HostageData;
-            Slot s1 = MapManager.inst.RandomSlot();
+            Slot s1 = MapManager.inst.map.endRoom. RandomSlot();
+            s1.marked = true;
             hostageUnit = UnitFactory.inst.CreateNPC(s1,hd.npc);
             
             hostageUnit.isHostage = true;
@@ -29,9 +30,17 @@ public class Objective
             break;
             case ObjectiveEnum.RETRIEVAL:
             targetRetrevial = 3;
-            for (int i = 0; i < 3; i++)
-            {
-                Slot s2 = MapManager.inst.RandomSlot();
+            List<Room> r = new List<Room>(MapManager.inst.map.rooms);
+            r.Remove(MapManager.inst.map.startRoom);
+            r.Remove(MapManager.inst.map.endRoom);
+            CreateRetrievalObject(MapManager.inst.map.endRoom);
+            System.Random rng = new System.Random();
+            r.OrderBy(_ => rng.Next()).ToList();
+            for (int i = 0; i < 2; i++)
+            {CreateRetrievalObject(r[i]);}
+
+            void CreateRetrievalObject(Room r){
+                Slot s2 = r.RandomSlot();
                 
                 RetrevialData rd = objectiveData as RetrevialData;
                 s2.MakeSpecial(rd.prefab.GetComponent<SpecialSlot>());
@@ -50,12 +59,19 @@ public class Objective
         switch (objectiveEnum)
         {
             case ObjectiveEnum.CLEARAREA:
-            return BattleManager.inst.enemyUnits.Count <= 0;
+            List<bool> roomsCleared = new List<bool>();
+            foreach (var item in MapManager.inst.map.rooms)
+            {roomsCleared.Add(item.roomClear);}
+            if(!roomsCleared.Contains(false))
+            {return true;}
+            else
+            {return false; }
+            
             case ObjectiveEnum.HOSTAGE:
             return hostageUnitDestSlots.Contains(hostageUnit.slot);
             case ObjectiveEnum.RETRIEVAL:
             
-            return currentRetrevial >= targetRetrevial;
+            return currentRetrevial >= targetRetrevial && MapManager.inst.currentRoom.roomClear;
             
             
             
