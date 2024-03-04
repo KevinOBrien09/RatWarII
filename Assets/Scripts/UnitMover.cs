@@ -80,7 +80,7 @@ public class UnitMover : Singleton<UnitMover>
     
     public void ExitSelectionMode()
     {
-        if(CamFollow.inst.CheckCameraState(CameraState.FOCUS))
+        if(CamFollow.inst.CheckCameraState(CameraState.FOCUS)|BattleManager.inst.gameOver)
         {return; }
 
         if( GameManager.inst.checkGameState(GameState.ENEMYTURN) || GameManager.inst.checkGameState(GameState.PLAYERSELECT)||GameManager.inst.checkGameState(GameState.UNITMOVE) && !inCoro)
@@ -137,7 +137,7 @@ public class UnitMover : Singleton<UnitMover>
 
     void LateUpdate()
     {
-        if(GameManager.inst.checkGameState(GameState.PLAYERSELECT) && !inCoro && !ActionMenu.inst.FUCKOFF)
+        if(GameManager.inst.checkGameState(GameState.PLAYERSELECT) && !inCoro && !ActionMenu.inst.FUCKOFF && !SkillAimer.inst.castDecided)
         {
             if(InputManager.inst.player. GetButtonDown("Cancel"))
             {

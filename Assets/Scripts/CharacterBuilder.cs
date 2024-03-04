@@ -10,10 +10,13 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     public GenericDictionary<Job,StartingStats> jobDict = new GenericDictionary<Job,StartingStats>();
     public GenericDictionary<Species,List<Skill>> speciesSkill = new GenericDictionary<Species,List<Skill>>();
     public GenericDictionary<Species,CharacterSounds> sfxDict = new GenericDictionary<Species, CharacterSounds>();
+     public GenericDictionary<Species,Sprite> female = new GenericDictionary<Species, Sprite>();
+    public GenericDictionary<Species,GenericDictionary<Job,List<Sprite>>> classVarients = new GenericDictionary<Species, GenericDictionary<Job, List<Sprite>>>();
     public List<Skill> mandatorySkills = new List<Skill>();
     public List<Skill> allSkills = new List<Skill>();
     public bool addAllSkills;
-    public CharacterGraphic Generate()
+
+    public Character GenerateCharacter()
     {
         Character character = new Character();
         character.species = MiscFunctions.RandomEnumValue<Species>();
@@ -21,14 +24,24 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         character.exp = new EXP();
         character.exp.level = 1;
         character.gender = GetGender();   
-        character.spriteVarient = characerGraphicPrefab.GetRandomSpriteVar(character);
-        CharacterGraphic cg =  Instantiate(characerGraphicPrefab,Vector3.zero,Quaternion.identity);
+        character.spriteVarient = GetRandomSpriteVar(character);
         character.characterName = nameDict[character.species].GenName(character);
-        cg.Init(character);
-        cg.character = character;
-        //currentChar = cg;
+        (Stats stats,List<Skill> skills ) statsAndSkills = CharacterBuilder.inst.GenerateStatsAndSkills(CharacterBuilder.inst.jobDict[character.job],character);
+        character.baseStats = statsAndSkills.stats;
+        character.skills = new List<Skill>( statsAndSkills.skills);
+        return character;
+    }
+    public CharacterGraphic GenerateGraphic(Character c)
+    {
+        CharacterGraphic cg =  Instantiate(characerGraphicPrefab,Vector3.zero,Quaternion.identity);
+        cg.Init(c);
+        cg.character = c;
         return cg;
     }
+
+
+    public int GetRandomSpriteVar(Character c)
+    {return  Random.Range(0,classVarients[c.species][c.job].Count);}
 
     public CharacterGraphic GenerateEnemy(DefinedCharacter e){
         Character character = new Character();

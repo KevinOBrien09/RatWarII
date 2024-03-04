@@ -11,7 +11,7 @@ public class RetrevialableObject : Interactable
     {
         int i = ObjectiveManager.inst.objective.currentRetrevial+1;
         ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" +  i + "/"+ObjectiveManager.inst.objective.targetRetrevial);
-        BattleTicker.inst.Type("Found a cube! ");
+        BattleTicker.inst.Type("Found an acorn! ");
         ObjectiveManager.inst.objective.currentRetrevial++;
         if(!ObjectiveManager.inst.CheckIfComplete())
         {BattleManager.inst. StartCoroutine(q());}

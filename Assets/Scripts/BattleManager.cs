@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class BattleManager : Singleton<BattleManager>
 {
@@ -14,11 +15,18 @@ public class BattleManager : Singleton<BattleManager>
     public int turn;
     public Queue<Unit> turnOrder = new Queue<Unit>();
     public bool roomLockDown,gameOver,looping;
+    public GameObject questComplete;
     public SoundData roomUnlockSting;
     public string lossReason = "REASON UNCLEAR";
-
-    public void Start(){
+    public bool skipFadeIn;
+    public IEnumerator Start(){
+        if(!skipFadeIn){
+        BlackFade.inst.fade.DOFade(1,0);
+        yield return new WaitForSeconds(1);
+        }
+       
         GameManager.inst.GameInit();
+       
     }
     public void Begin()
     {
@@ -59,6 +67,14 @@ public class BattleManager : Singleton<BattleManager>
 
     public void Win(){
         BattleTicker.inst.Type("Win");
+        gameOver = true;
+        Party.inst.AddGold(350);
+        Cursor.lockState = CursorLockMode.Confined;
+        questComplete.SetActive(true);
+    }
+
+    public void LeaveScene(){
+SceneManager.LoadScene("Hub");
     }
 
     public void UnitIteration()

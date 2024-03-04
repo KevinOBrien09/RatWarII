@@ -6,23 +6,35 @@ public enum GameState{PLAYERHOVER,PLAYERUI,PLAYERSELECT, UNITMOVE,ENEMYTURN,INTE
 public class GameManager : Singleton<GameManager>
 {
     public GameState currentGameState;
-    public bool doNotGenObjective;
+    public Objective.ObjectiveEnum chosenObjective;
+    public bool doNotGenObjective,chosenQuest;
     public void Start()
     {
         //GameInit();
        
     }
 
+    public void LoadQuest(Objective.ObjectiveEnum o)
+    {
+        chosenObjective = o;
+        chosenQuest = true;
+    }
+
     public void GameInit()
     {
        // MapManager.inst.grid.InitGrid();
+
         MapGenerator.inst.Generate();
-        StartCoroutine(q());
+        
+    }
+
+    public void GameSetUp(){
+StartCoroutine(q());
         IEnumerator q()
         {
             while(MapGenerator.inst.generating)
             {yield return null;}
-           MapManager.inst.InitStartRoom();
+            MapManager.inst.InitStartRoom();
             if(!doNotGenObjective){
                 ObjectiveManager.inst.GenerateObjective();
             }

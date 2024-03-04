@@ -77,7 +77,7 @@ public class ActionMenu : Singleton<ActionMenu>
     }
     
     void Update(){
-        if(GameManager.inst.checkGameState(GameState.ENEMYTURN)){
+        if(GameManager.inst.checkGameState(GameState.ENEMYTURN) | BattleManager.inst.gameOver){
             return;
         }
        if(!FUCKOFF)

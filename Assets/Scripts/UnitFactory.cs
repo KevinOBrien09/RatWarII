@@ -10,18 +10,32 @@ public class UnitFactory : Singleton<UnitFactory>
 {
     public Unit unitPrefab;
     public List<DefinedCharacter> enemies = new List<DefinedCharacter>();
-
-    public Unit CreatePlayerUnit(Slot slot)
+    public bool debug;
+    public Unit CreatePlayerUnit(Slot slot,Character c = null)
     {
 
         Unit u =  Instantiate(unitPrefab);
-        CharacterGraphic graphic =  CharacterBuilder.inst.Generate();
+        Character character = null;
+        if(c != null)
+        {
+            character = c;
+        }
+        else if(c == null && debug)
+        {
+            character = CharacterBuilder.inst.GenerateCharacter();
+            Debug.Log("Generated:" + character.characterName.firstName);
+        }
+        else if(c == null && !debug)
+        {
+            Debug.LogAssertion("Character is null, Not generating character because not in debug mode.");
+            return null;
+        }
+
+        CharacterGraphic graphic =  CharacterBuilder.inst.GenerateGraphic(character);
         u.character = graphic.character;
         graphic.unit = u;
         u.side = Side.PLAYER;
-       (Stats stats,List<Skill> skills ) statsAndSkills = CharacterBuilder.inst.GenerateStatsAndSkills(CharacterBuilder.inst.jobDict[u.character.job],u.character);
-        u.character.baseStats = statsAndSkills.stats;
-        u.character.skills = new List<Skill>( statsAndSkills.skills);
+      
         u.RecieveGraphic(graphic);
         u.health.Init(u.stats().hp);
         u.gameObject.name = graphic.character.characterName.fullName();

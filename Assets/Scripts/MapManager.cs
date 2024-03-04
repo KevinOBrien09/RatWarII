@@ -170,16 +170,16 @@ public class MapManager : Singleton<MapManager>
 
     public List<Slot> StartingRadius()
     {
-        Slot center = MapManager.inst.map.NodeArray[2,2].slot;
-        List<Slot> radius =  new List<Slot>();
-        for (int i = 0; i < 5; i++)
-        {
-            radius.Add(RandomSlot());
-        }
-        //center.func.GetRadiusSlots(1,null,true);
-       
         System.Random rng = new System.Random();
-        return radius.OrderBy(_ => rng.Next()).ToList();
+        List<Slot> sl = new List<Slot>(currentRoom.slots);
+        foreach (var item in currentRoom.slots)
+        {
+            if(!item.cont.walkable()|item.marked){
+                sl.Remove(item);
+            }
+            
+        }
+        return sl.OrderBy(_ => rng.Next()).ToList() ;
 
     }
 

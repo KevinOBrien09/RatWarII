@@ -33,4 +33,4 @@ MonoBehaviour:
   passThrough: 1
   goThroughWalls: 0
   projectilePath: 1
-  howManyTiles: 3
+  howManyTiles: 2

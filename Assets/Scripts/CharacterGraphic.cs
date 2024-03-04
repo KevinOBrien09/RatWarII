@@ -7,8 +7,8 @@ using DG.Tweening;
 public class CharacterGraphic : MonoBehaviour
 { 
     public Character character;
-    public GenericDictionary<Species,Sprite> female = new GenericDictionary<Species, Sprite>();
-    public GenericDictionary<Species,GenericDictionary<Job,List<Sprite>>> classVarients = new GenericDictionary<Species, GenericDictionary<Job, List<Sprite>>>();
+    // public GenericDictionary<Species,Sprite> female = new GenericDictionary<Species, Sprite>();
+    // public GenericDictionary<Species,GenericDictionary<Job,List<Sprite>>> classVarients = new GenericDictionary<Species, GenericDictionary<Job, List<Sprite>>>();
     public List<SpriteRenderer> allRenderers = new List<SpriteRenderer>();
     public Camera cam;
     public Unit unit;
@@ -43,21 +43,20 @@ public class CharacterGraphic : MonoBehaviour
 
             }
             allRenderers[1].gameObject.SetActive(true);
-            allRenderers[1].sprite = female[c.species];
+            allRenderers[1].sprite = CharacterBuilder.inst.female[c.species];
         }
         else
         {allRenderers[1].gameObject.SetActive(false);}
 
         spriteSetUp:
-        allRenderers[0].sprite = classVarients[c.species][c.job][c.spriteVarient];
+        allRenderers[0].sprite = CharacterBuilder.inst.classVarients[c.species][c.job][c.spriteVarient];
         RenderTexture texture = new RenderTexture(250,250,16);
         texture.Create();
         cam.targetTexture = texture;   
         cam.gameObject.SetActive(false);
     }
 
-    public int GetRandomSpriteVar(Character c)
-    {return  Random.Range(0,classVarients[c.species][c.job].Count);}
+    
 
     public void RedFlash(UnityAction action){
         StartCoroutine(q());

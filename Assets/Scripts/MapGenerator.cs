@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 using DG.Tweening;
 
 
@@ -27,8 +28,9 @@ public class MapGenerator : Singleton<MapGenerator>
     public bool generating;
     public LayerMask reAlignMask;
     Dictionary<Vector2,DungeonNode> dungDict = new Dictionary<Vector2, DungeonNode>();
-   public List<DungeonNode> dungeonNodes = new List<DungeonNode>();
+    public List<DungeonNode> dungeonNodes = new List<DungeonNode>();
     public Slot slotPrefab;
+    public bool debug;
     List<GameObject> gos = new List<GameObject>();
     protected override void Awake(){
         base.Awake();
@@ -122,8 +124,11 @@ public class MapGenerator : Singleton<MapGenerator>
         {gos.Add(Instantiate(prefab,n.vPosition,Quaternion.identity));}
         void Clear()
         {
-            foreach (var item in gos)
+            if(!showVisual){
+  foreach (var item in gos)
             {Destroy(item.gameObject);}
+            }
+          
             mapGrid.UpdateGrid();
         }
     }
@@ -435,20 +440,27 @@ public class MapGenerator : Singleton<MapGenerator>
         StartCoroutine(q());
         IEnumerator q()
         {
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(.1f);
             SpawnSlots(dict);
-            PerimeterSlots();
-            AssignStartEndRooms();
-            yield return new WaitForEndOfFrame();
-            BordersAndDoors();
-            RoomContent();
-            foreach (var item in spacers)
-            {Destroy(item.gameObject);}
-            foreach (var item in gos)
-            {Destroy(item.gameObject);}
-            yield return new WaitForEndOfFrame();
-            MapManager.inst.map.UpdateGrid();
-            generating = false;
+           if(CheckIfValid()){
+                PerimeterSlots();
+                AssignStartEndRooms();
+                yield return new WaitForEndOfFrame();
+                BordersAndDoors();
+                RoomContent();
+                foreach (var item in spacers)
+                {  if(!showVisual){Destroy(item.gameObject);}}
+                foreach (var item in gos)
+                {
+                    if(!showVisual){
+                    Destroy(item.gameObject);}
+                }
+                yield return new WaitForEndOfFrame();
+                MapManager.inst.map.UpdateGrid();
+                generating = false;
+                GameManager.inst.GameSetUp();
+           }
+            
         }
     }
 
@@ -518,6 +530,47 @@ public class MapGenerator : Singleton<MapGenerator>
         }
     }
 
+    public bool CheckIfValid()
+    {
+        Slot s = MapManager.inst.map.rooms[0].RandomSlot();
+        List<bool> l = new List<bool>();
+        foreach (var item in MapManager.inst.map.rooms)
+        {
+            Node targetNode = item.RandomSlot().node;
+            List<Node> n = MapManager.inst.map.aStar.FindPath(s.node,targetNode);
+            if(!n.Contains(targetNode))
+            {
+                Debug.LogAssertion("ROOMS ARE NOT CONNECTED");
+                Reset();
+                return false;
+            }
+        }
+        bool playerSelectedRetrevial = GameManager.inst.chosenObjective == Objective.ObjectiveEnum.RETRIEVAL && GameManager.inst.chosenQuest;
+        bool debugSelectedRetrevial = ObjectiveManager.inst.predecideObjective && ObjectiveManager.inst.predecidedObjective == Objective.ObjectiveEnum.RETRIEVAL;
+        if(playerSelectedRetrevial |debugSelectedRetrevial)
+        {
+            if(MapManager.inst.map.rooms.Count <= 4)
+            {
+                Debug.LogAssertion("NOT ENOUGH ROOMS FOR RETRIEVAL MISSION");
+                Reset();
+                return false;
+            }
+
+        }
+
+        return true;
+    }
+
+    public void Reset(){
+        Debug.Log("RESET");
+        if(!debug){
+            StopAllCoroutines();
+            BattleManager.inst.StopAllCoroutines();
+            SceneManager.LoadScene("Arena");
+        }
+
+    }
+
 
     void AssignStartEndRooms()
     {
@@ -545,11 +598,11 @@ public class MapGenerator : Singleton<MapGenerator>
         }
 
         MapManager.inst.map.AssignStartEnd(startRoom,endRoom);
-        if(showVisual)
-        {
-            Instantiate(placeholder,startRoom.transform.position,Quaternion.identity).GetComponent<MeshRenderer>().material.color = Color.blue;
-            Instantiate(placeholder,endRoom.transform.position,Quaternion.identity);
-        }
+        // if(showVisual)
+        // {
+        //     Instantiate(placeholder,startRoom.transform.position,Quaternion.identity).GetComponent<MeshRenderer>().material.color = Color.blue;
+        //     Instantiate(placeholder,endRoom.transform.position,Quaternion.identity);
+        // }
     }
 
 
@@ -641,13 +694,30 @@ public class MapGenerator : Singleton<MapGenerator>
         return (n1,n2);
     }
     
-    public void CreateStartingUnits(){
+    public void CreateStartingUnits()
+    {
         List<Slot> shuffle = MapManager.inst.StartingRadius();
-        for (int i = 0; i < howManyPartyMembers; i++)
-        { UnitFactory.inst. CreatePlayerUnit(shuffle[i]);}
+        if(UnitFactory.inst.debug)
+        {
+            if(Party.inst.activeParty.Count ==0){
+                for (int i = 0; i < howManyPartyMembers; i++)
+                { UnitFactory.inst. CreatePlayerUnit(shuffle[i]);}
+            }
+            else
+            {
+                for (int i = 0; i < Party.inst.activeParty.Count; i++)
+                { UnitFactory.inst.CreatePlayerUnit(shuffle[i],Party.inst.activeParty[i]);}
+            }
+          
+        }
+        else
+        {
+            for (int i = 0; i < Party.inst.activeParty.Count; i++)
+            { UnitFactory.inst.CreatePlayerUnit(shuffle[i],Party.inst.activeParty[i]);}
+        }
+   
 
-        // for (int i = 0; i < howManyEnemies; i++)
-        // {UnitFactory.inst. CreateEnemyUnit(MapManager.inst.RandomSlot());}
+    
     }
    
 }

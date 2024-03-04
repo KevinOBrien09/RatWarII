@@ -18,7 +18,9 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
     {
         objective = new Objective();
         Objective.ObjectiveEnum oe;
-        if(predecideObjective)
+        if(GameManager.inst.chosenQuest)
+        {oe = GameManager.inst.chosenObjective;}
+        else if(predecideObjective)
         {oe = predecidedObjective;}
         else
         {oe =  MiscFunctions.RandomEnumValue<Objective.ObjectiveEnum>();}

@@ -5,20 +5,25 @@ using UnityEngine.EventSystems;
 public class WorldTile : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerClickHandler
 {
     public SoundData SFX;
+    
+    public virtual void Click()
+    {}
+
+    public virtual void Enter()
+    {AudioManager.inst.GetSoundEffect().Play(SFX);}
+
+    public virtual void Exit()
+    {}
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Click");
+        if(eventData.button == PointerEventData.InputButton.Left)
+        {Click();}
     }
-
+    
     public void OnPointerEnter(PointerEventData eventData)
-    {
-        AudioManager.inst.GetSoundEffect().Play(SFX);
-        Debug.Log("In");
-    }
+    {Enter();}
 
     public void OnPointerExit(PointerEventData eventData)
-    {
-        Debug.Log("Out");
-    }
+    {Exit();}
 }

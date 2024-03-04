@@ -231,6 +231,9 @@ float percent = (5f / 100f) * (float) health.maxHealth;
                     ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" + i + " Left!" );
                 }
             }
+            else if(side == Side.PLAYER){
+                Party.inst.KillMember(character);
+            }
             dead = true;
             BattleManager.inst.UnitIsDead(this);
             Corpse c =  ObjectPoolManager.inst.Get<Corpse>(ObjectPoolTag.CORPSE);

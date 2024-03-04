@@ -48,10 +48,10 @@ public class SkillAimer : Singleton<SkillAimer>
                     
                 }
                 
-            BattleManager.inst.currentUnit.slot.DisableHover();
+                BattleManager.inst.currentUnit.slot.DisableHover();
                 castDecided = true;  
                 BattleTicker.inst.Type(_skill.skillName);
-              
+                GameManager.inst.ChangeGameState(GameState.UNITMOVE);
                 CastArgs args = new CastArgs();
                 args.caster = BattleManager.inst.currentUnit ;
                 if(s.cont.unit != null)
