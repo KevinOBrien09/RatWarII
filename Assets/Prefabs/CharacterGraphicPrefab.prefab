@@ -65,118 +65,6 @@ MonoBehaviour:
       level: 1
     spriteVarient: 0
     skills: []
-  female:
-    list:
-    - Key: 0
-      Value: {fileID: 21300000, guid: 4e80cb19fe740764fbeb8daa55c87bf7, type: 3}
-    - Key: 3
-      Value: {fileID: 21300000, guid: a149a42a025c90e458edf41e6f907694, type: 3}
-    - Key: 1
-      Value: {fileID: 21300000, guid: 1bc4d53bb0cbcd74a812a9c08a625277, type: 3}
-    - Key: 2
-      Value: {fileID: 21300000, guid: 677f28eafbcdd204e8a8d0c5cbc01691, type: 3}
-    keyCollision: 0
-  classVarients:
-    list:
-    - Key: 0
-      Value:
-        list:
-        - Key: 0
-          Value:
-          - {fileID: 21300000, guid: eb6e274a44fa1194c915a9fac8f0510b, type: 3}
-          - {fileID: 21300000, guid: e562ec462c641524a9a8a5e0c22aea54, type: 3}
-          - {fileID: 21300000, guid: 85340f0f9670e8d4680f38437c74c2f4, type: 3}
-          - {fileID: 21300000, guid: f1e42501274b77544941762b46a5c01a, type: 3}
-        - Key: 1
-          Value:
-          - {fileID: 21300000, guid: a12ed080811d643459554f42eced560e, type: 3}
-          - {fileID: 21300000, guid: b334c1f6b9bc5874cb7ce5b9adaaf9d3, type: 3}
-          - {fileID: 21300000, guid: 51f8fe4a78c96d6488890226a4ae46ad, type: 3}
-          - {fileID: 21300000, guid: 804fecf15d9cec34ebb27c73f8c3c43c, type: 3}
-          - {fileID: 21300000, guid: e9dc6ed572be75544898dfe4507ba089, type: 3}
-          - {fileID: 21300000, guid: 7927fd8296958c648bdb13461e90c413, type: 3}
-        - Key: 2
-          Value:
-          - {fileID: 21300000, guid: 62ab59959ede33643b7e585eebe742c0, type: 3}
-          - {fileID: 21300000, guid: fb4bd05c30dfcab44997df4ddecacee2, type: 3}
-          - {fileID: 21300000, guid: 84bbd979d4ce746418d8751368c007cb, type: 3}
-          - {fileID: 21300000, guid: 4602bef94570f264e906f86b2466d771, type: 3}
-          - {fileID: 21300000, guid: 1d4aeaf07531fe94abe30b0291b92b10, type: 3}
-          - {fileID: 21300000, guid: ffcc182950cc5df42b899bf1b0f6533d, type: 3}
-        keyCollision: 0
-    - Key: 1
-      Value:
-        list:
-        - Key: 0
-          Value:
-          - {fileID: 21300000, guid: 1ef15a38cfe2fde468f8f5b893ea793c, type: 3}
-          - {fileID: 21300000, guid: 98487210fffac3c48b682ab257a4a61d, type: 3}
-          - {fileID: 21300000, guid: 1ac75039499b7ee4fb58ae7d3637a2be, type: 3}
-          - {fileID: 21300000, guid: da42bf402c90c7948910957c7370f06e, type: 3}
-        - Key: 1
-          Value:
-          - {fileID: 21300000, guid: a1252db4bab137844865b59c4d2cc1f7, type: 3}
-          - {fileID: 21300000, guid: 79a80042f5a719548bee0acad75e99b9, type: 3}
-          - {fileID: 21300000, guid: 0fdd1e4bbd9991e47820016809d7f5e0, type: 3}
-          - {fileID: 21300000, guid: d14548b8633ae394ea8af197f7f2892e, type: 3}
-          - {fileID: 21300000, guid: 70324dab12484e74c98afc6307abd90d, type: 3}
-        - Key: 2
-          Value:
-          - {fileID: 21300000, guid: fe1b5ff47929c8a49b35f134d1ae09a6, type: 3}
-          - {fileID: 21300000, guid: 108816971d8a0e94491fdacd64995d90, type: 3}
-          - {fileID: 21300000, guid: e2cd468ce15d7f942bee6a1c141f12e3, type: 3}
-          - {fileID: 21300000, guid: b0beecb76a4ef3445a1c78877e73912f, type: 3}
-          - {fileID: 21300000, guid: 19be62aec64863d4db8edb86d176e339, type: 3}
-        keyCollision: 0
-    - Key: 3
-      Value:
-        list:
-        - Key: 0
-          Value:
-          - {fileID: 21300000, guid: 73b1ca5c72f8ab3489e3680e242e7ec4, type: 3}
-          - {fileID: 21300000, guid: 0bbe4b29a18e0f947bc8fc03ffe562df, type: 3}
-          - {fileID: 21300000, guid: eb812d02b4e6bd5429e20b0dd5f11939, type: 3}
-        - Key: 1
-          Value:
-          - {fileID: 21300000, guid: 5687d132f4a34984e8eaf0e544669baf, type: 3}
-          - {fileID: 21300000, guid: c6f80ec7c3ad48346a3a769f5fcb72f3, type: 3}
-          - {fileID: 21300000, guid: fb4608339c1d20941b94ba94889215ef, type: 3}
-          - {fileID: 21300000, guid: dd06d48034f28ed4e91999f1b37890de, type: 3}
-          - {fileID: 21300000, guid: fb7a05a4dafb0234595074377fb6517e, type: 3}
-        - Key: 2
-          Value:
-          - {fileID: 21300000, guid: 50a511f8d7824d440825268c3dc0b45d, type: 3}
-          - {fileID: 21300000, guid: c84d0ea477dfaa445b397fb4a74d25b6, type: 3}
-          - {fileID: 21300000, guid: 39b7bf759c5876e468f8e9900ad599ed, type: 3}
-          - {fileID: 21300000, guid: f144e0a10426c4c43a903b1a3040d345, type: 3}
-          - {fileID: 21300000, guid: 3c585e22f4fa1c24d964309edcd7566e, type: 3}
-        keyCollision: 0
-    - Key: 2
-      Value:
-        list:
-        - Key: 0
-          Value:
-          - {fileID: 21300000, guid: 803ace8fa35e9364bb9642646cedc873, type: 3}
-          - {fileID: 21300000, guid: 90b4e6ac78552f7409c01f683a524a27, type: 3}
-          - {fileID: 21300000, guid: cab7b4acfa2c84c40828a86c745bbac9, type: 3}
-          - {fileID: 21300000, guid: fb5816f761badb841a7df397c48d6f23, type: 3}
-        - Key: 1
-          Value:
-          - {fileID: 21300000, guid: 46c9f5c23e21d4c479d7a0eca6e596e4, type: 3}
-          - {fileID: 21300000, guid: b9dd33d8842e9394e82b972782506dc5, type: 3}
-          - {fileID: 21300000, guid: 830e30fa5eb312c44a89b442ea9be546, type: 3}
-          - {fileID: 21300000, guid: da562f506f234ea4e88e9c80e47f8528, type: 3}
-          - {fileID: 21300000, guid: 964575500dd1c574c82828a3ae71a01b, type: 3}
-          - {fileID: 21300000, guid: 857a8b27b098898439615aca41f288e3, type: 3}
-        - Key: 2
-          Value:
-          - {fileID: 21300000, guid: 261ffebc2393c6b4681469635a506bf7, type: 3}
-          - {fileID: 21300000, guid: 7f97f15984bcc514998f48bfecebdd48, type: 3}
-          - {fileID: 21300000, guid: f0c89970048eb1e478e74ac6d3271c5d, type: 3}
-          - {fileID: 21300000, guid: 93000c2cd8fe9814da4ea663950ef66d, type: 3}
-          - {fileID: 21300000, guid: f8bc8d086d8856f4c884d3fa7c8091ed, type: 3}
-        keyCollision: 0
-    keyCollision: 0
   allRenderers:
   - {fileID: 1725158932749588316}
   - {fileID: 6782575216237899060}
@@ -234,7 +122,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9826bc0de0a8e99478c777489b74bd84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -318,7 +206,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9826bc0de0a8e99478c777489b74bd84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

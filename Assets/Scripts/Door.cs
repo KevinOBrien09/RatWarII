@@ -10,8 +10,9 @@ public class Door : MonoBehaviour
     public List<Slot> occupiedSlots = new List<Slot>();
     public SpecialSlot doorInteractablePrefab;
     public GameObject placeHolder;
-    public Transform doorHolder;
+   public List<DoorInteractable> doorInteractables = new List<DoorInteractable>();
     public  List<Slot> triggerSlots = new List<Slot>();
+
     public Dictionary<Room,List<Slot>> landingSlots = new Dictionary<Room, List<Slot>>();
     public GameObject metalFence;
     public SpecialSlot currentSpecialSlot;
@@ -26,7 +27,7 @@ public class Door : MonoBehaviour
     public void OpenFromLockDown(){
         
         metalFence.transform.DOLocalMoveY(15,.25f).OnComplete((()=>{
-metalFence.gameObject.SetActive(false);
+        metalFence.gameObject.SetActive(false);
         }) );
     }
 
@@ -39,32 +40,41 @@ metalFence.gameObject.SetActive(false);
         occupiedSlots.Add(s2);
    
         foreach (var item in occupiedSlots)
-        {item.IsWall();}
+        {
+            if(item.cont.specialSlot == null){
+                item.cont.wall = true;
+                SpecialSlot ss =  Instantiate(doorInteractablePrefab,item.transform.position,Quaternion.identity);
+                currentSpecialSlot = ss;
+                DoorInteractable di = ss.interactable as DoorInteractable;
+                doorInteractables.Add(di);
+                di.door = this;
+                item. cont.specialSlot = ss;
+                if(item. cont.specialSlot.interactable != null)
+                {item.cont.specialSlot.interactable.slot = item;}
+                item.cont.specialSlot.slot = item;
+                item.cont.specialSlot.Init();
+           
+            }
+            else{
+                Debug.LogWarning("Already has a door interactable");
+            }
+          
+        }
         foreach (var item in occupiedSlots)
         {
             foreach (var s in  item.func.GetNeighbouringSlots())
             {
                 if(!s.cont.wall)
-                {
-                    triggerSlots.Add(s);
-                    SpecialSlot ss =  Instantiate(doorInteractablePrefab,s.transform.position,Quaternion.identity);
-                    currentSpecialSlot = ss;
-                    DoorInteractable di = ss.interactable as DoorInteractable;
-                    di.door = this;
-                    s.MakeSpecial(ss);
-                    
-                }
+                {triggerSlots.Add(s);}
             }
         }
-
+        
         landingSlots.Add(roomA,new List<Slot>());
         landingSlots.Add(roomB,new List<Slot>());
-
-      
-
+        
         foreach (var item in triggerSlots)
         {landingSlots[item.room].Add(item);}
-        if(landingSlots[roomA] [0].node.iGridX != landingSlots[roomA][1].node.iGridX)
+        if(s1.node.iGridX != s2.node.iGridX)
         {RotateDoor(0);}
         else
         {RotateDoor(90);}
@@ -121,7 +131,11 @@ metalFence.gameObject.SetActive(false);
     }
 
     public void RotateDoor(float y){
-        doorHolder.localRotation = Quaternion.Euler(new Vector3(0,y,0));
+        foreach (var item in doorInteractables)
+        {
+           item.transform. localRotation = Quaternion.Euler(new Vector3(0,y,0));
+        }
+       
     }
 
     

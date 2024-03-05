@@ -29,7 +29,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8408974752833964550}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2496448281456979579
 GameObject:
@@ -158,7 +158,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8408974752833964550}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &2143547988312961857
 SpriteRenderer:
@@ -180,7 +180,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e03e07d534bc12b4dad9fa838d2a9c77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -265,7 +265,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e03e07d534bc12b4dad9fa838d2a9c77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -350,7 +350,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e03e07d534bc12b4dad9fa838d2a9c77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -434,9 +434,9 @@ Transform:
   m_Children:
   - {fileID: 864182456605948315}
   - {fileID: 297796785329274880}
-  - {fileID: 6716659966055073437}
-  - {fileID: 8823354766648087843}
   - {fileID: 3006436150588918361}
+  - {fileID: 8823354766648087843}
+  - {fileID: 6716659966055073437}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -484,12 +484,7 @@ MonoBehaviour:
   border: {fileID: 1804679518769746182}
   hoverBorder: {fileID: 1842756857001394802}
   areaIndicator: {fileID: 2143547988312961857}
-  room:
-    roomType: 0
-    slots: []
-    wallDict:
-      list: []
-      keyCollision: 0
+  room: {fileID: 0}
   rayShooter: {fileID: 6716659966055073437}
   normalColour:
     serializedVersion: 2
@@ -504,3 +499,4 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 2348850687
   dormant: 0
+  marked: 0

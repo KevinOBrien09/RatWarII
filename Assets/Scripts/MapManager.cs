@@ -8,6 +8,7 @@ public class MapManager : Singleton<MapManager>
 {
     public Map map;
     public List<Slot> allSlots = new List<Slot>();
+    public List<Slot> intrustiveSlotsCurrentlyMadeTransparent = new List<Slot>();
     public Room currentRoom;
     public SoundData enemySpawnHit;
     public bool doNotSpawnEnemies;
@@ -17,6 +18,7 @@ public class MapManager : Singleton<MapManager>
     public void InitStartRoom()
     {
         currentRoom = map.startRoom;
+        SetDoors();
         currentRoom.lockDown = false;
         foreach (var item in currentRoom.borders)
         {
@@ -28,11 +30,27 @@ public class MapManager : Singleton<MapManager>
         HideInactiveRooms();
     }
 
+    public void SetDoors(){
+    foreach (var border in   currentRoom.borders)
+        {
+            foreach (var door in border.doors)
+            {
+                foreach (var doorSlot in door.occupiedSlots)
+                {
+                    Slot s = doorSlot;
+                    s.room.slots.Remove(s);
+                    currentRoom.slots.Add(s);
+                    doorSlot.room = currentRoom;
+                }
+            }
+        }
+    }
+
     public void  ChangeRoom(Room newRoom,Door d)
     {
         currentRoom = newRoom;
+       SetDoors();
        
-        
         for (int i = 0; i < BattleManager.inst.playerUnits.Count; i++)
         {
             Slot s = d.landingSlots[newRoom][i];
@@ -121,6 +139,15 @@ public class MapManager : Singleton<MapManager>
                 dr.LockDown();
             }
         }
+    }
+
+    public void CheckForIntrusions()
+    {
+        foreach (var item in allSlots)
+        {
+            item.DealWithSurrondingIntrusions();
+        }
+
     }
 
     public void OpenRoomsFromLockdown(){

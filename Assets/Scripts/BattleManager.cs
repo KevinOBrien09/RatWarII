@@ -173,8 +173,10 @@ SceneManager.LoadScene("Hub");
 
 
                 CamFollow.inst.ForceFOV(CamFollow.inst.baseFOV);
+                MapManager.inst.CheckForIntrusions();
                 if( currentUnit.stunned)
                 {
+                    
                     BattleTicker.inst.Type(BattleManager.inst. TurnState());
                     CamFollow.inst.target = currentUnit.slot. transform;
                     yield return new WaitForSeconds(.5f);
@@ -196,6 +198,7 @@ SceneManager.LoadScene("Hub");
                     if(currentUnit.side == Side.PLAYER)
                     {       
                         CamFollow.inst.Focus(currentUnit.slot.transform,()=>{});
+                        ActionMenu.inst.ChangeFormation(ActionMenu.Formation.DEFAULT);
                         currentUnit.activeUnitIndicator.gameObject.SetActive(true);
                         yield return new WaitForSeconds(.25f);
                         StatusEffectLoop(currentUnit);
@@ -222,7 +225,7 @@ SceneManager.LoadScene("Hub");
                         }
                     }
                     else
-                    {
+                    {   
                         SlotInfoDisplay.inst.Apply(currentUnit.slot);
                         GameManager.inst.ChangeGameState(GameState.ENEMYTURN);
                         yield return new WaitForSeconds(.25f);

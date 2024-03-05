@@ -9,11 +9,13 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public SlotContainer cont = new SlotContainer();
     public SlotFunctions func = new SlotFunctions();
     public Node node;
+    public List<IntrusiveMeshHandler> intrusiveMeshes = new List<IntrusiveMeshHandler>();
     public SpriteRenderer border,hoverBorder,areaIndicator;
     public Room room;
     public Transform rayShooter;
     public Color32 normalColour,moveColour,interactColour,skillColour;
     public bool dormant,marked;
+    public IntrusiveMeshHandler meshBelow;
 
     void Awake()
     {
@@ -24,32 +26,85 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public void ChangeColour(Color32 color)
     {border.color = color;}
 
-    public void ActivateAreaIndicator(Color32 color){
-        areaIndicator.gameObject.SetActive(true);
-        areaIndicator.color = color;
+    public void DealWithSurrondingIntrusions()
+    {
+        if(cont.specialSlot != null)
+        {
+            if(cont.specialSlot.intrusiveMesh != null)
+            {
+                Vector2 n = new Vector2(node.iGridX,node.iGridY+1);
+                if(MapManager.inst.nodeIsValid(n))
+                {
+                    Slot item = MapManager.inst.map.NodeArray[(int) n.x,(int) n.y].slot;
+                    if(item. hasUnitRightAbove(this.node))
+                    {
+                        cont.specialSlot.intrusiveMesh.MakeTrans();
+                        MapManager.inst.intrustiveSlotsCurrentlyMadeTransparent.Add(this);
+                    }
+                    else
+                    {
+                        
+                        cont.specialSlot.intrusiveMesh.Reset();
+                        
+                    }
+                }
+            }   
+        }
+    }
+
+    void MouseOverIntrusion(){
+        if(!cont.wall){
+        Vector2 n = new Vector2(node.iGridX,node.iGridY-1);
+        if(MapManager.inst.nodeIsValid(n))
+        {  
+            if(n.x == node.iGridX){
+                Slot s = MapManager.inst.map.NodeArray[(int)n.x,(int)n.y].slot;
+                if(s. cont.specialSlot != null)
+                {
+                    if(s.cont.specialSlot.intrusiveMesh != null)
+                    {
+                        s.cont.specialSlot.intrusiveMesh.MakeTrans();
+                        meshBelow =  s.cont.specialSlot.intrusiveMesh;
+                    }
+                }
+            }
+           
+        }
+        }
+   
+    }
+
+    public bool hasUnitRightAbove(Node og){
+
+        if(cont.unit != null)
+        {return node.iGridY > og.iGridY && node.iGridX == og.iGridX;}
+
+        return false;
         
     }
-
-    public void DectivateAreaIndicator(){
-        areaIndicator.gameObject.SetActive(false);
-      
+    
+    
+   
+    public void ActivateAreaIndicator(Color32 color)
+    {
+        areaIndicator.gameObject.SetActive(true);
+        areaIndicator.color = color;
     }
-
-   
-
-   
+    public void DectivateAreaIndicator()
+    { areaIndicator.gameObject.SetActive(false); }
     
     public SpecialSlot MakeSpecial(SpecialSlot specialSlotPrefab)
     {
         cont.specialSlot = Instantiate(specialSlotPrefab,transform);
-        if(cont.specialSlot.interactable != null){
-            cont.specialSlot.interactable.slot = this;
-        }
+        if(cont.specialSlot.interactable != null)
+        {cont.specialSlot.interactable.slot = this;}
         cont.specialSlot.slot = this;
+        cont.specialSlot.Init();
         return cont.specialSlot;
     }
 
-    public void IsWall(){
+    public void IsWall()
+    {
         cont.wall = true;
         cont.invisible = true;
         border.gameObject.SetActive(false);
@@ -63,6 +118,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
        
         if(GameManager.inst.checkGameState(GameState.PLAYERSELECT))
         {
+            MouseOverIntrusion();
             if(UnitMover.inst.validSlots.Contains(this))
             {
                 if(cont.walkable())
@@ -165,9 +221,8 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
         }
         else if(cont.specialSlot != null && cont.unit == null)
         {
-            if(cont.specialSlot.interactable != null){
-                hoverBorder.color = Color.magenta;
-            }
+            if(cont.specialSlot.interactable != null)
+            {hoverBorder.color = Color.magenta; }
         }
 
        
@@ -198,6 +253,10 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     {
         if(!GameManager.inst.checkGameState(GameState.PLAYERHOVER))
         { DisableHover(); }
+        if(meshBelow!= null){
+            meshBelow.Reset();
+            meshBelow = null;
+        }
     }
 
    

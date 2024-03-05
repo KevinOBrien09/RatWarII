@@ -63,12 +63,6 @@ MonoBehaviour:
       level: 1
     spriteVarient: 0
     skills: []
-  female:
-    list: []
-    keyCollision: 0
-  classVarients:
-    list: []
-    keyCollision: 0
   allRenderers:
   - {fileID: 7693170001504182426}
   cam: {fileID: 0}
@@ -126,7 +120,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9826bc0de0a8e99478c777489b74bd84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -188,12 +182,6 @@ MonoBehaviour:
       level: 1
     spriteVarient: 0
     skills: []
-  female:
-    list: []
-    keyCollision: 0
-  classVarients:
-    list: []
-    keyCollision: 0
   allRenderers: []
   cam: {fileID: 0}
   unit: {fileID: 0}

@@ -43,7 +43,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
              
             if( ! GameManager.inst.checkGameState(GameState.PLAYERUI) && ! GameManager.inst.checkGameState(GameState.INTERACT)) 
             {
-                if(ActionMenu.inst.currentState == ActionMenu.ActionMenuState.ROAM){
+                if(ActionMenu.inst.currentState == ActionMenuState.ROAM){
                 CamFollow.inst.Focus(slot.transform,()=>{CamFollow.inst.ChangeCameraState(CameraState.FREE);});
                 }
                 else{
@@ -106,7 +106,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
            
             if( !GameManager.inst.checkGameState(GameState.PLAYERUI)&& ! GameManager.inst.checkGameState(GameState.INTERACT)) 
             {
-                if(ActionMenu.inst.currentState == ActionMenu.ActionMenuState.ROAM)
+                if(ActionMenu.inst.currentState == ActionMenuState.ROAM)
                 {CamFollow.inst.Focus(slot.transform,()=>{CamFollow.inst.ChangeCameraState(CameraState.FREE);});}
                 else
                 {CamFollow.inst.Focus(slot.transform,()=>{});}

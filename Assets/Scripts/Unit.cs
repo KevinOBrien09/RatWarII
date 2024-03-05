@@ -108,6 +108,7 @@ public class Unit : MonoBehaviour
                 SlotInfoDisplay.inst.sl = finalSlot;
                 if(side == Side.PLAYER)
                 {
+                    ActionMenu.inst.ChangeFormation(ActionMenu.Formation.NOMOVE);
                     if(isHostage)
                     {
                         if(!ObjectiveManager.inst.CheckIfComplete())
@@ -276,13 +277,17 @@ float percent = (5f / 100f) * (float) health.maxHealth;
     public void Reposition(Slot newSlot)
     {
         Slot oldSlot = slot;
+       
         if(oldSlot != null)
-        {slot.cont.unit = null;}
+        {slot.cont.unit = null;
+        }
         if(side == Side.PLAYER )
         {SlotInfoDisplay.inst.Disable();}
         
         slot = newSlot;
+    
         slot.cont.unit = this;
+                MapManager.inst.CheckForIntrusions();
         graphic.ChangeSpriteSorting(slot.node);
         
     }

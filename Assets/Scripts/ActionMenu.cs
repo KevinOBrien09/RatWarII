@@ -4,60 +4,56 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 
+ public enum ActionMenuState{SKILL,MOVE,INTERACT,ROAM}
 public class ActionMenu : Singleton<ActionMenu>
 {
-    public enum ActionMenuState{SKILL,MOVE,INTERACT,ROAM}
+   
+    public enum Formation{DEFAULT,NOMOVE,PEACE}
+    public GenericDictionary<Formation,ActionMenuFormation> formationDict = new GenericDictionary<Formation, ActionMenuFormation>();
+    public ActionMenuFormation currentFormation;
     public RectTransform rt,border;
     public Vector2 hidden,shown;
     public bool FUCKOFF;
     public TextMeshProUGUI center;
     public ActionMenuState currentState;
-    public GenericDictionary<ActionMenuState,RectTransform> icons = new GenericDictionary<ActionMenuState, RectTransform>();
-   
     Slot slot;
     public bool open;
     void Start()
     {  
-      
         Cursor.lockState = CursorLockMode.Locked;
+        ChangeFormation(Formation.DEFAULT);
         shown = rt.anchoredPosition;
-        //gameObject.SetActive(false);
         rt.DOAnchorPos(hidden,0);
         Reset();
     }
 
     public void Show(Slot s)
     {
-        if(GameManager.inst.checkGameState(GameState.UNITMOVE)){
-   
-            return;
-        }
+        if(GameManager.inst.checkGameState(GameState.UNITMOVE))
+        {return;}
 
-        if(!FUCKOFF){
-            
-    
+        if(!FUCKOFF)
+        {
             slot = s;
-           
-            // CamFollow.inst.ChangeCameraState(CameraState.LOCK);
-            // GameManager.inst.ChangeGameState(GameState.PLAYERUI);
             CamFollow.inst.Focus(s.cont.unit.transform,()=>
             { 
-                if(ActionMenu.inst.currentState !=ActionMenu.ActionMenuState.SKILL){
-                BattleTicker.inst.Type(BattleManager.inst. TurnState());
-                }
-              
-                 CamFollow.inst.ChangeCameraState(CameraState.LOCK);
-            GameManager.inst.ChangeGameState(GameState.PLAYERUI);
-               
+                if(ActionMenu.inst.currentState != ActionMenuState.SKILL)
+                {BattleTicker.inst.Type(BattleManager.inst. TurnState());}
+                CamFollow.inst.ChangeCameraState(CameraState.LOCK);
+                GameManager.inst.ChangeGameState(GameState.PLAYERUI);
             });
             gameObject.SetActive(true);
             SlotInfoDisplay.inst.Apply(s);
             MoveOnScreen();
-           
-          
-            
         }
-       
+    }
+
+    public void ChangeFormation(Formation f)
+    {
+        foreach (var item in formationDict)
+        {item.Value.Deactivate();}
+        formationDict[f].Activate();
+        currentFormation = formationDict[f];
     }
 
     IEnumerator q()
@@ -68,7 +64,7 @@ public class ActionMenu : Singleton<ActionMenu>
     }
 
     public void MoveOnScreen(){
-         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
         FUCKOFF = true;
         SlotInfoDisplay.inst.Apply(slot);
         rt.DOAnchorPos(hidden,0);
@@ -76,37 +72,34 @@ public class ActionMenu : Singleton<ActionMenu>
         BattleManager.inst.StartCoroutine(q());
     }
     
-    void Update(){
-        if(GameManager.inst.checkGameState(GameState.ENEMYTURN) | BattleManager.inst.gameOver){
-            return;
-        }
-       if(!FUCKOFF)
+    void Update()
+    {
+        if(GameManager.inst.checkGameState(GameState.ENEMYTURN) | BattleManager.inst.gameOver)
+        {return;}
+        if(!FUCKOFF)
         {
             if(open)
             {
-                if(!SkillHandler.inst.open){
-                    if(Input.GetKeyDown(KeyCode.D)){
-                    MoveRight();
-                    }
+                if(!SkillHandler.inst.open)
+                {
+                    if(InputManager.inst.player.GetButtonDown("Right"))
+                    {currentFormation.MoveRight();}
 
-                    else if(Input.GetKeyDown(KeyCode.A)){
-                        MoveLeft();
-                    }
+                    else if(InputManager.inst.player.GetButtonDown("Left"))
+                    {currentFormation.MoveLeft();}
                 }
-              
-
-                if(Input.GetMouseButtonDown(0) | Input.GetKeyDown(KeyCode.Return)) {
-                    OpenSubmenu();
-                }
+                
+                if(InputManager.inst.player.GetButtonDown("Confirm")) 
+                { OpenSubmenu(); }
 
             }
             
-            if(currentState == ActionMenuState.ROAM && !open){
+            if(currentState == ActionMenuState.ROAM && !open)
+            {
                 if(InputManager.inst.player.GetButtonDown("Cancel"))
                 {
-                  //  if(SkillAimer.inst.)
-                   foreach (var item in MapManager.inst.currentRoom.slots)
-            { item. DisableHover();}
+                    foreach (var item in MapManager.inst.currentRoom.slots)
+                    { item. DisableHover();}
                     GameManager.inst.ChangeGameState(GameState.PLAYERUI);
                     Show(slot);
                 }
@@ -119,29 +112,25 @@ public class ActionMenu : Singleton<ActionMenu>
         switch(currentState)
         {
             case ActionMenuState.SKILL:
-            if(!SkillHandler.inst.open){
+            if(!SkillHandler.inst.open)
+            {
                 SkillHandler.inst.Open();
-                center.gameObject.SetActive(false);
-                foreach (var item in icons)
-                {item.Value.gameObject.SetActive(false);}
+              currentFormation.HideIcons();
             }
-           
-               
             break;
+
             case ActionMenuState.MOVE:
-           if(!slot.cont.unit.movedThisTurn){
-            FUCKOFF = true;
-            rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
-            { FUCKOFF = false; open = false;});
-           // SlotInfoDisplay.inst.Disable();
-            UnitMover.inst.EnterSelectionMode(slot);
-            Cursor.lockState = CursorLockMode.Confined;
-           }
-           else{
-            Debug.Log("Error Noise");
-           }
-         
+            if(!slot.cont.unit.movedThisTurn)
+            {
+                FUCKOFF = true;
+                rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
+                { FUCKOFF = false; open = false;});
+                UnitMover.inst.EnterSelectionMode(slot);
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+            else{Debug.Log("Error Noise");}
             break;
+
             case ActionMenuState.INTERACT:
             FUCKOFF = true;
             rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
@@ -151,7 +140,7 @@ public class ActionMenu : Singleton<ActionMenu>
 
             case ActionMenuState.ROAM:
             BattleTicker.inst.Type("Roaming...");
-        BattleManager.inst.currentUnit.slot.hoverBorderOn();
+            BattleManager.inst.currentUnit.slot.hoverBorderOn();
             CamFollow.inst.ChangeCameraState(CameraState.FREE);
             GameManager.inst.ChangeGameState(GameState.PLAYERHOVER);
             Hide();
@@ -161,121 +150,23 @@ public class ActionMenu : Singleton<ActionMenu>
         }
     }
 
-    public void Reset(){BattleTicker.inst.Type(BattleManager.inst. TurnState());
+    public void Reset()
+    {
+        BattleTicker.inst.Type(BattleManager.inst. TurnState());
         currentState = ActionMenuState.SKILL;
         border.DORotate(Vector3.zero,0);
-        icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,0),.25f);
-        icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,180),.25f);
-        icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,-90),.25f);
-        icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,90),.25f);
-        center.text = currentState.ToString();
+        currentFormation.Reset();
     }
 
     public void ChangeActionMenuState(ActionMenuState newState)
     {currentState = newState;}
-
-    public void MoveRight()
-    {
-        switch(currentState)
-        {
-            case ActionMenuState.SKILL:
-            ChangeState(ActionMenuState.MOVE);
-            break;
-
-            case ActionMenuState.MOVE:
-            ChangeState(ActionMenuState.ROAM);
-            break;
-
-            case ActionMenuState.ROAM:
-            ChangeState(ActionMenuState.INTERACT);
-            break;
-
-            case ActionMenuState.INTERACT:
-            ChangeState(ActionMenuState.SKILL);
-            break;
-        }
-
-       
-    }
-
-    public void MoveLeft()
-    {
-        switch(currentState)
-        {
-            case ActionMenuState.SKILL:
-           
-            ChangeState(ActionMenuState.INTERACT);
-            break;
-
-            case ActionMenuState.MOVE:
-          
-            ChangeState(ActionMenuState.SKILL);
-            break;
-
-            case ActionMenuState.INTERACT:
-            
-            ChangeState(ActionMenuState.ROAM);
-            break;
-
-            case ActionMenuState.ROAM:
-           
-            ChangeState(ActionMenuState.MOVE);
-            break;
-
-        }
-          center.text = currentState.ToString();
-    }
-
+    
     public void ReturnFromSkillMenu()
     {BattleTicker.inst.Type(BattleManager.inst. TurnState());
-        center.gameObject.SetActive(true);
-        foreach (var item in icons)
-        {item.Value.gameObject.SetActive(true);}
+        currentFormation.ShowIcons();
         Reset();
     }
-
-
-    public void ChangeState(ActionMenuState newState)
-    {
-        ChangeActionMenuState(newState);
-        switch(newState)
-        {
-            case ActionMenuState.SKILL:
-            border.DORotate(Vector3.zero,.25f);
-            icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,0),.25f);
-            icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,180),.25f);
-            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,-90),.25f);
-            icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,90),.25f);
-            break;
-
-            case ActionMenuState.MOVE:
-            border.DORotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,-90),.25f);
-            icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,180),.25f);
-            icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,0),.25f);
-            break;
-
-            case ActionMenuState.ROAM:
-            border.DORotate(new Vector3(0,0,180),.25f);
-            icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,180),.25f);
-            icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,0),.25f);
-            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,-90),.25f);
-            break;
-
-            case ActionMenuState.INTERACT:
-            border.DORotate(new Vector3(0,0, -90),.25f);
-            icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,-90),.25f);
-            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,0),.25f);
-            icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,180),.25f);
-            break;
-        }
-         center.text = currentState.ToString();
-    }
-
-
+    
     public void Hide()
     { 
         if(!FUCKOFF){

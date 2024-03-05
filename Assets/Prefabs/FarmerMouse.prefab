@@ -63,20 +63,6 @@ MonoBehaviour:
       level: 1
     spriteVarient: 0
     skills: []
-  female:
-    list:
-    - Key: 0
-      Value: {fileID: 21300000, guid: 4e80cb19fe740764fbeb8daa55c87bf7, type: 3}
-    - Key: 3
-      Value: {fileID: 21300000, guid: a149a42a025c90e458edf41e6f907694, type: 3}
-    - Key: 1
-      Value: {fileID: 21300000, guid: 1bc4d53bb0cbcd74a812a9c08a625277, type: 3}
-    - Key: 2
-      Value: {fileID: 21300000, guid: 677f28eafbcdd204e8a8d0c5cbc01691, type: 3}
-    keyCollision: 0
-  classVarients:
-    list: []
-    keyCollision: 0
   allRenderers:
   - {fileID: 2066492485215584218}
   cam: {fileID: 0}
@@ -133,7 +119,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9826bc0de0a8e99478c777489b74bd84, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

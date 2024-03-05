@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 public class SlotFunctions
 {
-   public Slot slot;
+    public Slot slot;
     public List<Direction> CheckIfSideSlot()
     {
         Dictionary<Direction,Vector3> dirDict = new Dictionary<Direction, Vector3>();

@@ -35,6 +35,8 @@ public class Objective
             r.Remove(MapManager.inst.map.endRoom);
             CreateRetrievalObject(MapManager.inst.map.endRoom);
             System.Random rng = new System.Random();
+            if(MapManager.inst.map.rooms.Count <= 4)
+            {Debug.LogAssertion("RANDOMLY SELECTED RETRIEVAL AND THERE IS NOT ENOUGH ROOMS FOR RETRIEVAL MISSION");}
             r.OrderBy(_ => rng.Next()).ToList();
             for (int i = 0; i < 2; i++)
             {CreateRetrievalObject(r[i]);}
