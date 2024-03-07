@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Party : Singleton<Party>
 {
     public int gold;
     public List<Character> activeParty = new List<Character>();
     public List<Character> benched = new List<Character>();
+    public UnityEvent onPartyEdit;
+    public int partySize = 3;
     bool startingGold;
     void Start(){
         if(!startingGold){
@@ -41,14 +44,16 @@ public class Party : Singleton<Party>
     {
         if(activeParty.Contains(c))
         {activeParty.Remove(c);}
+        onPartyEdit.Invoke();
     }
 
     public void AddToPossession(Character c)
     {
-        if(activeParty.Count < 3)
+        if(activeParty.Count < partySize)
         {activeParty.Add(c);}
         else
         {benched.Add(c);}
+        onPartyEdit.Invoke();
     }
 
   

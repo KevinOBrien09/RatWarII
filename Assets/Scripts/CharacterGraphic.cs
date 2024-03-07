@@ -9,19 +9,18 @@ public class CharacterGraphic : MonoBehaviour
     public Character character;
     // public GenericDictionary<Species,Sprite> female = new GenericDictionary<Species, Sprite>();
     // public GenericDictionary<Species,GenericDictionary<Job,List<Sprite>>> classVarients = new GenericDictionary<Species, GenericDictionary<Job, List<Sprite>>>();
+    public GenericDictionary<Species,Vector3> camPositionDict = new GenericDictionary<Species, Vector3>();
     public List<SpriteRenderer> allRenderers = new List<SpriteRenderer>();
     public Camera cam;
     public Unit unit;
-   
+    public CharacterGraphic iconClone;
     public void Init(Character c)
     {
         Orginize(c);
-        CharacterGraphic iconClone = Instantiate(this);
-        iconClone.Orginize(c);
-      
-        iconClone.gameObject.name = character.characterName.fullName() + ": IconClone";
-        cam = iconClone.cam;
-        IconGraphicHolder.inst.Take(iconClone);
+        character = c;
+   
+       
+        
     }
 
     public void EnemyInit(DefinedCharacter e){}
@@ -49,13 +48,30 @@ public class CharacterGraphic : MonoBehaviour
         {allRenderers[1].gameObject.SetActive(false);}
 
         spriteSetUp:
+    
         allRenderers[0].sprite = CharacterBuilder.inst.classVarients[c.species][c.job][c.spriteVarient];
+     
+    }
+   //this is stupid
+    public CharacterGraphic MakeCamClone(){
+    return Instantiate(this);
+    }
+    //this is stupid
+   public void CameraShit(CharacterGraphic original)
+    {
+        foreach (var item in allRenderers)
+        {item.gameObject.layer = 8;}
+        Orginize(original. character);
+        cam.transform.localPosition = camPositionDict[original.character.species];
+        gameObject.name = character.characterName.fullName() + ": IconClone";
         RenderTexture texture = new RenderTexture(250,250,16);
         texture.Create();
         cam.targetTexture = texture;   
-        cam.gameObject.SetActive(false);
+        IconGraphicHolder.inst.Take(this);
+        original.cam = cam;
+        original.iconClone = this;
     }
-
+   //this is stupid
     
 
     public void RedFlash(UnityAction action){

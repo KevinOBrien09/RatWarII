@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 using TMPro;
 
  public enum ActionMenuState{SKILL,MOVE,INTERACT,ROAM}
@@ -14,6 +15,8 @@ public class ActionMenu : Singleton<ActionMenu>
     public RectTransform rt,border;
     public Vector2 hidden,shown;
     public bool FUCKOFF;
+    public Image moveIcon,moveIconFade;
+    public SoundData error;
     public TextMeshProUGUI center;
     public ActionMenuState currentState;
     Slot slot;
@@ -21,7 +24,7 @@ public class ActionMenu : Singleton<ActionMenu>
     void Start()
     {  
         Cursor.lockState = CursorLockMode.Locked;
-        ChangeFormation(Formation.DEFAULT);
+       
         shown = rt.anchoredPosition;
         rt.DOAnchorPos(hidden,0);
         Reset();
@@ -48,12 +51,16 @@ public class ActionMenu : Singleton<ActionMenu>
         }
     }
 
-    public void ChangeFormation(Formation f)
-    {
-        foreach (var item in formationDict)
-        {item.Value.Deactivate();}
-        formationDict[f].Activate();
-        currentFormation = formationDict[f];
+  
+
+    public void RemoveMoveOption(){
+        moveIcon.color = new Color(0,0,0,.75f);
+        moveIconFade.enabled = true;
+    }
+
+    public void ResetMoveOption(){
+        moveIcon.color =  new Color(1,1,1,.75f);
+        moveIconFade.enabled = false;
     }
 
     IEnumerator q()
@@ -128,7 +135,11 @@ public class ActionMenu : Singleton<ActionMenu>
                 UnitMover.inst.EnterSelectionMode(slot);
                 Cursor.lockState = CursorLockMode.Confined;
             }
-            else{Debug.Log("Error Noise");}
+            else
+            {
+                AudioManager.inst.GetSoundEffect().Play(error);
+                Debug.Log("Error Noise");
+            }
             break;
 
             case ActionMenuState.INTERACT:

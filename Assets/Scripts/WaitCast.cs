@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
-
+using System.Collections;
 
 public class WaitCast : SkillCastBehaviour
 {
@@ -13,6 +13,13 @@ public class WaitCast : SkillCastBehaviour
         if(args.caster.sounds != null)
         {AudioManager.inst.GetSoundEffect().Play(args.caster.sounds.move);}
                
-         SkillAimer.inst.Skip();
+        StartCoroutine(q());
+        IEnumerator q()
+        {
+            
+            yield return new WaitForSeconds(.5f);
+            SkillAimer.inst.Finish(true);
+
+       }
     }
 }

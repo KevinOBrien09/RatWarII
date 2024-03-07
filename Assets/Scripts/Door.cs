@@ -135,6 +135,7 @@ public class Door : MonoBehaviour
         {
            item.transform. localRotation = Quaternion.Euler(new Vector3(0,y,0));
         }
+        metalFence.transform.localRotation = Quaternion.Euler(new Vector3(0,y,0));
        
     }
 

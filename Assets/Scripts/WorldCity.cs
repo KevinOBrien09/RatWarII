@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 public class WorldCity: Singleton<WorldCity>
 {
-    public enum CityState {HOVER,QUEST,RECRUIT}
+    public enum CityState {HOVER,QUEST,RECRUIT,ORGANIZER}
     public CityState currentState;
     public GameObject desktopButton;
     
@@ -23,6 +23,12 @@ public class WorldCity: Singleton<WorldCity>
                 if(WorldCity.inst.currentState == CityState.RECRUIT)
                 {
                     CharacterRecruiter.inst.BackOut();
+                    return;
+                }
+                if(WorldCity.inst.currentState == CityState.ORGANIZER)
+                {
+                    if(!DraggableComponent.isDragging)
+                    {RetunToHover();}
                     return;
                 }
                 if(WorldCity.inst.currentState != CityState.HOVER)

@@ -31,10 +31,19 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         character.skills = new List<Skill>( statsAndSkills.skills);
         return character;
     }
-    public CharacterGraphic GenerateGraphic(Character c)
+    public CharacterGraphic GenerateGraphic(Character c,bool cameraShit)
     {
         CharacterGraphic cg =  Instantiate(characerGraphicPrefab,Vector3.zero,Quaternion.identity);
-        cg.Init(c);
+          cg.Init(c);
+        if(cameraShit){
+          CharacterGraphic clone = cg.MakeCamClone();
+          clone.CameraShit(cg);
+        }
+        // else{
+        // Destroy(cg.cam.gameObject)    ;
+        // cg.cam = null;
+        // }
+     
         cg.character = c;
         return cg;
     }

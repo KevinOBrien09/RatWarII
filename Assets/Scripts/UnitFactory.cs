@@ -31,7 +31,7 @@ public class UnitFactory : Singleton<UnitFactory>
             return null;
         }
 
-        CharacterGraphic graphic =  CharacterBuilder.inst.GenerateGraphic(character);
+        CharacterGraphic graphic =  CharacterBuilder.inst.GenerateGraphic(character,true);
         u.character = graphic.character;
         graphic.unit = u;
         u.side = Side.PLAYER;

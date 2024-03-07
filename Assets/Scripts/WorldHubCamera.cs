@@ -16,7 +16,7 @@ public class WorldHubCamera : Singleton<WorldHubCamera>
     }
     public void Zoom(UnityAction a)
     {
-        cam.DOFieldOfView(0,.15f).OnComplete(()=>
+        cam.DOFieldOfView(1,.15f).OnComplete(()=>
         {
             a.Invoke();
             cam.DOFieldOfView(ogFOV,.15f);
@@ -26,7 +26,7 @@ public class WorldHubCamera : Singleton<WorldHubCamera>
 
     public void ZoomOut(UnityAction a)
     {
-        cam.DOFieldOfView(179,.15f).OnComplete(()=>
+        cam.DOFieldOfView(175,.15f).OnComplete(()=>
         {
             a.Invoke();
             cam.DOFieldOfView(ogFOV,.15f);

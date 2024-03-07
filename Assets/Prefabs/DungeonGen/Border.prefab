@@ -49,7 +49,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3169747179330104392}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -100,3 +100,5 @@ MonoBehaviour:
   roomA: {fileID: 0}
   roomB: {fileID: 0}
   slots: []
+  walls: []
+  doors: []

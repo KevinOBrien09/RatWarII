@@ -13,6 +13,7 @@ public class CharacterProfileMenu : MonoBehaviour
     public TextMeshProUGUI charName,title,hp,str,spd,move;
     public Image baseChar,gender;
     public GameObject left,right,hireButton;
+    public bool debug;
     int index;
     public void RecieveCharacters(List<Character> l)
     {
@@ -97,10 +98,12 @@ public class CharacterProfileMenu : MonoBehaviour
     public void Hire()
     {
         if(CharacterRecruiter.inst.state == 2){
-            if(Party.inst.canAfford(300))
+            if(Party.inst.canAfford(300)|debug)
             {
-
+                if(!debug){
                 Party.inst.RemoveGold(300);
+                }
+               
                 Character c = characters[index];
                 AudioManager.inst.GetSoundEffect().Play(CharacterBuilder.inst.sfxDict[c.species].move);
                 AudioManager.inst.GetSoundEffect().Play(goldSpend); 
@@ -121,6 +124,7 @@ public class CharacterProfileMenu : MonoBehaviour
                     charName.text = "Empty";
                     title.enabled = false;
                     hp.enabled = false;
+                    gender.enabled = false;
                     spd.enabled = false;
                     move.enabled = false;
                     str.enabled = false;

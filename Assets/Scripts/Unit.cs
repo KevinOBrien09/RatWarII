@@ -104,11 +104,16 @@ public class Unit : MonoBehaviour
                 moving = false;
                 Reposition(finalSlot);
                  MapManager.inst.map.UpdateGrid();
-                movedThisTurn = true;
+                 if(BattleManager.inst.roomLockDown){
+     movedThisTurn = true;
+                 }
+           
                 SlotInfoDisplay.inst.sl = finalSlot;
                 if(side == Side.PLAYER)
-                {
-                    ActionMenu.inst.ChangeFormation(ActionMenu.Formation.NOMOVE);
+                { 
+                    if(BattleManager.inst.roomLockDown){
+                    ActionMenu.inst.RemoveMoveOption();
+                    }
                     if(isHostage)
                     {
                         if(!ObjectiveManager.inst.CheckIfComplete())

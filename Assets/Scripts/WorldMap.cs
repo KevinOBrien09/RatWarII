@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using DG.Tweening;
 public class WorldMap : Singleton<WorldMap>
 {
     public enum MapState{OVERVIEW,CAPITALCITY}
@@ -32,6 +32,7 @@ public class WorldMap : Singleton<WorldMap>
 
     public void ExitCity()
     {
+        WorldHubCamera.inst.transform.DORotate(new Vector3(90,0,0) ,.15f);
         WorldHubCamera.inst.ZoomOut(()=>
         {
             cityGO.SetActive(false);
@@ -49,7 +50,7 @@ public class WorldMap : Singleton<WorldMap>
     public void SwapToCity()
     {
         WorldHubCamera.inst.Zoom(()=>{
-             
+              WorldHubCamera.inst.transform.DORotate(new Vector3(0,0,0) ,.15f);
             cityGO.SetActive(true);
             cityAmbi.Play();
             mapGO.SetActive(false);

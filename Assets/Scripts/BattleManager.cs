@@ -56,12 +56,16 @@ public class BattleManager : Singleton<BattleManager>
         }
     }
 
-    public void EndTurn(){
+    public void EndTurn(bool wasSkipped = false)
+    {
         if(currentUnit != null) 
         currentUnit.activeUnitIndicator.gameObject.SetActive(false);
+        if(wasSkipped &&!roomLockDown){
+            currentUnit = turnOrder.Dequeue();
+        }
         if(BattleManager.inst.turn != 0)
         {BattleManager.inst.UnitIteration();}
-     MapManager.inst.map.UpdateGrid();
+        MapManager.inst.map.UpdateGrid();
         ActionMenu.inst.Hide();
     }
 
@@ -96,8 +100,10 @@ SceneManager.LoadScene("Hub");
                 ActionMenu.inst.FUCKOFF = false;
                 
                 yield return new WaitForSeconds(.25f);
-              
+                if(BattleManager.inst.roomLockDown||currentUnit == null){
                 currentUnit = turnOrder.Dequeue();
+                }
+                
                 bool terrainShit = false;
                 if(currentUnit.tempTerrainCreated.Count != 0)
                 {
@@ -198,7 +204,7 @@ SceneManager.LoadScene("Hub");
                     if(currentUnit.side == Side.PLAYER)
                     {       
                         CamFollow.inst.Focus(currentUnit.slot.transform,()=>{});
-                        ActionMenu.inst.ChangeFormation(ActionMenu.Formation.DEFAULT);
+                        ActionMenu.inst.ResetMoveOption();
                         currentUnit.activeUnitIndicator.gameObject.SetActive(true);
                         yield return new WaitForSeconds(.25f);
                         StatusEffectLoop(currentUnit);

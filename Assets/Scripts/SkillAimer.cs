@@ -105,7 +105,7 @@ public class SkillAimer : Singleton<SkillAimer>
        
     }
 
-    public void Finish(){
+    public void Finish(bool wasSkipped = false){
         validTargets.Clear();
         BattleManager.inst.ToggleHealthBars(false);
     
@@ -126,7 +126,7 @@ public class SkillAimer : Singleton<SkillAimer>
         _skill = null;
     
         SkillHandler.inst.  Close();
-        BattleManager.inst.EndTurn();
+        BattleManager.inst.EndTurn(wasSkipped);
     }
     
     public void ProjectileAim(ProjectileSkill skill)

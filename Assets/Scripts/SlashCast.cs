@@ -60,7 +60,7 @@ public class SlashCast : SkillCastBehaviour
             yield return new WaitForSeconds(.2f);
 
 
-            SkillAimer.inst.Skip();
+            SkillAimer.inst.Finish(); 
         }
     }
 }

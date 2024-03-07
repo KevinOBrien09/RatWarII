@@ -67,13 +67,7 @@ public class NoMoveFormation : ActionMenuFormation
             
             break;
 
-            case ActionMenuState.MOVE:
-            ActionMenu.inst.border.DORotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,-90),.25f);
-            icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,180),.25f);
-           
-            break;
+     
 
             case ActionMenuState.ROAM:
             ActionMenu.inst.border.DORotate(new Vector3(0,0,180),.25f);

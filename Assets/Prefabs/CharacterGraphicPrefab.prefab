@@ -65,6 +65,17 @@ MonoBehaviour:
       level: 1
     spriteVarient: 0
     skills: []
+  camPositionDict:
+    list:
+    - Key: 0
+      Value: {x: 2.3, y: 4.45, z: -0.5}
+    - Key: 1
+      Value: {x: 0.6, y: 4.45, z: -0.5}
+    - Key: 2
+      Value: {x: 0.4, y: 4.45, z: -0.5}
+    - Key: 3
+      Value: {x: 1, y: 4.45, z: -0.5}
+    keyCollision: 0
   allRenderers:
   - {fileID: 1725158932749588316}
   - {fileID: 6782575216237899060}
@@ -143,7 +154,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 5662a728f1f8c684e9140b8b8f520177, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 30fed401efec7864fad3514a309da11f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -264,7 +275,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7274912486460193478}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.38, y: 4.44, z: -0.467}
+  m_LocalPosition: {x: 0, y: 4.45, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -302,7 +313,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 12ce61374094a9f42ac529210f572337, type: 2}
   m_TargetDisplay: 0
