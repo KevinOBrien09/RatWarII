@@ -27,8 +27,11 @@ public class WorldCity: Singleton<WorldCity>
                 }
                 if(WorldCity.inst.currentState == CityState.ORGANIZER)
                 {
-                    if(!DraggableComponent.isDragging)
-                    {RetunToHover();}
+                    if(!Draggable.isDragging)
+                    {
+                        RetunToHover();
+                    }
+                
                     return;
                 }
                 if(WorldCity.inst.currentState != CityState.HOVER)

@@ -83,8 +83,8 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
  icon.texture = slot.cont.unit.enemy.icon;
                }
                else{
- sl.cont.unit.graphic.cam.gameObject.SetActive(true);
-                icon.texture = u.graphic.cam.activeTexture;
+ 
+                icon.texture = IconGraphicHolder.inst.dict[u.character.ID];
                }
                
             }
@@ -140,17 +140,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
 
     public void Disable()
     {
-        if(sl != null)
-        {
-            if(sl.cont.unit != null)
-            {   
-                if(sl.cont.unit.side == Side.PLAYER && !sl.cont.unit.isHostage)
-                {
-  sl.cont.unit .graphic.cam.gameObject.SetActive(false);
-                }
-              
-            }
-        }
+        
         stackHandler.Kill();
         sl = null;
         healthBar.health = null;

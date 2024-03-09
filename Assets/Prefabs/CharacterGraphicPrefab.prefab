@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character:
+    ID: 
     characterName:
       title: 
       firstName: 
@@ -81,6 +82,7 @@ MonoBehaviour:
   - {fileID: 6782575216237899060}
   cam: {fileID: 2884578204550331822}
   unit: {fileID: 0}
+  iconClone: {fileID: 0}
 --- !u!1 &3815053326549457616
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,39 +1,67 @@
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
-public class CharacterCell : EquipmentSlot
+using UnityEngine.UI;
+using System.Collections.Generic;
+public class CharacterCell : DragDropCell
 {
-
     public enum CellType{TAB,PARTY}
     public CellType cellType;
-    public Character character;
-
-    public override void Drop(DraggableComponent draggable)
+    public int position;
+    public override int canTake(Draggable d)
     {
-     
-        CharacterDragger drag = draggable as CharacterDragger;
-        character = drag.tab.character;
+       
+        CharacterDragger a = d as CharacterDragger;
+        CharacterDragger b = draggable as CharacterDragger;
         if(cellType == CellType.TAB)
         {
-            if(Party.inst.activeParty.Contains(character))
-            {      
-                drag.tab.inPartySignifier.SetActive(false);
-                Party.inst.activeParty.Remove(character);
-                Party.inst.benched.Add(character);
-            }
-        }
-        else if (cellType == CellType.PARTY)
-        {
-            if(Party.inst.benched.Contains(character))
+            if(a.tab.cell == this)
             {
-                drag.tab.inPartySignifier.SetActive(true);
-                Party.inst.benched.Remove(character);
-                Party.inst.activeParty.Add(character);
+                if(Party.inst.activeParty.ContainsKey(a.tab.character.ID))
+                {
+                    a.NoCell();
+                    return 0; 
+                }
+                if(draggable == null)
+                { 
+                    AudioManager.inst.GetSoundEffect().Play(a. snap);
+                    return 1; }
+                }   
+        }
+        else if(cellType == CellType.PARTY)
+        {
+            if(b != null)
+            {
+                
+                if(Party.inst.activeParty.ContainsKey(a.tab.character.ID) && Party.inst.activeParty.ContainsKey(b.tab.character.ID))
+                { 
+                    AudioManager.inst.GetSoundEffect().Play(a. snap);
+                    return 2; 
+                }
+            }
+            else
+            {
+                Character c = a.tab.character;
+                if(draggable == null)
+                { 
+                    if(Party.inst.activeParty.ContainsKey(c.ID)) //moving from party slot to unoccupied party slot
+                    {
+                        Party.inst.UpdatePosition(c,position);
+                        AudioManager.inst.GetSoundEffect().Play(a. snap);
+                    }
+                   
+                    else if(!Party.inst.activeParty.ContainsKey(c.ID) && Party.inst.benched.ContainsKey(c.ID))
+                    {
+                        a.tab.inPartySignifier.gameObject.SetActive(true);
+                        AudioManager.inst.GetSoundEffect().Play(a. snap);
+                        AudioManager.inst.GetSoundEffect().Play(CharacterBuilder.inst.sfxDict[c.species].turnStart);
+                        Party.inst.BenchToParty(c,position);
+                    }
+                   
+                    return 1; 
+                }
             }
         }
-        base.Drop(draggable);
-        Party.inst.onPartyEdit.Invoke();
 
+        return 0; 
     }
 }

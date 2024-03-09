@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c603b92c96daa24088b1e84b0cbbbdd, type: 3}
   m_Name: Regenerate
   m_EditorClassIdentifier: 
-  ID: b5bb7964-4858-4bc1-b8b6-3897c3a3cd79
+  ID: 5c532875-d3fc-47d6-8fdb-9def828b05ad
   skillName: Regenerate
   desc: Heal the caster for 15HP.
   effects: []

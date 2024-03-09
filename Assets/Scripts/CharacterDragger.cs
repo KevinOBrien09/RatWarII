@@ -1,66 +1,55 @@
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
-public class CharacterDragger : DraggableComponent
+using UnityEngine.UI;
+using System.Collections.Generic;
+public class CharacterDragger : Draggable
 {
-    public CharacterTab tab;
-    public Canvas canvas;
-    Transform hi;
-
-    void Start(){
-        hi =GameObject.Find("PriorityTransform").transform;
-        
-    }
+   public CharacterTab tab;
+   public SoundData drop,snap;
 
 
-   
-    public void Init(CharacterTab _tab){
-        tab = _tab;
-        currentSlot = tab.equipmentSlot;
-
-    }
-
-    public override void Snap()
+    public override void NoCell()
     {
-        CharacterCell cc = currentSlot as CharacterCell;
-        if(cc != null)
+        CharacterCell a = dragDropCell as CharacterCell;
+        if(a.cellType == CharacterCell.CellType.PARTY)
+        {  tab.inPartySignifier.gameObject.SetActive(false);
+            tab.cell.Take(this);
+            AudioManager.inst.GetSoundEffect().Play(drop);
+            Party.inst.PartyToBench(tab.character);
+        }
+        else
         {
-            if(cc.cellType == CharacterCell.CellType.TAB)
-            {
-                base.Snap();
-            }
-            else
-            {
-                cc.character = null;
-                RemoveFromParty();
-            }
+            base.Snap();
         }
     }
 
-    public void RemoveFromParty(){
-
-       tab.equipmentSlot.Drop(this);
-    }
-
-
-
-    public override bool Accept(EquipmentSlot slot)
+    public override void Swap(DragDropCell sittingCell)
     {
+        Draggable a = sittingCell.draggable;
+        Draggable b = this;
+        DragDropCell cellA = sittingCell;
+        DragDropCell cellB = b.dragDropCell;
+        cellA.draggable = b;
+        b.dragDropCell = cellA;
+        b.startParent = cellA.holder;
+
+        cellB.draggable = a;
+        a.dragDropCell = cellB;
+        a.startParent = cellB.holder;
+        
+        a.Snap();
+        b.Snap();
+
+
+        CharacterCell cca = cellA as CharacterCell;
+        CharacterCell ccb = cellB as CharacterCell;
+
+        
+        CharacterDragger da = cca.draggable as CharacterDragger;
+        CharacterDragger db = ccb.draggable as CharacterDragger;
+        Party.inst.UpdatePosition(da.tab.character,cca.position);
+        Party.inst.UpdatePosition(db.tab.character,ccb.position);
+    }
+
   
-        return true;
-    }
-
-    public override void OnDrag(PointerEventData eventData){
-        base.OnDrag(eventData);
-        transform.SetParent(hi);
-    }
-
-     public override void OnEndDrag(PointerEventData eventData){
-        base.OnEndDrag(eventData);
-        currentSlot.Drop(this);
-     
-    }
-
-    
 }

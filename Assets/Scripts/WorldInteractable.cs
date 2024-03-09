@@ -12,6 +12,7 @@ public class WorldInteractable : WorldTile
     public Outline outline;
     bool hasOutline,hasHoverObject;
     public UnityEvent a;
+    public float camFOV = 40;
     void Start()
     {
         hasOutline = outline != null;
@@ -27,6 +28,7 @@ public class WorldInteractable : WorldTile
         if(WorldCity.inst.currentState == WorldCity.CityState.HOVER&& !WorldHubCamera.inst.fuckOff)
         { WorldCity.inst. desktopButton.SetActive(false);
             WorldHubCamera.inst.fuckOff = true;
+            WorldHubCamera.inst.cam.DOFieldOfView(camFOV,.2f);
             WorldHubCamera.inst.Move(camPos,()=>
             { a.Invoke(); });
             DisableHover();

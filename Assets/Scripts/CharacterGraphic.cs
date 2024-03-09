@@ -18,9 +18,6 @@ public class CharacterGraphic : MonoBehaviour
     {
         Orginize(c);
         character = c;
-   
-       
-        
     }
 
     public void EnemyInit(DefinedCharacter e){}
@@ -52,26 +49,12 @@ public class CharacterGraphic : MonoBehaviour
         allRenderers[0].sprite = CharacterBuilder.inst.classVarients[c.species][c.job][c.spriteVarient];
      
     }
-   //this is stupid
-    public CharacterGraphic MakeCamClone(){
-    return Instantiate(this);
+
+    public void KillCamera(){
+        Destroy( cam.gameObject);
+        cam = null;
+      
     }
-    //this is stupid
-   public void CameraShit(CharacterGraphic original)
-    {
-        foreach (var item in allRenderers)
-        {item.gameObject.layer = 8;}
-        Orginize(original. character);
-        cam.transform.localPosition = camPositionDict[original.character.species];
-        gameObject.name = character.characterName.fullName() + ": IconClone";
-        RenderTexture texture = new RenderTexture(250,250,16);
-        texture.Create();
-        cam.targetTexture = texture;   
-        IconGraphicHolder.inst.Take(this);
-        original.cam = cam;
-        original.iconClone = this;
-    }
-   //this is stupid
     
 
     public void RedFlash(UnityAction action){

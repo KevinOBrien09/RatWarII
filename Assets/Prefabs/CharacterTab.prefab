@@ -51,7 +51,7 @@ GameObject:
   - component: {fileID: 911681251795064341}
   - component: {fileID: 911681251795064347}
   - component: {fileID: 911681251795064346}
-  - component: {fileID: 7746079403716931441}
+  - component: {fileID: 8944231539475100541}
   m_Layer: 5
   m_Name: Dragger
   m_TagString: Untagged
@@ -78,7 +78,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0}
+  m_AnchoredPosition: {x: -0.000061035156, y: 0}
   m_SizeDelta: {x: 113.3872, y: 113.77}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &911681251795064347
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7746079403716931441
+--- !u!114 &8944231539475100541
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,10 +131,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cc33a577b80e9a43b051fb45576c974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartPosition: {x: 0, y: 0, z: 0}
-  currentSlot: {fileID: 0}
+  startParent: {fileID: 298818169412277524}
+  priorityTransform: {fileID: 0}
+  dragDropCell: {fileID: 695488598008486351}
   tab: {fileID: 911681252758425389}
-  canvas: {fileID: 0}
+  drop:
+    audioClip: {fileID: 8300000, guid: ec16a94ce077eb544b05428d86014a2a, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
+  snap:
+    audioClip: {fileID: 8300000, guid: 1a196a2a9fe4ee24ba95981080e049fb, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
 --- !u!1 &911681251811556626
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,7 +818,7 @@ MonoBehaviour:
   m_fontSizeMin: 1
   m_fontSizeMax: 36
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -982,28 +990,9 @@ MonoBehaviour:
   charTitle: {fileID: 911681251940278028}
   charIcon: {fileID: 911681252219521968}
   simpleIcon: {fileID: 2256384579447207389}
-  c:
-    characterName:
-      title: 
-      firstName: 
-      surname: 
-    species: 0
-    gender: 0
-    job: 0
-    baseStats:
-      hp: 0
-      speed: 0
-      strength: 0
-      moveRange: 0
-      passable: 0
-    exp:
-      level: 1
-    spriteVarient: 0
-    skills: []
-  dragger: {fileID: 7746079403716931441}
   inPartySignifier: {fileID: 6781999182474361029}
-  equipmentSlot: {fileID: 2863919745278640596}
   character:
+    ID: 
     characterName:
       title: 
       firstName: 
@@ -1021,8 +1010,8 @@ MonoBehaviour:
       level: 1
     spriteVarient: 0
     skills: []
-  iconGraphic: {fileID: 0}
-  rt: {fileID: 0}
+  cell: {fileID: 695488598008486351}
+  dragger: {fileID: 8944231539475100541}
 --- !u!222 &7603490919916022852
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2001,6 +1990,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: CharUICell
       objectReference: {fileID: 0}
+    - target: {fileID: 6475992546920598413, guid: 8ca1ba1541addd144ab26800d6ef0f36,
+        type: 3}
+      propertyPath: holder
+      value: 
+      objectReference: {fileID: 298818169412277524}
+    - target: {fileID: 6475992546920598413, guid: 8ca1ba1541addd144ab26800d6ef0f36,
+        type: 3}
+      propertyPath: draggable
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6823304010081388270, guid: 8ca1ba1541addd144ab26800d6ef0f36,
+        type: 3}
+      propertyPath: holder
+      value: 
+      objectReference: {fileID: 298818169412277524}
+    - target: {fileID: 6823304010081388270, guid: 8ca1ba1541addd144ab26800d6ef0f36,
+        type: 3}
+      propertyPath: draggable
+      value: 
+      objectReference: {fileID: 8944231539475100541}
     - target: {fileID: 8118105826210127605, guid: 8ca1ba1541addd144ab26800d6ef0f36,
         type: 3}
       propertyPath: holder
@@ -2010,12 +2019,12 @@ PrefabInstance:
         type: 3}
       propertyPath: currentItem
       value: 
-      objectReference: {fileID: 7746079403716931441}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ca1ba1541addd144ab26800d6ef0f36, type: 3}
---- !u!114 &2863919745278640596 stripped
+--- !u!114 &695488598008486351 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8118105826210127605, guid: 8ca1ba1541addd144ab26800d6ef0f36,
+  m_CorrespondingSourceObject: {fileID: 6823304010081388270, guid: 8ca1ba1541addd144ab26800d6ef0f36,
     type: 3}
   m_PrefabInstance: {fileID: 6275732998466248481}
   m_PrefabAsset: {fileID: 0}

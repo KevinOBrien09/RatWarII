@@ -14,11 +14,21 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     public GenericDictionary<Species,GenericDictionary<Job,List<Sprite>>> classVarients = new GenericDictionary<Species, GenericDictionary<Job, List<Sprite>>>();
     public List<Skill> mandatorySkills = new List<Skill>();
     public List<Skill> allSkills = new List<Skill>();
+    public GenericDictionary<string,Skill> skillDict = new GenericDictionary<string, Skill>();
     public bool addAllSkills;
+
+    protected override  void Awake(){
+        base.Awake();
+        foreach (var item in allSkills)
+        {
+            skillDict.Add(item.ID,item);
+        }
+    }
 
     public Character GenerateCharacter()
     {
         Character character = new Character();
+        character.ID = System.Guid.NewGuid().ToString();
         character.species = MiscFunctions.RandomEnumValue<Species>();
         character.job = MiscFunctions.RandomEnumValue<Job>();
         character.exp = new EXP();
@@ -29,23 +39,40 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         (Stats stats,List<Skill> skills ) statsAndSkills = CharacterBuilder.inst.GenerateStatsAndSkills(CharacterBuilder.inst.jobDict[character.job],character);
         character.baseStats = statsAndSkills.stats;
         character.skills = new List<Skill>( statsAndSkills.skills);
+        if(!IconGraphicHolder.inst.dict.ContainsKey(character.ID))
+        { IconGraphicHolder.inst.MakeIcon(character);}
+  
         return character;
     }
-    public CharacterGraphic GenerateGraphic(Character c,bool cameraShit)
+    public CharacterGraphic GenerateGraphic(Character c)
     {
         CharacterGraphic cg =  Instantiate(characerGraphicPrefab,Vector3.zero,Quaternion.identity);
-          cg.Init(c);
-        if(cameraShit){
-          CharacterGraphic clone = cg.MakeCamClone();
-          clone.CameraShit(cg);
-        }
-        // else{
-        // Destroy(cg.cam.gameObject)    ;
-        // cg.cam = null;
-        // }
+        cg.Init(c);
      
+       
         cg.character = c;
         return cg;
+    }
+
+    public Character GenerateFromSave(CharacterSaveData saveData){
+        Character character = new Character();
+        character.ID = saveData.ID;
+        character.species = saveData.species;
+        character.job = saveData.job;
+        character.exp = saveData.exp;
+       
+        character.gender = saveData.gender;
+        character.spriteVarient = saveData.spriteVarient;
+        character.characterName = saveData.characterName;
+       
+        character.baseStats =saveData.baseStats;
+        List<Skill> skills = new List<Skill>();
+        foreach (var item in saveData.skills)
+        {skills.Add(skillDict[item]);}
+        character.skills = new List<Skill>( skills);
+        if(!IconGraphicHolder.inst.dict.ContainsKey(character.ID))
+        { IconGraphicHolder.inst.MakeIcon(character);}
+        return character;
     }
 
 

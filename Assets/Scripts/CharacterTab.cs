@@ -11,33 +11,30 @@ public class CharacterTab : MonoBehaviour
 {
     public TextMeshProUGUI charName,charTitle;
     public RawImage charIcon,simpleIcon;
-    public Character c;
-    public CharacterDragger dragger;
     public GameObject inPartySignifier;
-    public EquipmentSlot equipmentSlot;
     public Character character;
-    public CharacterGraphic iconGraphic;
-    public RenderTexture rt;
-    void Start(){
-        // character =CharacterBuilder.inst.GenerateCharacter();
-        // Init(character);
-    }
-    public void Init(Character c){
+    public CharacterCell cell;
+    public CharacterDragger dragger;
+
+
+    public void Init(Character c)
+    {
         character = c;
         charName.text = c.characterName.fullName();
         charTitle.text = c.species.ToString() +"/"+ c.job.ToString();
-        dragger.Init(this);
-        CharacterGraphic cg = CharacterBuilder.inst.GenerateGraphic(c,true);
+
+           
+        charIcon.texture = IconGraphicHolder.inst.dict[character.ID];
+        simpleIcon.texture = IconGraphicHolder.inst.dict[character.ID];
         
-        iconGraphic = cg.iconClone;
-        rt = iconGraphic.cam.activeTexture;
-        charIcon.texture = rt;
-        simpleIcon.texture = rt;
-        Destroy(cg.gameObject);
+      
     }
-    public void IsPartyMember(int i){
+    public void IsPartyMember(CharacterCell newCell)
+    {
         inPartySignifier.SetActive(true);
-        BackbenchHandler.inst.partyCells[i].Drop(dragger);
+        newCell.Take(dragger);
+        
+    
     }
 
 

@@ -705,15 +705,24 @@ public class MapGenerator : Singleton<MapGenerator>
             }
             else
             {
-                for (int i = 0; i < Party.inst.activeParty.Count; i++)
-                { UnitFactory.inst.CreatePlayerUnit(shuffle[i],Party.inst.activeParty[i]);}
+                int i = 0;
+                foreach (var item in Party.inst.activeParty)
+                {
+                    UnitFactory.inst.CreatePlayerUnit(shuffle[i],item.Value.character);
+                    i++;
+                }
+               
             }
           
         }
         else
         {
-            for (int i = 0; i < Party.inst.activeParty.Count; i++)
-            { UnitFactory.inst.CreatePlayerUnit(shuffle[i],Party.inst.activeParty[i]);}
+            int i = 0;
+            foreach (var item in Party.inst.activeParty)
+            {
+                UnitFactory.inst.CreatePlayerUnit(shuffle[i],item.Value.character);
+                i++;
+            }
         }
    
 
