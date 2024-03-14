@@ -10,6 +10,7 @@ public class WorldHubCamera : Singleton<WorldHubCamera>
     Vector3 offset;
     float ogFOV;
     public bool fuckOff;
+   
     void Start(){
         ogFOV = cam.fieldOfView;
         offset = transform.position;
@@ -32,6 +33,11 @@ public class WorldHubCamera : Singleton<WorldHubCamera>
             cam.DOFieldOfView(ogFOV,.15f);
             //cam.fieldOfView = ogFOV;
         });
+    }
+
+    public void Reset(Transform t){
+        transform.DOMove(t.position,0);
+        transform.DORotate(t.rotation.eulerAngles,0);
     }
 
     public void Move(Transform t,UnityAction a)

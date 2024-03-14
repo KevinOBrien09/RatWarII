@@ -22,9 +22,9 @@ public class PartyOrganizer : MonoBehaviour
             yield return new WaitForSeconds(.1f);
             WorldHubCamera.inst.fuckOff = false;
           
-            
-            WorldCity.inst.ChangeState(WorldCity.CityState.ORGANIZER);
-            WorldCity.inst.close = shut;
+                    HubStateHandler.inst.ChangeStateString("Party");
+            HubStateHandler.inst.ChangeState(  HubStateHandler.HubState.ORGANIZER);
+            HubStateHandler.inst.close = shut;
         }
      
     }

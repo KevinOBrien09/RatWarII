@@ -33,13 +33,24 @@ MonoBehaviour:
       - Hoppy
       - Licky
       - Art
+      - Kermit
+      - Naveen
+      - Apu
     - Key: 2
       Value:
       - Ribby
       - Snicky
       - Alice
+      - Marge
+      - Tiana
+      - Lily
     keyCollision: 0
   surnames:
   - Croaksworth
   - Ribbiton
   - Flykiller
+  - Hopscotch
+  - Lollihop
+  - Apustaja
+  - Big Lips
+  - Hopalong

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
-public class CharacterDragger : Draggable
+public class CharacterDragger : Draggable ,IPointerClickHandler
 {
    public CharacterTab tab;
    public SoundData drop,snap;
@@ -21,6 +21,13 @@ public class CharacterDragger : Draggable
         {
             base.Snap();
         }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+       if(eventData.button == PointerEventData.InputButton.Right){
+        Debug.Log("RightClick");
+       }
     }
 
     public override void Swap(DragDropCell sittingCell)

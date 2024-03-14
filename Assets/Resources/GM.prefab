@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 8191127639272312101}
   - component: {fileID: 3881365602420787433}
   - component: {fileID: -705453231196937367}
+  - component: {fileID: 4117917676950112203}
   m_Layer: 0
   m_Name: GM
   m_TagString: Untagged
@@ -193,6 +194,7 @@ MonoBehaviour:
   doNotGenObjective: 0
   chosenQuest: 0
   loadFromFile: 1
+  saveSlotIndex: 999
 --- !u!114 &8191127639272312099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,11 +458,26 @@ MonoBehaviour:
   benched:
     list: []
     keyCollision: 0
+  deadCharacters:
+    list: []
+    keyCollision: 0
   onPartyEdit:
     m_PersistentCalls:
       m_Calls: []
   partySize: 3
   benchSize: 3
+--- !u!114 &4117917676950112203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8191127639272312126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a28cf75d6d81483468210806a62b65ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8191127640814863693
 GameObject:
   m_ObjectHideFlags: 0

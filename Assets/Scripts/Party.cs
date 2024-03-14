@@ -7,6 +7,7 @@ using UnityEngine.Events;
 [System.Serializable]
 public class CharacterHolder{
     public Character character;
+    public Vector2 mapTileID;
     public int currentHP;
     public int position;
 }
@@ -32,7 +33,7 @@ public class Party : Singleton<Party>
     public int gold;
     public GenericDictionary<string, CharacterHolder> activeParty = new GenericDictionary<string, CharacterHolder>();
     public GenericDictionary<string, CharacterHolder> benched = new GenericDictionary<string, CharacterHolder>();
-    public GenericDictionary<string, Character> deadCharacters = new GenericDictionary<string, Character>();
+    public GenericDictionary<string, CharacterHolder> deadCharacters = new GenericDictionary<string, CharacterHolder>();
     public UnityEvent onPartyEdit;
     public int partySize = 3;
     public int benchSize = 3;
@@ -43,7 +44,7 @@ public class Party : Singleton<Party>
             startingGold = true;
         }
         Refresh();
-      
+        
     }
 
     public void AddGold(int i){
@@ -67,16 +68,29 @@ public class Party : Singleton<Party>
     {return gold >= i;}
 
     public void KillMember(Character c)
-    {
+    { 
+        if(!deadCharacters.ContainsKey(c.ID))
+        {deadCharacters.Add(c.ID,activeParty[c.ID]);}
+
         if(activeParty.ContainsKey(c.ID))
         {activeParty.Remove(c.ID);}
 
-        if(!deadCharacters.ContainsKey(c.ID))
-        {deadCharacters.Add(c.ID,c);}
+       
 
-        SaveLoad.Save(GameManager.inst.saveSlotIndex);
-        
+       
+        SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyUpdateSave());
         onPartyEdit.Invoke();
+    }
+    public void SavePartyEdit(){
+        SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyUpdateSave());
+    }
+
+    public SaveData PartyUpdateSave()
+    {
+        SaveData sd = SaveLoad.Load(999);
+        sd.partySaveData = Save();
+        return sd;
+
     }
 
     public void AddToPossession(Character c)
@@ -86,7 +100,8 @@ public class Party : Singleton<Party>
             if(activeParty.Count < partySize)
             {
                 CharacterHolder holder = new CharacterHolder();
-                holder.character = c;   activeParty.Add(c.ID,holder);
+                holder.character = c;   
+                activeParty.Add(c.ID,holder);
                 holder.position = lastOpenPosition();
             }
             else
@@ -96,6 +111,7 @@ public class Party : Singleton<Party>
                 benched.Add(c.ID,holder);
             }
             onPartyEdit.Invoke();
+            SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyUpdateSave());
         }
       
     }
@@ -168,7 +184,7 @@ public class Party : Singleton<Party>
         {
             HolderSaveData hsd = new HolderSaveData();
             hsd.position = -10;
-            hsd.charSave = item.Value.Save();
+            hsd.charSave = item.Value.character. Save();
             psd.deceased.Add(hsd);
         }
         return psd;
@@ -189,6 +205,13 @@ public class Party : Singleton<Party>
             holder.position = item.position;
             holder.character = CharacterBuilder.inst.GenerateFromSave(item.charSave);
             benched.Add(item.charSave.ID,holder);
+        }
+        foreach (var item in psd.deceased)
+        {
+            CharacterHolder holder = new CharacterHolder();
+            holder.position = item.position;
+            holder.character = CharacterBuilder.inst.GenerateFromSave(item.charSave);
+            deadCharacters.Add(item.charSave.ID,holder);
         }
         onPartyEdit.Invoke();
     }

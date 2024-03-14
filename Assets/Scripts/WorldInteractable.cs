@@ -25,8 +25,8 @@ public class WorldInteractable : WorldTile
     }
     public override void Click()
     {
-        if(WorldCity.inst.currentState == WorldCity.CityState.HOVER&& !WorldHubCamera.inst.fuckOff)
-        { WorldCity.inst. desktopButton.SetActive(false);
+        if(  HubStateHandler.inst.currentState ==  HubStateHandler.HubState.HOVER&& !WorldHubCamera.inst.fuckOff)
+        {  HubStateHandler.inst.desktopButton.SetActive(false);
             WorldHubCamera.inst.fuckOff = true;
             WorldHubCamera.inst.cam.DOFieldOfView(camFOV,.2f);
             WorldHubCamera.inst.Move(camPos,()=>
@@ -37,7 +37,7 @@ public class WorldInteractable : WorldTile
     
     public override void Enter()
     {
-        if(WorldCity.inst.currentState == WorldCity.CityState.HOVER && !WorldHubCamera.inst.fuckOff)
+        if(  HubStateHandler.inst.currentState ==   HubStateHandler.HubState.HOVER && !WorldHubCamera.inst.fuckOff)
         {
             base.Enter();
             if(hasHoverObject)
@@ -53,7 +53,7 @@ public class WorldInteractable : WorldTile
         DisableHover();
     }
 
-    void DisableHover()
+  public  void DisableHover()
     {
         if(hasHoverObject)
         { hoverObject.gameObject.SetActive(false);}

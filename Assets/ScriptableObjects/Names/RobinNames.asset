@@ -31,11 +31,16 @@ MonoBehaviour:
       - Ronny
       - Robbie
       - 'Burt '
+      - Ralph
+      - Rusty
+      - Rocko
     - Key: 2
       Value:
       - Rin
       - Rizzie
-      - Billie
+      - Rio
+      - Rosy
+      - Roxy
     keyCollision: 0
   surnames:
   - Hood

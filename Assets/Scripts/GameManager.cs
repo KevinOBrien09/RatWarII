@@ -79,7 +79,11 @@ StartCoroutine(q());
 
         SaveData save =  new SaveData();
         save.partySaveData = Party.inst.Save();
+        save.mapSaveData = MapTileManager.inst.Save();
+       
         return save;
     }
+
+
 
 }

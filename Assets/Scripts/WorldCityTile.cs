@@ -10,7 +10,7 @@ public class WorldCityTile : WorldTile
     {
         base.Click();
         AudioManager.inst.GetSoundEffect().Play(zoom);
-        WorldMap.inst.SwapToCity();
+
         
     }
 

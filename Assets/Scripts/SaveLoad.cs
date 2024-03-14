@@ -15,7 +15,7 @@ public static class SaveLoad
     public static string savePath = Application.persistentDataPath+"/saves/";
 
 
-    public static void Save(int slot)
+    public static void Save(int slot,SaveData sd = null)
     {
         if(!SaveAlreadyExists(savePath + slot.ToString()))
         {
@@ -24,7 +24,11 @@ public static class SaveLoad
         
         string mainDataPath = savePath + slot + mainSave;
         int currentScene = SceneManager.GetActiveScene().buildIndex;
-        SaveData mainData = GameManager.inst.Save();
+        SaveData mainData =  null;
+        if(sd != null)
+        {mainData = sd;}
+        else
+        {mainData =  GameManager.inst.Save();}
         string mainDataToJSON = JsonUtility.ToJson(mainData,true);
         File.WriteAllText(mainDataPath , mainDataToJSON); 
 

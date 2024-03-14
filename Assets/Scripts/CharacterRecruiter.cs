@@ -37,8 +37,9 @@ public class CharacterRecruiter: Singleton<CharacterRecruiter>
 
 
                     WorldHubCamera.inst.fuckOff = false;
-                    WorldCity.inst.ChangeState(WorldCity.CityState.RECRUIT);
-                    WorldCity.inst.close = shut;
+                    HubStateHandler.inst.ChangeState( HubStateHandler.HubState.RECRUIT);
+                    HubStateHandler.inst.ChangeStateString("Guild");
+                    HubStateHandler.inst.close = shut;
 
                    }));
             });
@@ -54,6 +55,7 @@ public class CharacterRecruiter: Singleton<CharacterRecruiter>
 
     public void OpenRecruitMenu(){
           EventSystem.current.SetSelectedGameObject(null);
+           HubStateHandler.inst.ChangeStateString("Recruit");
         WorldHubCamera.inst.fuckOff = true;
         WorldHubCamera.inst.Move(recuritPos,(()=>
         {WorldHubCamera.inst.fuckOff = false;}));
@@ -74,13 +76,25 @@ public class CharacterRecruiter: Singleton<CharacterRecruiter>
                  
                 door.DOLocalRotate(new Vector3(0,0,0),.25f).OnComplete(() =>
                 {
-                    WorldCity.inst.RetunToHover();
+                    HubStateHandler.inst.RetunToHover();
                  //AudioManager.inst.GetSoundEffect().Play(doorShut);
                 }
                 );
             }));
         }
         else if(state == 2){
+             HubStateHandler.inst.ChangeStateString("Guild");
+            EventSystem.current.SetSelectedGameObject(null);
+            WorldHubCamera.inst.fuckOff = true;
+            WorldHubCamera.inst.Move(interiorCamPos,(()=>
+            { WorldHubCamera.inst.fuckOff = false;
+            state = 1;
+               
+            }));
+        }
+        else if(state == 3){
+            QuestGiver.inst.Close();
+            HubStateHandler.inst.ChangeStateString("Guild");
             EventSystem.current.SetSelectedGameObject(null);
             WorldHubCamera.inst.fuckOff = true;
             WorldHubCamera.inst.Move(interiorCamPos,(()=>
