@@ -72,7 +72,7 @@ public class BattleManager : Singleton<BattleManager>
     public void Win(){
         BattleTicker.inst.Type("Win");
         gameOver = true;
-        Party.inst.AddGold(350);
+        PartyManager .inst.AddGold(350);
         Cursor.lockState = CursorLockMode.Confined;
         questComplete.SetActive(true);
     }

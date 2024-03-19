@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 public class HubStateHandler: Singleton<HubStateHandler>
 {
-    public enum HubState {HOVER,QUEST,RECRUIT,ORGANIZER,LEAVE,MAP,INMAPTILE}
+    public enum HubState {HOVER,QUEST,RECRUIT,ORGANIZER,LEAVE,MAP,INMAPTILE,PARTYEDIT}
     public HubState currentState;
     public GameObject desktopButton;
     public TextMeshProUGUI location,date,state;
@@ -48,12 +48,21 @@ public class HubStateHandler: Singleton<HubStateHandler>
                 CharacterRecruiter.inst.BackOut();
                 return;
             }
+            if(currentState == HubState.PARTYEDIT){
+                if(BackbenchHandler.inst.CheckIfReady()){
+                BackbenchHandler.inst.LeaveEdit();
+                }
+                return;
+            }
             if(currentState == HubState.ORGANIZER)
             {
+               
                 if(!Draggable.isDragging)
                 {
                     RetunToHover();
                 }
+                
+               
             
                 return;
             }

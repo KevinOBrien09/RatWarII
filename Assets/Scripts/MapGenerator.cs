@@ -699,14 +699,15 @@ public class MapGenerator : Singleton<MapGenerator>
         List<Slot> shuffle = MapManager.inst.StartingRadius();
         if(UnitFactory.inst.debug)
         {
-            if(Party.inst.activeParty.Count ==0){
+            if(     PartyManager .inst.parties[PartyManager .inst.currentParty]. members.Count ==0) //this
+            {
                 for (int i = 0; i < howManyPartyMembers; i++)
                 { UnitFactory.inst. CreatePlayerUnit(shuffle[i]);}
             }
             else
             {
                 int i = 0;
-                foreach (var item in Party.inst.activeParty)
+                foreach (var item in     PartyManager .inst.parties[PartyManager .inst.currentParty]. members)
                 {
                     UnitFactory.inst.CreatePlayerUnit(shuffle[i],item.Value.character);
                     i++;
@@ -718,7 +719,7 @@ public class MapGenerator : Singleton<MapGenerator>
         else
         {
             int i = 0;
-            foreach (var item in Party.inst.activeParty)
+            foreach (var item in  PartyManager .inst.parties[PartyManager .inst.currentParty]. members)
             {
                 UnitFactory.inst.CreatePlayerUnit(shuffle[i],item.Value.character);
                 i++;

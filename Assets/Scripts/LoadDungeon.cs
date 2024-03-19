@@ -13,7 +13,7 @@ public class LoadDungeon : MonoBehaviour,IPointerEnterHandler
 
     public void Click()
     {
-        if(Party.inst.activeParty.Count ==0){
+        if(PartyManager .inst.parties[PartyManager .inst.currentParty]. members.Count ==0){
             Debug.Log("No party members");
             AudioManager.inst.GetSoundEffect().Play(error); 
         }

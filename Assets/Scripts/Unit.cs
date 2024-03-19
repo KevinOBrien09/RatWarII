@@ -238,7 +238,7 @@ float percent = (5f / 100f) * (float) health.maxHealth;
                 }
             }
             else if(side == Side.PLAYER){
-                Party.inst.KillMember(character);
+                PartyManager .inst.parties[PartyManager .inst.currentParty]. KillMember(character);
             }
             dead = true;
             BattleManager.inst.UnitIsDead(this);

@@ -7,6 +7,7 @@ using UnityEngine.Events;
 [System.Serializable]
 public class CharacterHolder{
     public Character character;
+    public string lastPartyID;
     public Vector2 mapTileID;
     public int currentHP;
     public int position;
@@ -15,141 +16,126 @@ public class CharacterHolder{
 [System.Serializable]
 public class HolderSaveData{
     public CharacterSaveData charSave;
+    public Vector2 mapTileID;
     public int currentHP;
     public int position;
 }
 [System.Serializable]
 public class PartySaveData
 {
+    [System.Serializable]
+    public class IndividualPartySave
+    {
+        public string id;
+        public string partyName;
+        public List<HolderSaveData> members = new List<HolderSaveData>();
+
+    }
     
-  
-    public List<HolderSaveData> activeParty = new List<HolderSaveData>();
+    public string activePartyID;
+    public List<IndividualPartySave> individualParties = new List<IndividualPartySave>();
     public List<HolderSaveData> benched = new List<HolderSaveData>();
     public List<HolderSaveData> deceased = new List<HolderSaveData>();
 
 }
-public class Party : Singleton<Party>
+
+[System.Serializable]
+public class Party 
 {
-    public int gold;
-    public GenericDictionary<string, CharacterHolder> activeParty = new GenericDictionary<string, CharacterHolder>();
-    public GenericDictionary<string, CharacterHolder> benched = new GenericDictionary<string, CharacterHolder>();
-    public GenericDictionary<string, CharacterHolder> deadCharacters = new GenericDictionary<string, CharacterHolder>();
-    public UnityEvent onPartyEdit;
+    public delegate void PartyEvent();
+    public PartyEvent onPartyEdit;
+
+    public string ID;
+    public string partyName;
+    public GenericDictionary<string, CharacterHolder> members = new GenericDictionary<string, CharacterHolder>();
+
+ // public UnityEvent onPartyEdit;
     public int partySize = 3;
-    public int benchSize = 3;
-    bool startingGold;
-    void Start(){
-        if(!startingGold){
-            gold = 900;
-            startingGold = true;
+
+    public void Create(){
+        ID = System.Guid.NewGuid().ToString();
+        partyName = ID;
+        
+     //  
+    }
+
+ 
+    
+   public PartySaveData.IndividualPartySave Save()
+   {
+        PartySaveData.IndividualPartySave ips = new PartySaveData.IndividualPartySave();
+        ips.partyName = partyName;
+        ips.id = ID;
+        foreach (var item in members)
+        {
+            HolderSaveData hsd = new HolderSaveData();
+            hsd.mapTileID = item.Value.mapTileID;
+            hsd.position = item.Value.position;
+            hsd.charSave = item.Value.character.Save();
+            ips.members.Add(hsd);
         }
-        Refresh();
-        
+        return ips;
     }
-
-    public void AddGold(int i){
-        gold += i;
-       Refresh();
-        
-    }
-
-    void Refresh()
-    {
-        if(GoldText.inst != null)
-        { GoldText.inst.Refresh(); }
-    }
-
-    public void RemoveGold(int i){
-        gold -= i;
-        Refresh();
-    }
-
-    public bool canAfford(int i)
-    {return gold >= i;}
-
+    
     public void KillMember(Character c)
     { 
-        if(!deadCharacters.ContainsKey(c.ID))
-        {deadCharacters.Add(c.ID,activeParty[c.ID]);}
+        if(!PartyManager.inst.deadCharacters .ContainsKey(c.ID))
+        {PartyManager.inst.deadCharacters .Add(c.ID,members[c.ID]);}
 
-        if(activeParty.ContainsKey(c.ID))
-        {activeParty.Remove(c.ID);}
-
-       
-
-       
-        SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyUpdateSave());
-        onPartyEdit.Invoke();
-    }
-    public void SavePartyEdit(){
-        SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyUpdateSave());
+        if(members.ContainsKey(c.ID))
+        {members.Remove(c.ID);}
+        
+        SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyManager.inst.PartyUpdateSave());
+        InvokePartyEdit();
     }
 
-    public SaveData PartyUpdateSave()
+    void InvokePartyEdit()
     {
-        SaveData sd = SaveLoad.Load(999);
-        sd.partySaveData = Save();
-        return sd;
-
+        if(onPartyEdit != null)
+        {onPartyEdit.Invoke(); }
+        else
+        {Debug.LogAssertion("onPartyEdit has no listeners!");}
     }
-
-    public void AddToPossession(Character c)
-    {
-        if(!activeParty.ContainsKey(c.ID) && !benched.ContainsKey(c.ID))
-        {
-            if(activeParty.Count < partySize)
-            {
-                CharacterHolder holder = new CharacterHolder();
-                holder.character = c;   
-                activeParty.Add(c.ID,holder);
-                holder.position = lastOpenPosition();
-            }
-            else
-            {   CharacterHolder holder = new CharacterHolder();
-                holder.character = c;
-                holder.position = -5;
-                benched.Add(c.ID,holder);
-            }
-            onPartyEdit.Invoke();
-            SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyUpdateSave());
-        }
-      
-    }
-
+    
     public void PartyToBench(Character c)
     {
-        if(activeParty.ContainsKey(c.ID) )
+        if(members.ContainsKey(c.ID) )
         {
             CharacterHolder holder = new CharacterHolder();
+            holder.mapTileID = LocationManager.inst.currentLocation;
             holder.character = c;
             holder.position = -5;
-            benched.Add(c.ID,holder);
-            activeParty.Remove(c.ID);
-            onPartyEdit.Invoke();
+            PartyManager.inst.benched.Add(c.ID,holder);
+            members.Remove(c.ID);
+            InvokePartyEdit();
         }
     }
 
     public void BenchToParty(Character c,int i)
     {
-        if(benched.ContainsKey(c.ID) )
+        if(PartyManager.inst.characterBelongsInLocation(c) )
         {
             CharacterHolder holder = new CharacterHolder();
+            holder.mapTileID = LocationManager.inst.currentLocation;
             holder.character = c;
             holder.position = i;
-            activeParty.Add(c.ID,holder);
-            benched.Remove(c.ID);
-            onPartyEdit.Invoke();
+            members.Add(c.ID,holder);
+            PartyManager.inst.benched.Remove(c.ID);
+            InvokePartyEdit();
         }
     }
 
     public void UpdatePosition(Character c, int i)
-    {activeParty[c.ID].position = i;     onPartyEdit.Invoke();}
+    {
+        members[c.ID].position = i;     
+          InvokePartyEdit();
+    }
 
 
     public int lastOpenPosition()
     {
         List<CharacterHolder> h = new List<CharacterHolder>();
-        foreach (var item in activeParty)
+        foreach (var item in members)
         {h.Add(item.Value);}
 
         for (int i = 0; i < partySize; i++)
@@ -163,56 +149,8 @@ public class Party : Singleton<Party>
         return 0;
     }
 
-    public PartySaveData Save()
-    {
-        PartySaveData psd = new PartySaveData();
-        foreach (var item in activeParty)
-        {
-            HolderSaveData hsd = new HolderSaveData();
-            hsd.position = item.Value.position;
-            hsd.charSave = item.Value.character.Save();
-            psd.activeParty.Add(hsd);
-        }
-        foreach (var item in benched)
-        {
-            HolderSaveData hsd = new HolderSaveData();
-            hsd.position = item.Value.position;
-            hsd.charSave = item.Value.character.Save();
-            psd.benched.Add(hsd);
-        }
-        foreach (var item in deadCharacters)
-        {
-            HolderSaveData hsd = new HolderSaveData();
-            hsd.position = -10;
-            hsd.charSave = item.Value.character. Save();
-            psd.deceased.Add(hsd);
-        }
-        return psd;
-    }
+    public void SavePartyEdit() //??
+    {SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyManager.inst.PartyUpdateSave()); }
 
-    public void Load(PartySaveData psd )
-    {
-        foreach (var item in psd.activeParty)
-        {
-            CharacterHolder holder = new CharacterHolder();
-            holder.position = item.position;
-            holder.character = CharacterBuilder.inst.GenerateFromSave(item.charSave);
-            activeParty.Add(item.charSave.ID,holder);
-        }
-        foreach (var item in psd.benched)
-        {
-            CharacterHolder holder = new CharacterHolder();
-            holder.position = item.position;
-            holder.character = CharacterBuilder.inst.GenerateFromSave(item.charSave);
-            benched.Add(item.charSave.ID,holder);
-        }
-        foreach (var item in psd.deceased)
-        {
-            CharacterHolder holder = new CharacterHolder();
-            holder.position = item.position;
-            holder.character = CharacterBuilder.inst.GenerateFromSave(item.charSave);
-            deadCharacters.Add(item.charSave.ID,holder);
-        }
-        onPartyEdit.Invoke();
-    }
+   
 }

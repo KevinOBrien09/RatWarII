@@ -18,7 +18,7 @@ public class GameManager : Singleton<GameManager>
 
     public void Load(){
   SaveData sd =     SaveLoad.Load(saveSlotIndex);
-        Party.inst.Load(sd.partySaveData);
+        PartyManager.inst.Load(sd.partySaveData);
     }
 
     #if UNITY_EDITOR
@@ -78,7 +78,7 @@ StartCoroutine(q());
     {
 
         SaveData save =  new SaveData();
-        save.partySaveData = Party.inst.Save();
+        save.partySaveData = PartyManager.inst.Save();
         save.mapSaveData = MapTileManager.inst.Save();
        
         return save;

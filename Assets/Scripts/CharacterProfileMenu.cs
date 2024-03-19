@@ -98,17 +98,17 @@ public class CharacterProfileMenu : MonoBehaviour
     public void Hire()
     {
         if(CharacterRecruiter.inst.state == 2){
-            if(Party.inst.canAfford(300)|debug)
+            if(PartyManager.inst.canAfford(300)|debug)
             {
                 if(!debug){
-                Party.inst.RemoveGold(300);
+               PartyManager.inst.RemoveGold(300);
                 }
                
                 Character c = characters[index];
                 AudioManager.inst.GetSoundEffect().Play(CharacterBuilder.inst.sfxDict[c.species].move);
                 AudioManager.inst.GetSoundEffect().Play(goldSpend); 
                 characters.Remove(c);
-                Party.inst.AddToPossession(c);
+                PartyManager.inst. AddToPossession(c);
                 if(characters.Count > 0)
                 {
                     

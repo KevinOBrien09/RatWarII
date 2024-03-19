@@ -7,7 +7,7 @@ public class GoldText : Singleton<GoldText>
     public TextMeshProUGUI txt;
 
     public void Refresh(){
-        txt.text = "G:" + Party.inst.gold.ToString();
+        //txt.text = "G:" + Party.inst.gold.ToString();
     }
 
 }

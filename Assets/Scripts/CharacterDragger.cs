@@ -15,7 +15,8 @@ public class CharacterDragger : Draggable ,IPointerClickHandler
         {  tab.inPartySignifier.gameObject.SetActive(false);
             tab.cell.Take(this);
             AudioManager.inst.GetSoundEffect().Play(drop);
-            Party.inst.PartyToBench(tab.character);
+         //   PartyManager .inst.currentParty
+         BackbenchHandler.inst.editingParty   . PartyToBench(tab.character);
         }
         else
         {
@@ -54,8 +55,8 @@ public class CharacterDragger : Draggable ,IPointerClickHandler
         
         CharacterDragger da = cca.draggable as CharacterDragger;
         CharacterDragger db = ccb.draggable as CharacterDragger;
-        Party.inst.UpdatePosition(da.tab.character,cca.position);
-        Party.inst.UpdatePosition(db.tab.character,ccb.position);
+        BackbenchHandler.inst.editingParty. UpdatePosition(da.tab.character,cca.position);
+        BackbenchHandler.inst.editingParty.UpdatePosition(db.tab.character,ccb.position);
     }
 
   

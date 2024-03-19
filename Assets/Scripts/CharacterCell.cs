@@ -14,12 +14,21 @@ public class CharacterCell : DragDropCell
         CharacterDragger b = draggable as CharacterDragger;
         if(cellType == CellType.TAB)
         {
+            
             if(a.tab.cell == this)
             {
-                if(Party.inst.activeParty.ContainsKey(a.tab.character.ID))
+            
+              
+                if(BackbenchHandler.inst.editing  )
                 {
-                    a.NoCell();
+                    if(BackbenchHandler.inst.editingParty.members.ContainsKey(a.tab.character.ID)){
+   a.NoCell();
                     return 0; 
+                    }
+                    else{
+                        return 1;
+                    }
+                 
                 }
                 if(draggable == null)
                 { 
@@ -32,7 +41,7 @@ public class CharacterCell : DragDropCell
             if(b != null)
             {
                 
-                if(Party.inst.activeParty.ContainsKey(a.tab.character.ID) && Party.inst.activeParty.ContainsKey(b.tab.character.ID))
+                if(  BackbenchHandler.inst.editingParty.members.ContainsKey(a.tab.character.ID) &&   BackbenchHandler.inst.editingParty.members.ContainsKey(b.tab.character.ID))
                 { 
                     AudioManager.inst.GetSoundEffect().Play(a. snap);
                     return 2; 
@@ -43,18 +52,18 @@ public class CharacterCell : DragDropCell
                 Character c = a.tab.character;
                 if(draggable == null)
                 { 
-                    if(Party.inst.activeParty.ContainsKey(c.ID)) //moving from party slot to unoccupied party slot
+                    if(  BackbenchHandler.inst.editingParty.members.ContainsKey(c.ID)) //moving from party slot to unoccupied party slot
                     {
-                        Party.inst.UpdatePosition(c,position);
+                        BackbenchHandler.inst.editingParty.UpdatePosition(c,position);
                         AudioManager.inst.GetSoundEffect().Play(a. snap);
                     }
                    
-                    else if(!Party.inst.activeParty.ContainsKey(c.ID) && Party.inst.benched.ContainsKey(c.ID))
+                    else if(!  BackbenchHandler.inst.editingParty.members.ContainsKey(c.ID) && PartyManager.inst.characterBelongsInLocation(c))
                     {
                         a.tab.inPartySignifier.gameObject.SetActive(true);
                         AudioManager.inst.GetSoundEffect().Play(a. snap);
                         AudioManager.inst.GetSoundEffect().Play(CharacterBuilder.inst.sfxDict[c.species].turnStart);
-                        Party.inst.BenchToParty(c,position);
+                        BackbenchHandler.inst.editingParty.BenchToParty(c,position);
                     }
                    
                     return 1; 
