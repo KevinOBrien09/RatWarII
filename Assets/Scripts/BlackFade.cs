@@ -10,9 +10,12 @@ public class BlackFade : Singleton<BlackFade>
 {
     public Image fade;
 
-    public void FadeOut(float t = 2){
+    public void FadeOut(float t = 2,UnityAction a = null){
         fade.DOFade(1,0);
         fade.DOFade(0,t);
+        if(a != null){
+            a.Invoke();
+        }
 
         
     }
@@ -21,5 +24,9 @@ public class BlackFade : Singleton<BlackFade>
         fade.DOFade(1,.25f).OnComplete(()=>{
             a.Invoke();
         });
+    }
+
+    public void toggleRaycast(bool b){
+        fade.raycastTarget = b;
     }
 }

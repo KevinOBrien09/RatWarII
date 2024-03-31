@@ -171,7 +171,8 @@ public class Unit : MonoBehaviour
             if(ca)
             {Flip(v);}
            
-            health.Hit(damage);
+            health.Hit(damage,castArgs);
+            
         if(bleed)
         {
             bleedVFX.gameObject.SetActive(true);

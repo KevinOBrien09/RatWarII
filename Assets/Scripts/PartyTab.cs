@@ -6,25 +6,40 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using DG.Tweening;
+
 public class PartyTab : MonoBehaviour
 {
-    public TextMeshProUGUI partyName;
-    public GenericDictionary<int,RawImage> icons = new GenericDictionary<int, RawImage>();
+    public TextMeshProUGUI partyName,partyLevel;
+    public GenericDictionary<int,PartyTabIcon> icons = new GenericDictionary<int,PartyTabIcon>();
     public List<Image> border = new List<Image>();
+    public List<GameObject> mapModeToggles = new List<GameObject>();
     public Color32 yellow;
     public Party party;
     public RectTransform holder;
     public float editPos,ogPos;
-    public GameObject setActiveButton;
-    public Image starIcon;
+  
+   
+    public Button mainTabButton;
+ 
 
     public void Init(Party p)
     {        
         party = p;
         ChangeBorderColour(Color.black);
         UpdateIcons();
+
+        partyLevel.text = p.TotalPartyLevel().ToString();
         partyName.text = p.partyName;
         party.onPartyEdit += UpdateIcons;
+    }
+
+    public void SetToMapMode(){
+        foreach (var item in mapModeToggles)
+        {
+               item.SetActive(false);
+        }
+        mainTabButton.enabled = true;
+    
     }
 
     public void Move(float p)
@@ -32,22 +47,35 @@ public class PartyTab : MonoBehaviour
         holder.DOAnchorPosX(p,.2f);
     }
 
-    public void UpdateIcons(){
+    public void ChangePartyName(){
+                partyName.text = party.partyName;
+    }
+
+    public void UpdateIcons()
+    {
         foreach (var item in icons)
         {
-            item.Value.enabled = false;
+            item.Value.Wipe();
         }
         foreach (var item in party.members)
         {   
-            icons[item.Value.position].enabled = true;
-            icons[item.Value.position].texture =  IconGraphicHolder.inst.dict[item.Value. character.ID];
+            icons[item.Value.position].Init(item.Value.character);
+            
         }
     }
 
     public void EditButton(){
+        if(CharacterStatSheet.inst.open){
+            return;
+        }
+
         if(!BackbenchHandler.inst.editing){
             EventSystem.current.SetSelectedGameObject(null);
             BackbenchHandler.inst.EditExistingParty(party);
+        }
+        else
+        {
+            BackbenchHandler.inst.LeaveEdit();
         }
  
     }
@@ -66,7 +94,7 @@ public class PartyTab : MonoBehaviour
    
             PartyManager.inst.currentParty = party.ID;
             HubCharacterDisplay.inst.Refresh();
-            BackbenchHandler.inst.ActivePartyRefresh();
+      
            // ChangeBorderColour(yellow);
         }
     }

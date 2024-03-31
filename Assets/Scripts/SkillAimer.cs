@@ -61,12 +61,7 @@ public class SkillAimer : Singleton<SkillAimer>
                 
                 args.targetSlot = s;
                 args.skill = _skill;
-                args.castEffects = ()=>
-                {
-                    foreach (var item in _skill.effects)
-                    {item.Go();}
                 
-                };
                 if(_skill.skillCastBehaviour == null)
                 {Debug.LogAssertion("No SkillCastBehaviour in " + _skill.skillName + "'s scriptable object. Game is now softlocked.");}
                 else

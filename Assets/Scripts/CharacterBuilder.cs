@@ -14,7 +14,9 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     public GenericDictionary<Species,GenericDictionary<Job,List<Sprite>>> classVarients = new GenericDictionary<Species, GenericDictionary<Job, List<Sprite>>>();
     public List<Skill> mandatorySkills = new List<Skill>();
     public List<Skill> allSkills = new List<Skill>();
+    public List<Trait> allTraits = new List<Trait>();
     public GenericDictionary<string,Skill> skillDict = new GenericDictionary<string, Skill>();
+    public GenericDictionary<string,Trait> traitDict = new GenericDictionary<string, Trait>();
     public bool addAllSkills;
 
     protected override  void Awake(){
@@ -22,6 +24,10 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         foreach (var item in allSkills)
         {
             skillDict.Add(item.ID,item);
+        }
+        foreach (var item in allTraits)
+        {
+            traitDict.Add(item.ID,item);
         }
     }
 
@@ -32,6 +38,7 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         character.species = MiscFunctions.RandomEnumValue<Species>();
         character.job = MiscFunctions.RandomEnumValue<Job>();
         character.exp = new EXP();
+        character.exp.Init(0);
         character.exp.level = 1;
         character.gender = GetGender();   
         character.spriteVarient = GetRandomSpriteVar(character);
@@ -41,7 +48,8 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         character.skills = new List<Skill>( statsAndSkills.skills);
         if(!IconGraphicHolder.inst.dict.ContainsKey(character.ID))
         { IconGraphicHolder.inst.MakeIcon(character);}
-  
+        character.battleData = new CharacterBattleData();
+        character.battleData.currentHP = character.stats().hp;
         return character;
     }
     public CharacterGraphic GenerateGraphic(Character c)
@@ -59,19 +67,29 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         character.ID = saveData.ID;
         character.species = saveData.species;
         character.job = saveData.job;
-        character.exp = saveData.exp;
+        character.exp = new EXP();
+        character.exp.Load(saveData.expSave);
        
         character.gender = saveData.gender;
         character.spriteVarient = saveData.spriteVarient;
         character.characterName = saveData.characterName;
        
         character.baseStats =saveData.baseStats;
+
         List<Skill> skills = new List<Skill>();
         foreach (var item in saveData.skills)
         {skills.Add(skillDict[item]);}
         character.skills = new List<Skill>( skills);
+
+        List<Trait> traits = new List<Trait>();
+        foreach (var item in saveData.traits)
+        {traits.Add(traitDict[item]);}
+        character.traits = new List<Trait>( traits);
+
         if(!IconGraphicHolder.inst.dict.ContainsKey(character.ID))
         { IconGraphicHolder.inst.MakeIcon(character);}
+        character.battleData = new CharacterBattleData();
+        character.battleData.Load(saveData.battleData);
         return character;
     }
 
@@ -99,12 +117,11 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
 
     public Stats genStats(StartingStats ss)
     {
-        
-      
         Stats s = new Stats();
         s.hp = (int)Random.Range(ss.hp.x, ss.hp.y);
         s.strength = (int)Random.Range(ss.strength.x,ss.strength.y);
         s.speed = (int)Random.Range(ss.speed.x, ss.speed.y);
+        s.magic = (int)Random.Range(ss.magic.x,ss.magic.y);
         s.moveRange = ss.moveRange;
         s.passable = false;
         return s;

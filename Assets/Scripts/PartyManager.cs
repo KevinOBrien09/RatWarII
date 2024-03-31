@@ -13,7 +13,7 @@ public class PartyManager : Singleton<PartyManager>
     public GenericDictionary<string,Party> parties = new GenericDictionary<string, Party>();
     public GenericDictionary<string, CharacterHolder> benched = new GenericDictionary<string, CharacterHolder>();
     public GenericDictionary<string, CharacterHolder> deadCharacters = new GenericDictionary<string, CharacterHolder>();
-
+    public Names partyNameSO;
 
     void Start()
     {
@@ -76,9 +76,15 @@ public class PartyManager : Singleton<PartyManager>
             parties.Remove(p.ID);
            
         }
+       
+       
+        
 
         if(parties.Count == 0){
             currentParty = string.Empty;
+        }
+        else{
+     currentParty = parties.First().Value.ID;
         }
     }
    
@@ -87,6 +93,7 @@ public class PartyManager : Singleton<PartyManager>
     {
         Party p = new Party();
         p.ID = ips.id;
+        p.mapTileID = ips.mapTileID;
         p.partyName = ips.partyName;
         foreach (var item in ips.members)
         {
@@ -94,6 +101,7 @@ public class PartyManager : Singleton<PartyManager>
             holder.position = item.position;
             holder.mapTileID = item.mapTileID;
             holder.character = CharacterBuilder.inst.GenerateFromSave(item.charSave);
+         
             p.members.Add(item.charSave.ID,holder); 
         }
         parties.Add(p.ID,p);
@@ -113,6 +121,7 @@ public class PartyManager : Singleton<PartyManager>
             hsd.mapTileID = item.Value.mapTileID;
             hsd.position = item.Value.position;
             hsd.charSave = item.Value.character.Save();
+            
             psd.benched.Add(hsd);
         }
         foreach (var item in deadCharacters)
@@ -121,10 +130,13 @@ public class PartyManager : Singleton<PartyManager>
             hsd.mapTileID = item.Value.mapTileID;
             hsd.position = -10;
             hsd.charSave = item.Value.character. Save();
+           
             psd.deceased.Add(hsd);
         }
         return psd;
     }
+
+   
 
 
     public SaveData PartyUpdateSave()
@@ -153,6 +165,8 @@ public class PartyManager : Singleton<PartyManager>
                 holder.mapTileID = LocationManager.inst.currentLocation;
                 holder.character = c;
                 holder.position = -5;
+                // holder.unitSaveData = new UnitSaveData();
+                // holder.unitSaveData.currentHP = c.stats().hp;
                 PartyManager.inst.benched.Add(c.ID,holder);
             // }
             // onPartyEdit.Invoke();
@@ -161,17 +175,39 @@ public class PartyManager : Singleton<PartyManager>
       
     }
 
+    public void Dismiss(Character c){
+        benched.Remove(c.ID);
+        SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyManager.inst.PartyUpdateSave());
+    }
 
+    public void XD(Vector2 lastLoc)
+    {
+    
+        foreach (var item in parties)
+        {
+            if(item.Value.mapTileID == lastLoc)
+            {
+                currentParty = item.Value.ID;
+                return;
+            }  
+          
+        }
+        currentParty = string.Empty;
 
-    public void Load(PartySaveData psd )
+        
+    }
+
+    public void Load(PartySaveData psd,Vector2 lastLoc )
     {
         currentParty = psd.activePartyID;
         foreach (var item in psd.individualParties)
         {
            AddPartyFromSave(item);
         }
-        if(parties.Count == 1){
-            currentParty = parties.First().Key;
+        if(parties.Count == 1| parties[psd.activePartyID].mapTileID != lastLoc)
+        {
+            XD(lastLoc);
+         //parties.First().Key;
         }
         foreach (var item in psd.benched)
         {

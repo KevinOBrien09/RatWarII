@@ -10,6 +10,7 @@ public class UnitFactory : Singleton<UnitFactory>
 {
     public Unit unitPrefab;
     public List<DefinedCharacter> enemies = new List<DefinedCharacter>();
+   
     public bool debug;
     public Unit CreatePlayerUnit(Slot slot,Character c = null)
     {
@@ -19,6 +20,7 @@ public class UnitFactory : Singleton<UnitFactory>
         if(c != null)
         {
             character = c;
+           
         }
         else if(c == null && debug)
         {
@@ -38,15 +40,20 @@ public class UnitFactory : Singleton<UnitFactory>
         u.side = Side.PLAYER;
       
         u.RecieveGraphic(graphic);
-        u.health.Init(u.stats().hp);
+        u.health.onRefresh .AddListener(()=>{
+        u.character.RefreshBattleData(u) ;
+        });
+        u.health.Init(u.stats().hp,character.battleData.currentHP);
         u.gameObject.name = graphic.character.characterName.fullName();
         ReposUnit(u,slot);
         if(CharacterBuilder.inst.sfxDict.ContainsKey(u.character.species))
         {
             u.sounds = CharacterBuilder.inst.sfxDict[u.character.species];
         }
-   
+        
         BattleManager.inst.playerUnits.Add(u);
+  
+    
         return u;
     }
 
@@ -81,7 +88,7 @@ e = dc;
         u.side = Side.ENEMY;
         u.character.baseStats = CharacterBuilder.inst.genStats(e.startingStats);
         u.RecieveGraphic(graphic);
-        u.health.Init(u.stats().hp);
+        u.health.Init(u.stats().hp,u.stats().hp);
         u.gameObject.name = graphic.character.characterName.fullName();
         ReposUnit(u,slot);
         u.charAI = Instantiate(e.charAI,u.transform);

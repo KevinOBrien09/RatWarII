@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections.Generic;
-public class CharacterDragger : Draggable ,IPointerClickHandler
+public class CharacterDragger : Draggable 
 {
    public CharacterTab tab;
    public SoundData drop,snap;
@@ -15,8 +15,8 @@ public class CharacterDragger : Draggable ,IPointerClickHandler
         {  tab.inPartySignifier.gameObject.SetActive(false);
             tab.cell.Take(this);
             AudioManager.inst.GetSoundEffect().Play(drop);
-         //   PartyManager .inst.currentParty
-         BackbenchHandler.inst.editingParty   . PartyToBench(tab.character);
+            BackbenchHandler.inst.editingParty.PartyToBench(tab.character);
+            tab.ToggleDismissButton(true);
         }
         else
         {
@@ -24,12 +24,28 @@ public class CharacterDragger : Draggable ,IPointerClickHandler
         }
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-       if(eventData.button == PointerEventData.InputButton.Right){
-        Debug.Log("RightClick");
-       }
+    public override void OnBeginDrag(PointerEventData eventData){
+        if(!CharacterStatSheet.inst.open){
+base.OnBeginDrag(eventData);
+        }
+        
     }
+
+    public override void OnDrag(PointerEventData eventData){
+        if(!CharacterStatSheet.inst.open){
+base.OnDrag(eventData);
+        }
+    }
+
+     public override void OnEndDrag(PointerEventData eventData){
+        if(!CharacterStatSheet.inst.open){
+base.OnEndDrag(eventData);
+        }
+    }
+
+    
+
+    
 
     public override void Swap(DragDropCell sittingCell)
     {

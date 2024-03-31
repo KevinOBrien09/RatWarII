@@ -17,10 +17,11 @@ public class Health : MonoBehaviour
     public int maxHealth;
     public int currentHealth;
     public UnityEvent onDie,onHit,onInit,onShieldBreak,onRefresh;
-    public void Init(int max){
+    public void Init(int max,int current){
         maxHealth = max;
-        currentHealth = maxHealth;
+        currentHealth = current;
         onInit.Invoke(); 
+        onRefresh.Invoke();
     }
 
     public void GainShield(StatusEffect se,int amount,Unit u)
@@ -115,7 +116,7 @@ public class Health : MonoBehaviour
         return hp > 0;      
     }
 
-    public void Hit(int damage)
+    public void Hit(int damage,CastArgs castArgs)
     {   
         for (int i = 0; i < damage; i++)
         {
@@ -132,7 +133,13 @@ public class Health : MonoBehaviour
         onHit.Invoke();  
         onRefresh.Invoke();
         if(currentHealth <=0)
-        {  onDie.Invoke();  }
+        {  
+            if(castArgs.caster.side == Side.PLAYER){
+ castArgs.caster.character.exp.AddExp(10);
+            }
+           
+            onDie.Invoke();  
+        }
     }
 
     public int shield()

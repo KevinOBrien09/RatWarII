@@ -17,7 +17,8 @@ public class Character
     public EXP exp;
     public int spriteVarient;
     public List<Skill> skills = new List<Skill>();
-
+    public List<Trait> traits = new List<Trait>();
+    public CharacterBattleData battleData;
     public CharacterSaveData Save()
     {
         CharacterSaveData csd = new CharacterSaveData();
@@ -27,14 +28,25 @@ public class Character
         csd.gender = gender;
         csd.job = job;
         csd.baseStats = baseStats;
-        csd.exp = exp;
+        csd.expSave = exp.Save();
         csd.spriteVarient = spriteVarient;
+        csd.battleData = battleData.Save();
         csd.skills = new List<string>();
+        csd.traits = new List<string>();
         foreach (var item in skills)
         { csd.skills.Add(item.ID); }
+        foreach (var item in traits)
+        { csd.traits.Add(item.ID); }
         return csd;
     }
 
+    public void RefreshBattleData(Unit u){
+        battleData.currentHP = u.health.currentHealth;
+    }
+
+    public Stats stats(){
+        return baseStats;
+    }
     
    
 }
@@ -48,7 +60,28 @@ public class CharacterSaveData
     public Gender gender;
     public Job job;
     public Stats baseStats;
-    public EXP exp;
+    public EXPSave expSave;
     public int spriteVarient;
     public List<string> skills = new List<string>();
+    public List<string> traits = new List<string>();
+    public CharacterBattleData battleData;
+}
+
+[System.Serializable]
+public class CharacterBattleData
+{
+    public int currentHP;
+
+    public void Load(CharacterBattleData cbd)
+    {
+        currentHP = cbd.currentHP;
+
+    }
+
+    public CharacterBattleData Save(){
+        CharacterBattleData cbd = new CharacterBattleData();
+        cbd.currentHP = currentHP;
+
+        return cbd;
+    }
 }

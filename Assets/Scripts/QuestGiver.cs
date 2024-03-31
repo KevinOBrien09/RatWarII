@@ -17,9 +17,9 @@ public class QuestGiver: Singleton<QuestGiver>
             yield return new WaitForSeconds(.1f);
             WorldHubCamera.inst.fuckOff = false;
             canvas.SetActive(true);
-                       HubStateHandler.inst.ChangeStateString("Quests");
+            HubStateHandler.inst.ChangeStateString("Quests");
             HubStateHandler.inst.ChangeState(HubStateHandler.HubState. QUEST);
-              HubStateHandler.inst.close = shut;
+            HubStateHandler.inst.close = shut;
         }
      
     }

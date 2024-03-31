@@ -9,7 +9,7 @@ public class CharacterHolder{
     public Character character;
     public string lastPartyID;
     public Vector2 mapTileID;
-    public int currentHP;
+  
     public int position;
 }
 
@@ -17,9 +17,11 @@ public class CharacterHolder{
 public class HolderSaveData{
     public CharacterSaveData charSave;
     public Vector2 mapTileID;
-    public int currentHP;
+   
     public int position;
 }
+
+
 [System.Serializable]
 public class PartySaveData
 {
@@ -28,6 +30,7 @@ public class PartySaveData
     {
         public string id;
         public string partyName;
+        public Vector2 mapTileID;
         public List<HolderSaveData> members = new List<HolderSaveData>();
 
     }
@@ -44,7 +47,7 @@ public class Party
 {
     public delegate void PartyEvent();
     public PartyEvent onPartyEdit;
-
+    public Vector2 mapTileID;
     public string ID;
     public string partyName;
     public GenericDictionary<string, CharacterHolder> members = new GenericDictionary<string, CharacterHolder>();
@@ -52,11 +55,20 @@ public class Party
  // public UnityEvent onPartyEdit;
     public int partySize = 3;
 
+    public void ChangeMapLocation(Vector2 v){
+        mapTileID = v;
+      InvokePartyEdit();
+    }
+
     public void Create(){
         ID = System.Guid.NewGuid().ToString();
-        partyName = ID;
-        
-     //  
+        string a,b;
+        List<string> start =PartyManager.inst.partyNameSO .firstNames[Gender.NA];
+        List<string> end = PartyManager.inst.partyNameSO .surnames;
+        a =  start [Random.Range(0,start.Count)] ;
+        b = end[Random.Range(0,end.Count)];
+        partyName = a + " " + b;
+        mapTileID = LocationManager.inst.currentLocation;
     }
 
  
@@ -66,16 +78,20 @@ public class Party
         PartySaveData.IndividualPartySave ips = new PartySaveData.IndividualPartySave();
         ips.partyName = partyName;
         ips.id = ID;
+        ips. mapTileID = mapTileID;
         foreach (var item in members)
         {
             HolderSaveData hsd = new HolderSaveData();
-            hsd.mapTileID = item.Value.mapTileID;
+            hsd.mapTileID = mapTileID;
             hsd.position = item.Value.position;
             hsd.charSave = item.Value.character.Save();
+          //  hsd.unitSaveData = PartyManager.inst. GetUnitData(item.Value.character,item.Value);
             ips.members.Add(hsd);
         }
         return ips;
     }
+
+  
     
     public void KillMember(Character c)
     { 
@@ -94,7 +110,7 @@ public class Party
         if(onPartyEdit != null)
         {onPartyEdit.Invoke(); }
         else
-        {Debug.LogAssertion("onPartyEdit has no listeners!");}
+        {Debug.LogWarning("onPartyEdit has no listeners!");}
     }
     
     public void PartyToBench(Character c)
@@ -109,6 +125,17 @@ public class Party
             members.Remove(c.ID);
             InvokePartyEdit();
         }
+    }
+
+    public int TotalPartyLevel(){
+        int i = 0;
+        foreach (var item in members)
+        {
+            i += item.Value.character.exp.level;
+            
+        }
+
+        return i;
     }
 
     public void BenchToParty(Character c,int i)

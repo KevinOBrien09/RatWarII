@@ -697,24 +697,10 @@ public class MapGenerator : Singleton<MapGenerator>
     public void CreateStartingUnits()
     {
         List<Slot> shuffle = MapManager.inst.StartingRadius();
-        if(UnitFactory.inst.debug)
+        if(!GameManager.inst.loadFromFile)
         {
-            if(     PartyManager .inst.parties[PartyManager .inst.currentParty]. members.Count ==0) //this
-            {
-                for (int i = 0; i < howManyPartyMembers; i++)
-                { UnitFactory.inst. CreatePlayerUnit(shuffle[i]);}
-            }
-            else
-            {
-                int i = 0;
-                foreach (var item in     PartyManager .inst.parties[PartyManager .inst.currentParty]. members)
-                {
-                    UnitFactory.inst.CreatePlayerUnit(shuffle[i],item.Value.character);
-                    i++;
-                }
-               
-            }
-          
+            for (int i = 0; i < howManyPartyMembers; i++)
+            { UnitFactory.inst. CreatePlayerUnit(shuffle[i]);}
         }
         else
         {

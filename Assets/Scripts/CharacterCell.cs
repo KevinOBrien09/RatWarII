@@ -64,6 +64,7 @@ public class CharacterCell : DragDropCell
                         AudioManager.inst.GetSoundEffect().Play(a. snap);
                         AudioManager.inst.GetSoundEffect().Play(CharacterBuilder.inst.sfxDict[c.species].turnStart);
                         BackbenchHandler.inst.editingParty.BenchToParty(c,position);
+                        a.tab.ToggleDismissButton(false);
                     }
                    
                     return 1; 

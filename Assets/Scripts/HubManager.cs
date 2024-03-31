@@ -7,10 +7,12 @@ public class HubManager: Singleton<HubManager>
 {
 
     public GameObject map,hub;
-    public WorldLeaveArea worldLeaveArea;
+   
     public AudioClip mapMusic,cityMusic;
-
+    public WorldLocationDeco currentDeco;
+    public Transform decoHolder;
     void Start(){
+        
         map.gameObject.SetActive(false);
             hub.gameObject.SetActive(true);  
     }
@@ -28,7 +30,7 @@ public class HubManager: Singleton<HubManager>
           WorldMapCamera.inst.Reset(true);
         MusicManager.inst.FadeAndChange(cityMusic);
         BlackFade.inst.FadeInEvent(()=>{
-            worldLeaveArea.Reset();
+    
             HubStateHandler.inst.ChangeState(HubStateHandler.HubState.HOVER);
         
             map.gameObject.SetActive(false);
@@ -37,6 +39,28 @@ public class HubManager: Singleton<HubManager>
 
         });
        
+    }
+
+    
+    public void SpawnNewDeco(LocationInfo locInfo){
+        if(currentDeco != null){
+            Destroy(currentDeco.gameObject);
+            currentDeco = null;
+        }
+        if(locInfo.locationMusic != null)
+        {
+          cityMusic = locInfo.locationMusic;
+        }
+        if(locInfo.decoPrefab != null)
+        {
+            currentDeco = Instantiate(locInfo.decoPrefab,decoHolder);
+            
+
+        }
+        else{
+            Debug.LogWarning("Deco Prefab is Null!!");
+        }
+      
     }
 
 }

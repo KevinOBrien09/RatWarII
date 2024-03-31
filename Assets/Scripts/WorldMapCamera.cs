@@ -11,8 +11,8 @@ void Start(){
     offset = transform.position;
 }
     public void Focus(Transform t){
-        transform.DOMove(new Vector3(t.position.x+.5f,t.position.y,transform.position.z) ,.2f);
-        camera_.DOFieldOfView(10,.2f);
+        transform.DOMove(new Vector3(t.position.x+1,t.position.y,transform.position.z) ,.2f);
+        camera_.DOFieldOfView(20,.2f);
       
     }
 

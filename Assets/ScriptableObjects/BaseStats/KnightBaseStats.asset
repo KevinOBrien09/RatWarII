@@ -15,6 +15,7 @@ MonoBehaviour:
   hp: {x: 100, y: 120}
   speed: {x: 2, y: 4}
   strength: {x: 8, y: 10}
+  magic: {x: 0, y: 5}
   moveRange: 4
   bnbSkill: {fileID: 11400000, guid: 3df21767c7cc7a343ac0196c5097b2fb, type: 2}
   otherSkills:

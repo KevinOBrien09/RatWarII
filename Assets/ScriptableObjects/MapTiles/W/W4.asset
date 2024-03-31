@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 470e5ec5207c9514e841c87f89518765, type: 3}
+  m_Name: W4
+  m_EditorClassIdentifier: 
+  locationName: Isle of Fortune
+  stage:
+    loc: 4
+    stage: 4
+  locationPic: {fileID: 21300000, guid: 32e373fee6c0db7439d60ee40ab4caac, type: 3}
+  decoPrefab: {fileID: 7269279807310001578, guid: 6c26d796e37719540a41536e9eebb523,
+    type: 3}
+  locationMusic: {fileID: 0}
+  travelSting:
+    audioClip: {fileID: 0}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
+  desc: WEST

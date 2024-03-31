@@ -9,6 +9,7 @@ public class StartingStats : ScriptableObject
     public Vector2 hp;
     public Vector2 speed;
     public Vector2 strength;
+    public Vector2 magic;
     public int moveRange;
     public Skill bnbSkill;
     public List<Skill> otherSkills = new List<Skill>();

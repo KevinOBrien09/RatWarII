@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using DG.Tweening;
+
 public class BackbenchHandler : Singleton<BackbenchHandler>
 {
     public GameObject canvasGO;
@@ -21,12 +22,14 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
     public GenericDictionary<string,CharacterTab> inPartyTabs = new GenericDictionary<string,CharacterTab>();
     public GenericDictionary<string, PartyTab> pTabs = new GenericDictionary<string, PartyTab>();
     public List<TextMeshProUGUI> text = new List<TextMeshProUGUI>();
+    public TMP_InputField nameField;
     public Party editingParty;
     public bool editing;
     public GameObject popUps;
     public Transform seperatorGO;
     public UnityEvent onPartyEdit;
     public Party partyToBeDeleted;
+    public Character characterToBeDismissed;
     void Start(){
        rt.DOAnchorPosX(hidden,0);  
        currentPartyRT.DOAnchorPosY(partyHidden,0).OnComplete(()=>{
@@ -45,7 +48,7 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
             PartyTab pt = MakePartyTab(p);
             pt.transform.SetSiblingIndex(1);
             PartyManager.inst.AddNewParty(p);
-            ActivePartyRefresh();
+            
             EnterEdit(p);
        }
    
@@ -63,18 +66,22 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
             t.transform.SetSiblingIndex(seperatorGO.GetSiblingIndex()+1);
             tabs.Add(item.Value.character.ID, t);
             inPartyTabs.Add(item.Value.character.ID, t);
+            t.ToggleDismissButton(false);
         }
+        PartyManager.inst.currentParty = p.ID;
     }
 
     public void EnterEdit(Party p){
         editingParty = p;
+        EventSystem.current.gameObject.GetComponent<Rewired.Integration.UnityUI.RewiredStandaloneInputModule>().deselectIfBackgroundClicked = true;
         HubStateHandler.inst.ChangeState(HubStateHandler.HubState.PARTYEDIT);
         HubStateHandler.inst.ChangeStateString("Party-Edit");
        // pTabs[editingParty.ID].ChangeBorderColour(  pTabs[editingParty.ID].yellow);
         pTabs[editingParty.ID].Move( pTabs[editingParty.ID].editPos);
        HubCharacterDisplay.inst.AddListener(p);
         EventSystem.current.SetSelectedGameObject(null);
-
+       
+        nameField.text = p.partyName;
         editing = true;
 
         foreach (var item in pTabs)
@@ -82,7 +89,7 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
           
             item.Value.ChangeBorderColour(Color.black);
         }
-          pTabs[editingParty .ID].ChangeBorderColour( pTabs[editingParty .ID].yellow);
+        pTabs[editingParty .ID].ChangeBorderColour( pTabs[editingParty .ID].yellow);
 
              HubCharacterDisplay.inst.Refresh();
         currentPartyRT.DOAnchorPosY(partyShown,.15f);  
@@ -91,39 +98,46 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
     public void LeaveEdit()
     {
         SaveLoad.Save(999);
-      
+        EventSystem.current.gameObject.GetComponent<Rewired.Integration.UnityUI.RewiredStandaloneInputModule>().deselectIfBackgroundClicked = false;
         if(editingParty != null)
         {
-            if(editingParty.ID != PartyManager.inst.currentParty){
+            editingParty.partyName = nameField.text;
+           
             if(pTabs.ContainsKey(editingParty.ID))
-            { pTabs[editingParty.ID].ChangeBorderColour(Color.black);}
-            }
-            if(pTabs.ContainsKey(editingParty.ID))
-            { pTabs[editingParty.ID].Move( pTabs[editingParty.ID].ogPos);}
-
-
-             foreach (var item in editingParty.members)
-        {
-            if(tabs.ContainsKey(item.Value.character.ID))
-            {
-               
-                tabs[item.Value.character.ID].dragger.dragDropCell.draggable = null;
-                Destroy(    tabs[item.Value.character.ID].dragger.gameObject);
-                Destroy(    tabs[item.Value.character.ID].gameObject);
-                tabs.Remove(item.Value.character.ID);
+            { 
+                pTabs[editingParty.ID].Move( pTabs[editingParty.ID].ogPos);
+                  pTabs[editingParty.ID].ChangePartyName();
             }
 
-            if(inPartyTabs.ContainsKey(item.Value.character.ID))
+
+            foreach (var item in editingParty.members)
             {
-                inPartyTabs[item.Value.character.ID].dragger.dragDropCell.draggable = null;
-                Destroy(inPartyTabs[item.Value.character.ID].dragger.gameObject);
-                Destroy(inPartyTabs[item.Value.character.ID].gameObject);
+                if(tabs.ContainsKey(item.Value.character.ID))
+                {
+                
+                    tabs[item.Value.character.ID].dragger.dragDropCell.draggable = null;
+                    Destroy(    tabs[item.Value.character.ID].dragger.gameObject);
+                    Destroy(    tabs[item.Value.character.ID].gameObject);
+                    tabs.Remove(item.Value.character.ID);
+                }
+
+                if(inPartyTabs.ContainsKey(item.Value.character.ID))
+                {
+                    inPartyTabs[item.Value.character.ID].dragger.dragDropCell.draggable = null;
+                    Destroy(inPartyTabs[item.Value.character.ID].dragger.gameObject);
+                    Destroy(inPartyTabs[item.Value.character.ID].gameObject);
+                }
             }
         }
-        }
-
-
-       
+        
+        foreach (var item in pTabs)
+        { item.Value.ChangeBorderColour(Color.black); }
+        if(PartyManager.inst.parties.ContainsKey(editingParty .ID))
+        { pTabs[editingParty .ID].ChangeBorderColour( pTabs[editingParty .ID].yellow); }
+        else
+        { pTabs[PartyManager.inst.currentParty].ChangeBorderColour( pTabs[PartyManager.inst.currentParty].yellow); }
+        
+            
         HubCharacterDisplay.inst.RemoveListeners();
         inPartyTabs.Clear();
         editingParty = null;
@@ -131,10 +145,16 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
         EventSystem.current.SetSelectedGameObject(null);
         editing = false;
         HubCharacterDisplay.inst.Refresh();
-        ActivePartyRefresh();
+        foreach (var item in tabs)
+        {
+            item.Value.ToggleDismissButton(true);
+        }
+        
+       
         HubStateHandler.inst.ChangeStateString("Party");
-        currentPartyRT.DOAnchorPosY(partyHidden,.15f);  
         HubStateHandler.inst.ChangeState(  HubStateHandler.HubState.ORGANIZER);
+        currentPartyRT.DOAnchorPosY(partyHidden,.15f);  
+        
     }
 
     public bool CheckIfReady()
@@ -158,6 +178,34 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
     public void DiscardCurrentEditPartyFromButton()
     { 
        DiscardParty(editingParty);
+    }
+
+    public void DismissCharacterPopup(){
+        popUps.SetActive(true);
+        popUps.transform.GetChild(3).gameObject.SetActive(true);
+    }
+
+    public void ReturnFromDismiss(){
+        characterToBeDismissed = null;
+        popUps.SetActive(false);
+        popUps.transform.GetChild(3).gameObject.SetActive(false);
+    }
+
+    public void ActuallyDismiss()
+    {
+        PartyManager.inst.Dismiss(characterToBeDismissed);
+        popUps.SetActive(false);
+        popUps.transform.GetChild(3).gameObject.SetActive(false);
+        CharacterTab ct =  tabs[characterToBeDismissed.ID];
+        if(ct.dragger.dragDropCell !=null)
+        {ct.dragger.dragDropCell.draggable = null;}
+        Destroy(  ct.dragger.gameObject);
+        if(tabs.ContainsKey(characterToBeDismissed.ID))
+        {tabs.Remove(characterToBeDismissed.ID);}
+        if(inPartyTabs.ContainsKey(characterToBeDismissed.ID))
+        {inPartyTabs.Remove(characterToBeDismissed.ID);}
+        Destroy(ct.gameObject);
+        characterToBeDismissed = null;
     }
 
     public void DiscardParty(Party p){
@@ -192,6 +240,7 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
     public void ConfirmDeletion(){
         BackbenchHandler.inst.DiscardParty(partyToBeDeleted);
         NoDelete();
+        HubCharacterDisplay.inst.Refresh();
     }
 
    
@@ -222,13 +271,23 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
         {
         foreach (var item in PartyManager.inst.parties)
         {
+            if(item.Value.mapTileID == LocationManager.inst.currentLocation){
             MakePartyTab(item.Value);
+            }
           
            
          
         }
         }
-        ActivePartyRefresh();
+        foreach (var item in pTabs)
+        {
+          
+            item.Value.ChangeBorderColour(Color.black);
+        }
+        if(PartyManager.inst.currentParty != string.Empty){
+            pTabs[PartyManager.inst.currentParty].ChangeBorderColour( pTabs[PartyManager.inst.currentParty].yellow);
+        }
+        
         TextMeshProUGUI seperator =  Instantiate(textPrefab,tabHolder);
         text.Add(seperator);
         seperator.text = "----------------------";
@@ -248,34 +307,7 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
         capacityText.text = tabs.Count +"/12";
     }
 
-    public void ActivePartyRefresh()
-    {
-        if(PartyManager.inst.currentParty != string.Empty)
-        {
-            if(pTabs.ContainsKey(PartyManager.inst.currentParty))
-            {
-                foreach (var item in pTabs)
-                {
-                    item.Value.setActiveButton.gameObject.SetActive(true);
-                    item.Value.starIcon.gameObject.SetActive(false);
-                    item.Value.ChangeBorderColour(Color.black);
-                }
-                pTabs[PartyManager.inst.currentParty].setActiveButton.gameObject.SetActive(false);
-                pTabs[PartyManager.inst.currentParty].starIcon.gameObject.SetActive(true);
-                pTabs[PartyManager.inst.currentParty].transform.SetSiblingIndex(1);
-            pTabs[PartyManager.inst.currentParty].ChangeBorderColour( pTabs[PartyManager.inst.currentParty].yellow);
-            }
-            else{
-                Debug.LogAssertion("PARTY TABS DO NOT CONTAIN ID :" + PartyManager.inst.currentParty);
-            }
-        }
-        else
-        {
-                Debug.LogWarning("NO CURRENT PARTY!");
-        }
-      
-
-    }
+   
 
     PartyTab MakePartyTab(Party p)
     {  

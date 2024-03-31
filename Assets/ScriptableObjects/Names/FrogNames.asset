@@ -35,7 +35,6 @@ MonoBehaviour:
       - Art
       - Kermit
       - Naveen
-      - Apu
     - Key: 2
       Value:
       - Ribby
@@ -48,9 +47,8 @@ MonoBehaviour:
   surnames:
   - Croaksworth
   - Ribbiton
-  - Flykiller
   - Hopscotch
   - Lollihop
   - Apustaja
-  - Big Lips
+  - Fat Mouth
   - Hopalong

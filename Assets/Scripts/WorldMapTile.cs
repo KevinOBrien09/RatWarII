@@ -1,32 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class WorldMapTile : WorldTile
 {
     public LocationInfo locationInfo;
     public GameObject highlight,areaLocked;
+    public Transform locationIndicator;
+     float og ;
     void Awake(){
-        locationInfo.mapTile = this;
+    
         highlight.SetActive(false);
-   
+        og = locationIndicator.localPosition.y;
     }
 
     public void Refresh( ){
         
         if(!MapTileManager.inst.debug){
-            if(locationInfo.stage.unlocked){
-            areaLocked.SetActive(false);
-            }
-            else{
-                    areaLocked.SetActive(true);
-            }
+          
         }
         
     }
 
     public void UnlockArea(){
         areaLocked.SetActive(false);
+    }
+
+    public void ToggleCurrentLocIndic(bool b)
+    {
+        locationIndicator.gameObject.SetActive(b);
+        if(b){
+q();
+        }
+        
+        void q()
+        {
+       
+            float c = locationIndicator.localPosition.y+.15f;
+            locationIndicator.DOLocalMoveY(c,1f).OnComplete(()=>{
+            locationIndicator.DOLocalMoveY(og,1f).OnComplete(()=>{
+                q();
+            });
+
+            });
+
+        }
+       
     }
         
         

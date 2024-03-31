@@ -13,13 +13,13 @@ public class WorldInteractable : WorldTile
     bool hasOutline,hasHoverObject;
     public UnityEvent a;
     public float camFOV = 40;
-    void Start()
+   IEnumerator Start()
     {
         hasOutline = outline != null;
         hasHoverObject = hoverObject!= null;
         if(hasHoverObject)
         {hoverObject.gameObject.SetActive(false);}
-        
+        yield return new WaitForEndOfFrame();
         if(hasOutline)
         {outline.enabled = false;}
     }

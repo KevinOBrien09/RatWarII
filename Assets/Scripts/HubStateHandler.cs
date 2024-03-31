@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 public class HubStateHandler: Singleton<HubStateHandler>
 {
-    public enum HubState {HOVER,QUEST,RECRUIT,ORGANIZER,LEAVE,MAP,INMAPTILE,PARTYEDIT}
+    public enum HubState {HOVER,QUEST,RECRUIT,ORGANIZER,LEAVE,MAP,INMAPTILE,PARTYEDIT,STATSHEET}
     public HubState currentState;
     public GameObject desktopButton;
     public TextMeshProUGUI location,date,state;
@@ -16,9 +16,19 @@ public class HubStateHandler: Singleton<HubStateHandler>
     public Transform hover;
     public UnityEvent close;
     public AudioClip mapMusic;
-    void Start(){
+   
+    IEnumerator Start(){
         ChangeState(HubState.HOVER);
         MusicManager.inst.ChangeMusic(mapMusic);
+        yield return new WaitForEndOfFrame();
+        ChangeLocationName(MapTileManager.inst.ld[LocationManager.inst.currentLocation].locationInfo.locationName);
+        MapTileManager.inst.RefreshCurrentLoc();
+     
+    }
+
+
+    public void ChangeLocationName(string s){
+        location.text = s;
     }
     public void ChangeState(HubState cs){
         currentState = cs;
@@ -77,6 +87,10 @@ public class HubStateHandler: Singleton<HubStateHandler>
                 HubStateHandler.inst.ChangeState(HubStateHandler.HubState.MAP);
                 HubStateHandler.inst.ChangeStateString("Map");
                 WorldMapCamera.inst.Reset(true);
+                return;
+            }
+            if(currentState == HubState.STATSHEET){
+                CharacterStatSheet.inst.Close();
                 return;
             }
            

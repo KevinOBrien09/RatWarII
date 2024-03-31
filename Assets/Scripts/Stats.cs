@@ -9,6 +9,7 @@ public class Stats
     public int hp;
     public int speed;
     public int strength;
+    public int magic;
     public int moveRange = 0;
     public bool passable;
     
@@ -20,6 +21,7 @@ public class Stats
         s.strength = strength + statMods.strength;
         s.speed = speed + statMods.speed;
         s.moveRange = moveRange + statMods.moveRange;
+        s.magic = magic + statMods.magic;
         s.passable = passable;
 
         return s;

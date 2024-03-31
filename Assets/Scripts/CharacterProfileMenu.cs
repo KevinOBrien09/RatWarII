@@ -6,15 +6,16 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using DG.Tweening;
-public class CharacterProfileMenu : MonoBehaviour
+public class CharacterProfileMenu : Singleton< CharacterProfileMenu>
 {
     public SoundData error,goldSpend;
     public List<Character> characters = new List<Character>();
-    public TextMeshProUGUI charName,title,hp,str,spd,move;
+    public TextMeshProUGUI charName,title,hp,str,spd,move,mgk;
     public Image baseChar,gender;
     public GameObject left,right,hireButton;
     public bool debug;
     int index;
+ 
     public void RecieveCharacters(List<Character> l)
     {
         characters = new List<Character>(l);
@@ -47,10 +48,11 @@ public class CharacterProfileMenu : MonoBehaviour
         baseChar.sprite = CharacterBuilder.inst.classVarients[c.species][c.job][c.spriteVarient];
         charName.text = c.characterName.fullName();
         title.text = c.job.ToString() + " "+ c.species.ToString();
-        hp.text = "HP:" + c.baseStats.hp.ToString();
-        spd.text = "SPD:" + c.baseStats.speed.ToString();
-        move.text = "MVE:" + c.baseStats.moveRange.ToString();
-        str.text = "STR:" + c.baseStats.strength.ToString();
+        hp.text = "HP:" + c.stats().hp.ToString();
+        spd.text = "SPD:" + c.stats().speed.ToString();
+        move.text = "MVE:" + c.stats().moveRange.ToString();
+        str.text = "STR:" + c.stats().strength.ToString();
+        mgk.text = "MGK:" + c.stats().magic.ToString();
 
     }
 

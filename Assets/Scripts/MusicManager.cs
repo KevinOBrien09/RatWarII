@@ -20,12 +20,17 @@ public class MusicManager : Singleton<MusicManager>
         source.Play();
     }
 
-    public void FadeAndChange(AudioClip c){
-        source.DOFade(0,.5f).OnComplete(()=>{
-            source.Stop();
-            source.clip = c;
-            source.Play();
-            source.DOFade(ogVol,.5f);
+    public void FadeAndChange(AudioClip c,float t = .5f){
+
+        source.DOFade(0,t).OnComplete(()=>
+        {
+            if(c != null){
+                source.Stop();
+                source.clip = c;
+                source.Play();
+                source.DOFade(ogVol,t);
+            }
+          
 
         });
     }

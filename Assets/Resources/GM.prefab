@@ -395,7 +395,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
   - {fileID: 11400000, guid: 7419948df84a9a24589bc6c406bd8914, type: 2}
   - {fileID: 11400000, guid: 3df21767c7cc7a343ac0196c5097b2fb, type: 2}
+  allTraits:
+  - {fileID: 11400000, guid: 0e4827e5e7bca7546a72318c5a27016a, type: 2}
+  - {fileID: 11400000, guid: 6a39801335be35c41b065dcd54f14056, type: 2}
+  - {fileID: 11400000, guid: 87a25504b93da374bb9be1ee9aa60984, type: 2}
+  - {fileID: 11400000, guid: 430852d06616ba9428e00ecef7abe9ad, type: 2}
   skillDict:
+    list: []
+    keyCollision: 0
+  traitDict:
     list: []
     keyCollision: 0
   addAllSkills: 0
@@ -452,6 +460,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentLocation: {x: 0, y: 0}
+  locationTravelingTo: {x: 0, y: 0}
+  inTravel: 0
+  INSTANT_TRAVEL: 1
 --- !u!114 &6432488518052387560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -465,15 +476,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
+  currentParty: 
   parties:
     list: []
     keyCollision: 0
-  soloCharacters:
+  benched:
     list: []
     keyCollision: 0
   deadCharacters:
     list: []
     keyCollision: 0
+  partyNameSO: {fileID: 11400000, guid: 1a2df1ac5e3a9f449a1d00b5957046ef, type: 2}
 --- !u!1 &8191127640814863693
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,7 +18,7 @@ public class GameManager : Singleton<GameManager>
 
     public void Load(){
   SaveData sd =     SaveLoad.Load(saveSlotIndex);
-        PartyManager.inst.Load(sd.partySaveData);
+        PartyManager.inst.Load(sd.partySaveData,sd.mapSaveData.lastLocation);
     }
 
     #if UNITY_EDITOR
@@ -26,9 +26,9 @@ public class GameManager : Singleton<GameManager>
         if(Input.GetKeyDown(KeyCode.M)){
  SaveLoad.Save(999);
         }
-  if(Input.GetKeyDown(KeyCode.L)){
-              Load();
-  }
+//   if(Input.GetKeyDown(KeyCode.L)){
+//               Load();
+//   }
     }//REMOVE
     #endif
     public void LoadQuest(Objective.ObjectiveEnum o)
@@ -79,7 +79,13 @@ StartCoroutine(q());
 
         SaveData save =  new SaveData();
         save.partySaveData = PartyManager.inst.Save();
-        save.mapSaveData = MapTileManager.inst.Save();
+        if(MapTileManager.inst != null){
+ save.mapSaveData = MapTileManager.inst.Save();
+        }
+        else{
+            save.mapSaveData =  SaveLoad.Load(saveSlotIndex).mapSaveData;
+        }
+       
        
         return save;
     }

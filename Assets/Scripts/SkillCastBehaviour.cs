@@ -23,5 +23,5 @@ public class CastArgs
     public Unit target;
     public Skill skill;
     public Slot targetSlot;
-    public UnityAction castEffects;
+  
 }
