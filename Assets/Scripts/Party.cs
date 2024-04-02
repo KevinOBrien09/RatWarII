@@ -100,9 +100,20 @@ public class Party
 
         if(members.ContainsKey(c.ID))
         {members.Remove(c.ID);}
+        if(members.Count <=0)
+        {
+            AllMembersDead();
+        }
         
         SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyManager.inst.PartyUpdateSave());
         InvokePartyEdit();
+    }
+
+    public void AllMembersDead()
+    {
+        members.Clear();
+        PartyManager.inst.RemoveParty(this);
+
     }
 
     void InvokePartyEdit()

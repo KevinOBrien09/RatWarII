@@ -204,7 +204,11 @@ public class PartyManager : Singleton<PartyManager>
         {
            AddPartyFromSave(item);
         }
-        if(parties.Count == 1| parties[psd.activePartyID].mapTileID != lastLoc)
+        if(!parties.ContainsKey(currentParty)){
+            Debug.LogWarning("Old Party string was not found!");
+          XD(lastLoc);
+        }
+        if(parties.Count == 1| parties[currentParty].mapTileID != lastLoc)
         {
             XD(lastLoc);
          //parties.First().Key;

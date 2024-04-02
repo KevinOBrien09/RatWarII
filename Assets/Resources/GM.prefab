@@ -462,7 +462,7 @@ MonoBehaviour:
   currentLocation: {x: 0, y: 0}
   locationTravelingTo: {x: 0, y: 0}
   inTravel: 0
-  INSTANT_TRAVEL: 1
+  INSTANT_TRAVEL: 0
 --- !u!114 &6432488518052387560
 MonoBehaviour:
   m_ObjectHideFlags: 0

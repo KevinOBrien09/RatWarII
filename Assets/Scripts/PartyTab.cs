@@ -38,6 +38,10 @@ public class PartyTab : MonoBehaviour
         {
                item.SetActive(false);
         }
+        foreach (var item in icons)
+        {item.Value.rawImage.raycastTarget = false;
+            
+        }
         mainTabButton.enabled = true;
     
     }

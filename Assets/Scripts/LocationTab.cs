@@ -46,28 +46,31 @@ public class LocationTab : Button
     public void Click(){
         EventSystem.current.SetSelectedGameObject(null);
         PartyManager.inst.currentParty = LocationDetailHandler.inst.clickedInParty.ID;
-        LocationManager.inst.BeginTravel(i.stage.GetID());
-        if(LocationManager.inst.INSTANT_TRAVEL){
-            LocationManager.inst.Transfer();
-        }
-        else{
-            LocationDetailHandler.inst.Hide();
-    
-            BlackFade.inst.toggleRaycast(true);
-            MusicManager.inst.FadeAndChange(null,1);
-            AudioManager.inst.GetSoundEffect().Play(i.travelSting);
-            HubCharacterDisplay.inst.fandfLogo.gameObject.SetActive(true);
-            HubCharacterDisplay.inst.fandfLogo.DOFade(1,2f);
-            BlackFade.inst.FadeInEvent(()=>{
-            GameManager.inst.  StartCoroutine(q());
-            IEnumerator q(){
-                yield return new WaitForSeconds(.5f);
-                SceneManager.LoadScene("Arena");
-            }
-            });
-        }
-      // 
        
+        if( LocationManager.inst.BeginTravel(i.stage.GetID(),i.brain))
+        {
+            if(LocationManager.inst.INSTANT_TRAVEL)
+            {LocationManager.inst.Transfer();}
+            else
+            {
+                LocationDetailHandler.inst.Hide();
+                BlackFade.inst.toggleRaycast(true);
+                MusicManager.inst.FadeAndChange(null,1);
+                AudioManager.inst.GetSoundEffect().Play(i.travelSting);
+                HubCharacterDisplay.inst.fandfLogo.gameObject.SetActive(true);
+                HubCharacterDisplay.inst.fandfLogo.DOFade(1,2f);
+                BlackFade.inst.FadeInEvent(()=>{
+                GameManager.inst.  StartCoroutine(q());
+                IEnumerator q()
+                {
+                    yield return new WaitForSeconds(.5f);
+                    SceneManager.LoadScene("Arena");
+                }
+                });
+            }
+        }
+        else
+        {Debug.LogAssertion("COULD NOT TRAVEL!");}
     }
 
 }

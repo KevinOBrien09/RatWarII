@@ -7,6 +7,8 @@ public class LocationManager : Singleton<LocationManager>
     
     public Vector2 currentLocation;
     public Vector2 locationTravelingTo;
+    public MapGeneratorBrain nextLocBrain;
+
     public bool inTravel;
     public bool INSTANT_TRAVEL;
     protected override void Awake()
@@ -16,9 +18,20 @@ public class LocationManager : Singleton<LocationManager>
         MapSaveData msd = sd.mapSaveData;
         LocationManager.inst.currentLocation = msd.lastLocation;
     }
-    public void BeginTravel(Vector2 newLocation){
-        locationTravelingTo = newLocation;
-        inTravel = true;
+    public bool BeginTravel(Vector2 newLocation,MapGeneratorBrain brain){
+
+        if(brain != null){
+            nextLocBrain = brain;
+            inTravel = true;
+            locationTravelingTo = newLocation;
+            return true;
+        }
+        else{
+            Debug.LogAssertion("MAP DATA IS NULL!!!");
+            return false;
+        }
+       
+  
     }
     public void Transfer(){
            currentLocation = locationTravelingTo;

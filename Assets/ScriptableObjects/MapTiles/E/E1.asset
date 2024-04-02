@@ -20,6 +20,7 @@ MonoBehaviour:
   decoPrefab: {fileID: 7269279807310001578, guid: caed01c7b18a0b24bbd4c8a37814c64e,
     type: 3}
   locationMusic: {fileID: 0}
+  brain: {fileID: -8125641903671149423, guid: 0576862e4d939fe4097f174535c67a4d, type: 3}
   travelSting:
     audioClip: {fileID: 0}
     pitchRange: {x: 0.9, y: 1.1}

@@ -41,7 +41,11 @@ public class ObjectiveManager : Singleton<ObjectiveManager>
             rd.objectiveEnum = oe;
             objective.SetUp(rd);
             break;
-          
+            case Objective.ObjectiveEnum.BOSS:
+          BossObjectiveData boss = new   BossObjectiveData();
+            boss.objectiveEnum = oe;
+            objective.SetUp(boss);
+            break;
         }
         
     }
@@ -73,6 +77,13 @@ public class HostageData : ObjectiveData
 {
     public DefinedCharacter npc;
     
+
+}
+
+[System.Serializable]
+public class BossObjectiveData : ObjectiveData
+{
+   
 
 }
 

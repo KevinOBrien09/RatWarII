@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Unknown
   m_EditorClassIdentifier: 
   ID: 5eea4d05-7d76-4e79-9bb5-21029057ac7f
-  traitName: ???
-  aligment: 3
+  traitName: Racist
+  aligment: 2
+  traitDesc: Buffs and heals on non-hedgehogs are halved. May refuse help from non
+    hedgehogs

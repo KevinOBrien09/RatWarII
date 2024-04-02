@@ -12,5 +12,6 @@ public class Trait : GUIDScriptableObject
 {
     public string traitName;
     public Aligment aligment;
+  [TextArea]  public string traitDesc;
     
 }

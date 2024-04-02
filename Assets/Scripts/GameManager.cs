@@ -41,7 +41,8 @@ public class GameManager : Singleton<GameManager>
     {
        // MapManager.inst.grid.InitGrid();
 
-        MapGenerator.inst.Generate();
+        MapGenerator.inst.BeginGeneration(LocationManager.inst.nextLocBrain);
+        //ParseQuirks();
         
     }
 
@@ -56,11 +57,35 @@ StartCoroutine(q());
                 ObjectiveManager.inst.GenerateObjective();
             }
             
-            MapGenerator.inst. CreateStartingUnits();
+         CreateStartingUnits();
             BattleManager.inst.Begin();
             BlackFade.inst.FadeOut();
        }
     }
+
+
+      public void CreateStartingUnits()
+    {
+        List<Slot> shuffle = MapManager.inst.StartingRadius();
+        if(!GameManager.inst.loadFromFile)
+        {
+            for (int i = 0; i < 3; i++)
+            { UnitFactory.inst. CreatePlayerUnit(shuffle[i]);}
+        }
+        else
+        {
+            int i = 0;
+            foreach (var item in  PartyManager .inst.parties[PartyManager .inst.currentParty]. members)
+            {
+                UnitFactory.inst.CreatePlayerUnit(shuffle[i],item.Value.character);
+                i++;
+            }
+        }
+   
+
+    
+    }
+   
     
     public void ChangeGameState(GameState newGameState)
     {

@@ -109,7 +109,7 @@ public class CharacterStatSheet : Singleton<CharacterStatSheet>
                 tt.Init(c.traits[i],traitSpritDict[c.traits[i].aligment]);
             }
             else{
-                tt.Init(empty,traitSpritDict[Aligment.NA]);
+                tt.Init(empty,traitSpritDict[empty.aligment]);
             }
             traitTabs.Add(tt);
         }

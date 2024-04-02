@@ -271,7 +271,7 @@ SceneManager.LoadScene("Hub");
         if(b){
   lossReason = "The adventurers have perished...";
         }
-      
+     
         return b;
     }
 
@@ -279,6 +279,18 @@ SceneManager.LoadScene("Hub");
     {
         BattleTicker.inst.Type(lossReason);
         MusicManager.inst.source.DOFade(0,1);
+        LocationManager.inst.inTravel = false;
+        BlackFade.inst.FadeInEvent(()=>
+        {
+            StartCoroutine(q());
+            IEnumerator q()
+            {
+                yield return new WaitForSeconds(1);
+                SceneManager.LoadScene("Hub");
+            }
+          
+        });
+       
     }
 
     public void StatusEffectLoop(Unit u) //THIS IS BAAADDDD

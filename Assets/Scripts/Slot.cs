@@ -16,7 +16,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public Color32 normalColour,moveColour,interactColour,skillColour;
     public bool dormant,marked;
     public IntrusiveMeshHandler meshBelow;
-
+    public MeshRenderer mesh;
     void Awake()
     {
         cont.slot = this;
@@ -50,6 +50,10 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
                 }
             }   
         }
+    }
+
+    public void ChangeMaterial(Material m){
+        mesh.material = m;
     }
 
     void MouseOverIntrusion(){

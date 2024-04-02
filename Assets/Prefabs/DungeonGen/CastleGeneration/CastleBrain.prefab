@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5748137093549833882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5748137093549834084}
+  - component: {fileID: -8125641903671149423}
+  m_Layer: 0
+  m_Name: CastleBrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5748137093549834084
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5748137093549833882}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8125641903671149423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5748137093549833882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf4be069ddaf6247bd0bba53ef2a09f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotMat: {fileID: 2100000, guid: c10896cc4b0760d42b571f4db0aa691a, type: 2}
+  borderDict:
+    list: []
+    keyCollision: 0
+  roomSizeDict:
+    list:
+    - Key: 0
+      Value: {x: 50, y: 50}
+    - Key: 1
+      Value: {x: 100, y: 100}
+    - Key: 2
+      Value: {x: 50, y: 25}
+    - Key: 3
+      Value: {x: 25, y: 50}
+    - Key: 4
+      Value: {x: 100, y: 50}
+    - Key: 5
+      Value: {x: 50, y: 100}
+    keyCollision: 0
+  blockage: {fileID: 3177572613690716978, guid: 17a5b3a65d5b6874181deade3972aeb1,
+    type: 3}
+  roomSpacerPrefab: {fileID: 114230363071559536, guid: 77b910e951dfa3148871bb9595a18dec,
+    type: 3}
+  wall: {fileID: -5628535466239815856, guid: dce9f0901830ea04b8e61685ca9845ff, type: 3}
+  doorPrefab: {fileID: 4476731597353253134, guid: 04e3f25993a64e84e861803442e962e1,
+    type: 3}
+  borderPrefab: {fileID: 6402608400887523798, guid: 1d4b06e23cf7e2b419143ef189133934,
+    type: 3}
+  dungeonNodePrefab: {fileID: 5183120452575869949, guid: 8bb086fb9ea9d294b98d584a1dc96075,
+    type: 3}
+  blockagePercentRange: {x: 40, y: 50}
+  reAlignMask:
+    serializedVersion: 2
+    m_Bits: 128
+  dungeonNodes: []
+  slotPrefab: {fileID: 1237057250585610339, guid: d0b0ee552725a50488ad99c5ae0a19db,
+    type: 3}
+  debug: 0

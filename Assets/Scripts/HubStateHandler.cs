@@ -19,6 +19,7 @@ public class HubStateHandler: Singleton<HubStateHandler>
    
     IEnumerator Start(){
         ChangeState(HubState.HOVER);
+        Cursor.lockState = CursorLockMode.Confined;
         MusicManager.inst.ChangeMusic(mapMusic);
         yield return new WaitForEndOfFrame();
         ChangeLocationName(MapTileManager.inst.ld[LocationManager.inst.currentLocation].locationInfo.locationName);

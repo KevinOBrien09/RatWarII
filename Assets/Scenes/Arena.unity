@@ -488,56 +488,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d29df0f2c06ed40a37b806c07f2843, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  borderDict:
-    list: []
-    keyCollision: 0
-  roomSizeDict:
-    list:
-    - Key: 0
-      Value: {x: 50, y: 50}
-    - Key: 1
-      Value: {x: 100, y: 100}
-    - Key: 2
-      Value: {x: 50, y: 25}
-    - Key: 3
-      Value: {x: 25, y: 50}
-    - Key: 4
-      Value: {x: 100, y: 50}
-    - Key: 5
-      Value: {x: 50, y: 100}
-    keyCollision: 0
   generatorAstar: {fileID: 56964770}
-  mapGrid: {fileID: 56964769}
-  howManyPartyMembers: 3
-  howManyEnemies: 3
-  spikeSlotPrefab: {fileID: 3119150678241855687, guid: 263a027136c805045bbbe43cda3a4eae,
-    type: 3}
-  placeholder: {fileID: 6998329089859767902, guid: 7b06755d6eb9d494a92dca4801c180d9,
-    type: 3}
-  blockage: {fileID: 3177572613690716978, guid: 17a5b3a65d5b6874181deade3972aeb1,
-    type: 3}
-  plane: {fileID: 7545540679654556103, guid: 116a6e37b187d6f4b8633449d6c2a0da, type: 3}
-  offshootTarget: {fileID: 4895545534671510243, guid: 950d7963f37547f4dade3b24560c0bfd,
-    type: 3}
-  roomSpacerPrefab: {fileID: 114230363071559536, guid: 77b910e951dfa3148871bb9595a18dec,
-    type: 3}
-  wall: {fileID: -5628535466239815856, guid: dce9f0901830ea04b8e61685ca9845ff, type: 3}
-  doorPrefab: {fileID: 4476731597353253134, guid: 04e3f25993a64e84e861803442e962e1,
-    type: 3}
-  borderPrefab: {fileID: 6402608400887523798, guid: 1d4b06e23cf7e2b419143ef189133934,
-    type: 3}
-  dungeonNodePrefab: {fileID: 5183120452575869949, guid: 8bb086fb9ea9d294b98d584a1dc96075,
-    type: 3}
-  blockagePercentRange: {x: 40, y: 50}
-  showVisual: 0
+  genGrid: {fileID: 56964769}
   generating: 0
-  reAlignMask:
-    serializedVersion: 2
-    m_Bits: 128
-  dungeonNodes: []
-  slotPrefab: {fileID: 1237057250585610339, guid: d0b0ee552725a50488ad99c5ae0a19db,
-    type: 3}
-  debug: 0
+  brain: {fileID: 0}
 --- !u!1 &75574672
 GameObject:
   m_ObjectHideFlags: 0
@@ -3005,7 +2959,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 846847690}
   m_HandleRect: {fileID: 846847689}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -5688,7 +5642,7 @@ MonoBehaviour:
       type: 3}
   hostageInteractablePrefab: {fileID: 1252069360783040105, guid: ce2e627b6ed249a42897f7cb5a24fbba,
     type: 3}
-  predecideObjective: 1
+  predecideObjective: 0
   predecidedObjective: 2
 --- !u!114 &1011832594
 MonoBehaviour:

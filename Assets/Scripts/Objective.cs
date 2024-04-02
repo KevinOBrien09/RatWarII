@@ -6,7 +6,7 @@ using System.Linq;
 [System.Serializable]
 public class Objective 
 {
-    public enum ObjectiveEnum{CLEARAREA,RETRIEVAL,HOSTAGE}
+    public enum ObjectiveEnum{CLEARAREA,RETRIEVAL,HOSTAGE,BOSS}
     public ObjectiveEnum objectiveEnum;
     public int currentRetrevial,targetRetrevial;
     public Unit hostageUnit;
@@ -49,6 +49,10 @@ public class Objective
                 s2.cont.wall = true;
             }
             break;
+
+            case ObjectiveEnum.BOSS:
+            Debug.LogWarning("BOSS LOGIC NEEDS TO BE IMPLEMENTED!!");
+            break;
             
             default:
             Debug.LogAssertion("DEFAULT CASE!!");
@@ -75,7 +79,8 @@ public class Objective
             
             return currentRetrevial >= targetRetrevial && MapManager.inst.currentRoom.roomClear;
             
-            
+            case ObjectiveEnum.BOSS:
+            return false;
             
             default:
             Debug.LogAssertion("DEFAULT CASE!!");

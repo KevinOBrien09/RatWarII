@@ -9,13 +9,13 @@ public class PartyTabIcon : StatSheetOpener
 
     public void Wipe(){
         character = null;
-        enabled = false;
+       rawImage.enabled = false;
     }
 
     public override void Init(Character c){
         rawImage.texture =  IconGraphicHolder.inst.dict[c.ID];
-      character = c;
-      enabled = true;
+        character = c;
+        rawImage.enabled = true;
     }
 
 }

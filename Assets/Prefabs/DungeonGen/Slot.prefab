@@ -93,7 +93,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 863a1ba6aa6f001438fe0d959fe40e2a, type: 2}
+  - {fileID: 2100000, guid: 211b3943d37342c4a940168984aa9adb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -481,6 +481,7 @@ MonoBehaviour:
     ihCost: 0
     offShootStart: 0
     slot: {fileID: 0}
+  intrusiveMeshes: []
   border: {fileID: 1804679518769746182}
   hoverBorder: {fileID: 1842756857001394802}
   areaIndicator: {fileID: 2143547988312961857}
@@ -500,3 +501,5 @@ MonoBehaviour:
     rgba: 2348850687
   dormant: 0
   marked: 0
+  meshBelow: {fileID: 0}
+  mesh: {fileID: 6580155906847053995}
