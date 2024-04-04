@@ -64,7 +64,7 @@ public class MapTileManager : Singleton<MapTileManager>
 
         if(loadFromFile)
         {
-            SaveData sd =  SaveLoad.Load(999);
+            SaveData sd =  SaveLoad.Load(GameManager.inst.saveSlotIndex);
             MapSaveData msd = sd.mapSaveData;
        
             foreach (var item in msd.stages)

@@ -12,7 +12,7 @@ public class LocationInfo :ScriptableObject
     public WorldLocationDeco decoPrefab;
     public AudioClip locationMusic;
     public MapGeneratorBrain brain;
-
+    
     public SoundData travelSting;
     [TextArea(10,10)] public string desc;
 

@@ -97,7 +97,7 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
 
     public void LeaveEdit()
     {
-        SaveLoad.Save(999);
+        SaveLoad.Save(GameManager.inst.saveSlotIndex);
         EventSystem.current.gameObject.GetComponent<Rewired.Integration.UnityUI.RewiredStandaloneInputModule>().deselectIfBackgroundClicked = false;
         if(editingParty != null)
         {

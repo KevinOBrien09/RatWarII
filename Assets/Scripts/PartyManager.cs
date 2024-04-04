@@ -141,7 +141,7 @@ public class PartyManager : Singleton<PartyManager>
 
     public SaveData PartyUpdateSave()
     {
-        SaveData sd = SaveLoad.Load(999);
+        SaveData sd = SaveLoad.Load(GameManager.inst.saveSlotIndex);
         sd.partySaveData = Save();
         return sd;
 
@@ -208,11 +208,14 @@ public class PartyManager : Singleton<PartyManager>
             Debug.LogWarning("Old Party string was not found!");
           XD(lastLoc);
         }
-        if(parties.Count == 1| parties[currentParty].mapTileID != lastLoc)
+        else{
+if(parties.Count == 1| parties[currentParty].mapTileID != lastLoc)
         {
             XD(lastLoc);
          //parties.First().Key;
         }
+        }
+        
         foreach (var item in psd.benched)
         {
             CharacterHolder holder = new CharacterHolder();

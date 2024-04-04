@@ -461,6 +461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLocation: {x: 0, y: 0}
   locationTravelingTo: {x: 0, y: 0}
+  nextLocBrain: {fileID: 0}
   inTravel: 0
   INSTANT_TRAVEL: 0
 --- !u!114 &6432488518052387560

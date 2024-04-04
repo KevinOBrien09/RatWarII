@@ -19,6 +19,8 @@ MonoBehaviour:
   locationPic: {fileID: 21300000, guid: 8fb79174e6039cf47bce2a3f18e6e2df, type: 3}
   decoPrefab: {fileID: 8842817864029100572, guid: 1ea1afbf4648a484aa94458050baf770,
     type: 3}
+  locationMusic: {fileID: 8300000, guid: d56ec9a2f4b5bd94ba75fb51d45e9cfa, type: 3}
+  brain: {fileID: 0}
   travelSting:
     audioClip: {fileID: 0}
     pitchRange: {x: 0.9, y: 1.1}

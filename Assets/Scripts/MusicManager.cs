@@ -9,7 +9,7 @@ public class MusicManager : Singleton<MusicManager>
 {
     public AudioClip battle,peace;
     public AudioSource source;
-    float ogVol;
+   public float ogVol;
     void Start(){
         ogVol = source.volume;
     }    
@@ -33,6 +33,10 @@ public class MusicManager : Singleton<MusicManager>
           
 
         });
+    }
+
+    public void FadeToSilence(float t = .5f){
+        source.DOFade(0,t);
     }
 
 }

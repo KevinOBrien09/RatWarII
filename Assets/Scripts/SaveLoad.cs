@@ -19,7 +19,7 @@ public static class SaveLoad
     {
         if(!SaveAlreadyExists(savePath + slot.ToString()))
         {
-            CreateSaveFile(slot);
+            CreateSaveFile(slot,"THIS SHOULDN'T HAPPEN IN BUILD LOL");
         }
         
         string mainDataPath = savePath + slot + mainSave;
@@ -35,7 +35,10 @@ public static class SaveLoad
         string saveSlotPath =  savePath + slot + saveSlot;
         string saveSlotDataJSON = File.ReadAllText(saveSlotPath);
         SaveSlotData saveSlotData = JsonUtility.FromJson<SaveSlotData>(saveSlotDataJSON);
-      
+        FileInfo f = new FileInfo(saveSlotPath);
+        saveSlotData.date = GetTime(f);
+        saveSlotData.screenShotPath = TakeScreenShot(slot.ToString());
+        saveSlotData.lastGameLoc = LocationManager.inst.locName;
         string saveSlotDataBackToJSON = JsonUtility.ToJson(saveSlotData,true);
         File.WriteAllText(saveSlotPath, saveSlotDataBackToJSON); 
         
@@ -86,10 +89,14 @@ public static class SaveLoad
         return false; 
     }
 
+    public static bool SaveHolderExists(){
+        return Directory.Exists(savePath);
+    }
+
     public static bool SaveAlreadyExists(string dir)
     { return Directory.Exists(dir); }
 
-    public static SaveSlotData CreateSaveFile(int slotNumber)
+    public static SaveSlotData CreateSaveFile(int slotNumber,string saveName)
     {
         if(!Directory.Exists(savePath)) //Folder that holds all save files.
         {Directory.CreateDirectory(savePath);}
@@ -117,7 +124,9 @@ public static class SaveLoad
             FileInfo f = new FileInfo(saveSlotPath);
             
             string sceneName = SceneManager.GetActiveScene().name;
+
             SaveSlotData ssd = new SaveSlotData(slotNumber,GetTime(f),TakeScreenShot(slotNumber.ToString()));
+            ssd.saveName = saveName;
             string saveSlotDataToJSON = JsonUtility.ToJson(ssd,true);
             File.WriteAllText(saveSlotPath, saveSlotDataToJSON);
        
@@ -132,33 +141,46 @@ public static class SaveLoad
         }
     }
 
-    // public static List<SaveSlotData> GetSaveSlots()
-    // {
-    //     List<SaveSlotData> slotDatas = new List<SaveSlotData>();
-    //     if(Directory.Exists(savePath))
-    //     {
-    //         DirectoryInfo directoryInfo = new DirectoryInfo(savePath);
-    //         string[] folders = Directory.GetDirectories(savePath);
-    //         if(folders.Length > 0)
-    //         {
-    //             foreach (var item in folders)
-    //             {
-    //                 string d = Path.GetFileName( Path.GetDirectoryName(item + "/"));
-    //                 string dPath = savePath + d  + saveSlot;
-    //                 if(File.Exists(dPath))
-    //                 {
-    //                     string json = File.ReadAllText(dPath);
-    //                     SaveSlotData data = JsonUtility.FromJson<SaveSlotData>(json);
-    //                     slotDatas.Add(data);
-    //                 }
-    //                 else
-    //                 {Debug.LogAssertion("No slot data found");}
-    //             }
-    //         }
-    //         else
-    //         { Debug.LogWarning("No save slots found!"); }
-    //     }
+    public static List<SaveSlotData> GetSaveSlots()
+    {
+        List<SaveSlotData> slotDatas = new List<SaveSlotData>();
+        if(Directory.Exists(savePath))
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(savePath);
+            string[] folders = Directory.GetDirectories(savePath);
+            if(folders.Length > 0)
+            {
+                foreach (var item in folders)
+                {
+                    string d = Path.GetFileName( Path.GetDirectoryName(item + "/"));
+                    string dPath = savePath + d  + saveSlot;
+                    if(File.Exists(dPath))
+                    {
+                        string json = File.ReadAllText(dPath);
+                        SaveSlotData data = JsonUtility.FromJson<SaveSlotData>(json);
+                        slotDatas.Add(data);
+                    }
+                    else
+                    {Debug.LogAssertion("No slot data found");}
+                }
+            }
+            else
+            { Debug.LogWarning("No save slots found!"); }
+        }
 
-    //     return slotDatas;
-    // }
+        return slotDatas;
+    }
+
+    public static Texture2D LoadPNG(string filePath) {
+
+        Texture2D tex = null;
+        byte[] fileData;
+
+        if (File.Exists(filePath)) 	{
+            fileData = File.ReadAllBytes(filePath);
+            tex = new Texture2D(2, 2);
+            tex.LoadImage(fileData); //..this will auto-resize the texture dimensions.
+        }
+        return tex;
+    }
 }

@@ -9,22 +9,19 @@ public class GameManager : Singleton<GameManager>
     public Objective.ObjectiveEnum chosenObjective;
     public bool doNotGenObjective,chosenQuest,loadFromFile;
     public int saveSlotIndex = 999;
-    void Start(){
-        if(loadFromFile){
-            Load();
-        }
-
-    }
+  
 
     public void Load(){
-  SaveData sd =     SaveLoad.Load(saveSlotIndex);
+        SaveData sd =  SaveLoad.Load(saveSlotIndex);
         PartyManager.inst.Load(sd.partySaveData,sd.mapSaveData.lastLocation);
+        MapSaveData msd = sd.mapSaveData;
+        LocationManager.inst.currentLocation = msd.lastLocation;
     }
 
     #if UNITY_EDITOR
     void Update(){ //REMOVE
         if(Input.GetKeyDown(KeyCode.M)){
- SaveLoad.Save(999);
+ SaveLoad.Save(saveSlotIndex);
         }
 //   if(Input.GetKeyDown(KeyCode.L)){
 //               Load();

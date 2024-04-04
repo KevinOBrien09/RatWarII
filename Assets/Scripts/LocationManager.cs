@@ -8,16 +8,15 @@ public class LocationManager : Singleton<LocationManager>
     public Vector2 currentLocation;
     public Vector2 locationTravelingTo;
     public MapGeneratorBrain nextLocBrain;
-
+    public string locName;
     public bool inTravel;
     public bool INSTANT_TRAVEL;
-    protected override void Awake()
-    {
-        base.Awake(); 
-        SaveData sd =  SaveLoad.Load(999);
-        MapSaveData msd = sd.mapSaveData;
-        LocationManager.inst.currentLocation = msd.lastLocation;
-    }
+    // protected override void Awake()
+    // {
+    //     base.Awake(); 
+    //     SaveData sd =  SaveLoad.Load(999);
+       
+    // }
     public bool BeginTravel(Vector2 newLocation,MapGeneratorBrain brain){
 
         if(brain != null){
@@ -36,8 +35,9 @@ public class LocationManager : Singleton<LocationManager>
     public void Transfer(){
            currentLocation = locationTravelingTo;
         if(PartyManager.inst.currentParty != string.Empty){
+            locName = MapTileManager.inst.ld[currentLocation].locationInfo.locationName;
             PartyManager.inst.parties[PartyManager.inst.currentParty].ChangeMapLocation(locationTravelingTo);
-            HubStateHandler.inst.   ChangeLocationName(MapTileManager.inst.ld[currentLocation].locationInfo.locationName);
+            HubStateHandler.inst.   ChangeLocationName(locName);
             HubCharacterDisplay.inst.Refresh();
             MapTileManager.inst.RefreshCurrentLoc();
             HubManager.inst.SpawnNewDeco(MapTileManager.inst.ld[LocationManager.inst.currentLocation].locationInfo);
@@ -53,7 +53,8 @@ public class LocationManager : Singleton<LocationManager>
         BlackFade.inst.FadeInEvent(()=>{
             currentLocation = v;
             PartyManager.inst.XD(LocationManager.inst.currentLocation);
-            HubStateHandler.inst.   ChangeLocationName(MapTileManager.inst.ld[currentLocation].locationInfo.locationName);
+            locName = MapTileManager.inst.ld[currentLocation].locationInfo.locationName;
+            HubStateHandler.inst.   ChangeLocationName(locName);
             HubCharacterDisplay.inst.Refresh();
            
             HubStateHandler.inst.close = null;
