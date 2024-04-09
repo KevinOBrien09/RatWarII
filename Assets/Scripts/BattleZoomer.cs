@@ -16,7 +16,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
     public Image rightIMG,leftIMG,handleIMG;
     public List<SoundData> negativeSounds = new List<SoundData>();
 
-    public  void ZoomIn(CastArgs args,UnityAction action,bool end)
+    public void ZoomIn(CastArgs args,UnityAction action,bool end)
     {
         
         float leftY,rightY,casterY,targetY;

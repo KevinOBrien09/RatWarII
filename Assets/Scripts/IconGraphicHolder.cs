@@ -6,6 +6,11 @@ public class IconGraphicHolder : Singleton<IconGraphicHolder>
 { 
     float currentX = 0;
     public GenericDictionary<string,Texture2D> dict = new GenericDictionary<string, Texture2D>();
+
+    public void Wipe(){
+        currentX = 0;
+        dict.Clear();
+    }
     
     public void MakeIcon(Character c)
     {

@@ -28,7 +28,7 @@ public class QuestGiver: Singleton<QuestGiver>
         if( !WorldHubCamera.inst.fuckOff)
         {  
             CharacterRecruiter.inst.state = 3;
-            HubStateHandler.inst.desktopButton.SetActive(false);
+            
             WorldHubCamera.inst.fuckOff = true;
             WorldHubCamera.inst.cam.DOFieldOfView(40,.2f);
             WorldHubCamera.inst.Move(camPos,()=>

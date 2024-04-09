@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
+public enum MapQuirk{NONE,ROOMS,FOG_OF_WAR}
 public class MapManager : Singleton<MapManager>
 {
     public Map map;
@@ -12,7 +13,7 @@ public class MapManager : Singleton<MapManager>
     public Room currentRoom;
     public SoundData enemySpawnHit;
     public bool doNotSpawnEnemies;
-   
+    public MapQuirk mapQuirk;
     
 
     public void InitStartRoom()
@@ -131,6 +132,7 @@ public class MapManager : Singleton<MapManager>
     }
 
     public void LockDownRooms(){
+         if(mapQuirk == MapQuirk.ROOMS){
         foreach (var item in currentRoom.borders)
         {
             foreach (var dr in item.doors)
@@ -139,6 +141,7 @@ public class MapManager : Singleton<MapManager>
                 dr.LockDown();
             }
         }
+         }
     }
 
     public void CheckForIntrusions()
@@ -161,8 +164,10 @@ public class MapManager : Singleton<MapManager>
         }
     }
 
-    public void HideInactiveRooms(){
-        foreach (var item in map.rooms)
+    public void HideInactiveRooms()
+    {
+        if(mapQuirk == MapQuirk.ROOMS){
+foreach (var item in map.rooms)
         {
             foreach (var s in item.slots)
             {  s.ActivateAreaIndicator(new Color32(0,0,0,200));
@@ -179,10 +184,19 @@ public class MapManager : Singleton<MapManager>
         
             s.dormant = false;
         }
+        }
+        
     }
 
     public bool slotBelongsToGrid(Slot s)
-    {return currentRoom.slots.Contains(s); }
+    {
+        if(mapQuirk == MapQuirk.ROOMS){
+        return currentRoom.slots.Contains(s); 
+        }
+        else{
+            return true;
+        }
+    }
 
     public bool nodeIsValid(Vector2 v)
     {

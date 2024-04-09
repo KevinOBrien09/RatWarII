@@ -70,7 +70,7 @@ MonoBehaviour:
   moveOneElementPerAxisPress: 0
   setActionsById: 0
   horizontalActionId: -1
-  verticalActionId: -1
+  verticalActionId: 8
   submitActionId: -1
   cancelActionId: -1
   m_HorizontalAxis: UIHorizontal
@@ -193,7 +193,7 @@ MonoBehaviour:
   chosenObjective: 0
   doNotGenObjective: 0
   chosenQuest: 0
-  loadFromFile: 1
+  loadFromFile: 0
   saveSlotIndex: 999
 --- !u!114 &8191127639272312099
 MonoBehaviour:
@@ -460,8 +460,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentLocation: {x: 0, y: 0}
-  locationTravelingTo: {x: 0, y: 0}
-  nextLocBrain: {fileID: 0}
+  locationTravelingTo: {fileID: 0}
+  locName: 
   inTravel: 0
   INSTANT_TRAVEL: 0
 --- !u!114 &6432488518052387560
@@ -747,6 +747,7 @@ MonoBehaviour:
   battle: {fileID: 8300000, guid: 4fe648304d2f42747a571e2213bb0880, type: 3}
   peace: {fileID: 8300000, guid: 48e080d8b013d8b48a784c7e51c35b76, type: 3}
   source: {fileID: 8191127640884174846}
+  ogVol: 0
 --- !u!1001 &2917663855408516804
 PrefabInstance:
   m_ObjectHideFlags: 0

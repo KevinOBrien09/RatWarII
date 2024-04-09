@@ -17,6 +17,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public bool dormant,marked;
     public IntrusiveMeshHandler meshBelow;
     public MeshRenderer mesh;
+    public MeshFilter mf;
     void Awake()
     {
         cont.slot = this;
@@ -61,16 +62,22 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
         Vector2 n = new Vector2(node.iGridX,node.iGridY-1);
         if(MapManager.inst.nodeIsValid(n))
         {  
-            if(n.x == node.iGridX){
+            if(n.x == node.iGridX)
+            {
+               
                 Slot s = MapManager.inst.map.NodeArray[(int)n.x,(int)n.y].slot;
-                if(s. cont.specialSlot != null)
+                if(s != null)
                 {
-                    if(s.cont.specialSlot.intrusiveMesh != null)
+                    if(s. cont.specialSlot != null)
                     {
-                        s.cont.specialSlot.intrusiveMesh.MakeTrans();
-                        meshBelow =  s.cont.specialSlot.intrusiveMesh;
+                        if(s.cont.specialSlot.intrusiveMesh != null)
+                        {
+                            s.cont.specialSlot.intrusiveMesh.MakeTrans();
+                            meshBelow =  s.cont.specialSlot.intrusiveMesh;
+                        }
                     }
                 }
+               
             }
            
         }
@@ -159,7 +166,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
         switch(GameManager.inst.currentGameState)
         {
             case GameState.PLAYERHOVER:
-            foreach (var item in MapManager.inst.currentRoom.slots)
+            foreach (var item in MapManager.inst.allSlots)
             { item. DisableHover();}
             SlotInfoDisplay.inst.Apply(this);
             hoverBorderOn();

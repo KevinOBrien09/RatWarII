@@ -13,20 +13,29 @@ public class MapGenerator : Singleton<MapGenerator>
     public Grid_ genGrid;
     public bool generating;
     public MapGeneratorBrain brain;
+    public LocationInfo testing;
     protected override void Awake()
     {
         base.Awake();
         genGrid.CreateGrid();
     }
     
-    public void BeginGeneration(MapGeneratorBrain newBrain)
+    public void BeginGeneration(LocationInfo LI)
     {
-        if(newBrain != null){
+        if(LI != null){
+            genGrid.ResizeGrid(LI.mapSize);
+            MapManager.inst.map.ResizeGrid(LI.mapSize);
             generating = true;
-            brain = Instantiate(newBrain);
+            brain = Instantiate(LI.brain);
             brain.Generate();
         }
-        else{
+        // else if(brain != null){
+        //     generating = true;
+        //     brain = Instantiate(brain);
+        //     brain.Generate();
+        // }
+        else
+        {
             Debug.LogAssertion("CANNOT GENERATE NO MAP DATA!!!");
         }
    
@@ -36,7 +45,7 @@ public class MapGenerator : Singleton<MapGenerator>
     {
         generating = false;
         GameManager.inst.GameSetUp();
-        Destroy(brain.gameObject);
-        Destroy(gameObject);
+        // Destroy(brain.gameObject);
+        // Destroy(gameObject);
     }
 }

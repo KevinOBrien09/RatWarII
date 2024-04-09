@@ -16,9 +16,10 @@ public class Grid_ : MonoBehaviour
     float fNodeDiameter;
     public int iGridSizeX, iGridSizeY;
 
-    // public void AssignRoomSize(GenerationRoomType generationRoomType){
-    //     vGridWorldSize = MapGenerator.inst. roomSizeDict[generationRoomType];
-    // }
+    public void ResizeGrid (Vector2 size){
+        vGridWorldSize  = size;
+        CreateGrid();
+    }
 
    
    public void CreateGrid()

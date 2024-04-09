@@ -6,23 +6,26 @@ public class LocationManager : Singleton<LocationManager>
 {
     
     public Vector2 currentLocation;
-    public Vector2 locationTravelingTo;
-    public MapGeneratorBrain nextLocBrain;
+    public LocationInfo locationTravelingTo;
+
     public string locName;
     public bool inTravel;
     public bool INSTANT_TRAVEL;
-    // protected override void Awake()
-    // {
-    //     base.Awake(); 
-    //     SaveData sd =  SaveLoad.Load(999);
-       
-    // }
-    public bool BeginTravel(Vector2 newLocation,MapGeneratorBrain brain){
 
-        if(brain != null){
-            nextLocBrain = brain;
+    public void Wipe(){
+        currentLocation = Vector2.zero;
+        locationTravelingTo = null;
+       
+        locName = string.Empty;
+        inTravel = false;
+    }
+  
+    public bool BeginTravel(LocationInfo i){
+
+        if(i.brain != null){
+            locationTravelingTo = i;
             inTravel = true;
-            locationTravelingTo = newLocation;
+           
             return true;
         }
         else{
@@ -33,10 +36,10 @@ public class LocationManager : Singleton<LocationManager>
   
     }
     public void Transfer(){
-           currentLocation = locationTravelingTo;
+           currentLocation = locationTravelingTo.stage.GetID();
         if(PartyManager.inst.currentParty != string.Empty){
             locName = MapTileManager.inst.ld[currentLocation].locationInfo.locationName;
-            PartyManager.inst.parties[PartyManager.inst.currentParty].ChangeMapLocation(locationTravelingTo);
+            PartyManager.inst.parties[PartyManager.inst.currentParty].ChangeMapLocation(    currentLocation );
             HubStateHandler.inst.   ChangeLocationName(locName);
             HubCharacterDisplay.inst.Refresh();
             MapTileManager.inst.RefreshCurrentLoc();

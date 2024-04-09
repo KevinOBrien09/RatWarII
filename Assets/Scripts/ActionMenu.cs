@@ -81,7 +81,7 @@ public class ActionMenu : Singleton<ActionMenu>
     
     void Update()
     {
-        if(GameManager.inst.checkGameState(GameState.ENEMYTURN) | BattleManager.inst.gameOver)
+        if(GameManager.inst.checkGameState(GameState.ENEMYTURN) || BattleManager.inst.gameOver||MapGenerator.inst.generating)
         {return;}
         if(!FUCKOFF)
         {
@@ -105,7 +105,7 @@ public class ActionMenu : Singleton<ActionMenu>
             {
                 if(InputManager.inst.player.GetButtonDown("Cancel"))
                 {
-                    foreach (var item in MapManager.inst.currentRoom.slots)
+                    foreach (var item in MapManager.inst.allSlots)
                     { item. DisableHover();}
                     GameManager.inst.ChangeGameState(GameState.PLAYERUI);
                     Show(slot);

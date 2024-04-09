@@ -18,7 +18,7 @@ public class TitleScreen : Singleton<TitleScreen>
     public Image mapHider;
     public Vector3 logoStartPos,logoEndPos;
     public float mapStart,mapEnd;
-    public GameObject pressStartText,optionHolder,saveHolder,nameSavePopup;
+    public GameObject pressStartText,optionHolder,saveHolder,nameSavePopup,creditsGO;
     public Button loadGameButton,returnButton,creditButton;
     public SaveSlotHandler saveSlotHandler;
     Tween t;
@@ -28,12 +28,14 @@ public class TitleScreen : Singleton<TitleScreen>
     public int saveToLoad;
     public CanvasGroup loadingScreen;
     void Start()
-    {
+    {  
+        GameManager.inst.Wipe();
         saveToLoad = -1;
         saveHolder.SetActive(false);
         optionHolder.SetActive(false);
         nameSavePopup.SetActive(false);
         pressStartText.SetActive(false);
+        creditsGO.SetActive(false);
         returnButton.gameObject.SetActive(false);
         MusicManager.inst.ChangeMusic(fullSong);
         logo.DOAnchorPos3D(logoStartPos,0);
@@ -139,12 +141,21 @@ public class TitleScreen : Singleton<TitleScreen>
         });
     }
 
+    public void Credits(){
+        saveHolder.SetActive(true);
+        optionHolder.SetActive(false);
+        returnButton.gameObject.SetActive(true);
+        creditsGO.SetActive(true);
+        currentState = TitleScreenState.CREDITS;
+    }
+
     public void ReturnButton(){
         switch (currentState)
         {
             case TitleScreenState.NEWGAME:
             saveHolder.SetActive(false);
-            optionHolder.SetActive(true);
+            optionHolder.SetActive(true);      
+            creditsGO.SetActive(false);
             returnButton.gameObject.SetActive(false);
             saveSlotHandler.Exit();
             currentState = TitleScreenState.MENU;
@@ -152,19 +163,28 @@ public class TitleScreen : Singleton<TitleScreen>
             return;
 
             case TitleScreenState.NAMING_SAVE:
-            nameSavePopup.SetActive(false);
+            nameSavePopup.SetActive(false);      
+            creditsGO.SetActive(false);
             saveToLoad = -1;
-              currentState = TitleScreenState.NEWGAME;
+            currentState = TitleScreenState.NEWGAME;
             break;
 
             case TitleScreenState.LOADGAME:
             saveHolder.SetActive(false);
-            optionHolder.SetActive(true);
+            optionHolder.SetActive(true);      creditsGO.SetActive(false);
             returnButton.gameObject.SetActive(false);
             saveSlotHandler.Exit();
             currentState = TitleScreenState.MENU;
 
             return;
+
+            case TitleScreenState.CREDITS:
+            saveHolder.SetActive(false);
+            optionHolder.SetActive(true);
+            creditsGO.SetActive(false);
+            returnButton.gameObject.SetActive(false);
+            currentState = TitleScreenState.MENU;
+            break;
             
             default:
 

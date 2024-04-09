@@ -134,10 +134,17 @@ public class Health : MonoBehaviour
         onRefresh.Invoke();
         if(currentHealth <=0)
         {  
-            if(castArgs.caster.side == Side.PLAYER){
- castArgs.caster.character.exp.AddExp(10);
+            if(castArgs.caster != null)
+            {
+                if(castArgs.caster.side == Side.PLAYER)
+                {
+                    castArgs.caster.character.exp.AddExp(10);
+                }
             }
-           
+            else
+            {
+                Debug.LogAssertion("CASTER IS NULL???");
+            }
             onDie.Invoke();  
         }
     }

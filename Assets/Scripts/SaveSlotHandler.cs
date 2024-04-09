@@ -28,17 +28,31 @@ public class SaveSlotHandler : MonoBehaviour
     public void SpawnSlots(){
       
         List<SaveSlotData> saves = SaveLoad.GetSaveSlots(); //redo
+        List<SaveSlotData> l = new List<SaveSlotData>();
+        for (int i = 0; i < amountOfSaveSlotsInPage; i++)
+        {
+            l.Add(null);
+        }
+        foreach (var item in saves)
+        {
+            if(item.slotNumber != 999){
+   l.Insert(item.slotNumber,item);
+            }
+         
+            
+           
+        }
       
         for (int i = 0; i < amountOfSaveSlotsInPage; i++)
         {
             SaveSlot ss = Instantiate(saveSlotPrefab,holder);
-            if(saves.ElementAtOrDefault(i) == null){
+            if(l.ElementAtOrDefault(i) == null){
               
                 ss.InitEmpty(i);
             }
             else{
              
-                ss.Init(saves[i]);
+                ss.Init(l[i]);
             }
             saveSlotInstances.Add(ss);
             

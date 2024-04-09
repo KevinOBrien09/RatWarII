@@ -15,7 +15,7 @@ public static class SaveLoad
     public static string savePath = Application.persistentDataPath+"/saves/";
 
 
-    public static void Save(int slot,SaveData sd = null)
+    public static void Save(int slot,SaveData sd = null,bool takePhoto = false)
     {
         if(!SaveAlreadyExists(savePath + slot.ToString()))
         {
@@ -37,7 +37,10 @@ public static class SaveLoad
         SaveSlotData saveSlotData = JsonUtility.FromJson<SaveSlotData>(saveSlotDataJSON);
         FileInfo f = new FileInfo(saveSlotPath);
         saveSlotData.date = GetTime(f);
-        saveSlotData.screenShotPath = TakeScreenShot(slot.ToString());
+        if(takePhoto){
+ saveSlotData.screenShotPath = TakeScreenShot(slot.ToString());
+        }
+       
         saveSlotData.lastGameLoc = LocationManager.inst.locName;
         string saveSlotDataBackToJSON = JsonUtility.ToJson(saveSlotData,true);
         File.WriteAllText(saveSlotPath, saveSlotDataBackToJSON); 

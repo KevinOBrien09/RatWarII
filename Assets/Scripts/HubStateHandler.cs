@@ -10,7 +10,7 @@ public class HubStateHandler: Singleton<HubStateHandler>
 {
     public enum HubState {HOVER,QUEST,RECRUIT,ORGANIZER,LEAVE,MAP,INMAPTILE,PARTYEDIT,STATSHEET}
     public HubState currentState;
-    public GameObject desktopButton;
+
     public TextMeshProUGUI location,date,state;
     public Button leaveButton;
     public Transform hover;
@@ -111,7 +111,7 @@ public class HubStateHandler: Singleton<HubStateHandler>
         WorldHubCamera.inst.Move(hover,(()=>{
         WorldHubCamera.inst.fuckOff = false;
         ChangeState(HubState.HOVER);
-        desktopButton.SetActive(true);
+ 
         }));
      
     }

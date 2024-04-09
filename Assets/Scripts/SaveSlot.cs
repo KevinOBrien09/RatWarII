@@ -16,8 +16,9 @@ public class SaveSlot : MonoBehaviour
     public void Init(SaveSlotData ssd){
         hasData.SetActive(true);
         empty.SetActive(false);
-        slotNumber = ssd.slotNumber;
-        saveName.text = "<size=150%>"+ ssd.slotNumber +":</size> "+ ssd.saveName;
+        int q = ssd.slotNumber+1;
+     
+        saveName.text = "<size=150%>"+ q +":</size> "+ ssd.saveName;
         location.text = ssd.lastGameLoc;
       
         date.text = ssd.date;
@@ -30,6 +31,7 @@ public class SaveSlot : MonoBehaviour
         }
        
         saveSlotData = ssd;
+        slotNumber = saveSlotData.slotNumber;
         if(TitleScreen.inst.currentState == TitleScreen.TitleScreenState.NEWGAME)
         {
             button.interactable = false;
@@ -43,7 +45,7 @@ public class SaveSlot : MonoBehaviour
     public void InitEmpty(int i){
         hasData.SetActive(false);
         empty.SetActive(true);
-        slotNumber = i+1;
+        slotNumber = i;
      
         if(TitleScreen.inst.currentState == TitleScreen.TitleScreenState.NEWGAME)
         {

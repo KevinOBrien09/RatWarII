@@ -103,16 +103,27 @@ public class Unit : MonoBehaviour
             { 
                 moving = false;
                 Reposition(finalSlot);
-                 MapManager.inst.map.UpdateGrid();
-                 if(BattleManager.inst.roomLockDown){
-     movedThisTurn = true;
-                 }
+                MapManager.inst.map.UpdateGrid();
+                if(MapManager.inst.mapQuirk == MapQuirk.ROOMS){
+                    if(BattleManager.inst.roomLockDown)
+                    {
+                        movedThisTurn = true;
+                    }
+                }
+                else{
+                    movedThisTurn = true;
+                }
            
                 SlotInfoDisplay.inst.sl = finalSlot;
                 if(side == Side.PLAYER)
                 { 
-                    if(BattleManager.inst.roomLockDown){
-                    ActionMenu.inst.RemoveMoveOption();
+                    if(MapManager.inst.mapQuirk == MapQuirk.ROOMS){
+                        if(BattleManager.inst.roomLockDown){
+                        ActionMenu.inst.RemoveMoveOption();
+                        }
+                    }
+                    else{
+                           ActionMenu.inst.RemoveMoveOption();
                     }
                     if(isHostage)
                     {
@@ -238,8 +249,15 @@ float percent = (5f / 100f) * (float) health.maxHealth;
                     ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" + i + " Left!" );
                 }
             }
-            else if(side == Side.PLAYER){
-                PartyManager .inst.parties[PartyManager .inst.currentParty]. KillMember(character);
+            else if(side == Side.PLAYER)
+            {
+                if(PartyManager .inst.currentParty != string.Empty){
+      PartyManager .inst.parties[PartyManager .inst.currentParty]. KillMember(character);
+                }
+                else {
+                    Debug.LogWarning("Character died in debug mode, hence there is no save to remove them from. This warning should not happen in build.");
+                }
+          
             }
             dead = true;
             BattleManager.inst.UnitIsDead(this);

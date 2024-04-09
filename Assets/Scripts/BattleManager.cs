@@ -14,7 +14,8 @@ public class BattleManager : Singleton<BattleManager>
     public Unit currentUnit;
     public int turn;
     public Queue<Unit> turnOrder = new Queue<Unit>();
-    public bool roomLockDown,gameOver,looping;
+    public bool roomLockDown;
+    public bool gameOver,looping;
     public GameObject questComplete;
     public SoundData roomUnlockSting;
     public string lossReason = "REASON UNCLEAR";
@@ -24,7 +25,7 @@ public class BattleManager : Singleton<BattleManager>
         BlackFade.inst.fade.DOFade(1,0);
         yield return new WaitForSeconds(1);
         }
-       
+        MusicManager.inst.FadeToSilence(0);
         GameManager.inst.GameInit();
        
     }
@@ -60,9 +61,12 @@ public class BattleManager : Singleton<BattleManager>
     {
         if(currentUnit != null) 
         currentUnit.activeUnitIndicator.gameObject.SetActive(false);
-        if(wasSkipped &&!roomLockDown){
-            currentUnit = turnOrder.Dequeue();
+        if(MapManager.inst.mapQuirk == MapQuirk.ROOMS){
+            if(wasSkipped &&!roomLockDown){
+                currentUnit = turnOrder.Dequeue();
+            }
         }
+        
         if(BattleManager.inst.turn != 0)
         {BattleManager.inst.UnitIteration();}
         MapManager.inst.map.UpdateGrid();
@@ -100,7 +104,10 @@ SceneManager.LoadScene("Hub");
                 ActionMenu.inst.FUCKOFF = false;
                 
                 yield return new WaitForSeconds(.25f);
-                if(BattleManager.inst.roomLockDown||currentUnit == null){
+                if(MapManager.inst.mapQuirk != MapQuirk.ROOMS){
+                currentUnit = turnOrder.Dequeue();
+                }
+               else if(BattleManager.inst.roomLockDown||currentUnit == null  ){
                 currentUnit = turnOrder.Dequeue();
                 }
                 

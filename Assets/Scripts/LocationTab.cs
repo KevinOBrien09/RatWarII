@@ -47,7 +47,7 @@ public class LocationTab : Button
         EventSystem.current.SetSelectedGameObject(null);
         PartyManager.inst.currentParty = LocationDetailHandler.inst.clickedInParty.ID;
        
-        if( LocationManager.inst.BeginTravel(i.stage.GetID(),i.brain))
+        if( LocationManager.inst.BeginTravel(i))
         {
             if(LocationManager.inst.INSTANT_TRAVEL)
             {LocationManager.inst.Transfer();}

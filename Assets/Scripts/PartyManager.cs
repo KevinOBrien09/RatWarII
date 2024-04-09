@@ -22,6 +22,15 @@ public class PartyManager : Singleton<PartyManager>
         
     }
 
+    
+    public void Wipe(){
+        currentParty = string.Empty;
+        parties.Clear();
+        benched.Clear();
+        deadCharacters.Clear();
+        gold = 0;
+    }
+
     public bool canAfford(int i)
     {return gold >= i;}
 
@@ -234,4 +243,5 @@ if(parties.Count == 1| parties[currentParty].mapTileID != lastLoc)
         }
      //   onPartyEdit.Invoke();
     }
+
 }

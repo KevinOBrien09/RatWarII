@@ -15,6 +15,7 @@ public class SkillWindow : Singleton<SkillWindow>
     public RawImage renderTexture;
     public RenderTexture videoText;
     public Texture2D placeholder;
+    public VideoClip fallback;
     public Image blackFade;
     void Start(){
         Close();
@@ -29,19 +30,24 @@ public class SkillWindow : Singleton<SkillWindow>
         blackFade.DOFade(1,0);
         videoPlayer.clip = null;
         StartCoroutine(q());
-        IEnumerator q(){
-             if(clipDict.ContainsKey(s)){
+        IEnumerator q()
+        {
+            if(clipDict.ContainsKey(s))
+            {
           
             videoPlayer.clip = clipDict[s];
             videoPlayer.Play();
             renderTexture.texture = videoText;
 
-        }
-        else{
-            renderTexture.texture = placeholder;
-        }
+            }
+            else
+            {
+                videoPlayer.clip = fallback;
+                videoPlayer.Play();
+                renderTexture.texture = videoText;
+            }
             yield return new WaitForSeconds(.1f);
-           blackFade.DOFade(0,1f);
+            blackFade.DOFade(0,1f);
        
         }
       

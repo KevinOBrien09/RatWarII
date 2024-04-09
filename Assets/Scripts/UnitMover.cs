@@ -35,10 +35,9 @@ public class UnitMover : Singleton<UnitMover>
             });
             
             selectedSlot = sSlot;
-            int moveRange = 0;
-            if(BattleManager.inst.roomLockDown)
-            {moveRange =sSlot.cont. unit.stats().moveRange;}
-            else
+            int  moveRange =sSlot.cont. unit.stats().moveRange;
+           
+            if(MapManager.inst.mapQuirk == MapQuirk.ROOMS &&  !BattleManager.inst.roomLockDown)
             {moveRange = 99;}
             validSlots =sSlot.func.GetRadiusSlots(moveRange,null,true);
             if(selectedUnit.side == Side.PLAYER){
@@ -86,13 +85,14 @@ public class UnitMover : Singleton<UnitMover>
         if( GameManager.inst.checkGameState(GameState.ENEMYTURN) || GameManager.inst.checkGameState(GameState.PLAYERSELECT)||GameManager.inst.checkGameState(GameState.UNITMOVE) && !inCoro)
         {
             StartCoroutine(q());
+   
         }
         IEnumerator q()
         {
             inCoro = true;
             CamFollow.inst.ZoomOut();
-           DirectionIndicator.inst.Reset();
-            foreach (var item in MapManager.inst.currentRoom.slots)
+            DirectionIndicator.inst.Reset();
+            foreach (var item in  validSlots)
             {
             
                 item.ChangeColour(item.normalColour);

@@ -26,7 +26,7 @@ public class WorldInteractable : WorldTile
     public override void Click()
     {
         if(  HubStateHandler.inst.currentState ==  HubStateHandler.HubState.HOVER&& !WorldHubCamera.inst.fuckOff)
-        {  HubStateHandler.inst.desktopButton.SetActive(false);
+        {  
             WorldHubCamera.inst.fuckOff = true;
             WorldHubCamera.inst.cam.DOFieldOfView(camFOV,.2f);
             WorldHubCamera.inst.Move(camPos,()=>

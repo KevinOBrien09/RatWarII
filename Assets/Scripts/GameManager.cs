@@ -9,9 +9,19 @@ public class GameManager : Singleton<GameManager>
     public Objective.ObjectiveEnum chosenObjective;
     public bool doNotGenObjective,chosenQuest,loadFromFile;
     public int saveSlotIndex = 999;
-  
 
-    public void Load(){
+
+    public void Wipe()
+    {
+        chosenQuest = false;
+        saveSlotIndex = 999;
+        LocationManager.inst.Wipe();
+        PartyManager.inst.Wipe();
+        IconGraphicHolder.inst.Wipe();
+    }
+    
+    public void Load()
+    {
         SaveData sd =  SaveLoad.Load(saveSlotIndex);
         PartyManager.inst.Load(sd.partySaveData,sd.mapSaveData.lastLocation);
         MapSaveData msd = sd.mapSaveData;
@@ -19,14 +29,12 @@ public class GameManager : Singleton<GameManager>
     }
 
     #if UNITY_EDITOR
-    void Update(){ //REMOVE
-        if(Input.GetKeyDown(KeyCode.M)){
- SaveLoad.Save(saveSlotIndex);
-        }
-//   if(Input.GetKeyDown(KeyCode.L)){
-//               Load();
-//   }
-    }//REMOVE
+    void Update()
+    { 
+        if(Input.GetKeyDown(KeyCode.M))
+        {SaveLoad.Save(saveSlotIndex);}
+
+    }
     #endif
     public void LoadQuest(Objective.ObjectiveEnum o)
     {
@@ -36,15 +44,22 @@ public class GameManager : Singleton<GameManager>
 
     public void GameInit()
     {
-       // MapManager.inst.grid.InitGrid();
-
-        MapGenerator.inst.BeginGeneration(LocationManager.inst.nextLocBrain);
-        //ParseQuirks();
-        
+        if(LocationManager.inst.locationTravelingTo!= null){
+            MapGenerator.inst.BeginGeneration(LocationManager.inst.locationTravelingTo);
+        }
+        else if(MapGenerator.inst.testing != null){
+            LocationManager.inst.locationTravelingTo = MapGenerator.inst.testing;
+            MapGenerator.inst.BeginGeneration(LocationManager.inst.locationTravelingTo);
+        }
+        else{
+            Debug.LogWarning("Cannot Load a map!");
+        }
+       
     }
 
-    public void GameSetUp(){
-StartCoroutine(q());
+    public void GameSetUp()
+    {
+        StartCoroutine(q());
         IEnumerator q()
         {
             while(MapGenerator.inst.generating)
@@ -53,15 +68,39 @@ StartCoroutine(q());
             if(!doNotGenObjective){
                 ObjectiveManager.inst.GenerateObjective();
             }
-            
-         CreateStartingUnits();
+            CreateStartingUnits();
+            if(MapGenerator.inst.brain != null)
+            {
+                if(MapGenerator.inst.brain.overrideLocationInfoMusic != null)
+                {
+                    MusicManager.inst.FadeAndChange(MapGenerator.inst.brain.overrideLocationInfoMusic);
+                }
+                else if(LocationManager.inst.locationTravelingTo!= null)
+                {
+                    if(LocationManager.inst.locationTravelingTo.locationMusic!= null)
+                    {
+                        MusicManager.inst.FadeAndChange(LocationManager.inst.locationTravelingTo.locationMusic);
+                    }
+                }
+
+            }
+            else if(LocationManager.inst.locationTravelingTo!= null)
+            {
+                if(LocationManager.inst.locationTravelingTo.locationMusic!= null)
+                {
+                    MusicManager.inst.FadeAndChange(LocationManager.inst.locationTravelingTo.locationMusic);
+                }
+            }
+           
             BattleManager.inst.Begin();
+
+
             BlackFade.inst.FadeOut();
        }
     }
 
 
-      public void CreateStartingUnits()
+    public void CreateStartingUnits()
     {
         List<Slot> shuffle = MapManager.inst.StartingRadius();
         if(!GameManager.inst.loadFromFile)
@@ -78,9 +117,6 @@ StartCoroutine(q());
                 i++;
             }
         }
-   
-
-    
     }
    
     
@@ -98,17 +134,16 @@ StartCoroutine(q());
 
     public SaveData Save()
     {
-
         SaveData save =  new SaveData();
         save.partySaveData = PartyManager.inst.Save();
-        if(MapTileManager.inst != null){
- save.mapSaveData = MapTileManager.inst.Save();
+        if(MapTileManager.inst != null)
+        {
+            save.mapSaveData = MapTileManager.inst.Save();
         }
-        else{
+        else
+        {
             save.mapSaveData =  SaveLoad.Load(saveSlotIndex).mapSaveData;
         }
-       
-       
         return save;
     }
 

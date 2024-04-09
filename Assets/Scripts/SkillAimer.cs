@@ -18,7 +18,7 @@ public class SkillAimer : Singleton<SkillAimer>
     {
         if(!castDecided){
  //Debug.Log("Leave");
-        foreach (var item in MapManager.inst.currentRoom.slots)
+        foreach (var item in validSlots)
         {item.ChangeColour(item.normalColour);}
          BattleManager.inst.currentUnit.slot.DisableHover();
         validSlots.Clear();
@@ -41,7 +41,7 @@ public class SkillAimer : Singleton<SkillAimer>
             {  
                
 
-                foreach (var item in MapManager.inst.currentRoom.slots)
+                foreach (var item in validSlots)
                 {
                 
                item.ChangeColour(item.normalColour);
@@ -115,7 +115,7 @@ public class SkillAimer : Singleton<SkillAimer>
         }
        
         skillCastBehaviour = null;
-        foreach (var item in MapManager.inst.currentRoom.slots)
+        foreach (var item in validSlots)
         {item.ChangeColour(item.normalColour);}
         castDecided = false;
         _skill = null;

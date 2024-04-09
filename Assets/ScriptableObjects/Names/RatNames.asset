@@ -41,6 +41,7 @@ MonoBehaviour:
       - Gonzalez
       - Speedy
       - Lemmiwinks
+      - Chip
     - Key: 2
       Value:
       - Rita
@@ -50,6 +51,9 @@ MonoBehaviour:
       - Ratilda
       - Min
       - Lisa
+      - Piper
+      - Nutmeg
+      - Brie
     keyCollision: 0
   surnames:
   - I
