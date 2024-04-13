@@ -27,7 +27,7 @@ public class MapGenerator : Singleton<MapGenerator>
             MapManager.inst.map.ResizeGrid(LI.mapSize);
             generating = true;
             brain = Instantiate(LI.brain);
-            brain.Generate();
+            brain.Generate(LI);
         }
         // else if(brain != null){
         //     generating = true;

@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3250850130256505322
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3250850130256505316}
+  - component: {fileID: 3250850130256505317}
+  m_Layer: 0
+  m_Name: PerlinBrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3250850130256505316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3250850130256505322}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3250850130256505317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3250850130256505322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c234137ded7ee1c4ab8377bc4bd269c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideLocationInfoMusic: {fileID: 0}
+  slotMat: {fileID: 2100000, guid: c3e3f2d09fb41b7429aa0e96e8bc99c6, type: 2}
+  locationInfo: {fileID: 11400000, guid: 2c93c46c2f5693d45b1a86b9a04f34d3, type: 2}
+  mapBoundPrefab: {fileID: 483074661798837847, guid: 2d2c151fbeebde34abcbad481f185124,
+    type: 3}
+  slotPrefab: {fileID: 1237057250585610339, guid: d0b0ee552725a50488ad99c5ae0a19db,
+    type: 3}
+  oneTileHigh: {fileID: 7524912176607559903, guid: 9533056508e506b48852828d22ac6154,
+    type: 3}
+  twoTileHigh: {fileID: 7524912176607559903, guid: 9533056508e506b48852828d22ac6154,
+    type: 3}
+  perlinGrid:
+    list: []
+    keyCollision: 0
+  materialDictionary:
+    list:
+    - Key: 0
+      Value: {fileID: 2100000, guid: 5b00fd594ad374547b9baf6417aff7aa, type: 2}
+    - Key: 1
+      Value: {fileID: 2100000, guid: 6901e220ec84034428d950719139bdd5, type: 2}
+    - Key: 2
+      Value: {fileID: 2100000, guid: c3e3f2d09fb41b7429aa0e96e8bc99c6, type: 2}
+    - Key: 3
+      Value: {fileID: 2100000, guid: c3e3f2d09fb41b7429aa0e96e8bc99c6, type: 2}
+    keyCollision: 0
+  scale: 30

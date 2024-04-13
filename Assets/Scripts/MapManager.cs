@@ -14,7 +14,32 @@ public class MapManager : Singleton<MapManager>
     public SoundData enemySpawnHit;
     public bool doNotSpawnEnemies;
     public MapQuirk mapQuirk;
-    
+    public List<Slot> premadeSlots;
+    public Queue<Slot> premadeSlotQ = new Queue<Slot>();
+    public List<Wall> premadeWalls;
+    public Queue<Wall> premadeWallQ = new Queue<Wall>();
+    public void QPremadeSlots()
+    {
+        foreach (var item in premadeSlots)
+        {premadeSlotQ.Enqueue(item);}
+
+        foreach (var item in premadeWalls)
+        {premadeWallQ.Enqueue(item);}
+    }
+    public bool canGivePremadeSlot(){
+        return premadeSlotQ.Count > 0;
+    }
+      public bool canGivePremadeWall(){
+        return premadeWallQ.Count > 0;
+    }
+    public Slot GivePremade()
+    {
+        return premadeSlotQ.Dequeue();
+    }
+    public Wall GiveWall()
+    {
+        return premadeWallQ.Dequeue();
+    }
 
     public void InitStartRoom()
     {
@@ -246,7 +271,7 @@ foreach (var item in map.rooms)
 
     public Slot RandomSlot()
     {
-        List<Slot> Xd = new List<Slot>(currentRoom.slots);
+        List<Slot> Xd = new List<Slot>(allSlots);
        
         System.Random rng = new System.Random();
         

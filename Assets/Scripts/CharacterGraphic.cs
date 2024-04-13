@@ -14,6 +14,7 @@ public class CharacterGraphic : MonoBehaviour
     public Camera cam;
     public Unit unit;
     public CharacterGraphic iconClone;
+    public Breathing breathing;
     public void Init(Character c)
     {
         Orginize(c);

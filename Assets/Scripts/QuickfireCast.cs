@@ -22,7 +22,10 @@ public class QuickfireCast : SkillCastBehaviour
         
         CamFollow.inst.target = arrow.transform;
         if(args.target != null){
-        args.target.healthBar.gameObject.transform.parent.gameObject. SetActive(true);
+             if(args.target.healthBar  != null){
+ args.target.healthBar.gameObject.transform.parent.gameObject. SetActive(true);
+             } 
+       
         }
         
         CamFollow.inst.Focus(arrow.transform,(()=>{
@@ -133,7 +136,10 @@ public class QuickfireCast : SkillCastBehaviour
           
             yield return new WaitForSeconds(.25f);
             if(castArgs.target != null){
-            castArgs.target.healthBar.gameObject.transform.parent.gameObject. SetActive(false);
+                if(castArgs.target.healthBar != null){
+                castArgs.target.healthBar.gameObject.transform.parent.gameObject. SetActive(false);
+                }
+      
             Destroy(_arrow.gameObject);
             }
             else{

@@ -14,7 +14,7 @@ public class PremadeLocationBrain : MapGeneratorBrain
     public PremadeLocation level;
     public Slot slotPrefab;
     public Objective.ObjectiveEnum objective;
-    public override void Generate()
+    public override void Generate(LocationInfo li = null)
     {
         PremadeLocation pm = Instantiate(level,MapManager.inst.transform);
         GameManager.inst.LoadQuest(objective);

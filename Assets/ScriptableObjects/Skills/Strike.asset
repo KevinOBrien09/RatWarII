@@ -15,7 +15,6 @@ MonoBehaviour:
   ID: d6bf4a4c-6af8-42e8-a16f-6310278651c7
   skillName: Strike
   desc: Deal {STR 200%} DMG to an enemy in a 2 tile radius.
-  effects: []
   side: 1
   skillCastBehaviour: {fileID: 5895357610692576228, guid: 416e7d8f44b6171439d6d5f65a7028ee,
     type: 3}
@@ -26,6 +25,8 @@ MonoBehaviour:
     pitchRange: {x: 0.9, y: 1}
     volume: 1
   value: 
+  canHitBreakableSlots: 1
   radius: 2
   canSelfCast: 0
   showHealthBars: 1
+  cannotCastOnSpecialSlot: 0

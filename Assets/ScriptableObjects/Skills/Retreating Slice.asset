@@ -15,11 +15,10 @@ MonoBehaviour:
   ID: 468b3f0f-f9de-496b-88a3-28a288085cb6
   skillName: Retreating Slice
   desc: Slice an enemy for {STR200%} DMG,  knocking the caster back one tile.
-  effects: []
-  side: 1
+  side: 0
   skillCastBehaviour: {fileID: 688472123201566840, guid: 2a8098d002b753742a90d2c656a5fba2,
     type: 3}
-  doesntNeedUnitInSlot: 0
+  doesntNeedUnitInSlot: 1
   statusEffectIcon: {fileID: 0}
   sounds:
   - audioClip: {fileID: 8300000, guid: 7cbd6cd765888ff418d01d98bd1ce9c2, type: 3}
@@ -27,3 +26,6 @@ MonoBehaviour:
     volume: 1
   value: 
   radius: 1
+  canSelfCast: 0
+  showHealthBars: 0
+  cannotCastOnSpecialSlot: 0

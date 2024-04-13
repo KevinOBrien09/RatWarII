@@ -28,7 +28,7 @@ public class CastleGeneratorBrain : MapGeneratorBrain
     List<GameObject> gos = new List<GameObject>();
     
     
-    public override void Generate()
+    public override void Generate(LocationInfo li = null)
     {
         MapManager.inst.mapQuirk = MapQuirk.ROOMS;
         (List<Node> path,Node startNode,Node endNode) layout = DrawLayout();
@@ -549,7 +549,7 @@ public class CastleGeneratorBrain : MapGeneratorBrain
         return true;
     }
 
-    public void Reset(){
+    public override void Reset(){
         Debug.Log("RESET");
         if(!debug){
             StopAllCoroutines();

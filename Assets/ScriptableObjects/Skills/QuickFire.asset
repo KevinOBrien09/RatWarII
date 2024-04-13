@@ -15,7 +15,6 @@ MonoBehaviour:
   ID: c7c54216-da53-491d-b961-91f8224254c4
   skillName: Quickfire
   desc: Shoot an arrow dealing 5 DMG, gaining 2 DMG for each tile traveled
-  effects: []
   side: 1
   skillCastBehaviour: {fileID: 6636933160678305289, guid: 27e41a4b6e065ea4b94771691f6f3d94,
     type: 3}
@@ -29,6 +28,7 @@ MonoBehaviour:
     pitchRange: {x: 0.9, y: 1.1}
     volume: 1
   value: 
+  canHitBreakableSlots: 1
   passThrough: 0
   goThroughWalls: 0
   projectilePath: 0

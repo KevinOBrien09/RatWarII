@@ -33,50 +33,87 @@ public class BattleZoomer : Singleton<BattleZoomer>
         u.right.transform.DOLocalMove(Vector3.zero,.1f);
         AudioManager.inst.GetSoundEffect().Play(negativeSounds[0])   ;
         BattleManager.inst.ToggleHealthBars(false);
-        leftHp.gameObject.SetActive(true);
+       
         rightIMG.color = Color.black;
         leftIMG.color = Color.black;
-        if(u.right.side ==Side.PLAYER)
+        if(u.right.side == Side.PLAYER)
         {
             rightIMG.color = Color.white;
             handle.transform.DORotate(Vector3.zero,.25f);
         }
         if(u.left.side ==Side.PLAYER)
-        {leftIMG.color = Color.white;handle.transform.DOLocalRotate(new Vector3(0,0,180),.25f);}
+        {leftIMG.color = Color.white;
+        handle.transform.DOLocalRotate(new Vector3(0,0,180),.25f);}
         if(args.caster.side == Side.PLAYER)
         {handleIMG.color = Color.white;}
         else
         {handleIMG.color = Color.black;}
-        leftHp.health = u.left.health;
-        leftHp.Refresh();
-        UnityAction leftHpAction = ()=> {leftHp.Refresh();};
+
+        UnityAction leftHpAction = null;
+        if(u.left.isEntity())
+        {
+            leftHp.gameObject.SetActive(true);
+            leftHp.health = u.left.health;
+            leftHp.Refresh();
+            leftHpAction = ()=> {leftHp.Refresh();};
+            u.left.health.onHit.AddListener(leftHpAction);  
+            u.left.healthBar.transform.parent. localScale = new Vector3(1,1,1);
+            u.left.transform.localScale = Vector3.one;
+            foreach (var item in u.left.graphic.allRenderers)
+            {item.sortingLayerName = "Zoom";}
+        }
+        else
+        {
+            leftHp.gameObject.SetActive(false);
+            if(u.left.CheckType<BreakableSlot>())
+            {
+               u.left.transform.localRotation = Quaternion.Euler(10,0,0);
+            }
+           
+        }
+        
+        UnityAction rightHpAction = null;
+        if(u.right.isEntity())
+        {
+            rightHP.gameObject.SetActive(true);
+            rightHP.health = u. right.health;
+            rightHP.Refresh();
+            rightHpAction = ()=> {rightHP.Refresh();};
+            u. right.health.onHit.AddListener(rightHpAction);
+            u.right.healthBar.transform.parent. localScale = new Vector3(-1,1,1);
+            u.right.transform.localScale =   new Vector3(-1,1,1);
+            foreach (var item in u.right.graphic.allRenderers)
+            {item.sortingLayerName = "Zoom";}
+        }
+        else
+        {
+            rightHP.gameObject.SetActive(false);
+            if(u.right.CheckType<BreakableSlot>())
+            {
+                u.right.transform.localRotation = Quaternion.Euler(10,0,0);
+            }
+           
+        }
        
-        u.left.health.onHit.AddListener(leftHpAction);
 
-        rightHP.health = u. right.health;
-        rightHP.Refresh();
-        UnityAction rightHpAction = ()=> {rightHP.Refresh();};
-
-        u. right.health.onHit.AddListener(rightHpAction);
-        rightHP.gameObject.SetActive(true);
-        leftHp.gameObject.SetActive(true);
+       
+        
         centerHP.gameObject.SetActive(false);
+
         aimThing.gameObject.SetActive(true);
         handle.gameObject.SetActive(true);
         UI.gameObject.SetActive(true);
         group.DOFade(1,.1f);
      
-        u.right.transform.localScale =   new Vector3(-1,1,1);
-        u.right.healthBar.transform.parent. localScale = new Vector3(-1,1,1);
-        u.left.healthBar.transform.parent. localScale = new Vector3(1,1,1);
-        u.left.transform.localScale = Vector3.one;
+
+       
+    
+
 
         args.caster.activeUnitIndicator.gameObject.SetActive(false);
 
-        foreach (var item in u.left.graphic.allRenderers)
-        {item.sortingLayerName = "Zoom";}
-        foreach (var item in u.right.graphic.allRenderers)
-        {item.sortingLayerName = "Zoom";}
+      
+       
         CamFollow.inst.ForceFOV(45);
         StartCoroutine(BeginMove());
       
@@ -124,12 +161,16 @@ public class BattleZoomer : Singleton<BattleZoomer>
                         IEnumerator Reset()
                         {   
                             yield return new WaitForSeconds(.5f); //This value matters, CharacterGraphic:106
-                            
-                            bool targetAlive = args.target.health.currentHealth > 0;
-                            bool casterAlive = args.caster.health.currentHealth > 0;
                             Unit target = args.target;
                             Unit caster = args.caster;
-                    AudioManager.inst.GetSoundEffect().Play(negativeSounds[1])   ;
+                            bool targetAlive = false;
+                            if(target.isEntity()){
+                            targetAlive =   target.health.currentHealth > 0;
+                            }
+                          
+                            bool casterAlive = caster.health.currentHealth > 0;
+                       
+                            AudioManager.inst.GetSoundEffect().Play(negativeSounds[1])   ;
                             if(casterAlive)
                             {
                                 caster.graphic.ChangeSpriteSorting( caster.slot.node);
@@ -147,8 +188,14 @@ public class BattleZoomer : Singleton<BattleZoomer>
                             { CamFollow.inst.ChangeCameraState(CameraState.LOCK); });
                             CamFollow.inst.ForceFOV( CamFollow.inst.baseFOV);
                             yield return new WaitForSeconds(.45f);
-                            u. right.health.onHit.RemoveListener(rightHpAction);
-                            u. left.health.onHit.RemoveListener(leftHpAction);
+                            if(rightHpAction != null){
+                                u. right.health.onHit.RemoveListener(rightHpAction);
+                            }
+                           
+                            if(leftHpAction != null){
+                                u. left.health.onHit.RemoveListener(leftHpAction);
+                            }
+                       
                             leftHp.health = null;
                             rightHP.health = null;
                             rightIMG.color = Color.black;

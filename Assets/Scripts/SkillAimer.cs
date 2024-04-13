@@ -159,6 +159,22 @@ public class SkillAimer : Singleton<SkillAimer>
             break;
 
         }
+
+        List<Slot> validClone = new List<Slot>(validSlots);
+        foreach (var item in validClone)
+        {
+            if(item.cont.unit != null)
+            {
+                if(!item.cont.unit.isEntity() )
+                {
+                    if(!skill.canHitBreakableSlots)
+                    {validSlots.Remove(item);}
+                }
+                
+              
+            }
+        }
+
         if(BattleManager.inst.currentUnit.side == Side.PLAYER){
             foreach (var item in validSlots)
             {item.ChangeColour(item.skillColour);} 
@@ -195,16 +211,26 @@ public class SkillAimer : Singleton<SkillAimer>
         }
 
         foreach (var item in validTargets)
-        {
-            if(item.side == skill.side)
+        {   
+            if(item.isEntity())
             {
-                if(skill.showHealthBars){
-          item.healthBar.gameObject.transform.parent.gameObject.SetActive(true);
+                if(item.side == skill.side)
+                {
+                    if(skill.showHealthBars){
+                    item.healthBar.gameObject.transform.parent.gameObject.SetActive(true);
+                    }
+        
                 }
-      
+                else
+                {validSlots.Remove(item.slot);}
             }
             else
-            {validSlots.Remove(item.slot);}
+            {
+                if(!skill.canHitBreakableSlots){
+                    validSlots.Remove(item.slot);
+                }
+
+            }
         }
    
    
@@ -223,16 +249,28 @@ public class SkillAimer : Singleton<SkillAimer>
     {
         currentState = Aim.SELF;
         validSlots   = slot.func.GetRadiusSlots(skill.radius,skill,false);
+      
         validSlots.Add(slot);
         BattleManager.inst.currentUnit.slot.hoverBorderOn();
-        foreach (var item in validSlots)
+        List<Slot> validClone = new List<Slot>(validSlots);
+        foreach (var item in validClone)
         {
             if(item.cont.unit != null)
             {
-                if(skill.showHealthBars){
+                if(item.cont.unit.isEntity() )
+                {
+                    if(skill.showHealthBars)
+                    {
                     if(item.cont.unit.side == skill.side)
                     {item.cont.unit.healthBar.gameObject.transform.parent.gameObject.SetActive(true);}
+                    }
                 }
+                else{
+                     if(!skill.canHitBreakableSlots){
+                    validSlots.Remove(item);
+                    }
+                }
+                
               
             }
            item.ChangeColour(item.skillColour);

@@ -14,7 +14,7 @@ public class Skill : GUIDScriptableObject
     public Sprite statusEffectIcon;
     public List<SoundData> sounds = new List<SoundData>();
     public List<int> value = new List<int>();
- 
+    public bool canHitBreakableSlots;
     public void Go()
     {Debug.Log(skillName);}
 

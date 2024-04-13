@@ -92,8 +92,10 @@ public class HubCharacterDisplay : Singleton<HubCharacterDisplay>
                 CharacterGraphic cg = CharacterBuilder.inst.GenerateGraphic(item.Value.character);
                 cg.KillCamera();
                 graphics.Add(cg);
-                cg.transform.localScale = new Vector3(.2f,.2f,.2f);
+           
                 cg.transform.SetParent(holders[item.Value.position]);
+                cg.transform.localScale = Vector3.one;
+                cg.breathing.min = .99f;
                 //poof[item.Value.position].Play();
                 cg.transform.localPosition = Vector3.zero;
             }

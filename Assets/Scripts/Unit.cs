@@ -167,7 +167,7 @@ public class Unit : MonoBehaviour
     }
 
 
-    public void Hit(int damage,CastArgs castArgs, bool bleed = false)
+    public virtual void Hit(int damage,CastArgs castArgs, bool bleed = false)
     {   
         int i = health.dmgAmount(damage);
         ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go(i.ToString(),Color.white,transform.position);
@@ -233,7 +233,7 @@ float percent = (5f / 100f) * (float) health.maxHealth;
        
     }
 
-    public void Die()
+    public virtual void Die()
     {  
         if(!dead)
         {
@@ -311,12 +311,24 @@ float percent = (5f / 100f) * (float) health.maxHealth;
         slot = newSlot;
     
         slot.cont.unit = this;
-                MapManager.inst.CheckForIntrusions();
-        graphic.ChangeSpriteSorting(slot.node);
+        MapManager.inst.CheckForIntrusions();
+        if(isEntity()){
+ graphic.ChangeSpriteSorting(slot.node);
+        }
+       
         
     }
 
     
     public Stats stats()
     {return character.baseStats;}
+
+    public virtual bool isEntity(){
+        return true;
+    }
+
+    public virtual bool CheckType<T>()
+    {
+        return this.GetType() == typeof(T);
+    }
 }

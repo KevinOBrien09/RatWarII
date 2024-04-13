@@ -89,6 +89,10 @@ public class Room : MonoBehaviour
         {
             EnemySpawnData esd = new EnemySpawnData();
             esd.enemy = UnitFactory.inst.enemies[Random.Range(0, UnitFactory.inst.enemies.Count)];
+            if(enemySlots.ElementAtOrDefault(i) == null){
+Debug.LogAssertion("THIS SHIT AGAIN JUST GONNA FUCKING RESET");
+MapGenerator.inst.brain.Reset();
+            }
             esd.spawnSlot = enemySlots[i];
             enemySpawnData.Add(esd);
         }

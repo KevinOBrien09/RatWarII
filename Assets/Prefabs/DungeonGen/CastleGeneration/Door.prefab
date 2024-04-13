@@ -252,7 +252,7 @@ MonoBehaviour:
     type: 3}
   placeHolder: {fileID: 6998329089859767902, guid: 7b06755d6eb9d494a92dca4801c180d9,
     type: 3}
-  doorHolder: {fileID: 0}
+  doorInteractables: []
   triggerSlots: []
   metalFence: {fileID: 4026344334407370420}
   currentSpecialSlot: {fileID: 0}

@@ -376,6 +376,7 @@ MonoBehaviour:
   mandatorySkills:
   - {fileID: 11400000, guid: 110ff04177b4e3d43be40ee0b55812df, type: 2}
   - {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
+  - {fileID: 11400000, guid: 9c5002f7d21ac1d408daf22adcaffa93, type: 2}
   allSkills:
   - {fileID: 11400000, guid: bc53671835068c249a159a29ce7509e4, type: 2}
   - {fileID: 11400000, guid: 62061462c3443164e976eaa8a39611c9, type: 2}

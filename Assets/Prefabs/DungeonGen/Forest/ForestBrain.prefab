@@ -45,7 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overrideLocationInfoMusic: {fileID: 0}
-  slotMat: {fileID: 2100000, guid: e64383b27ac28444d96158f19c4ab2b7, type: 2}
+  slotMat: {fileID: 2100000, guid: a9a2dceb6930a7649ab78f38eedb3a6a, type: 2}
+  locationInfo: {fileID: 11400000, guid: 2c93c46c2f5693d45b1a86b9a04f34d3, type: 2}
+  mapBoundPrefab: {fileID: 483074661798837847, guid: 2d2c151fbeebde34abcbad481f185124,
+    type: 3}
   borderDict:
     list: []
     keyCollision: 0
@@ -53,19 +56,29 @@ MonoBehaviour:
     list:
     - Key: 0
       Value: {x: 50, y: 50}
+    - Key: 1
+      Value: {x: 100, y: 100}
+    - Key: 2
+      Value: {x: 50, y: 25}
+    - Key: 3
+      Value: {x: 25, y: 50}
+    - Key: 4
+      Value: {x: 100, y: 50}
+    - Key: 5
+      Value: {x: 50, y: 100}
     keyCollision: 0
   blockage: {fileID: 3177572613690716978, guid: 17a5b3a65d5b6874181deade3972aeb1,
     type: 3}
   roomSpacerPrefab: {fileID: 114230363071559536, guid: 77b910e951dfa3148871bb9595a18dec,
     type: 3}
-  wall: {fileID: -5628535466239815856, guid: dce9f0901830ea04b8e61685ca9845ff, type: 3}
+  wall: {fileID: -5628535466239815856, guid: 84cd227766cd4b14bb26b2869f706851, type: 3}
   doorPrefab: {fileID: 4476731597353253134, guid: 04e3f25993a64e84e861803442e962e1,
     type: 3}
   borderPrefab: {fileID: 6402608400887523798, guid: 1d4b06e23cf7e2b419143ef189133934,
     type: 3}
   dungeonNodePrefab: {fileID: 5183120452575869949, guid: 8bb086fb9ea9d294b98d584a1dc96075,
     type: 3}
-  blockagePercentRange: {x: 30, y: 40}
+  blockagePercentRange: {x: 20, y: 20}
   reAlignMask:
     serializedVersion: 2
     m_Bits: 128
@@ -73,4 +86,17 @@ MonoBehaviour:
   slotPrefab: {fileID: 1237057250585610339, guid: d0b0ee552725a50488ad99c5ae0a19db,
     type: 3}
   debug: 0
+  mushrooms: {fileID: 8309181893620995274, guid: ffae39105dff5d54599afb5ca6602b1b,
+    type: 3}
+  grass: {fileID: 8309181893620995274, guid: d059c3c09cf725e4fb0bb3304a4ffce1, type: 3}
   oobSlot: {fileID: 7438966391406493943, guid: 43eb83e9a43b51b498903abaa0413022, type: 3}
+  xOffset: 0
+  yOffset: 0
+  materialDictionary:
+    list:
+    - Key: 0
+      Value: {fileID: 2100000, guid: a9a2dceb6930a7649ab78f38eedb3a6a, type: 2}
+    - Key: 1
+      Value: {fileID: 2100000, guid: 45259e517235825408c02d4b98c662c8, type: 2}
+    keyCollision: 0
+  perlinGrid: 

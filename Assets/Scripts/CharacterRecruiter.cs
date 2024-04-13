@@ -14,7 +14,8 @@ public class CharacterRecruiter: Singleton<CharacterRecruiter>
     public Transform door,interiorCamPos,exteriorCamPos,recuritPos;
     public CharacterProfileMenu profileMenu;
     public SoundData doorOpen,doorShut;
-    
+    public TMP_Typewriter owlSpeech;
+    public List<string> owlStrings;
 
     void Start(){
         List<Character> chr = new List<Character>();
@@ -27,7 +28,9 @@ public class CharacterRecruiter: Singleton<CharacterRecruiter>
 
     public void Open()
     {
+        
         state = 1;
+        owlSpeech.m_textUI.text = string.Empty;
         StartCoroutine(q());
         IEnumerator q()
         {
@@ -35,7 +38,7 @@ public class CharacterRecruiter: Singleton<CharacterRecruiter>
             door.DOLocalRotate(new Vector3(0,-90,0),.25f).OnComplete(()=>{
                    WorldHubCamera.inst.Move(interiorCamPos,(()=>{
 
-
+                    OwlString();
                     WorldHubCamera.inst.fuckOff = false;
                     HubStateHandler.inst.ChangeState( HubStateHandler.HubState.RECRUIT);
                     HubStateHandler.inst.ChangeStateString("Guild");
@@ -51,6 +54,19 @@ public class CharacterRecruiter: Singleton<CharacterRecruiter>
            
             yield return new WaitForSeconds(.2f);
         }
+    }
+
+    public void OwlString(){
+        owlSpeech.m_textUI.DOFade(1,0);
+        owlSpeech.m_textUI.text = string.Empty;
+        string s = owlStrings[Random.Range(0,owlStrings.Count)];
+        owlSpeech.Play(s,90f,(()=>{
+            StartCoroutine(q());
+            IEnumerator q(){
+                yield return new WaitForSeconds(1.5f);
+                owlSpeech.m_textUI.DOFade(0,.1f);
+            }
+        }));
     }
 
     public void OpenRecruitMenu(){
@@ -76,6 +92,7 @@ public class CharacterRecruiter: Singleton<CharacterRecruiter>
                  
                 door.DOLocalRotate(new Vector3(0,0,0),.25f).OnComplete(() =>
                 {
+                    owlSpeech.m_textUI.text = string.Empty;
                     HubStateHandler.inst.RetunToHover();
                  //AudioManager.inst.GetSoundEffect().Play(doorShut);
                 }

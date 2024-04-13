@@ -137,9 +137,29 @@ public class SlotFunctions
                 }
                 else if(skill != null)
                 {
+                    // if(s.cont.unit != null){
+                    //     if(!s.cont.unit.isEntity())
+                    //     {
+                    //         if(skill.canHitBreakableSlots)
+                    //         {
+                    //             candidateSlots.Add(s);
+                    //           //"Breakable and we can break"
+                    //             continue;
+                    //         }
+                    //         else
+                    //         {
+                    //            //"Current slot is occupied by breakable but we cannot break"
+                    //             continue;
+                    //         }
+                          
+                    //     }
+                      
+                    // }
+
+
                     if(skill is RadiusSkill rSkill)
                     {
-                        if(rSkill.cannotCastOnSpecialSlot)
+                        if(rSkill.cannotCastOnSpecialSlot) //temp terrain
                         {
                             if(s.cont.walkable() && s.cont.specialSlot == null)
                             {
@@ -147,6 +167,7 @@ public class SlotFunctions
                             }
                         }
                          else{
+                            
                             candidateSlots.Add(s);
                         }
                         
@@ -160,14 +181,9 @@ public class SlotFunctions
                 else
                 {candidateSlots.Add(s);}
             }
-            else
-            {
-                // if ( !MapManager.inst.slotBelongsToGrid(s) )  {
-                //     Debug.LogAssertion("Slot Does not belong to room");
-                // }
-               
-            }
+         
         }
+     
         List<Slot> ss = new List<Slot>(FilterUnadjacents(candidateSlots,new List<Slot>(),skill));
        
         if(ss.Contains(slot))

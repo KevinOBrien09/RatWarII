@@ -15,7 +15,6 @@ MonoBehaviour:
   ID: 96de55b2-7e0f-4bf9-b992-78c05034c4c7
   skillName: Whirlwind Slash
   desc: Deal 15 DMG and knock back all enemies within 1 tile.
-  effects: []
   side: 1
   skillCastBehaviour: {fileID: 8986954494872946150, guid: 63f404df52e8cac44ae85344a87dead9,
     type: 3}
@@ -25,6 +24,8 @@ MonoBehaviour:
   - audioClip: {fileID: 8300000, guid: 23a0bf3ead0436d48b3fb9fca007a5d4, type: 3}
     pitchRange: {x: 1.1, y: 1.2}
     volume: 1
+  value: 
+  canHitBreakableSlots: 1
   radius: 1
   castOnCasterSlot: 0
   showHealthBars: 1

@@ -40,6 +40,7 @@ public class SlashCast : SkillCastBehaviour
                     
                     if(item.cont.unit != null)
                     {
+
                         if(item.cont.unit.side != args.caster.side)
                         {  
                             Unit i = item.cont.unit;
@@ -51,6 +52,10 @@ public class SlashCast : SkillCastBehaviour
                             i.Hit(damage,args);
                           
                             
+                        }
+                        else if(!item.cont.unit.isEntity()){
+                            Unit i = item.cont.unit;
+                            i.Hit(damage,args);  
                         }
                         
                     }
