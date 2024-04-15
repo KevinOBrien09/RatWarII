@@ -30,8 +30,15 @@ public class Room : MonoBehaviour
         wallDict.Add(Direction.DOWN,new List<Wall>());
         wallDict.Add(Direction.RIGHT,new List<Wall>());
         wallDict.Add(Direction.LEFT,new List<Wall>());
-        tmp = transform.Find("Text").GetComponent<TextMeshPro>();
-        tmp.text = i.ToString();
+      
+        Transform t = transform.Find("Text");
+        if(t != null){
+if(t.TryGetComponent<TextMeshPro>(out tmp)){
+  tmp.text = i.ToString();
+        }
+        }
+        
+      
         roomID = i;
         transform.name =  "Room :" + i;
         transform.SetParent(MapManager.inst.map.transform);

@@ -108,9 +108,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   full: 1
   min: 0.985
-  inhaleTime: 2
+  inhaleTime: 1
   pauseTime: 0.2
-  exhaleTime: 2
+  exhaleTime: 0.5
 --- !u!1 &3815053326549457616
 GameObject:
   m_ObjectHideFlags: 0

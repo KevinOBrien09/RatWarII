@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2271753359373751317}
   - component: {fileID: -1777989716343388507}
+  - component: {fileID: -9056367546411649205}
+  - component: {fileID: -6299225455210601169}
   m_Layer: 0
   m_Name: SwampGeneratorBrain
   m_TagString: Untagged
@@ -44,19 +46,73 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18b4904238677764096663a168dd172a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overrideLocationInfoMusic: {fileID: 0}
-  slotMat: {fileID: 2100000, guid: 3108abc1209edaa459cfec0d19688415, type: 2}
+  overrideLocationInfoMusic: {fileID: 8300000, guid: 14f67bfb1dc32f84681d99560db3a6fa,
+    type: 3}
+  slotMat: {fileID: 2100000, guid: 211b3943d37342c4a940168984aa9adb, type: 2}
   locationInfo: {fileID: 11400000, guid: 2c93c46c2f5693d45b1a86b9a04f34d3, type: 2}
   mapBoundPrefab: {fileID: 483074661798837847, guid: 2d2c151fbeebde34abcbad481f185124,
     type: 3}
   perlinGrid:
     list: []
     keyCollision: 0
-  scale: 30
+  scale: 20
+  waterGrid: {fileID: -6299225455210601169}
   slotPrefab: {fileID: 1237057250585610339, guid: d0b0ee552725a50488ad99c5ae0a19db,
     type: 3}
   waterSlot: {fileID: 5800021180665823503, guid: 63a96e563164ccb498ddbe7a54780b9f,
     type: 3}
   mud: {fileID: 2100000, guid: 49a621c49537b3243a0db4e7a770e029, type: 2}
   mushrooms: {fileID: 8309181893620995274, guid: ffae39105dff5d54599afb5ca6602b1b,
+    type: 3}
+  landSlots: []
+  waterSlots: []
+  red: {fileID: 2100000, guid: 410ca8fd0dc7fc64ebbe32707f061ad6, type: 2}
+  blue: {fileID: 2100000, guid: 1d097a99613314c45922f8211e3f0f7c, type: 2}
+  invertWater: 1
+  randomIslandColour: 0
+  islandSizeThreshHold: 10
+  test: {fileID: 6317745398976898932, guid: 82eaafef64b37ad4c9eae30e885ebdbe, type: 3}
+--- !u!114 &-9056367546411649205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2271753359373751316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcbaf19957eb5e9418f8eea2c3f0300b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GridReference: {fileID: -6299225455210601169}
+--- !u!114 &-6299225455210601169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2271753359373751316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dae92dfff1f8d17448ed7bbe0f69e2ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockage:
+    serializedVersion: 2
+    m_Bits: 65
+  aStar: {fileID: -9056367546411649205}
+  vGridWorldSize: {x: 0, y: 0}
+  fNodeRadius: 2.5
+  fDistanceBetweenNodes: 2.5
+  FinalPath: []
+  fNodeDiameter: 0
+  iGridSizeX: 0
+  iGridSizeY: 0
+  boatSlotPrefab: {fileID: 6317745398976898932, guid: 82eaafef64b37ad4c9eae30e885ebdbe,
+    type: 3}
+  nodes:
+    list: []
+    keyCollision: 0
+  ocean: {fileID: 0}
+  boatPrefab: {fileID: 4699243772254297766, guid: facbd0ac5bb2da84f87b4179fedf7a4a,
     type: 3}

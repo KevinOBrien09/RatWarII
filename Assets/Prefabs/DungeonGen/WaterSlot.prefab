@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7561042720703169333}
   - component: {fileID: 6694688817800788525}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: AreaIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5005404718652983660}
   - component: {fileID: 6367170675494328426}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 5379840948504178935}
   - component: {fileID: 6396782807130426142}
   - component: {fileID: 680794100644506856}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: HoverBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 3883673494567486314}
   - component: {fileID: 3883673494567486313}
   - component: {fileID: 5800021180665823503}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: WaterSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,6 +377,7 @@ MonoBehaviour:
   meshBelow: {fileID: 0}
   mesh: {fileID: 1875275786712289735}
   mf: {fileID: 5468777562613367947}
+  isWater: 0
 --- !u!1 &6311454725795125311
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,7 +387,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2045029145710350321}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: RayShooter
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
@@ -420,7 +421,7 @@ GameObject:
   - component: {fileID: 5468777562613367947}
   - component: {fileID: 1875275786712289735}
   - component: {fileID: 8682099007723582044}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: SlotMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -516,7 +517,7 @@ GameObject:
   - component: {fileID: 7274873487789913401}
   - component: {fileID: 7274873487789913414}
   - component: {fileID: 7274873487789913415}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: WaterBlock_50m
   m_TagString: Untagged
   m_Icon: {fileID: 0}

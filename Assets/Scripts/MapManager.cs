@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public enum MapQuirk{NONE,ROOMS,FOG_OF_WAR}
+public enum MapQuirk{NONE,ROOMS,ISLANDS}
 public class MapManager : Singleton<MapManager>
 {
     public Map map;

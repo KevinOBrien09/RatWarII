@@ -23,12 +23,15 @@ public class PerlinGeneratorBrain : MapGeneratorBrain
         int X = (int) mainGrid.x;
       //  
         int howManyTiles = MapManager.inst.map.NodeArray.Length;
-        
+        var dampener = Y;
+        if(X<Y){
+            dampener = X;
+        }
         foreach (var item in MapManager.inst.map.NodeArray)
         {
             
-            float xCoord = randomorg + (float)item.iGridX/X*scale;
-            float yCoord = randomorg +  (float)item.iGridY/Y*scale;
+            float xCoord = randomorg + (float)item.iGridX/dampener*scale;
+            float yCoord = randomorg +  (float)item.iGridY/dampener*scale;
             float sample = Mathf.PerlinNoise(xCoord, yCoord);
             if (sample == Mathf.Clamp(sample, 0, 0.5f))
             perlinGrid.Add(new Vector2(item.iGridX,item.iGridY),0);

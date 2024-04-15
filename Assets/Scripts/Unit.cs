@@ -104,26 +104,30 @@ public class Unit : MonoBehaviour
                 moving = false;
                 Reposition(finalSlot);
                 MapManager.inst.map.UpdateGrid();
-                if(MapManager.inst.mapQuirk == MapQuirk.ROOMS){
+                if(MapManager.inst.mapQuirk == MapQuirk.ROOMS)
+                {
                     if(BattleManager.inst.roomLockDown)
                     {
                         movedThisTurn = true;
                     }
                 }
-                else{
+                else
+                {
                     movedThisTurn = true;
                 }
            
                 SlotInfoDisplay.inst.sl = finalSlot;
                 if(side == Side.PLAYER)
                 { 
-                    if(MapManager.inst.mapQuirk == MapQuirk.ROOMS){
-                        if(BattleManager.inst.roomLockDown){
-                        ActionMenu.inst.RemoveMoveOption();
+                    if(MapManager.inst.mapQuirk == MapQuirk.ROOMS)
+                    {
+                        if(BattleManager.inst.roomLockDown)
+                        {
+                            ActionMenu.inst.RemoveMoveOption();
                         }
                     }
                     else{
-                           ActionMenu.inst.RemoveMoveOption();
+                        ActionMenu.inst.RemoveMoveOption();
                     }
                     if(isHostage)
                     {

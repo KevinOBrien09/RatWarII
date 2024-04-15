@@ -20,12 +20,12 @@ public class Breathing : MonoBehaviour
         {
             StartCoroutine(q());
             IEnumerator q(){
-                yield return new WaitForSeconds(Random.Range(.1f,1.5f));
+                yield return new WaitForSeconds(inhaleTime);
                 transform.DOScaleY(full,inhaleTime).OnComplete(()=>
                 {
                     StartCoroutine(w());
                     IEnumerator w(){
-                        yield return new WaitForSeconds(Random.Range(.1f,1.5f));
+                        yield return new WaitForSeconds(exhaleTime);
                         Breathe();
                     }
                 });

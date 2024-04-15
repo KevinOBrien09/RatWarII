@@ -18,6 +18,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public IntrusiveMeshHandler meshBelow;
     public MeshRenderer mesh;
     public MeshFilter mf;
+    public bool isWater;
     void Awake()
     {
         cont.slot = this;

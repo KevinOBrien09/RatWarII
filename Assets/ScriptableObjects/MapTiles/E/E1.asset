@@ -21,7 +21,7 @@ MonoBehaviour:
     type: 3}
   locationMusic: {fileID: 8300000, guid: e6d453e1c2903d140808919f0380a6b3, type: 3}
   brain: {fileID: -1777989716343388507, guid: 15cf2cbfc24dcd04988503b270c6f8d6, type: 3}
-  mapSize: {x: 300, y: 250}
+  mapSize: {x: 640, y: 200}
   travelSting:
     audioClip: {fileID: 0}
     pitchRange: {x: 0.9, y: 1.1}

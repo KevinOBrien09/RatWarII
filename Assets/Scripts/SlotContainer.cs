@@ -17,7 +17,7 @@ public class SlotContainer
      
      public bool walkable()
      {
-          if(slot.node.isBlocked | slot.cont.wall)
+          if(slot.node.isBlocked | slot.cont.wall| slot.isWater)
           { return false; }
           else if(unit != null)
           { return unit.stats().passable; }

@@ -13,7 +13,7 @@ public class Grid_ : MonoBehaviour
     public float fDistanceBetweenNodes;
     public Node[,] NodeArray;
     public List<Node> FinalPath;
-    float fNodeDiameter;
+   [HideInInspector] public float fNodeDiameter;
     public int iGridSizeX, iGridSizeY;
 
     public void ResizeGrid (Vector2 size){
@@ -22,7 +22,7 @@ public class Grid_ : MonoBehaviour
     }
 
    
-   public void CreateGrid()
+   public virtual void CreateGrid()
     {
         fNodeDiameter = fNodeRadius * 2;
         iGridSizeX = Mathf.RoundToInt(vGridWorldSize.x / fNodeDiameter);
@@ -147,7 +147,7 @@ public class Grid_ : MonoBehaviour
 
 
     //Function that draws the wireframe
-    private void OnDrawGizmos()
+    public virtual void OnDrawGizmos()
     {
         if(!enabled){
             return;
