@@ -9,12 +9,14 @@ public class BoatGrid : Grid_
     public GenericDictionary<Vector3,Node> nodes = new GenericDictionary<Vector3, Node>();
     public Room ocean;
     public Boat boatPrefab;
-     
+    public GenericDictionary<int,List<BoatSlot>> seas = new GenericDictionary<int, List<BoatSlot>>();
+    public List<BoatSlot> mainSea;
     public override void CreateGrid()
     {
         ocean = gameObject.AddComponent<Room>();
         MapManager.inst.map.rooms.Add(ocean);
         ocean.Init(MapManager.inst.map.rooms.Count);
+        gameObject.name = "Room:Ocean";
 
        fNodeDiameter = fNodeRadius * 2;
         iGridSizeX = Mathf.RoundToInt(vGridWorldSize.x / fNodeDiameter);
@@ -50,61 +52,77 @@ public class BoatGrid : Grid_
                 item.slot = bs;
                 bs.transform.name =  "WATER:" + bs.node.iGridX + "|"+bs.node.iGridY;
                 ocean.slots.Add(bs);
+                bs.CheckIfCostal();
             }
             
         }
-
-        SpawnBoat();
     }
 
-    public void SpawnBoat(){
-        Slot s = ocean.RandomSlot();
-        Boat b = Instantiate(boatPrefab,s.node.vPosition,Quaternion.identity);
-        b.Reposition(s);
+    public void ParseOcean(){
+        List<  BoatSlot> unaccBoatSlots = new List<BoatSlot>();
+        foreach(var o in ocean.slots){
+            BoatSlot bs = o as BoatSlot;
+            unaccBoatSlots.Add(bs);
+        }
+
+        loop();
+        void loop()
+        {
+            System.Random rng = new System.Random();
+            List<  BoatSlot> shuff =  unaccBoatSlots.OrderBy(_ => rng.Next()).ToList();
+            if(shuff.Count != 0)
+            {
+                BoatSlot s = null;
+                for (int i = 0; i < shuff.Count; i++)
+                {
+                    BoatSlot q = shuff[i];
+                    if(q.cont.walkable()){
+                        s = q;
+                        break;
+                    }
+                }
+                if(s != null)
+                {
+                    List<BoatSlot> sea =  s.FilterUnadjacentsBOAT(unaccBoatSlots,new List<BoatSlot>(),true);
+                    if(sea.Count > 0)
+                    {
+                        seas.Add(seas.Count+1,sea);
+                        foreach (var item in sea)
+                        {unaccBoatSlots.Remove(item);}
+                    }
+                    else
+                    {
+                        //This is for 1x1 isolated tiles.
+                       sea.Add(s);
+                       unaccBoatSlots.Remove(s);
+                        seas.Add(seas.Count+1,sea);
+                    }
+                    
+                    if(unaccBoatSlots.Count != 0)
+                    {loop();}
+                }
+               
+            }
+        }
+        
+        int count = 0;
+        foreach (var item in seas)
+        {
+            if(item.Value.Count > count){
+                mainSea = item.Value;
+                count = item.Value.Count;
+            }
+        }
     }
 
-    // public override void OnDrawGizmos()
-    // {
-    //     if(!enabled){
-    //         return;
-    //     }
-    //     Gizmos.DrawWireCube(transform.position, new Vector3(vGridWorldSize.x, 1, vGridWorldSize.y));
-
-    //     if (NodeArray != null)
-    //     {
-    //         foreach (Node n in NodeArray)
-    //         {
-    //             if (!n.isBlocked)
-    //             {
-    //                 Gizmos.color = Color.magenta;//Set the color of the node
-    //             }
-    //             else
-    //             {
-    //                 Gizmos.color = Color.red;//Set the color of the node
-    //             }
-
-
-    //             if (FinalPath != null)
-    //             {
-    //                 if (FinalPath.Contains(n))
-    //                 {
-    //                     Gizmos.color = Color.green;
-    //                 }
-
-    //             }
-
-    //             if (n.isBlocked)
-    //             {
-    //                 Gizmos.DrawWireCube(n.vPosition, Vector3.one * (fNodeDiameter - fDistanceBetweenNodes));//Draw the node at the position of the node.
-    //             }
-    //             else
-    //             {
-    //                 Gizmos.DrawWireCube(n.vPosition, Vector3.one * (fNodeDiameter - fDistanceBetweenNodes));//Draw the node at the position of the node.
-
-    //             }
-                
-    //         }
-    //     }
-    // }
+    public Boat SpawnBoat(Island startingIsland){
+        BoatSlot bs = startingIsland.RandomBoatSlot();
+        Boat b = Instantiate(boatPrefab,bs.node.vPosition,Quaternion.identity);
+        b.Reposition(bs);
+      
+        b.Dock();
+        return b;
+       
+    }
 
 }

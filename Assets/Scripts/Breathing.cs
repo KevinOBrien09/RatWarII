@@ -10,7 +10,28 @@ public class Breathing : MonoBehaviour
     IEnumerator Start()
     {
         yield return new WaitForSeconds(Random.Range(.1f,1.5f));
-        Breathe();
+        bool b =    Random.Range(0,2) == 1;
+        if(b){
+    Breathe();
+        }
+        else{
+            transform.DOScaleY(min,0).OnComplete(()=>
+            {
+                StartCoroutine(q());
+                IEnumerator q(){
+                    yield return new WaitForSeconds(inhaleTime);
+                    transform.DOScaleY(full,inhaleTime).OnComplete(()=>
+                    {
+                        StartCoroutine(w());
+                        IEnumerator w(){
+                            yield return new WaitForSeconds(exhaleTime);
+                            Breathe();
+                        }
+                    });
+                }
+            });
+        }
+    
     }
 
     public void Breathe()

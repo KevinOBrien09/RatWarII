@@ -32,6 +32,10 @@ public static class MiscFunctions{
     //     return X.OrderBy(_ => rng.Next()).ToList();
     // }
 
+    public static bool FiftyFifty(){
+        return Random.Range(0,2) == 1;
+    }
+
     public static Vector3 FindCenterOfTransforms(List<Transform> transforms)
     {
         var bound = new Bounds(transforms[0].position, Vector3.zero);

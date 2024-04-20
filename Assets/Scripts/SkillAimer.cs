@@ -119,7 +119,7 @@ public class SkillAimer : Singleton<SkillAimer>
         {item.ChangeColour(item.normalColour);}
         castDecided = false;
         _skill = null;
-    
+        
         SkillHandler.inst.  Close();
         BattleManager.inst.EndTurn(wasSkipped);
     }

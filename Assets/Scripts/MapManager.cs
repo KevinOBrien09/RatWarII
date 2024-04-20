@@ -236,16 +236,44 @@ foreach (var item in map.rooms)
 
     public List<Slot> StartingRadius()
     {
-        System.Random rng = new System.Random();
-        List<Slot> sl = new List<Slot>(currentRoom.slots);
-        foreach (var item in currentRoom.slots)
+        Collider[] c = Physics.OverlapSphere(MapManager.inst.map.startRoom.RandomSlot().transform.position,3);
+        Slot s = null;
+        foreach (var item in c)
         {
-            if(!item.cont.walkable()|item.marked){
-                sl.Remove(item);
+            if(item.TryGetComponent<Slot>(out s))
+            {
+                if(!s.isWater){
+                    break;
+                }
+              
+            }
+        }
+        if(s == null)
+        {s = MapManager.inst.map.startRoom.RandomSlot();}
+    
+        List<Slot> radius = s.func.GetRadiusSlots(2,CharacterBuilder.inst.mandatorySkills[0],false);
+        if(!s.isWater){
+             radius.Add(s);
+        }
+       
+        foreach (var item in MapManager.inst.map.startRoom.slots)
+        {
+            if(!radius.Contains(item)){
+                radius.Add(item);
+            }
+        }
+
+        List<Slot> filter = new List<Slot>(radius);
+        foreach (var item in filter)
+        {
+            BoatSlot bs = item as BoatSlot;
+            if(item.isWater|item.isBoat | bs != null){
+                radius.Remove(item);
             }
             
         }
-        return sl.OrderBy(_ => rng.Next()).ToList() ;
+
+        return radius;
 
     }
 

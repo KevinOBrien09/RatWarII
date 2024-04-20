@@ -7,14 +7,16 @@ using DG.Tweening;
 
 public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
 {
-    public TextMeshProUGUI charName,hp,speciesClass,level;
+    public TextMeshProUGUI charName,hp,speciesClass,level,moveTokenCount;
     public TextMeshProUGUI speed,moveRange,strength,magic;
     public RawImage icon;
     public Vector2 shown,hidden;
     public RectTransform rt;
     public StatusEffectStackHandler stackHandler;
     public HealthBar healthBar;
-   public Slot sl;
+    public List<GameObject>moveTokes = new List<GameObject>();
+    public Slot sl;
+
     void Start()
     {
         shown = rt.anchoredPosition;
@@ -93,6 +95,12 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 else{
                     icon.texture = slot.cont.unit.enemy.icon;
                 }
+
+                moveTokenCount.text = " MT:"+ u.currentMoveTokens.ToString();
+                foreach (var item in moveTokes)
+                {item.SetActive(false);}
+                for (int i = 0; i < u.currentMoveTokens; i++)
+                { moveTokes[i].SetActive(true); }
                 
             }
         }
@@ -137,7 +145,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 speed.text =string.Empty;
                 strength.text =string.Empty;
                 moveRange.text = string.Empty;
-            
+                magic.text = string.Empty;
                     
             }
     }

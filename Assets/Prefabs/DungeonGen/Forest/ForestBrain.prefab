@@ -100,3 +100,5 @@ MonoBehaviour:
       Value: {fileID: 2100000, guid: 45259e517235825408c02d4b98c662c8, type: 2}
     keyCollision: 0
   perlinGrid: 
+  backDrop: {fileID: 5027502631909377749, guid: 9223e9dd62755e547837e9c58c9c1b84,
+    type: 3}

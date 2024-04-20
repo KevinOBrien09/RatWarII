@@ -135,20 +135,29 @@ public class QuickfireCast : SkillCastBehaviour
             }
           
             yield return new WaitForSeconds(.25f);
-            if(castArgs.target != null){
+            if(castArgs.target != null)
+            {
                 if(castArgs.target.healthBar != null){
                 castArgs.target.healthBar.gameObject.transform.parent.gameObject. SetActive(false);
                 }
       
-            Destroy(_arrow.gameObject);
+                Destroy(_arrow.gameObject);
             }
-            else{
-                castArgs.targetSlot.cont.AddContent(arrowSlotContent);
-                foreach (var item in _arrow.gameObject.GetComponentsInChildren<SpriteRenderer>())
+            else
+            {
+                if(castArgs.targetSlot.isWater)  
                 {
-                    item.sortingLayerName = "Default";
-                    
+                    Destroy(_arrow.gameObject);
                 }
+                else{
+                    castArgs.targetSlot.cont.AddContent(arrowSlotContent);
+                    foreach (var item in _arrow.gameObject.GetComponentsInChildren<SpriteRenderer>())
+                    {
+                        item.sortingLayerName = "Default";
+                        
+                    }
+                }
+                
             }
             SkillAimer.inst.Finish();
         }

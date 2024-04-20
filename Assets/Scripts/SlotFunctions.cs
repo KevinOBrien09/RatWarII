@@ -127,6 +127,9 @@ public class SlotFunctions
         Collider[] c = Physics.OverlapSphere(slot.transform.position,radius*5);
         foreach(var item in c)
         {
+            if(item.gameObject.name == "XD"){
+                Debug.Log("Picking up boat tiles");
+            }
             Slot s = null;
             bool v = item.TryGetComponent<Slot>(out s);
             if(v && MapManager.inst.slotBelongsToGrid(s))  

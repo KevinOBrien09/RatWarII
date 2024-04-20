@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-
+using UnityEngine.Events;
 public enum Side{PLAYER,ENEMY,NEITHER,BOTH}
 public class Unit : MonoBehaviour
 {
@@ -22,7 +22,7 @@ public class Unit : MonoBehaviour
     public  ParticleSystemRenderer shieldGraphic,shieldKillRend;
     public ParticleSystem shieldKill,bleedVFX;
     public List<SoundData> systemSounds = new List<SoundData>();
-    public bool movedThisTurn;
+    //public bool movedThisTurn;
     public bool inKnockback;
     public bool stunned;
     public Material whiteFlash,spriteDefault;
@@ -35,8 +35,13 @@ public class Unit : MonoBehaviour
     public bool dead;
     public SoundData footstep;
     public bool isHostage;
+    public float moveSpeed = .1f;
+    public int baseLineMoveTokens,currentMoveTokens;
+
     void Start()
     {
+        baseLineMoveTokens = 2;
+        currentMoveTokens = baseLineMoveTokens;
         var values = System.Enum.GetValues(typeof(StatusEffectEnum));
         foreach (StatusEffectEnum item in values)
         {statusEffects.Add(item,new List<StatusEffect>());}
@@ -76,10 +81,13 @@ public class Unit : MonoBehaviour
         }
       
     }
-    public void MoveAlongPath(Queue<Slot> q,Slot finalSlot)
-    {
-        if(sounds != null)
-        {AudioManager.inst.GetSoundEffect().Play(sounds.move);}
+    public void MoveAlongPath(Queue<Slot> q,Slot finalSlot,UnityAction end = null)
+    {    
+        if(MiscFunctions.FiftyFifty()) 
+        {
+            if(sounds != null)
+            {AudioManager.inst.GetSoundEffect().Play(sounds.move);}
+        }
         loop();
         moving = true;
         void loop()
@@ -89,11 +97,14 @@ public class Unit : MonoBehaviour
 
                 Slot s= q.Dequeue();
                 Vector3 v =  new Vector3(s.transform.position.x, transform.position.y ,s.transform.position.z);
-                graphic.ChangeSpriteSorting(s.node);
+                if(isEntity()){
+   graphic.ChangeSpriteSorting(s.node);
+                
+                }
                 Flip(v);
              
 
-                transform.DOMove(v,.1f).OnComplete(()=>
+                transform.DOMove(v,moveSpeed).OnComplete(()=>
                 { 
                     AudioManager.inst.GetSoundEffect().Play(footstep);
                     loop(); 
@@ -103,53 +114,56 @@ public class Unit : MonoBehaviour
             { 
                 moving = false;
                 Reposition(finalSlot);
+                if(end != null){
+                    end.Invoke();
+                }
+                  if(isEntity()){
                 MapManager.inst.map.UpdateGrid();
-                if(MapManager.inst.mapQuirk == MapQuirk.ROOMS)
-                {
-                    if(BattleManager.inst.roomLockDown)
-                    {
-                        movedThisTurn = true;
-                    }
-                }
-                else
-                {
-                    movedThisTurn = true;
-                }
+                // if(MapManager.inst.mapQuirk == MapQuirk.ROOMS)
+                // {
+                //     if(BattleManager.inst.roomLockDown)
+                //     {
+                //         movedThisTurn = true;
+                //     }
+                // }
+                // else
+                // {
+                //     movedThisTurn = true;
+                // }
            
                 SlotInfoDisplay.inst.sl = finalSlot;
+            
                 if(side == Side.PLAYER)
                 { 
-                    if(MapManager.inst.mapQuirk == MapQuirk.ROOMS)
-                    {
-                        if(BattleManager.inst.roomLockDown)
-                        {
-                            ActionMenu.inst.RemoveMoveOption();
-                        }
-                    }
-                    else{
-                        ActionMenu.inst.RemoveMoveOption();
-                    }
+                   
                     if(isHostage)
                     {
                         if(!ObjectiveManager.inst.CheckIfComplete())
                         {
-                            GameManager.inst.ChangeGameState(GameState.PLAYERUI);
-                            ActionMenu.inst.Reset();
-                            ActionMenu.inst.Show(this.slot);
+                            if(!AutoSkip.inst.autoSkip){
+                             
+                             
+                            }
+                           else{
+                            BattleManager.inst.EndTurn(); // may be bug?
+                            }
                         }
                         else{
                             BattleManager.inst.Win();
                         }
                     }
-                    else
-                    {
-                        GameManager.inst.ChangeGameState(GameState.PLAYERUI);
-                        ActionMenu.inst.Reset();
-                        ActionMenu.inst.Show(this.slot);
+                    else{
+                    BattleManager.inst.EndTurn();
                     }
                    
+                       
+                              
+                        
+                        
+                    
+                   
+                    }
                 }
-                
 
                 //BattleManager.inst.EndTurn();
             }
@@ -168,6 +182,10 @@ public class Unit : MonoBehaviour
     public void RemoveStun(){
         stunned =  false;
         stunIndicator.SetActive(false);
+    }
+
+    public void DeductMoveToken(){
+        currentMoveTokens--;
     }
 
 
@@ -283,7 +301,7 @@ float percent = (5f / 100f) * (float) health.maxHealth;
     }
 
 
-    public void Flip(Vector3 v)
+    public virtual void Flip(Vector3 v)
     {
         if( transform.position.x != v.x)
         {
@@ -317,7 +335,11 @@ float percent = (5f / 100f) * (float) health.maxHealth;
         slot.cont.unit = this;
         MapManager.inst.CheckForIntrusions();
         if(isEntity()){
- graphic.ChangeSpriteSorting(slot.node);
+            graphic.ChangeSpriteSorting(slot.node);
+        }
+        if(newSlot.isBoat){
+            transform.SetParent(newSlot.transform);
+            Debug.Log("BoatSlot");
         }
        
         

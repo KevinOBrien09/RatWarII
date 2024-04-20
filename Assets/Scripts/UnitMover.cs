@@ -11,11 +11,18 @@ public class UnitMover : Singleton<UnitMover>
     public Quaternion unitStartRot;
     public bool inCoro;
     public Color32 baseSlotColour,validSlotColour;
-
+    public BoatMover boatMover;
     public void EnterSelectionMode(Slot sSlot)
     {
         if(!inCoro)
         {
+            if(sSlot.isBoat)
+            {
+                if(boatMover != null)
+                {boatMover.EnterSelection(sSlot);}
+                else
+                { Debug.LogAssertion("BOAT MOVER IS NULL!!!");}
+            }
             inCoro = true;
             selectedUnit = sSlot.cont. unit;
             unitStartRot = selectedUnit.transform.rotation;
@@ -92,12 +99,14 @@ public class UnitMover : Singleton<UnitMover>
             inCoro = true;
             CamFollow.inst.ZoomOut();
             DirectionIndicator.inst.Reset();
-            foreach (var item in  validSlots)
-            {
             
-                item.ChangeColour(item.normalColour);
-              
-            }
+            if(boatMover != null)
+            {boatMover.ExitSelection();}
+            else
+            { Debug.LogWarning("BOAT MOVER IS NULL (only matters in island level tho!!!)");}
+            
+            foreach (var item in  validSlots)
+            { item.ChangeColour(item.normalColour); }
            
             selectedUnit.transform.rotation = unitStartRot;
             validSlots.Clear();
@@ -117,6 +126,10 @@ public class UnitMover : Singleton<UnitMover>
     {
         if(slot.cont.unit != null)
         {return;}
+        if(!slot.isBoat){
+            selectedUnit.transform.SetParent(null);
+        }
+       
         GameManager.inst.ChangeGameState(GameState.UNITMOVE);
         CamFollow.inst.target =  selectedUnit.transform;
         Cursor.lockState = CursorLockMode.Locked;
@@ -134,6 +147,9 @@ public class UnitMover : Singleton<UnitMover>
         CamFollow.inst.ChangeCameraState(CameraState.LOCK);
      
     }
+
+   
+
 
     void LateUpdate()
     {

@@ -21,6 +21,8 @@ public class BattleZoomer : Singleton<BattleZoomer>
         
         float leftY,rightY,casterY,targetY;
         CamFollow.inst.STOPMOVING = true; 
+        Transform casterParent = args.caster.transform.parent;
+        Transform targetParent = args.caster.transform.parent;
         Cursor.lockState = CursorLockMode.Locked;
         (Unit left,Unit right) u = leftMostUnit(args.target,args.caster);
         leftY = u.left.transform.position.y;
@@ -174,13 +176,13 @@ public class BattleZoomer : Singleton<BattleZoomer>
                             if(casterAlive)
                             {
                                 caster.graphic.ChangeSpriteSorting( caster.slot.node);
-                                caster.transform.SetParent(null);
+                                caster.transform.SetParent(casterParent);
                                 caster.transform.DOMove(new Vector3(caster.slot.transform.position.x,casterY,caster.slot.transform.position.z) ,.2f);
                             }
                             if(targetAlive)
                             {
                                 target.graphic.ChangeSpriteSorting( target.slot.node);
-                                target.transform.SetParent(null);
+                                target.transform.SetParent(targetParent);
                                 target.transform.DOMove(new Vector3(target.slot.transform.position.x,targetY,target.slot.transform.position.z) ,.2f);
                             }
                             
@@ -232,6 +234,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
         CamFollow.inst.target = args.caster.slot.transform;
         Unit u = args.caster;
         float  ogY = u.transform.position.y;
+        Transform ogParent = u.transform.parent;
         u.transform.SetParent(BattleZoomer.inst.center);
         u.transform.DOLocalMove(Vector3.zero,.1f);
         u.activeUnitIndicator.gameObject.SetActive(false);
@@ -260,8 +263,8 @@ public class BattleZoomer : Singleton<BattleZoomer>
             centerHP.Refresh();
             yield return new WaitForSeconds(.5f);
 
-           
-            u.transform.SetParent(null);
+
+            u.transform.SetParent(ogParent);
             u.transform.DOMove(new Vector3(u.slot.transform.position.x,ogY,u.slot.transform.position.z) ,.2f).OnComplete(()=>{
 
               

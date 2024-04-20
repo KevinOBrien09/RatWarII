@@ -33,6 +33,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
     List<Slot> perimeterSlots = new List<Slot>();
     int perlinLastX,perlinLastY;
     public int[] perlinGrid;
+    public GameObject backDrop;
     public override void Generate(LocationInfo li = null)
     {
         locationInfo = li;
@@ -453,6 +454,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
 
     void SpawnSlots(  Dictionary<GameObject,Room> dict)
     {
+       
         foreach (var item in  MapManager.inst.map.NodeArray)
         {
             var g = Physics.OverlapSphere(item.vPosition,.1f,layerMask:reAlignMask);
@@ -460,13 +462,13 @@ public class ForestGenerationBrain : MapGeneratorBrain
             if(g.Length == 1)
             {
                 Room r = dict[g[0].gameObject];
+                if(r == null){
+                    Debug.LogAssertion("THE ROOM IS NULL!!!");
+                
+                }
                 int i =  GetIdUsingPerlin(item.iGridX, item.iGridY);
-                // if(i == 2){
-                //     CreateWall(item);
-                // }
-                // else{
-                    CreateSlot(item, r,i);
-             //   }
+                CreateSlot(item, r,i);
+            
               
             }
             else if(g.Length > 1)
@@ -512,9 +514,9 @@ public class ForestGenerationBrain : MapGeneratorBrain
             s.transform.position = item.vPosition;
             s.transform.rotation = Quaternion.identity;
         }
-    //     else{
-    //         s = Instantiate(slotPrefab,item.vPosition,Quaternion.identity);
-    //   }
+        else{
+            s = Instantiate(slotPrefab,item.vPosition,Quaternion.identity);
+      }
        
         r.slots.Add(s);
         s.gameObject.name = r.roomID +"|"+r.slots.Count;
@@ -820,6 +822,54 @@ public class ForestGenerationBrain : MapGeneratorBrain
         // worldmap = noiseTex;
     }
  
+
+    public override void BuildBounds(){
+        Vector2 v = locationInfo.mapSize;
+        float y = mapBoundPrefab.transform.position.y;
+        MapBounds l = Instantiate(mapBoundPrefab,new Vector3(v.x,y,0),Quaternion.identity);
+        MapBounds r = Instantiate(mapBoundPrefab,new Vector3(-v.x,y,0),Quaternion.identity);
+        MapBounds t = Instantiate(mapBoundPrefab,new Vector3(0,y,v.y),Quaternion.identity);
+        MapBounds b = Instantiate(mapBoundPrefab,new Vector3(0,y,-v.y),Quaternion.identity);
+        GameObject  tbd =   Instantiate(backDrop,t.backdropAnchors[3]);
+        GameObject  rbd =   Instantiate(backDrop,r.backdropAnchors[1]);
+        GameObject  lbd =   Instantiate(backDrop,l.backdropAnchors[2]);
+        GameObject  brbd =   Instantiate(backDrop,b.backdropAnchors[1]);
+        GameObject  blbd =   Instantiate(backDrop,b.backdropAnchors[2]);
+        float yScale = 500;
+        tbd.transform.localScale = new Vector3(tbd.transform.localScale.x,yScale,tbd.transform.localScale.z);
+        rbd.transform.localScale = new Vector3(rbd.transform.localScale.x,yScale,rbd.transform.localScale.z);
+        rbd.transform.localRotation = Quaternion.Euler(0,90,0);
+        lbd.transform.localScale = new Vector3(lbd.transform.localScale.x,yScale,lbd.transform.localScale.z);
+        lbd.transform.localRotation = Quaternion.Euler(0,-90,0);
+
+        brbd.transform.localScale = new Vector3( brbd.transform.localScale.x,yScale, brbd.transform.localScale.z);
+        brbd.transform.localRotation = Quaternion.Euler(0,90,0);
+        blbd.transform.localScale = new Vector3(blbd.transform.localScale.x,yScale,blbd.transform.localScale.z);
+        blbd.transform.localRotation = Quaternion.Euler(0,-90,0);
+
+
+      
+        l.Init(v,slotMat);
+        r.Init(v,slotMat);
+        t.Init(v,slotMat);
+        b.Init(v,slotMat);
+        tbd.transform.SetParent(null);
+        rbd .transform.SetParent(null);
+        lbd .transform.SetParent(null);
+        brbd .transform.SetParent(null);
+        blbd.transform.SetParent(null);
+
+        l.transform.localScale = new Vector3(l.transform.localScale.x,50,l.transform.localScale.z);
+        r.transform.localScale = new Vector3(r.transform.localScale.x,50,r.transform.localScale.z);
+        t.transform.localScale = new Vector3(t.transform.localScale.x,50,t.transform.localScale.z);
+
+        // l.gameObject.SetActive(false);
+        // r.gameObject.SetActive(false);
+        // t.gameObject.SetActive(false);
+        //b.transform.localScale = new Vector3(b.transform.localScale.x,50,b.transform.localScale.z);
+       
+        CameraBoundManager.inst.Init(v);
+    }
  
 
    

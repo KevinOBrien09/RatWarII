@@ -17,6 +17,11 @@ public class SlotContainer
      
      public bool walkable()
      {
+          if(slot.node == null)
+          {
+               Debug.Log("Overriden Tile");
+               return false;
+          }
           if(slot.node.isBlocked | slot.cont.wall| slot.isWater)
           { return false; }
           else if(unit != null)

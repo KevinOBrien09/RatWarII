@@ -18,7 +18,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public IntrusiveMeshHandler meshBelow;
     public MeshRenderer mesh;
     public MeshFilter mf;
-    public bool isWater;
+    public bool isWater,isBoat;
     void Awake()
     {
         cont.slot = this;
@@ -123,7 +123,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
         hoverBorder.gameObject.SetActive(false);
     }
     
-    public void SlotHover()
+    public virtual void SlotHover()
     {
         if(cont.invisible)
         { return; }
@@ -252,16 +252,16 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
         border.gameObject.SetActive(true);
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         if(eventData.button == PointerEventData.InputButton.Left)
         { SlotSelect();}
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {SlotHover();}
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         if(!GameManager.inst.checkGameState(GameState.PLAYERHOVER))
         { DisableHover(); }

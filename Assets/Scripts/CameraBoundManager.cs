@@ -20,15 +20,15 @@ public class CameraBoundManager : Singleton<CameraBoundManager>
 
         Transform right = dict[Direction.RIGHT];
 
-        right.transform.position = new Vector3(v.x/2,right.transform.position.y,0) ;
+        right.transform.position = new Vector3(v.x/2-10,right.transform.position.y,0) ;
         right.transform.localScale = new Vector3(  right.transform.localScale.x,    right.transform.localScale.y,v.y) ;
 
         Transform left = dict[Direction.LEFT];
         float lx = v.x/2;
-        left.transform.position = new Vector3(-lx,left.transform.position.y,0) ;
+        left.transform.position = new Vector3(-lx+10,left.transform.position.y,0) ;
         left.transform.localScale = new Vector3(left.transform.localScale.x,left.transform.localScale.y,v.y) ;
 
-      int offset =  MiscFunctions.GetPercentage((int) v.y,20);
-      transform.position = new Vector3(0,45,-offset);
+		int offset =  MiscFunctions.GetPercentage((int) v.y,20);
+		transform.position = new Vector3(0,45,-offset);
     }
 }

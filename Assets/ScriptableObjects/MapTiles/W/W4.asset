@@ -20,8 +20,8 @@ MonoBehaviour:
   decoPrefab: {fileID: 7269279807310001578, guid: 6c26d796e37719540a41536e9eebb523,
     type: 3}
   locationMusic: {fileID: 0}
-  brain: {fileID: -8125641903671149423, guid: 0576862e4d939fe4097f174535c67a4d, type: 3}
-  mapSize: {x: 250, y: 250}
+  brain: {fileID: -1777989716343388507, guid: 15cf2cbfc24dcd04988503b270c6f8d6, type: 3}
+  mapSize: {x: 450, y: 200}
   travelSting:
     audioClip: {fileID: 0}
     pitchRange: {x: 0.9, y: 1.1}

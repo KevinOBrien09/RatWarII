@@ -53,24 +53,66 @@ public class BattleManager : Singleton<BattleManager>
         {
             
             turnOrder.Enqueue(item);
-            item. movedThisTurn = false;
+            item.currentMoveTokens = item.baseLineMoveTokens;
+            //item. movedThisTurn = false;
         }
+    }
+
+    public bool UnitHasMoveTokens()
+    {
+        if(currentUnit != null) 
+        {
+          return currentUnit.currentMoveTokens > 0;
+        }
+
+
+        return false;
     }
 
     public void EndTurn(bool wasSkipped = false)
     {
+        if(AutoSkip.inst.autoSkip|wasSkipped){
+            ActuallyEnd();
+            return;
+        }
+
         if(currentUnit != null) 
-        currentUnit.activeUnitIndicator.gameObject.SetActive(false);
-        if(MapManager.inst.mapQuirk == MapQuirk.ROOMS){
-            if(wasSkipped &&!roomLockDown){
-                currentUnit = turnOrder.Dequeue();
+        {
+            currentUnit.activeUnitIndicator.gameObject.SetActive(false);
+            if(currentUnit.side == Side.PLAYER)
+            {
+                currentUnit.DeductMoveToken();
+                if(UnitHasMoveTokens())
+                {
+                    GameManager.inst.ChangeGameState(GameState.PLAYERUI);
+                    ActionMenu.inst.Reset();
+                    ActionMenu.inst.Show(currentUnit.slot);
+                }
+                else{
+                    ActuallyEnd();
+                }
+            }
+            else{
+                ActuallyEnd();
             }
         }
-        
-        if(BattleManager.inst.turn != 0)
-        {BattleManager.inst.UnitIteration();}
-        MapManager.inst.map.UpdateGrid();
-        ActionMenu.inst.Hide();
+        else{
+            ActuallyEnd();
+        }
+    
+        void ActuallyEnd(){
+            if(MapManager.inst.mapQuirk == MapQuirk.ROOMS){
+                if(wasSkipped &&!roomLockDown){
+                    currentUnit = turnOrder.Dequeue();
+                }
+            }
+            
+            if(BattleManager.inst.turn != 0)
+            {BattleManager.inst.UnitIteration();}
+            MapManager.inst.map.UpdateGrid();
+            ActionMenu.inst.Hide();
+        }
+       
     }
 
     public void Win(){
@@ -83,6 +125,12 @@ public class BattleManager : Singleton<BattleManager>
 
     public void LeaveScene(){
 SceneManager.LoadScene("Hub");
+    }
+
+    public void CheckForTurnEnd(){
+        if(currentUnit.currentMoveTokens <= 0){
+            EndTurn();
+        }
     }
 
     public void UnitIteration()
@@ -110,6 +158,13 @@ SceneManager.LoadScene("Hub");
                else if(BattleManager.inst.roomLockDown||currentUnit == null  ){
                 currentUnit = turnOrder.Dequeue();
                 }
+                // if(UnitMover.inst.boatMover!=null)
+                // {
+                //     if(UnitMover.inst.boatMover.boat.movedThisTurn){
+                //         UnitMover.inst.boatMover.boat.movedThisTurn = false;
+                //     }
+                  
+                // }
                 
                 bool terrainShit = false;
                 if(currentUnit.tempTerrainCreated.Count != 0)
@@ -226,9 +281,10 @@ SceneManager.LoadScene("Hub");
                         }
                         else
                         {
+                        
                             if(currentUnit. sounds != null)
                             {AudioManager.inst.GetSoundEffect().Play(currentUnit.sounds.turnStart);}
-                            
+                        
                             ActionMenu.inst.FUCKOFF = false;
                             InteractHandler.inst.bleh = false;
                             GameManager.inst.ChangeGameState(GameState.PLAYERUI);

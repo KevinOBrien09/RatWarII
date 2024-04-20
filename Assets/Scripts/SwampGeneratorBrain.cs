@@ -19,11 +19,11 @@ public class SwampGeneratorBrain : PerlinGeneratorBrain
     public List<Slot> landSlots = new List<Slot>();
     public List<Slot> waterSlots = new List<Slot>();
     public Material red,blue;
-      List<List<Slot>> landMasses = new List<List<Slot>>();
-      List<Node> waterNodes = new List<Node>();
+    List<List<Slot>> landMasses = new List<List<Slot>>();
+    List<Node> waterNodes = new List<Node>();
     public bool invertWater,randomIslandColour;
     public int islandSizeThreshHold;
-    public BoatSlot test;
+   
     public override void Generate(LocationInfo li = null)
     {
         locationInfo = li;
@@ -46,12 +46,23 @@ public class SwampGeneratorBrain : PerlinGeneratorBrain
             RemoveSmallIslands();
             SpawnWaterSlots();
             KillProblematicWaterTiles();
-             yield return   new WaitForSeconds(.1f);
-            MakeWaterGrid();
+            yield return   new WaitForSeconds(.1f);
+            ReparseIslands();
             InitRooms();
+         
+            MakeWaterGrid();
+            
             AddContent();
+            
             BuildBounds();
             SetStartRoom();
+            Island i = MapManager.inst.map.startRoom as Island;
+           
+
+            UnitMover.inst.boatMover = new BoatMover();
+            
+            UnitMover.inst.boatMover.Init(this);
+            UnitMover.inst.boatMover.boat = waterGrid.SpawnBoat(i);
             yield return   new WaitForSeconds(.1f);
             waterGrid.UpdateGrid();
             MapManager.inst.map.UpdateGrid();
@@ -128,7 +139,7 @@ public class SwampGeneratorBrain : PerlinGeneratorBrain
 
     public void SlotSetUp(Slot s,Node n)
     {
-        Room r =  MapManager.inst.map.startRoom;
+        Room r =  MapManager.inst.map.startRoom;  //might be bug
         r.slots.Add(s);
         s.gameObject.name = r.roomID +"|"+r.slots.Count;
         s.room = r;
@@ -193,7 +204,7 @@ public class SwampGeneratorBrain : PerlinGeneratorBrain
         foreach (var mass in landMasses)
         {
             GameObject G = new GameObject();
-            Room r =   G.AddComponent<Room>();
+            Island r =   G.AddComponent<Island>();
             MapManager.inst.map.rooms.Add(r);
             r.Init(i);
             List<Transform> t = new List<Transform>();
@@ -205,6 +216,7 @@ public class SwampGeneratorBrain : PerlinGeneratorBrain
             {
                 r.slots.Add(tile);
                 tile.transform.SetParent(G.transform);
+                tile.room = r;
                 MapManager.inst.map.startRoom.slots.Remove(tile);
             }
             i++;
@@ -277,6 +289,12 @@ public class SwampGeneratorBrain : PerlinGeneratorBrain
     }
 
 
+    void ReparseIslands(){
+        landMasses.Clear();
+        ParseIslands();
+    }
+
+
     void KillProblematicWaterTiles()
     {
         List<Slot> beachSlots = new List<Slot>();
@@ -308,23 +326,11 @@ public class SwampGeneratorBrain : PerlinGeneratorBrain
 
 
     void MakeWaterGrid(){
-        // List<BoatSlot> bs = new List<BoatSlot>();
-        // foreach (var item in MapManager.inst.allSlots)
-        // {
-        //     Vector3 v = new Vector3(item.node.vPosition.x+2.5f,item.node.vPosition.y,item.node.vPosition.z+2.5f);
-        //     BoatSlot s =   Instantiate(test,v,Quaternion.identity);
-        //     if(!s.Valid())
-        //     {
-        //         Destroy(s.gameObject);
-        //     }
-        //     else{
-        //         s.transform.name =  "BOAT:" + s.transform.name;
-        //         bs.Add(s);
-        //     }
-        // }
+       
         waterGrid.ResizeGrid( locationInfo.mapSize);
         waterGrid.CreateGrid();
         waterGrid.SpawnSlots();
+        waterGrid.ParseOcean();
 
     }
     
