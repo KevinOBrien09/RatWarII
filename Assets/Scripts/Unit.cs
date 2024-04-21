@@ -13,6 +13,7 @@ public class Unit : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public ParticleSystemRenderer activeUnitIndicator;
     public Health health;
+    public SkillResource skillResource;
     public HealthBar healthBar;
     public Stats statMods;
     public Side side;

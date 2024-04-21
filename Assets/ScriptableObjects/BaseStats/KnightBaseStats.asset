@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: KnightBaseStats
   m_EditorClassIdentifier: 
   hp: {x: 100, y: 120}
+  resource: {x: 100, y: 100}
   speed: {x: 2, y: 4}
   strength: {x: 8, y: 10}
   magic: {x: 0, y: 5}

@@ -40,19 +40,39 @@ public class UnitFactory : Singleton<UnitFactory>
         u.side = Side.PLAYER;
       
         u.RecieveGraphic(graphic);
-        u.health.onRefresh .AddListener(()=>{
-        u.character.RefreshBattleData(u) ;
-        });
         u.health.Init(u.stats().hp,character.battleData.currentHP);
+        u.skillResource.Init(u.stats().resource,character.battleData.currentResource);
+        u.health.onRefresh .AddListener(()=>
+        { u.character.RefreshBattleData(u) ;});
+      
+
+        u.skillResource.onChange.AddListener(()=>
+        {u.character.RefreshBattleData(u);});
+        Debug.Log(character.battleData.currentResource);
+
+        
+        u.skillResource.SetCatagory(u.character.job);
+
         u.gameObject.name = graphic.character.characterName.fullName();
         ReposUnit(u,slot);
         if(CharacterBuilder.inst.sfxDict.ContainsKey(u.character.species))
-        {
-            u.sounds = CharacterBuilder.inst.sfxDict[u.character.species];
-        }
+        {u.sounds = CharacterBuilder.inst.sfxDict[u.character.species];}
         
         BattleManager.inst.playerUnits.Add(u);
-  
+        //strike
+        //bnb 1  whirlwind
+        //bnb 2 barrier
+        //bnb3(species) lick wounds 
+        //lvl 3 class
+        //lvl 5 species
+        //lvl 7 class
+        //lvl 8 speices 
+        //specialist
+        //specialist
+        //specialist
+
+
+        //lvl 1 starting stuff, lvl 2 stats, lvl 3 class ability , lvl 4 stats , lvl 5 speices ability, lvl 6 stats, lvl 7 class ability, lvl 8 speices ability, lvl 9 stats
     
         return u;
     }

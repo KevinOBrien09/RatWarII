@@ -50,6 +50,9 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         { IconGraphicHolder.inst.MakeIcon(character);}
         character.battleData = new CharacterBattleData();
         character.battleData.currentHP = character.stats().hp;
+       
+        character.battleData.currentResource = character.stats().resource;
+          Debug.Log( character.battleData.currentResource +" res");
         return character;
     }
     public CharacterGraphic GenerateGraphic(Character c)
@@ -119,6 +122,7 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
     {
         Stats s = new Stats();
         s.hp = (int)Random.Range(ss.hp.x, ss.hp.y);
+        s.resource = (int)Random.Range(ss.resource.x, ss.resource.y);
         s.strength = (int)Random.Range(ss.strength.x,ss.strength.y);
         s.speed = (int)Random.Range(ss.speed.x, ss.speed.y);
         s.magic = (int)Random.Range(ss.magic.x,ss.magic.y);

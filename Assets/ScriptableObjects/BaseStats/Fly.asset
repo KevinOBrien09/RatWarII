@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Fly
   m_EditorClassIdentifier: 
   hp: {x: 5, y: 10}
+  resource: {x: 100, y: 100}
   speed: {x: 1, y: 1}
   strength: {x: 1, y: 1}
+  magic: {x: 0, y: 0}
   moveRange: 5
   bnbSkill: {fileID: 11400000, guid: 110ff04177b4e3d43be40ee0b55812df, type: 2}
   otherSkills: []

@@ -19,6 +19,7 @@ public class Character
     public List<Skill> skills = new List<Skill>();
     public List<Trait> traits = new List<Trait>();
     public CharacterBattleData battleData;
+    public SkillResource resource;
     public CharacterSaveData Save()
     {
         CharacterSaveData csd = new CharacterSaveData();
@@ -42,6 +43,7 @@ public class Character
 
     public void RefreshBattleData(Unit u){
         battleData.currentHP = u.health.currentHealth;
+        battleData.currentResource = u.skillResource.current;
     }
 
     public Stats stats(){
@@ -71,17 +73,17 @@ public class CharacterSaveData
 public class CharacterBattleData
 {
     public int currentHP;
-
+    public int currentResource;
     public void Load(CharacterBattleData cbd)
     {
         currentHP = cbd.currentHP;
-
+        currentResource = cbd.currentResource;
     }
 
     public CharacterBattleData Save(){
         CharacterBattleData cbd = new CharacterBattleData();
         cbd.currentHP = currentHP;
-
+        cbd.currentResource = currentResource;
         return cbd;
     }
 }

@@ -7,9 +7,11 @@ using DG.Tweening;
 
 public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
 {
-    public TextMeshProUGUI charName,hp,speciesClass,level,moveTokenCount;
-    public TextMeshProUGUI speed,moveRange,strength,magic;
+    public TextMeshProUGUI charName,hp,resource,speciesClass,level,moveTokenCount;
+    public TextMeshProUGUI speed,moveRange,strength,magic,defence;
+    public GenericDictionary<SkillResource.Catagory,Sprite> resBarDict = new GenericDictionary<SkillResource.Catagory, Sprite>();
     public RawImage icon;
+    public Image resourceFill;
     public Vector2 shown,hidden;
     public RectTransform rt;
     public StatusEffectStackHandler stackHandler;
@@ -35,6 +37,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 healthBar.health = slot.cont.unit.health;
                 healthBar.gameObject.SetActive(true);
                 healthBar.Refresh();
+             
                 if(!gameObject.activeSelf){
                     gameObject.SetActive(true);
                     rt.DOAnchorPos(hidden,0);
@@ -73,7 +76,9 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 if(slot.cont.specialSlot != null){
                     sc.Add(slot.cont.specialSlot.slotContents);
                 }
-            
+                resourceFill.sprite = resBarDict[u.skillResource.catagory];
+                resourceFill.DOFillAmount((float)u.skillResource.current/(float)u.skillResource.max,0);
+                resource.text = u.skillResource.abbrv() + u.skillResource.current.ToString() +"/" + u.skillResource.max.ToString();
                 stackHandler.SlotContents(sc);
                 speed.text = "SPEED:" + u.stats().speed.ToString();
                 strength.text = "STR:" + u.stats().strength.ToString();

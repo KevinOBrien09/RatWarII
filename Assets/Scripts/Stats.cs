@@ -7,6 +7,7 @@ using UnityEngine;
 public class Stats
 {
     public int hp;
+    public int resource;
     public int speed;
     public int strength;
     public int magic;
@@ -18,6 +19,7 @@ public class Stats
     {
         Stats s = new Stats();
         s.hp = hp + statMods.hp;
+        s.resource = resource + statMods.resource;
         s.strength = strength + statMods.strength;
         s.speed = speed + statMods.speed;
         s.moveRange = moveRange + statMods.moveRange;

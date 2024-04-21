@@ -554,6 +554,7 @@ GameObject:
   - component: {fileID: 4472879287895378444}
   - component: {fileID: 4472879287895378447}
   - component: {fileID: 7819094409353634773}
+  - component: {fileID: 3466372155060701892}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -605,6 +606,7 @@ MonoBehaviour:
     job: 0
     baseStats:
       hp: 0
+      resource: 0
       speed: 0
       strength: 0
       magic: 0
@@ -622,13 +624,17 @@ MonoBehaviour:
     traits: []
     battleData:
       currentHP: 0
+      currentResource: 0
+    resource: {fileID: 0}
   slot: {fileID: 0}
   spriteRenderer: {fileID: 0}
   activeUnitIndicator: {fileID: 9173404679522346605}
   health: {fileID: 7819094409353634773}
+  skillResource: {fileID: 3466372155060701892}
   healthBar: {fileID: 2349106473795105033}
   statMods:
     hp: 0
+    resource: 0
     speed: 0
     strength: 0
     magic: 0
@@ -657,7 +663,6 @@ MonoBehaviour:
   - audioClip: {fileID: 8300000, guid: b89cbf3090609b4409ab20ab107cc0c1, type: 3}
     pitchRange: {x: 0.9, y: 1}
     volume: 0.6
-  movedThisTurn: 0
   inKnockback: 0
   stunned: 0
   whiteFlash: {fileID: 7621306211184561729, guid: 6ab5e72ad2c61d14abc048a95e471c81,
@@ -676,6 +681,9 @@ MonoBehaviour:
     pitchRange: {x: 0.9, y: 1.1}
     volume: 1
   isHostage: 0
+  moveSpeed: 0.1
+  baseLineMoveTokens: 0
+  currentMoveTokens: 0
 --- !u!114 &7819094409353634773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -766,6 +774,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3466372155060701892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4472879287895378434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e9c69bc02f519f4b926f9a526f93f64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onChange:
+    m_PersistentCalls:
+      m_Calls: []
+  max: 0
+  current: 0
 --- !u!1 &6317255079733299742
 GameObject:
   m_ObjectHideFlags: 0

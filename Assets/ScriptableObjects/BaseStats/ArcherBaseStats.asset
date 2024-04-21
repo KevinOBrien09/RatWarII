@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ArcherBaseStats
   m_EditorClassIdentifier: 
   hp: {x: 60, y: 80}
+  resource: {x: 100, y: 100}
   speed: {x: 4, y: 6}
   strength: {x: 4, y: 6}
   magic: {x: 1, y: 3}
