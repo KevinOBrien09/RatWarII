@@ -59,10 +59,12 @@ MonoBehaviour:
     job: 0
     baseStats:
       hp: 0
+      resource: 0
       speed: 0
       strength: 0
       magic: 0
       moveRange: 2
+      defence: 0
       passable: 0
     exp:
       level: 1
@@ -76,6 +78,8 @@ MonoBehaviour:
     traits: []
     battleData:
       currentHP: 0
+      currentResource: 0
+    resource: {fileID: 0}
   camPositionDict:
     list:
     - Key: 0
@@ -184,7 +188,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 191d9142a4a746249a2f09baab2b9253, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cab7b4acfa2c84c40828a86c745bbac9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

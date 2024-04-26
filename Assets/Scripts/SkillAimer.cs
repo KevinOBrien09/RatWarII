@@ -32,6 +32,9 @@ public class SkillAimer : Singleton<SkillAimer>
        
     }
 
+    public bool canCast(Unit u,Skill s)
+    {return u.skillResource.canSpend(s.resourceCost);}
+
     public void RecieveSlot(Slot s)
     {
         if(!castDecided)
@@ -66,7 +69,9 @@ public class SkillAimer : Singleton<SkillAimer>
                 {Debug.LogAssertion("No SkillCastBehaviour in " + _skill.skillName + "'s scriptable object. Game is now softlocked.");}
                 else
                 {
+                    SkillHandler.inst.costTab.SetActive(false);
                     skillCastBehaviour  = Instantiate( _skill.skillCastBehaviour);
+                    BattleManager.inst.currentUnit.skillResource.Spend(_skill.resourceCost);
                     skillCastBehaviour.Go(args);
                     Cursor.lockState = CursorLockMode.Locked;
                 }
@@ -85,6 +90,7 @@ public class SkillAimer : Singleton<SkillAimer>
             GameManager.inst.ChangeGameState(GameState.PLAYERSELECT);
         }
         BattleTicker.inst.Type("Preparing " + s.skillName+"...");
+     
         //BattleManager.inst.ToggleHealthBars(true);
         aiming = true;
         if(s is SelfSkill selfSkill)
@@ -305,17 +311,5 @@ public class SkillAimer : Singleton<SkillAimer>
     }
 
 
-    public bool canCast(Skill skill)
-    {
-        // switch(skill.ID)
-        // {
-        //     case "35433542-3142-45a9-b3d4-93096ef99883": //barrier
-        //     if(BattleManager.inst.)
-        //     break;
-        //     default:
-        //     return true;
-            
-        // }
-        return false;
-    }
+ 
 }

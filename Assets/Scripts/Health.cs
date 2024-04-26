@@ -134,7 +134,7 @@ public class Health : MonoBehaviour
         onRefresh.Invoke();
         if(currentHealth <=0)
         {  
-            if(castArgs.caster != null)
+            if(castArgs != null)
             {
                 if(castArgs.caster.side == Side.PLAYER)
                 {
@@ -143,7 +143,7 @@ public class Health : MonoBehaviour
             }
             else
             {
-                Debug.LogAssertion("CASTER IS NULL???");
+                Debug.LogAssertion("CASTERARGS IS NULL???");
             }
             onDie.Invoke();  
         }

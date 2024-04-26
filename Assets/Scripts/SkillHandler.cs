@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using TMPro;
@@ -14,13 +15,20 @@ public class SkillHandler : Singleton<SkillHandler>
     public Skill hoveredSkill;
     public SkillBehaviour hoveredBehaviour;
     public ScrollRectAutoScroll scrollRectAutoScroll;
+    public GameObject costTab;
+    public List<GameObject> icons = new List<GameObject>();
+    public GenericDictionary<SkillResource.Catagory,Sprite> dict = new GenericDictionary<SkillResource.Catagory, Sprite>();
+    public List<TextMeshProUGUI> costText = new List<TextMeshProUGUI>();
+    public Image resourceIcon;
     void Start(){
         Close();
+        Debug.Log(gameObject.name);
     }
     public void Open()
     {
         gameObject.SetActive(true);
         if(currentSkills.Count > 0){
+          
             StartCoroutine(q(currentSkills[0].gameObject));
            IEnumerator q(GameObject g)
             {
@@ -58,12 +66,17 @@ public class SkillHandler : Singleton<SkillHandler>
                 {
                     if(!SkillAimer.inst.aiming&& !ActionMenu.inst.FUCKOFF)
                     {
+                        if(SkillAimer.inst.canCast(BattleManager.inst.currentUnit,hoveredSkill)){
+                            BattleManager.inst.StartCoroutine(SkillHandler.inst.SetObject(null));
+                            SkillAimer.inst.Go(hoveredSkill);
                         
+                            ActionMenu.inst.Hide();
+                        }
+                        else{
+                            Debug.LogWarning("Cannot Cast " +hoveredSkill.skillName);
+                        }
                      
-                        BattleManager.inst.StartCoroutine(SkillHandler.inst.SetObject(null));
-                        SkillAimer.inst.Go(hoveredSkill);
-                    
-                        ActionMenu.inst.Hide();
+                       
                         
                        
                     }
@@ -106,12 +119,30 @@ public class SkillHandler : Singleton<SkillHandler>
 
     public void Close()
     {
+         costTab.SetActive(false);
         hoveredSkill = null;
         hoveredBehaviour = null;
         ActionMenu.inst.ReturnFromSkillMenu();
         gameObject.SetActive(false);
        // BattleTicker.inst.Wipe();
         open = false;
+    }
+
+    public void ChangeCostDetails(Skill skill){
+     
+        costTab.SetActive(true);
+        icons[0].gameObject.SetActive(true);
+        int q = skill.additionalMoveTokenCost+1;
+        if(skill.resourceCost > 0){
+            icons[1].gameObject.SetActive(true);
+            costText[0].text = "X"+ q.ToString();
+            resourceIcon.sprite = dict[BattleManager.inst.currentUnit.skillResource.catagory];
+            costText[1].text = ":"+skill.resourceCost.ToString();
+        }
+        else
+        {icons[1].gameObject.SetActive(false);}
+      
+        
     }
 
 }

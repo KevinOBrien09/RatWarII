@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1460983a89d450149bcb7177ce59b1c3, type: 3}
+  m_Name: Fly
+  m_EditorClassIdentifier: 
+  ID: b56e1980-2320-4634-aa28-0084ef77919e
+  names:
+  - Fly
+  tagLine: BLUEBOTTLE FLY
+  startingStats: {fileID: 11400000, guid: 44fe959ce9b4d20478f1203f6c47ee87, type: 2}
+  characterGraphic: {fileID: 1875858896460908558, guid: e2f06924009dac446a053dc5ac0fdcf2,
+    type: 3}
+  icon: {fileID: 2800000, guid: 141b2929f5cfd5048b592a46b0ad0d25, type: 3}
+  corpseHead: {fileID: 0}
+  bloodGradient:
+    serializedVersion: 2
+    rgba: 0
+  bloodSplatMat: {fileID: 2100000, guid: 4f15441a137de8443bdcf04935db076b, type: 2}
+  charAI: {fileID: 9030826205893364487, guid: 4556b83d16967e8479428665ff8a4ed7, type: 3}
+  sounds: {fileID: 11400000, guid: 642347a0c3f32fc47b3802e8c5baa4c5, type: 2}
+  skillResCat: 3

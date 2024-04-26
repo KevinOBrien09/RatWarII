@@ -31,6 +31,7 @@ public class SkillBehaviour : Selectable
         bg.color = color2;
         SkillHandler.inst.hoveredSkill = skill;
         SkillHandler.inst.hoveredBehaviour = this;
+        SkillHandler.inst.ChangeCostDetails(skill);
     }
 
       public override void OnDeselect(BaseEventData eventData)

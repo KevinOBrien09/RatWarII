@@ -8,6 +8,8 @@ public class Skill : GUIDScriptableObject
 {
     public string skillName;
     [TextArea(10,10)]  public string desc;
+    public int resourceCost,additionalMoveTokenCost;
+    public SkillResource.Catagory intendedResource;
     public Side side;
     public SkillCastBehaviour skillCastBehaviour;
     public bool doesntNeedUnitInSlot;

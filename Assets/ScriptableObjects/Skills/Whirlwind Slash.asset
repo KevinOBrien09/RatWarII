@@ -15,6 +15,9 @@ MonoBehaviour:
   ID: 96de55b2-7e0f-4bf9-b992-78c05034c4c7
   skillName: Whirlwind Slash
   desc: Deal 15 DMG and knock back all enemies within 1 tile.
+  resourceCost: 2
+  additionalMoveTokenCost: 0
+  intendedResource: 2
   side: 1
   skillCastBehaviour: {fileID: 8986954494872946150, guid: 63f404df52e8cac44ae85344a87dead9,
     type: 3}

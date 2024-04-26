@@ -198,14 +198,17 @@ public class Unit : MonoBehaviour
         bool ca = castArgs != null;
         if(ca){
            v = castArgs.caster.transform.position;
+         
         }
-        
+
+        CastArgs c= castArgs;
+        Debug.Log(c.caster.name);
         graphic.RedFlash(()=>
         {
             if(ca)
             {Flip(v);}
            
-            health.Hit(damage,castArgs);
+            health.Hit(damage,c);
             
         if(bleed)
         {

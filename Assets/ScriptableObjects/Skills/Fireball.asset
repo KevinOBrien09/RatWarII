@@ -16,6 +16,9 @@ MonoBehaviour:
   skillName: Fireball
   desc: 'Launch a fireball inflicting 5 DMG to <u>all units</u> in its trajectory.
     Upon reaching its target it explodes dealing 15 DMG. '
+  resourceCost: 10
+  moveTokenCost: 0
+  intendedResource: 1
   side: 0
   skillCastBehaviour: {fileID: 852672454136546561, guid: 340d355117f14394a9738fd3932f61bf,
     type: 3}

@@ -27,3 +27,4 @@ MonoBehaviour:
   bloodSplatMat: {fileID: 2100000, guid: 31348add57830e1418ad7d43a6abb92b, type: 2}
   charAI: {fileID: 8600280297082065181, guid: 632049caacb7d464c81dd424df19d2e6, type: 3}
   sounds: {fileID: 0}
+  skillResCat: 1

@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character:
+    ID: 
     characterName:
       title: 
       firstName: 
@@ -55,18 +56,36 @@ MonoBehaviour:
     job: 0
     baseStats:
       hp: 0
+      resource: 0
       speed: 0
       strength: 0
+      magic: 0
       moveRange: 0
+      defence: 0
       passable: 0
     exp:
       level: 1
+      currentExp: 0
+      targetExp: 0
+      a: 100
+      b: 1.5
+      c: 7
     spriteVarient: 0
     skills: []
+    traits: []
+    battleData:
+      currentHP: 0
+      currentResource: 0
+    resource: {fileID: 0}
+  camPositionDict:
+    list: []
+    keyCollision: 0
   allRenderers:
   - {fileID: 7693170001504182426}
   cam: {fileID: 0}
   unit: {fileID: 0}
+  iconClone: {fileID: 0}
+  breathing: {fileID: 0}
 --- !u!1 &7693170001504182420
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +112,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7693170001504182420}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.11, y: 5.65, z: -0.45}
+  m_LocalPosition: {x: -0.11, y: 2.9, z: -0.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -165,6 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character:
+    ID: 
     characterName:
       title: 
       firstName: 
@@ -174,14 +194,32 @@ MonoBehaviour:
     job: 0
     baseStats:
       hp: 0
+      resource: 0
       speed: 0
       strength: 0
+      magic: 0
       moveRange: 0
+      defence: 0
       passable: 0
     exp:
       level: 1
+      currentExp: 0
+      targetExp: 0
+      a: 100
+      b: 1.5
+      c: 7
     spriteVarient: 0
     skills: []
+    traits: []
+    battleData:
+      currentHP: 0
+      currentResource: 0
+    resource: {fileID: 0}
+  camPositionDict:
+    list: []
+    keyCollision: 0
   allRenderers: []
   cam: {fileID: 0}
   unit: {fileID: 0}
+  iconClone: {fileID: 0}
+  breathing: {fileID: 0}

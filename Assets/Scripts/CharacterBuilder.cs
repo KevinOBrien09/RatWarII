@@ -52,7 +52,7 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         character.battleData.currentHP = character.stats().hp;
        
         character.battleData.currentResource = character.stats().resource;
-          Debug.Log( character.battleData.currentResource +" res");
+        
         return character;
     }
     public CharacterGraphic GenerateGraphic(Character c)

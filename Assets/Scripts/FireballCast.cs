@@ -15,7 +15,7 @@ public class FireballCast : SkillCastBehaviour
     {
         args.caster.Flip(args.targetSlot.transform.position);
         GameObject fb = Instantiate(fireballPrefab);
-        fb.transform. GetChild(1).GetComponent<DamageUnitPassThrough>().Init(args.caster,traDmg);
+        fb.transform. GetChild(1).GetComponent<DamageUnitPassThrough>().Init(args,traDmg);
         fb.transform.position = args.caster.transform.position;
 
         CamFollow.inst.Focus(fb.transform,(()=>

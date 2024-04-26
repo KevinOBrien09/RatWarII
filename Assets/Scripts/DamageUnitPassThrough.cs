@@ -9,10 +9,12 @@ public class DamageUnitPassThrough : MonoBehaviour
     public int damage;
     bool initDone;
     Unit caster;
-    public void Init(Unit u,int dmg){
-        caster = u;
-initDone = true;
-damage = dmg;
+    CastArgs castArgs;
+    public void Init(CastArgs args,int dmg){
+        caster = args.caster;
+        castArgs = args;
+        initDone = true;
+        damage = dmg;
     }
 
     void OnTriggerEnter(Collider other)
@@ -27,7 +29,7 @@ damage = dmg;
                 {
                     if(s.cont.unit != caster){
                         //if(s.unit.side != caster.side){
-                            s.cont.unit.Hit(damage,null);
+                            s.cont.unit.Hit(damage,castArgs);
                       //  }
                     }
                    

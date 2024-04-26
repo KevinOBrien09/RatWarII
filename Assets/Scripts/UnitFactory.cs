@@ -48,7 +48,7 @@ public class UnitFactory : Singleton<UnitFactory>
 
         u.skillResource.onChange.AddListener(()=>
         {u.character.RefreshBattleData(u);});
-        Debug.Log(character.battleData.currentResource);
+       
 
         
         u.skillResource.SetCatagory(u.character.job);
@@ -109,11 +109,14 @@ e = dc;
         u.character.baseStats = CharacterBuilder.inst.genStats(e.startingStats);
         u.RecieveGraphic(graphic);
         u.health.Init(u.stats().hp,u.stats().hp);
+        u.skillResource.Init((int) e.startingStats.resource.x,(int)e.startingStats.resource.x);
+        u.skillResource.catagory = e.skillResCat;
         u.gameObject.name = graphic.character.characterName.fullName();
         ReposUnit(u,slot);
         u.charAI = Instantiate(e.charAI,u.transform);
         u.charAI.Init(u);
         BattleManager.inst.enemyUnits.Add(u);
+        
         return u;
     }
 

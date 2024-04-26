@@ -84,6 +84,14 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 strength.text = "STR:" + u.stats().strength.ToString();
                 moveRange.text = "MOVE:" + u.stats().moveRange.ToString();
                 magic.text = "MGK:" + u.stats().magic.ToString();
+                string defModColour = "<color=white>";
+                if(u.stats().defence > 0){
+                    defModColour = "<color=yellow>";
+                }
+                else if(u.stats().defence < 0){
+                 defModColour = "<color=lightblue>";
+                }
+                defence.text ="DEF:"+ defModColour + u.stats().defence.ToString() +"%</color>";
                 icon.gameObject.SetActive(true);
                 if(slot.cont.unit.side == Side.PLAYER)
                 {

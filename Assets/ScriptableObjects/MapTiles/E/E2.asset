@@ -21,6 +21,9 @@ MonoBehaviour:
     type: 3}
   locationMusic: {fileID: 8300000, guid: e6d453e1c2903d140808919f0380a6b3, type: 3}
   brain: {fileID: -6948342892267616774, guid: f18f5175b98e67040b2a2e72db0e9a1a, type: 3}
+  mapSize: {x: 250, y: 250}
+  enemies:
+  - {fileID: 11400000, guid: 28bf5ffd724f78242a01c09310e0ba01, type: 2}
   travelSting:
     audioClip: {fileID: 0}
     pitchRange: {x: 0.9, y: 1.1}

@@ -11,6 +11,7 @@ public class BattleManager : Singleton<BattleManager>
     public List<Unit> playerUnits = new List<Unit>();
     public List<Unit> enemyUnits = new List<Unit>();
     public List<Unit> neutralUnits = new List<Unit>();
+    public List<Unit> unitsIDontCareAboutInTurnReset = new List<Unit>();
     public Unit currentUnit;
     public int turn;
     public Queue<Unit> turnOrder = new Queue<Unit>();
@@ -20,6 +21,8 @@ public class BattleManager : Singleton<BattleManager>
     public SoundData roomUnlockSting;
     public string lossReason = "REASON UNCLEAR";
     public bool skipFadeIn;
+    public bool hasAmbush,inAmbush;
+    public int turnsTilAmbush;
     public IEnumerator Start(){
         if(!skipFadeIn){
         BlackFade.inst.fade.DOFade(1,0);
@@ -39,22 +42,35 @@ public class BattleManager : Singleton<BattleManager>
     {
         BattleTicker.inst.Type(BattleManager.inst. TurnState());
         ResetTurnOrder();
-
+        unitsIDontCareAboutInTurnReset.Clear();
         UnitIteration();
         turn++;
     }
 
-    public void ResetTurnOrder(){
+    public void ResetTurnOrder()
+    {
         turnOrder.Clear();
         List<Unit> u = new List<Unit>(allUnits());
         List<Unit> ordered = u.OrderBy(f => f.stats().speed).ToList();
         ordered.Reverse();
+        
+        foreach (var item in unitsIDontCareAboutInTurnReset)
+        {
+            if(ordered.Contains(item))
+            {ordered.Remove(item);}
+        }
+        
         foreach (var item in ordered)
         {
-            
-            turnOrder.Enqueue(item);
-            item.currentMoveTokens = item.baseLineMoveTokens;
-            //item. movedThisTurn = false;
+            if(!turnOrder.Contains(item))
+            {
+                turnOrder.Enqueue(item);
+                item.currentMoveTokens = item.baseLineMoveTokens;
+                item.skillResource.Regain(item.skillResource.regen);
+            }
+            else{
+                Debug.Log("double up");
+            }
         }
     }
 
@@ -69,9 +85,22 @@ public class BattleManager : Singleton<BattleManager>
         return false;
     }
 
+    public bool checkForAmbush(){
+        if(hasAmbush && !inAmbush)
+        {
+            if(turnsTilAmbush <= 0)
+            {
+                AmbushHandler.inst.SpawnAmbush();
+                inAmbush = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void EndTurn(bool wasSkipped = false)
     {
-        if(AutoSkip.inst.autoSkip|wasSkipped){
+        if(AutoSkip.inst.autoSkip|wasSkipped|currentUnit.stunned){
             ActuallyEnd();
             return;
         }
@@ -100,7 +129,12 @@ public class BattleManager : Singleton<BattleManager>
             ActuallyEnd();
         }
     
-        void ActuallyEnd(){
+        void ActuallyEnd()
+        {
+            
+            if(hasAmbush){
+                turnsTilAmbush--;
+            }
             if(MapManager.inst.mapQuirk == MapQuirk.ROOMS){
                 if(wasSkipped &&!roomLockDown){
                     currentUnit = turnOrder.Dequeue();
@@ -165,6 +199,13 @@ SceneManager.LoadScene("Hub");
                 //     }
                   
                 // }
+                unitsIDontCareAboutInTurnReset.Add(currentUnit);
+                if(checkForAmbush()){
+                    turnsTilAmbush = Random.Range(5,10);
+                    yield return new WaitForSeconds(1);
+                    ResetTurnOrder();
+                  
+                }
                 
                 bool terrainShit = false;
                 if(currentUnit.tempTerrainCreated.Count != 0)

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 614892599666610654}
   - component: {fileID: 1875858896460908558}
+  - component: {fileID: 5047841570759905682}
   m_Layer: 0
   m_Name: Fly
   m_TagString: Untagged
@@ -46,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character:
+    ID: 
     characterName:
       title: 
       firstName: 
@@ -55,18 +57,53 @@ MonoBehaviour:
     job: 0
     baseStats:
       hp: 0
+      resource: 0
       speed: 0
       strength: 0
+      magic: 0
       moveRange: 0
+      defence: 0
       passable: 0
     exp:
       level: 1
+      currentExp: 0
+      targetExp: 0
+      a: 100
+      b: 1.5
+      c: 7
     spriteVarient: 0
     skills: []
+    traits: []
+    battleData:
+      currentHP: 0
+      currentResource: 0
+    resource: {fileID: 0}
+  camPositionDict:
+    list: []
+    keyCollision: 0
   allRenderers:
   - {fileID: 7328323460515365484}
   cam: {fileID: 0}
   unit: {fileID: 0}
+  iconClone: {fileID: 0}
+  breathing: {fileID: 5047841570759905682}
+--- !u!114 &5047841570759905682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614892599666610641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10d06613764c55543a12c01599e2ef28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  full: 1
+  min: 0.95
+  inhaleTime: 1
+  pauseTime: 1
+  exhaleTime: 1
 --- !u!1 &7328323460515365474
 GameObject:
   m_ObjectHideFlags: 0
@@ -77,7 +114,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7328323460515365485}
   - component: {fileID: 7328323460515365484}
-  - component: {fileID: 7328323460515365475}
+  - component: {fileID: 3389813075897390622}
+  - component: {fileID: 6532112430755074387}
   m_Layer: 0
   m_Name: fly
   m_TagString: Untagged
@@ -93,7 +131,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7328323460515365474}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.15, z: -0.45}
+  m_LocalPosition: {x: 0, y: 1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -151,8 +189,28 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!114 &7328323460515365475
+  m_SpriteSortPoint: 1
+--- !u!95 &3389813075897390622
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7328323460515365474}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 68eba7881700eac41a0f4f9c37117b5a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6532112430755074387
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,27 +219,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7328323460515365474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08cfb4560e4c4bc42bb8c3133d739c3e, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c4a8405c693bf64ca3d5b4c2c0eef22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character:
-    characterName:
-      title: 
-      firstName: 
-      surname: 
-    species: 0
-    gender: 0
-    job: 0
-    baseStats:
-      hp: 0
-      speed: 0
-      strength: 0
-      moveRange: 0
-      passable: 0
-    exp:
-      level: 1
-    spriteVarient: 0
-    skills: []
-  allRenderers: []
-  cam: {fileID: 0}
-  unit: {fileID: 0}
+  anim: {fileID: 3389813075897390622}
+  startState: FlyIdle
+  range: {x: 0.5, y: 2}

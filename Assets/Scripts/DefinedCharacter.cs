@@ -16,4 +16,5 @@ public class DefinedCharacter : GUIDScriptableObject
     public Material bloodSplatMat;
     public CharacterAI charAI;
     public CharacterSounds sounds;
+    public SkillResource.Catagory skillResCat;
 }

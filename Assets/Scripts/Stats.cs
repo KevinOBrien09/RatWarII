@@ -12,6 +12,7 @@ public class Stats
     public int strength;
     public int magic;
     public int moveRange = 0;
+    public int defence;
     public bool passable;
     
 
@@ -25,6 +26,7 @@ public class Stats
         s.moveRange = moveRange + statMods.moveRange;
         s.magic = magic + statMods.magic;
         s.passable = passable;
+        s.defence = defence+ statMods.defence;
 
         return s;
     }

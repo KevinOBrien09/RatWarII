@@ -7,11 +7,11 @@ using UnityEngine.Events;
 public class SkillResource : MonoBehaviour
 {
     public UnityEvent onChange;
-    public enum Catagory{NONE,MANA,STAMINA}
+    public enum Catagory{NONE,MANA,STAMINA,PUSS}
     public Catagory catagory;
     public int max;
     public int current;
-
+    public int regen;
     public void Init(int max,int current)
     {
         this.max = max;
@@ -19,8 +19,10 @@ public class SkillResource : MonoBehaviour
         onChange.Invoke();
     }
 
-    public bool canSpend()
-    { return true; }
+    public bool canSpend(float cost)
+    { 
+       return current >= cost;
+    }
 
     public void Spend(int cost){
         current -=cost;
@@ -46,12 +48,15 @@ public class SkillResource : MonoBehaviour
         {
             case Job.KNIGHT:
             catagory = Catagory.STAMINA;
+            regen = 1;
             break;
             case Job.WIZARD:
             catagory = Catagory.MANA;
+            regen = 0;
             break;
             case Job.ARCHER:
             catagory = Catagory.STAMINA;
+            regen = 1;
             break;
             default:
             Debug.LogWarning("CATAGORY FOR " + job.ToString()+" NOT SET!!");
@@ -69,6 +74,8 @@ public class SkillResource : MonoBehaviour
             return "MNA: ";
             case Catagory.STAMINA:
             return "STA: ";
+            case Catagory.PUSS:
+            return "PUS: ";
             default:
             return "ERR: ";
         }

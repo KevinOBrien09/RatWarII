@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WizardBaseStats
   m_EditorClassIdentifier: 
   hp: {x: 80, y: 100}
-  resource: {x: 100, y: 100}
+  resource: {x: 100, y: 135}
   speed: {x: 3, y: 5}
   strength: {x: 2, y: 4}
   magic: {x: 5, y: 15}

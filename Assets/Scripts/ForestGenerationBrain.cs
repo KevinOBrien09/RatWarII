@@ -34,6 +34,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
     int perlinLastX,perlinLastY;
     public int[] perlinGrid;
     public GameObject backDrop;
+    public GameObject test;
     public override void Generate(LocationInfo li = null)
     {
         locationInfo = li;
@@ -129,7 +130,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
             dungDict.Add(new Vector2( dn.originalNode.iGridX, dn.originalNode.iGridY),dn );
             dungeonNodes.Add(dn);
         }
-    }
+    }       
 
     public void ParseLayout(Node start,Node end)
     {   
@@ -392,8 +393,8 @@ public class ForestGenerationBrain : MapGeneratorBrain
         }
     }
 
-    public void SpawnSpacers()
-    {
+    public void SpawnSpacers() /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    { 
         List<GameObject> spacers = new List<GameObject>();
         Dictionary<GameObject,Room> dict = new Dictionary<GameObject, Room>();
         int i = 1;
@@ -439,9 +440,13 @@ public class ForestGenerationBrain : MapGeneratorBrain
                     Destroy(item.gameObject);
                 }
                 BuildBounds();
+                BattleManager.inst.hasAmbush = true;
+                BattleManager.inst.turnsTilAmbush = 1;
+                UnitFactory.inst.enemies =new List<DefinedCharacter>(locationInfo.enemies) ;
+                //Random.Range(5,10);
                 yield return new WaitForEndOfFrame();
                 MapManager.inst.map.UpdateGrid();
-               MapGenerator.inst.WrapUp();
+                MapGenerator.inst.WrapUp();
             }
             else
             {
@@ -686,6 +691,23 @@ public class ForestGenerationBrain : MapGeneratorBrain
 
     public void RoomContent()
     {
+
+        // List<Slot> rand = new List<Slot>();
+        // foreach (var item in MapManager.inst.allSlots)
+        // {
+        //    rand.Add(item);
+        // }
+        // System.Random rng = new System.Random();
+        // rand = rand.OrderBy(_ => rng.Next()).ToList();
+        // int howManyEncounterSlots = MiscFunctions.GetPercentage(MapManager.inst.allSlots.Count,5);
+    
+        // for (int i = 0; i < howManyEncounterSlots; i++)
+        // {
+        //     if(rand[i].cont.walkable()){    Debug.Log(howManyEncounterSlots +"HMES");
+        //         Instantiate(test,rand[i].transform.position,Quaternion.identity);
+        //     }
+        // }
+
 
         foreach (var item in MapManager.inst.allSlots)
         {
