@@ -28,4 +28,8 @@ MonoBehaviour:
     audioClip: {fileID: 0}
     pitchRange: {x: 0.9, y: 1.1}
     volume: 1
+  ambience:
+    audioClip: {fileID: 8300000, guid: 76a7df2fd675184499d3b9e3d0f8b403, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
   desc: Tasha, the gnome mother.

@@ -91,7 +91,9 @@ public class GameManager : Singleton<GameManager>
                     MusicManager.inst.FadeAndChange(LocationManager.inst.locationTravelingTo.locationMusic);
                 }
             }
-           
+
+                  MusicManager.inst.ChangeAmbience( LocationManager.inst.locationTravelingTo.ambience.audioClip);
+                
             BattleManager.inst.Begin();
 
 

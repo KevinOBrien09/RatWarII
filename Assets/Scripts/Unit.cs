@@ -38,6 +38,7 @@ public class Unit : MonoBehaviour
     public bool isHostage;
     public float moveSpeed = .1f;
     public int baseLineMoveTokens,currentMoveTokens;
+    public SpriteRenderer minimapIcon;
 
     void Start()
     {
@@ -46,6 +47,7 @@ public class Unit : MonoBehaviour
         var values = System.Enum.GetValues(typeof(StatusEffectEnum));
         foreach (StatusEffectEnum item in values)
         {statusEffects.Add(item,new List<StatusEffect>());}
+    
     }
 
     public void RecieveGraphic(CharacterGraphic _graphic)
@@ -59,6 +61,22 @@ public class Unit : MonoBehaviour
         graphic.transform.localRotation = Quaternion.Euler(0,0,0);
         character = graphic.character;
         healthBar.gameObject.transform.parent.gameObject.SetActive(false);
+        //
+        StartCoroutine(Q());
+
+        IEnumerator Q(){
+            yield   return new WaitForSeconds(.2f);
+            if(side == Side.PLAYER){
+                Texture2D tex= IconGraphicHolder.inst.dict[character.ID];
+
+                minimapIcon.sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+            }
+            else{
+                 minimapIcon.sprite =  Sprite.Create(enemy.icon, new Rect(0.0f, 0.0f, enemy.icon.width, enemy.icon.height), new Vector2(0.5f, 0.5f), 100.0f);
+            }
+           
+        }
+      
     }
     
 
@@ -84,7 +102,7 @@ public class Unit : MonoBehaviour
     }
     public void MoveAlongPath(Queue<Slot> q,Slot finalSlot,UnityAction end = null)
     {    
-        if(MiscFunctions.FiftyFifty()) 
+        if(currentMoveTokens == baseLineMoveTokens) 
         {
             if(sounds != null)
             {AudioManager.inst.GetSoundEffect().Play(sounds.move);}
@@ -141,13 +159,9 @@ public class Unit : MonoBehaviour
                     {
                         if(!ObjectiveManager.inst.CheckIfComplete())
                         {
-                            if(!AutoSkip.inst.autoSkip){
-                             
-                             
-                            }
-                           else{
-                            BattleManager.inst.EndTurn(); // may be bug?
-                            }
+                            
+                            BattleManager.inst.EndTurn(); 
+                            
                         }
                         else{
                             BattleManager.inst.Win();
@@ -351,7 +365,9 @@ float percent = (5f / 100f) * (float) health.maxHealth;
 
     
     public Stats stats()
-    {return character.baseStats;}
+    {
+        return character.baseStats.Stack(statMods);
+    }
 
     public virtual bool isEntity(){
         return true;

@@ -9,6 +9,7 @@ public class MusicManager : Singleton<MusicManager>
 {
     public AudioClip battle,peace;
     public AudioSource source;
+    public AudioSource ambience;
    public float ogVol;
     void Start(){
         ogVol = source.volume;
@@ -18,6 +19,13 @@ public class MusicManager : Singleton<MusicManager>
         source.Stop();
         source.clip = c;
         source.Play();
+    }
+
+    public void ChangeAmbience(AudioClip c){
+        ambience.Stop();
+        ambience.clip = c;
+        ambience.volume = ogVol;
+        ambience.Play();
     }
 
     public void FadeAndChange(AudioClip c,float t = .5f){
@@ -41,6 +49,7 @@ public class MusicManager : Singleton<MusicManager>
 
     public void FadeToSilence(float t = .5f){
         source.DOFade(0,t);
+        ambience.DOFade(0,t);
     }
 
 }

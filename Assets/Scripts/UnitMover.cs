@@ -27,7 +27,8 @@ public class UnitMover : Singleton<UnitMover>
             selectedUnit = sSlot.cont. unit;
             unitStartRot = selectedUnit.transform.rotation;
             if(selectedUnit.side == Side.PLAYER)
-            {
+            { Minimap.inst.ResizeFOV(sSlot.cont. unit.stats().moveRange);
+            Minimap.inst.Show();
                 BattleTicker.inst.Type("Preparing Move...");
             }
             CamFollow.inst.Focus(sSlot.cont. unit.transform,()=>
@@ -46,7 +47,7 @@ public class UnitMover : Singleton<UnitMover>
            
             if(MapManager.inst.mapQuirk == MapQuirk.ROOMS &&  !BattleManager.inst.roomLockDown)
             {moveRange = 99;}
-            validSlots =sSlot.func.GetRadiusSlots(moveRange,null,true);
+            validSlots =sSlot.func.GetRadiusSlots(moveRange,null,false);
             if(selectedUnit.side == Side.PLAYER){
             SelectionUI(sSlot);
             }
@@ -129,13 +130,13 @@ public class UnitMover : Singleton<UnitMover>
         if(!slot.isBoat){
             selectedUnit.transform.SetParent(null);
         }
-       
+         Minimap.inst.Hide();
         GameManager.inst.ChangeGameState(GameState.UNITMOVE);
         CamFollow.inst.target =  selectedUnit.transform;
         Cursor.lockState = CursorLockMode.Locked;
         ExitSelectionMode();
-       BattleTicker.inst.Type("Moving..");
-        selectedUnit.activeUnitIndicator.gameObject.SetActive(false);
+        BattleTicker.inst.Type("Moving..");
+ 
         selectedUnit.slot.ChangeColour(selectedUnit.slot.normalColour);
         List<Node> path =  MapManager.inst.map.aStar. FindPath(UnitMover.inst.selectedSlot.node,
        slot.node);
@@ -143,7 +144,7 @@ public class UnitMover : Singleton<UnitMover>
         foreach (var item in path)
         {   q.Enqueue(item.slot); }
         selectedUnit.MoveAlongPath(q,slot);
-        
+        validSlots.Clear();
         CamFollow.inst.ChangeCameraState(CameraState.LOCK);
      
     }
@@ -160,6 +161,7 @@ public class UnitMover : Singleton<UnitMover>
                 ExitSelectionMode();
                  MapManager.inst.map.UpdateGrid();
                 ActionMenu.inst.Show(selectedSlot);
+               
                 //CamFollow.inst.ChangeCameraState(CameraState.FREE);
             }
         }

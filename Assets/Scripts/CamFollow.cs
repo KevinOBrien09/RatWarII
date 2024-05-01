@@ -48,7 +48,7 @@ public class CamFollow : Singleton<CamFollow>
                 Focus(target,()=>{ChangeCameraState(CameraState.FREE);});
             }
             if(!SkillAimer.inst.castDecided){
-  STOPMOVING = InputManager.inst.player.GetButton("Focus");
+            STOPMOVING = InputManager.inst.player.GetButton("Focus");
             }
             
           

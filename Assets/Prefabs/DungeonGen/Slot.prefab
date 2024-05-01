@@ -223,7 +223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 297796785329274880}
   - component: {fileID: 1804679518769746182}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 864182456605948315}
   - component: {fileID: 1842756857001394802}
   - component: {fileID: 5198723161901163908}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HoverBorder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -504,3 +504,5 @@ MonoBehaviour:
   meshBelow: {fileID: 0}
   mesh: {fileID: 6580155906847053995}
   mf: {fileID: 770741968930885095}
+  isWater: 0
+  isBoat: 0

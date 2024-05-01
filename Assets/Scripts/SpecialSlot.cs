@@ -15,7 +15,7 @@ public class SpecialSlot : MonoBehaviour
     public Interactable interactable;
     public bool sotTrigger;
 
-    public void Init(){
+    public virtual void Init(){
         if(sorter != null){
           sorter.sortingOrder =   -slot.node.iGridY;
         }

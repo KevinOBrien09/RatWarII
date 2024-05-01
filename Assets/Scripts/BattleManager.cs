@@ -22,7 +22,7 @@ public class BattleManager : Singleton<BattleManager>
     public string lossReason = "REASON UNCLEAR";
     public bool skipFadeIn;
     public bool hasAmbush,inAmbush;
-    public int turnsTilAmbush;
+    public int iterationsTilAmbush;
     public IEnumerator Start(){
         if(!skipFadeIn){
         BlackFade.inst.fade.DOFade(1,0);
@@ -41,10 +41,14 @@ public class BattleManager : Singleton<BattleManager>
     public void NewTurn()
     {
         BattleTicker.inst.Type(BattleManager.inst. TurnState());
+         unitsIDontCareAboutInTurnReset.Clear();
         ResetTurnOrder();
-        unitsIDontCareAboutInTurnReset.Clear();
-        UnitIteration();
+       
+
         turn++;
+         Debug.LogAssertion("XD" + turn);
+        UnitIteration();
+       
     }
 
     public void ResetTurnOrder()
@@ -88,7 +92,7 @@ public class BattleManager : Singleton<BattleManager>
     public bool checkForAmbush(){
         if(hasAmbush && !inAmbush)
         {
-            if(turnsTilAmbush <= 0)
+            if( iterationsTilAmbush <= 0)
             {
                 AmbushHandler.inst.SpawnAmbush();
                 inAmbush = true;
@@ -100,14 +104,14 @@ public class BattleManager : Singleton<BattleManager>
 
     public void EndTurn(bool wasSkipped = false)
     {
-        if(AutoSkip.inst.autoSkip|wasSkipped|currentUnit.stunned){
+        if(wasSkipped|currentUnit.stunned){
             ActuallyEnd();
             return;
         }
 
         if(currentUnit != null) 
         {
-            currentUnit.activeUnitIndicator.gameObject.SetActive(false);
+           
             if(currentUnit.side == Side.PLAYER)
             {
                 currentUnit.DeductMoveToken();
@@ -133,7 +137,7 @@ public class BattleManager : Singleton<BattleManager>
         {
             
             if(hasAmbush){
-                turnsTilAmbush--;
+                 iterationsTilAmbush--;
             }
             if(MapManager.inst.mapQuirk == MapQuirk.ROOMS){
                 if(wasSkipped &&!roomLockDown){
@@ -180,7 +184,7 @@ SceneManager.LoadScene("Hub");
         
      
         IEnumerator q(){
-            
+            SkillAimer.inst.validSlots.Clear();
             if(turnOrder.Count > 0)
             { 
                 ActionMenu.inst.FUCKOFF = false;
@@ -192,20 +196,24 @@ SceneManager.LoadScene("Hub");
                else if(BattleManager.inst.roomLockDown||currentUnit == null  ){
                 currentUnit = turnOrder.Dequeue();
                 }
-                // if(UnitMover.inst.boatMover!=null)
-                // {
-                //     if(UnitMover.inst.boatMover.boat.movedThisTurn){
-                //         UnitMover.inst.boatMover.boat.movedThisTurn = false;
-                //     }
-                  
-                // }
+
+                foreach (var item in allUnits())
+                {
+                  item.activeUnitIndicator.gameObject.SetActive(false);
+                }
+
+                currentUnit .activeUnitIndicator.gameObject.SetActive(true);
+               
                 unitsIDontCareAboutInTurnReset.Add(currentUnit);
-                if(checkForAmbush()){
-                    turnsTilAmbush = Random.Range(5,10);
+                if(!MapManager.inst.doNotSpawnEnemies){
+ if(checkForAmbush()){
+                     iterationsTilAmbush = Random.Range(5,10);
                     yield return new WaitForSeconds(1);
                     ResetTurnOrder();
                   
                 }
+                }
+               
                 
                 bool terrainShit = false;
                 if(currentUnit.tempTerrainCreated.Count != 0)
@@ -308,7 +316,7 @@ SceneManager.LoadScene("Hub");
                     {       
                         CamFollow.inst.Focus(currentUnit.slot.transform,()=>{});
                         ActionMenu.inst.ResetMoveOption();
-                        currentUnit.activeUnitIndicator.gameObject.SetActive(true);
+                    
                         yield return new WaitForSeconds(.25f);
                         StatusEffectLoop(currentUnit);
                         while(looping)

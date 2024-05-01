@@ -116,7 +116,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
 
       
        
-        CamFollow.inst.ForceFOV(45);
+       // CamFollow.inst.ForceFOV(45);
         StartCoroutine(BeginMove());
       
         IEnumerator BeginMove()
@@ -188,7 +188,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
                             
                             CamFollow.inst.Focus(args.caster.slot.transform,()=>
                             { CamFollow.inst.ChangeCameraState(CameraState.LOCK); });
-                            CamFollow.inst.ForceFOV( CamFollow.inst.baseFOV);
+                            //CamFollow.inst.ForceFOV( CamFollow.inst.baseFOV);
                             yield return new WaitForSeconds(.45f);
                             if(rightHpAction != null){
                                 u. right.health.onHit.RemoveListener(rightHpAction);
@@ -253,7 +253,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
 
         foreach (var item in u.graphic.allRenderers)
         {item.sortingLayerName = "Zoom";}
-        CamFollow.inst.ForceFOV(45);
+        //CamFollow.inst.ForceFOV(45);
         StartCoroutine(BeginMove());
         IEnumerator BeginMove()
         {
@@ -273,7 +273,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
 
             CamFollow.inst.Focus(u.slot.transform,()=>
             { CamFollow.inst.ChangeCameraState(CameraState.LOCK); });
-            CamFollow.inst.ForceFOV( CamFollow.inst.baseFOV);
+           // CamFollow.inst.ForceFOV( CamFollow.inst.baseFOV);
             yield return new WaitForSeconds(.45f);
     
             u. health.onHit.RemoveListener(HpAction);

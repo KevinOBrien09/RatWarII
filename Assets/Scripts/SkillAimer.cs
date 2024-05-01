@@ -50,7 +50,7 @@ public class SkillAimer : Singleton<SkillAimer>
                item.ChangeColour(item.normalColour);
                     
                 }
-                
+                Minimap.inst.Hide();
                 BattleManager.inst.currentUnit.slot.DisableHover();
                 castDecided = true;  
                 BattleTicker.inst.Type(_skill.skillName);
@@ -71,7 +71,8 @@ public class SkillAimer : Singleton<SkillAimer>
                 {
                     SkillHandler.inst.costTab.SetActive(false);
                     skillCastBehaviour  = Instantiate( _skill.skillCastBehaviour);
-                    BattleManager.inst.currentUnit.skillResource.Spend(_skill.resourceCost);
+                    int realCost = BattleManager.inst.currentUnit.skillResource.Convert(_skill.intendedResource,_skill.resourceCost);
+                    BattleManager.inst.currentUnit.skillResource.Spend(realCost);
                     skillCastBehaviour.Go(args);
                     Cursor.lockState = CursorLockMode.Locked;
                 }
@@ -90,7 +91,7 @@ public class SkillAimer : Singleton<SkillAimer>
             GameManager.inst.ChangeGameState(GameState.PLAYERSELECT);
         }
         BattleTicker.inst.Type("Preparing " + s.skillName+"...");
-     
+       
         //BattleManager.inst.ToggleHealthBars(true);
         aiming = true;
         if(s is SelfSkill selfSkill)
@@ -112,7 +113,7 @@ public class SkillAimer : Singleton<SkillAimer>
     
       //  Debug.Log("Finish");
         aiming = false;
-        validSlots.Clear();
+        
         if(skillCastBehaviour != null){
  Destroy(skillCastBehaviour.gameObject);
         }
@@ -125,7 +126,7 @@ public class SkillAimer : Singleton<SkillAimer>
         {item.ChangeColour(item.normalColour);}
         castDecided = false;
         _skill = null;
-        
+        validSlots.Clear();
         SkillHandler.inst.  Close();
         BattleManager.inst.EndTurn(wasSkipped);
     }
@@ -133,9 +134,10 @@ public class SkillAimer : Singleton<SkillAimer>
     public void ProjectileAim(ProjectileSkill skill)
     {
         if(BattleManager.inst.currentUnit.side == Side.PLAYER){
-        currentState = Aim.PROJECTILE;
-
-        CamFollow.inst.ChangeCameraState(CameraState.FREE);
+            currentState = Aim.PROJECTILE;
+                Minimap.inst.ResizeFOV(skill.howManyTiles);
+            Minimap.inst.Show();
+            CamFollow.inst.ChangeCameraState(CameraState.FREE);
             Cursor.lockState = CursorLockMode.Confined;
        
         }
@@ -191,7 +193,11 @@ public class SkillAimer : Singleton<SkillAimer>
     public void RadiusAim(RadiusSkill skill)
     {
         currentState = Aim.RADIUS;
-    
+        if(BattleManager.inst.currentUnit.side == Side.PLAYER){
+Minimap.inst.ResizeFOV(skill.radius);
+        Minimap.inst.Show();
+        }
+        
        
         Character casterChar = caster.character;
         Cursor.lockState = CursorLockMode.Confined;

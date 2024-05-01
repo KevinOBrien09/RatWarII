@@ -15,7 +15,8 @@ public class StatusEffectStackHandler : MonoBehaviour
     {
         foreach (var l in  u.statusEffects)
         {
-            foreach (var item in l.Value)
+            if(l.Key != StatusEffectEnum.STATMOD){
+ foreach (var item in l.Value)
             {
     
                 if(d.ContainsKey(item.statusEffectEnum))
@@ -32,6 +33,11 @@ public class StatusEffectStackHandler : MonoBehaviour
                     d.Add(item.statusEffectEnum,statusEffectStack);
                 }
             }
+            }
+            else{
+                
+            }
+           
             
         }
     }

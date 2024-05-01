@@ -10,7 +10,7 @@ public class DefinedCharacter : GUIDScriptableObject
     public string tagLine;
     public StartingStats startingStats;
     public CharacterGraphic characterGraphic;
-    public Texture icon;
+    public Texture2D icon;
     public Sprite corpseHead;
     public Color32 bloodGradient;
     public Material bloodSplatMat;

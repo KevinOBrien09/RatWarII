@@ -15,6 +15,7 @@ public class LocationInfo :ScriptableObject
     public Vector2 mapSize = new Vector2(250,250);
     public List<DefinedCharacter> enemies = new List<DefinedCharacter>();
     public SoundData travelSting;
+    public SoundData ambience;
     [TextArea(10,10)] public string desc;
 
 

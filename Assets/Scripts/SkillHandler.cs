@@ -137,7 +137,8 @@ public class SkillHandler : Singleton<SkillHandler>
             icons[1].gameObject.SetActive(true);
             costText[0].text = "X"+ q.ToString();
             resourceIcon.sprite = dict[BattleManager.inst.currentUnit.skillResource.catagory];
-            costText[1].text = ":"+skill.resourceCost.ToString();
+            int i =  BattleManager.inst.currentUnit.skillResource.Convert(skill.intendedResource,skill.resourceCost);
+            costText[1].text = ":"+i;
         }
         else
         {icons[1].gameObject.SetActive(false);}

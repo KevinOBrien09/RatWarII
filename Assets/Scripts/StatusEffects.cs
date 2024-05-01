@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
  
-public enum StatusEffectEnum{BARRIER,BLEED,BILE}
+public enum StatusEffectEnum{BARRIER,BLEED,BILE,STATMOD}
 public static class StatusEffects
 {
 
@@ -22,6 +22,31 @@ public static class StatusEffects
            u,kill,skill,StatusEffectEnum.BARRIER
         );
        u.AddStatusEffect(barrier);
+    }
+
+    public static void StatMod(Unit u,Skill skill, int howManyTurns,int change, StatEnum statEnum){
+        StatusEffect statMod = new StatusEffect();
+        int kill = BattleManager.inst.turn + howManyTurns;
+        statMod.statEnum = statEnum;
+        statMod.Init
+        (
+            _add: ()=>
+            { 
+                u.statMods.Edit(statEnum,change);
+            },
+            _tick:null,
+            _remove:()=>
+            { 
+                int i = 0;
+                if(change > 0)
+                {i = -System.Math.Abs(change);}
+                else
+                {i = System.Math.Abs(change);}
+                u.statMods.Edit(statEnum,i);
+            },
+           u,kill,skill,StatusEffectEnum.STATMOD
+        );
+        u.AddStatusEffect(statMod);
     }
 
 

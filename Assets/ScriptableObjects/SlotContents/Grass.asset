@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10eeb75c3eaa4e143abfefb585cfcf41, type: 3}
   m_Name: Grass
   m_EditorClassIdentifier: 
-  contentName: Brush
-  contentDesc: 'mushrooms xd
+  contentName: Tall grass
+  contentDesc: 'le grass XD
+
 
 '
-  picture: {fileID: 2800000, guid: 66397964bf35b064c9b3aa59da6b893f, type: 3}
+  picture: {fileID: 2800000, guid: 771ad468671f31e40bcb79890536895b, type: 3}
   unStackable: 1

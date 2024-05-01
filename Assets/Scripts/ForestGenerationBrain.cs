@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-
+using UnityEngine.Rendering;
 
 
 public class ForestGenerationBrain : MapGeneratorBrain
@@ -35,8 +35,14 @@ public class ForestGenerationBrain : MapGeneratorBrain
     public int[] perlinGrid;
     public GameObject backDrop;
     public GameObject test;
+    List<Node> walledGenSlots = new List<Node>();
+    public SideTerrain sideTerrainPrefab;
+    public Material wallMat;
+    public GameObject tree;
     public override void Generate(LocationInfo li = null)
     {
+        MapGenerator.inst.genGrid.fNodeRadius = roomSizeDict[GenerationRoomType.NORMAL].x/2;
+        MapGenerator.inst.genGrid.CreateGrid();
         locationInfo = li;
         GeneratePerlin();
         MapManager.inst.QPremadeSlots();
@@ -103,6 +109,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
                     Spawn(blockage,item);
                 }
             }
+           
             return (filtered,startEnd.n1,startEnd.n2);
             
         }
@@ -142,9 +149,6 @@ public class ForestGenerationBrain : MapGeneratorBrain
         sideHallway();
         foreach (var item in lunch)
         {dungDict.Remove(item);}
-        bigRoom();
-        Clear();
-        vertDoubleRoom();
         Clear();
         bool sideHallway()
         {
@@ -197,191 +201,12 @@ public class ForestGenerationBrain : MapGeneratorBrain
                     lunch.Add(og);
                     foundHallway = true;
                 }
-
-
             }
 
             return foundHallway;
         }
 
-        bool bigRoom()
-        {
-            foreach(var item in dungeonNodes)
-            {
-                Vector2 og = new Vector2( item.originalNode.iGridX, item.originalNode.iGridY);
-                Vector2 up = new Vector2( item.originalNode.iGridX, item.originalNode.iGridY+1);
-                Vector2 down =  new Vector2( item.originalNode.iGridX, item.originalNode.iGridY-1);
-                Vector2 upRight = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY+1);
-                Vector2 right = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY);
-                Vector2 upLeft = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY+1);
-                Vector2 left = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY);
-                Vector2 downLeft = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY-1);
-                Vector2 downRight = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY-1);
-                
-                bool botLeft = dungDict.ContainsKey(og) && 
-                dungDict.ContainsKey(up) 
-                && dungDict.ContainsKey(upRight)
-                && dungDict.ContainsKey(right);
-
-                bool botRight = dungDict.ContainsKey(og) && 
-                dungDict.ContainsKey(up) 
-                &&  dungDict.ContainsKey(upLeft) 
-                && dungDict.ContainsKey(left);
-
-                bool topRight = dungDict.ContainsKey(og) &&
-                dungDict.ContainsKey(down) 
-                &&  dungDict.ContainsKey(left) 
-                && dungDict.ContainsKey(downLeft);
-                bool topLeft = dungDict.ContainsKey(og) &&
-                dungDict.ContainsKey(down)
-                &&  dungDict.ContainsKey(right)
-                && dungDict.ContainsKey(downRight);
-                bool possibleBigRoom = botLeft | botRight | topRight | topLeft;
-
-                if(possibleBigRoom)
-                {
-                    if(botLeft)
-                    {
-                        dinner.Add(dungDict[up]);
-                        dinner.Add(dungDict[upRight]);
-                        dinner.Add(dungDict[right]);
-                        dungDict[og].MarkAsBigRoom(dinner);
-
-                        dungDict.Remove(og);
-                        dungDict.Remove(up);
-                        dungDict.Remove(upRight);
-                        dungDict.Remove(right);
-                        
-                    }
-                    else if(botRight)
-                    {
-                        dinner.Add(dungDict[up]);
-                        dinner.Add(dungDict[upLeft]);
-                        dinner.Add(dungDict[left]);
-                        dungDict[og].MarkAsBigRoom(dinner);
-
-                        dungDict.Remove(og);
-                        dungDict.Remove(up);
-                        dungDict.Remove(left);
-                        dungDict.Remove(upLeft); 
-
-                    }
-                    else if(topRight)
-                    {   
-                        dinner.Add(dungDict[down]);
-                        dinner.Add(dungDict[left]);
-                        dinner.Add(dungDict[downLeft]);
-                        dungDict[og].MarkAsBigRoom(dinner);
-                        
-                        dungDict.Remove(og);
-                        dungDict.Remove(down);
-                        dungDict.Remove(left);
-                        dungDict.Remove(downLeft); 
-                    }
-                    else if(topLeft)
-                    {   
-                        dinner.Add(dungDict[down]);
-                        dinner.Add(dungDict[right]);
-                        dinner.Add(dungDict[downRight]);
-                        dungDict[og].MarkAsBigRoom(dinner);
-                        
-                        dungDict.Remove(og);
-                        dungDict.Remove(down);
-                        dungDict.Remove(right);
-                        dungDict.Remove(downRight); 
-                    }
-                  return true;
-                }
-            }  
-            return false;
-        }
-
-
-        bool vertDoubleRoom(){
-            foreach(var item in dungeonNodes)
-            {
-                Vector2 og = new Vector2( item.originalNode.iGridX, item.originalNode.iGridY);
-                Vector2 up = new Vector2( item.originalNode.iGridX, item.originalNode.iGridY+1);
-                Vector2 down =  new Vector2( item.originalNode.iGridX, item.originalNode.iGridY-1);
-                Vector2 upRight = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY+1);
-                Vector2 right = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY);
-                Vector2 upLeft = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY+1);
-                Vector2 left = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY);
-                Vector2 downLeft = new Vector2( item.originalNode.iGridX-1, item.originalNode.iGridY-1);
-                Vector2 downRight = new Vector2( item.originalNode.iGridX+1, item.originalNode.iGridY-1);
-
-               
-                if(dungDict.ContainsKey(left) && dungDict.ContainsKey(og)) 
-                {
-                    if(item.roomType == GenerationRoomType.NORMAL)
-                    {
-                        if(dungDict[og].roomType == GenerationRoomType.NORMAL && dungDict[left].roomType == GenerationRoomType.NORMAL)
-                        {
-                            if(Random.Range(0,3 ) ==1)
-                            {
-                                dungDict[og].MarkAsHORIDouble(dungDict[left]);
-                                dinner.Add(dungDict[left]);
-                                dungDict.Remove(og);
-                                dungDict.Remove(left);
-                            }
-                        }
-                    }
-                }
-
-                if(dungDict.ContainsKey(right) && dungDict.ContainsKey(og)) 
-                {
-                    if(item.roomType == GenerationRoomType.NORMAL)
-                    {
-                        if(dungDict[og].roomType == GenerationRoomType.NORMAL && dungDict[right].roomType == GenerationRoomType.NORMAL)
-                        {
-                            if(Random.Range(0,3 ) ==1){
-                            dungDict[og].MarkAsHORIDouble(dungDict[right]);
-                            dinner.Add(dungDict[right]);
-                            dungDict.Remove(og);
-                            dungDict.Remove(right);
-                            }
-                        }
-                    }
-                }
-                
-                if(dungDict.ContainsKey(up) && dungDict.ContainsKey(og)) 
-                {
-                    if(item.roomType == GenerationRoomType.NORMAL)
-                    {
-                        if(dungDict[og].roomType == GenerationRoomType.NORMAL && dungDict[up].roomType == GenerationRoomType.NORMAL)
-                        {
-                            if(Random.Range(0,3 ) ==1){
-                            dungDict[og].MarkAsVERTDouble(dungDict[up]);
-                            dinner.Add(dungDict[up]);
-                            dungDict.Remove(og);
-                            dungDict.Remove(up);
-                            }
-                        }
-                    }
-
-                }
-
-                if(dungDict.ContainsKey(down) && dungDict.ContainsKey(og)) 
-                {
-                    if(item.roomType == GenerationRoomType.NORMAL)
-                    {
-                        if(dungDict[og].roomType == GenerationRoomType.NORMAL && dungDict[down].roomType == GenerationRoomType.NORMAL)
-                        {
-                            if(Random.Range(0,3 ) ==1){
-                            dungDict[og].MarkAsVERTDouble(dungDict[down]);
-                            dinner.Add(dungDict[down]);
-                            dungDict.Remove(og);
-                            dungDict.Remove(down);
-                            }
-                        }
-                    }
-
-                }
-            }
-
-            return false;
-        }
-       
+   
         void Clear()
         {
             foreach (var item in dinner)
@@ -395,28 +220,35 @@ public class ForestGenerationBrain : MapGeneratorBrain
 
     public void SpawnSpacers() /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     { 
-        List<GameObject> spacers = new List<GameObject>();
-        Dictionary<GameObject,Room> dict = new Dictionary<GameObject, Room>();
-        int i = 1;
-        foreach (var item in dungeonNodes)
-        {
-            GameObject spacer = Instantiate(roomSpacerPrefab,item.spawnPoint.position,Quaternion.identity);
-            Room r = item.gameObject.AddComponent<Room>();
-            r.Init(i);
-            r.roomType = item.roomType;
-            dict.Add(spacer,r);
-            spacers.Add(spacer);
-            Vector2 v = roomSizeDict[item.roomType];
-            spacer.transform.localScale = new Vector3(v.x,1,v.y);
-            i++;
-        }
-        MapGenerator.inst.genGrid.enabled = false;
-        // MapManager.inst.map.vGridWorldSize = MapGenerator.inst.genGrid.vGridWorldSize;
-        // MapManager.inst.map.CreateGrid();
-        // List<Node> n = new List<Node>();
+
         StartCoroutine(q());
         IEnumerator q()
         {
+            Dictionary< GameObject, Vector2> spacers = new   Dictionary<GameObject,Vector2>();
+            Dictionary<GameObject,Room> dict = new Dictionary<GameObject, Room>();
+            int i = 1;
+            foreach (var item in dungeonNodes)
+            {
+                GameObject spacer = Instantiate(roomSpacerPrefab,item.spawnPoint.position,Quaternion.identity);
+                Room r = item.gameObject.AddComponent<Room>();
+                r.Init(i);
+                r.roomType = item.roomType;
+                dict.Add(spacer,r);
+                Vector2 v = roomSizeDict[item.roomType];
+                spacers.Add(spacer,v );
+                i++;
+            }
+
+            MapGenerator.inst.genGrid.UpdateGrid();
+            GetWalledSlots();
+            yield return new WaitForSeconds(.1f);
+            foreach (var item in spacers)
+            {
+                Vector2 v = item.Value;
+                item.Key.transform.localScale = new Vector3(v.x,1,v.y);
+            }
+
+            MapGenerator.inst.genGrid.enabled = false;
             yield return new WaitForSeconds(.1f);
             SpawnSlots(dict);
             MapManager.inst.map.UpdateGrid();
@@ -424,7 +256,8 @@ public class ForestGenerationBrain : MapGeneratorBrain
             PerimeterSlots();
             MapManager.inst.map.UpdateGrid();
             yield return new WaitForSeconds(.1f);
-           if(CheckIfValid()){
+        
+            if(CheckIfValid()){
                 yield return new WaitForSeconds(.1f);
             
                 AssignStartEndRooms();
@@ -433,7 +266,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
                 RoomContent();
                 foreach (var item in spacers)
                 {  
-                    Destroy(item.gameObject);
+                    Destroy(item.Key);
                 }
                 foreach (var item in gos)
                 {
@@ -441,9 +274,14 @@ public class ForestGenerationBrain : MapGeneratorBrain
                 }
                 BuildBounds();
                 BattleManager.inst.hasAmbush = true;
-                BattleManager.inst.turnsTilAmbush = 1;
+                BattleManager.inst. iterationsTilAmbush = 2;
                 UnitFactory.inst.enemies =new List<DefinedCharacter>(locationInfo.enemies) ;
                 //Random.Range(5,10);
+                foreach (var item in walledGenSlots)
+                {
+                    SideTerrain st =   Instantiate(sideTerrainPrefab,item.vPosition,Quaternion.identity);
+                    st.Init();
+                }
                 yield return new WaitForEndOfFrame();
                 MapManager.inst.map.UpdateGrid();
                 MapGenerator.inst.WrapUp();
@@ -452,6 +290,16 @@ public class ForestGenerationBrain : MapGeneratorBrain
             {
                 Debug.LogAssertion("NOT ALL SLOTS ARE ACCESSIBILE!! RESTTING!!");
                 Reset();
+            }
+            
+        }
+    }
+
+    public void GetWalledSlots(){
+        foreach (var item in  MapGenerator.inst.genGrid.NodeArray)
+        {
+            if(item.isBlocked){
+                walledGenSlots .Add(item);
             }
             
         }
@@ -493,18 +341,19 @@ public class ForestGenerationBrain : MapGeneratorBrain
            Wall w = null;
              
             
-                if(MapManager.inst.canGivePremadeWall()){
-                    w = MapManager.inst.GiveWall();
-                    w.gameObject.SetActive(true);
-                    w.transform.SetParent(null);
-                    w.transform.position = item.vPosition;
-                    w.transform.rotation = Quaternion.identity;
-                }
-                else{
+                // if(MapManager.inst.canGivePremadeWall()){
+                //     w = MapManager.inst.GiveWall();
+                //     w.gameObject.SetActive(true);
+                //     w.transform.SetParent(null);
+                //     w.transform.position = item.vPosition;
+                //     w.transform.rotation = Quaternion.identity;
+                // }
+                // else{
                   w=     Instantiate(wall,item.vPosition,Quaternion.identity);
-              }
-    
-                w.ChangeMat(slotMat); 
+             // }
+                ForestWall fw = w as ForestWall;
+                fw.ApplyDeco();
+                w.ChangeMat(wallMat); 
     }
 
  
@@ -550,9 +399,20 @@ public class ForestGenerationBrain : MapGeneratorBrain
                     if(item.gameObject.activeSelf){
                         if(dirs.Count == 1){
                         perimeterSlots.Add(item);
+                        if(!dirs.Contains(Direction.DOWN)){
+                            GameObject g = Instantiate(tree,item.transform.position,Quaternion.identity);
+                            g.transform.rotation = Quaternion.Euler(  g.transform.rotation.eulerAngles.x,Random.Range(0,360), g.transform.rotation.eulerAngles.z);
+                            int i = Random.Range(0,g.transform.childCount);
+                            GameObject bush =  g.transform.GetChild(i).gameObject;
+                            bush.SetActive(true);
+                            
+                            bush.GetComponent<SortingGroup>().sortingOrder = -item.node.iGridX;
+                        }
                         item.IsWall();
                         Wall w = Instantiate(wall,item.transform.position,Quaternion.identity);
-                        w.ChangeMat(slotMat);
+                        ForestWall fw = w as ForestWall;
+                        fw.ApplyDeco();
+                        w.ChangeMat(wallMat);
                         item.room.wallDict[dirs[0]].Add(w);
                         w.transform.SetParent(item.room.transform);
                         item.gameObject.SetActive(false);

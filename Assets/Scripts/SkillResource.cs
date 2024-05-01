@@ -79,8 +79,34 @@ public class SkillResource : MonoBehaviour
             default:
             return "ERR: ";
         }
-       
+    }
 
+    public int Convert(Catagory other,int value){
+        switch (other)
+        {
+            case Catagory.NONE:
+            return value;
+            case Catagory.MANA:
+            if(catagory == Catagory.STAMINA){
+                return value/10;
+            }
+            else if(catagory == Catagory.MANA){
+                return value;
+            }
+            return value;
+            case Catagory.STAMINA:
+            if(catagory == Catagory.STAMINA){
+                return value;
+            }
+            else if(catagory == Catagory.MANA){
+                 return value*10;
+            }
+            return value;
+            case Catagory.PUSS:
+            return value;
+            default:
+            return value;
+        }
     }
 
 

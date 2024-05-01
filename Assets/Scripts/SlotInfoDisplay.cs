@@ -12,6 +12,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
     public GenericDictionary<SkillResource.Catagory,Sprite> resBarDict = new GenericDictionary<SkillResource.Catagory, Sprite>();
     public RawImage icon;
     public Image resourceFill;
+    public GameObject resourceBar;
     public Vector2 shown,hidden;
     public RectTransform rt;
     public StatusEffectStackHandler stackHandler;
@@ -36,6 +37,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             {
                 healthBar.health = slot.cont.unit.health;
                 healthBar.gameObject.SetActive(true);
+                resourceBar.gameObject.SetActive(true);
                 healthBar.Refresh();
              
                 if(!gameObject.activeSelf){
@@ -80,18 +82,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 resourceFill.DOFillAmount((float)u.skillResource.current/(float)u.skillResource.max,0);
                 resource.text = u.skillResource.abbrv() + u.skillResource.current.ToString() +"/" + u.skillResource.max.ToString();
                 stackHandler.SlotContents(sc);
-                speed.text = "SPEED:" + u.stats().speed.ToString();
-                strength.text = "STR:" + u.stats().strength.ToString();
-                moveRange.text = "MOVE:" + u.stats().moveRange.ToString();
-                magic.text = "MGK:" + u.stats().magic.ToString();
-                string defModColour = "<color=white>";
-                if(u.stats().defence > 0){
-                    defModColour = "<color=yellow>";
-                }
-                else if(u.stats().defence < 0){
-                 defModColour = "<color=lightblue>";
-                }
-                defence.text ="DEF:"+ defModColour + u.stats().defence.ToString() +"%</color>";
+                SetStats(u);
                 icon.gameObject.SetActive(true);
                 if(slot.cont.unit.side == Side.PLAYER)
                 {
@@ -148,6 +139,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 
             
                 healthBar.gameObject.SetActive(false);
+                resourceBar.gameObject.SetActive(false);
                 stackHandler.Kill();
             
                 stackHandler.SlotContents(slot.cont.slotContents);
@@ -159,6 +151,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 strength.text =string.Empty;
                 moveRange.text = string.Empty;
                 magic.text = string.Empty;
+                defence.text = string.Empty;
                     
             }
     }
@@ -174,6 +167,49 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
            // gameObject.SetActive(false);
         });
 
+    }
+
+    public void SetStats(Unit u){
+        string normal =  "<color=white>";
+        string increase = "<color=yellow>";
+        string decrease = "<color=lightblue>";
+        string end = "</color>";
+
+
+        string speedModColour = normal;
+        if(u.stats().speed > u.character.baseStats.speed)
+        {speedModColour = increase;}
+        else if(u.stats().defence < u.character.baseStats.speed)
+        {speedModColour = decrease;}
+        speed.text = "SPEED:" + speedModColour + u.stats().speed.ToString() + end;
+
+        string strModColour = normal;
+        if(u.stats().strength > u.character.baseStats.strength)
+        {strModColour = increase;}
+        else if(u.stats().strength <  u.character.baseStats.strength)
+        {strModColour = decrease;}
+        strength.text = "STR:" + strModColour + u.stats().strength.ToString() + end;
+
+        string moveModColour = normal;
+        if(u.stats().moveRange > u.character.baseStats.moveRange)
+        {moveModColour = increase;}
+        else if(u.stats().moveRange < u.character.baseStats.moveRange)
+        {moveModColour = decrease;}
+        moveRange.text = "MOVE:" + moveModColour + u.stats().moveRange.ToString() + end;
+
+        string mgkModColour = normal;
+        if(u.stats().magic > u.character.baseStats.magic)
+        {mgkModColour = increase;}
+        else if(u.stats().magic < u.character.baseStats.magic)
+        {mgkModColour = decrease;}
+        magic.text = "MGK:" + mgkModColour+ u.stats().magic.ToString() + end;
+
+        string defModColour = normal;
+        if(u.stats().defence > u.character.baseStats.defence)
+        {defModColour = increase;}
+        else if(u.stats().defence < u.character.baseStats.defence)
+        {defModColour = decrease;}
+        defence.text ="DEF:"+ defModColour + u.stats().defence.ToString() +"%</color>";
     }
 
   

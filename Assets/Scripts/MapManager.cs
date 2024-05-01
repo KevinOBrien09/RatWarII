@@ -53,6 +53,7 @@ public class MapManager : Singleton<MapManager>
         }
         currentRoom.roomClear = true;
         MusicManager.inst.ChangeMusic( MusicManager.inst.peace);
+  
         HideInactiveRooms();
     }
 

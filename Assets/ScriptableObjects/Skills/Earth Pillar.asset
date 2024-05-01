@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: d802dfd8-74e8-4a53-8912-3c9f4a589b5e
   skillName: Earth Pillar
-  desc: Erect a 1 x1 pillar from the earth that lasts for 1 turn.
-  effects: []
+  desc: Erect a 1x1 pillar from the earth that lasts for 1 turn.
+  resourceCost: 0
+  additionalMoveTokenCost: 0
+  intendedResource: 0
   side: 2
   skillCastBehaviour: {fileID: 4220685632100824470, guid: ab3a6259f44cfca45ae3c62c661308cf,
     type: 3}
@@ -26,6 +28,7 @@ MonoBehaviour:
     pitchRange: {x: 0.9, y: 1}
     volume: 1
   value: 
+  canHitBreakableSlots: 0
   radius: 4
   canSelfCast: 0
   showHealthBars: 0
