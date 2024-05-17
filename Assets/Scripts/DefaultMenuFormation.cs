@@ -36,7 +36,7 @@ public class DefaultMenuFormation : ActionMenuFormation
             break;
 
         }
-        ActionMenu.inst.center.text = ActionMenu.inst.currentState.ToString();
+         ChangeCenterText();
     }
 
     public override void MoveRight(){
@@ -58,7 +58,7 @@ public class DefaultMenuFormation : ActionMenuFormation
             ChangeState(ActionMenuState.SKILL);
             break;
         }
-        ActionMenu.inst.center.text = ActionMenu.inst.currentState.ToString();
+         ChangeCenterText();
     }
 
     public override void ChangeState(ActionMenuState newState)
@@ -98,7 +98,7 @@ public class DefaultMenuFormation : ActionMenuFormation
             icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,180),.25f);
             break;
         }
-         ActionMenu.inst.center.text = ActionMenu.inst.currentState.ToString();
+         ChangeCenterText();
     }
 
     public override void Reset(){
@@ -106,7 +106,14 @@ public class DefaultMenuFormation : ActionMenuFormation
         icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,180),.25f);
         icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,-90),.25f);
         icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,90),.25f);
-        ActionMenu.inst.center.text = ActionMenu.inst.currentState.ToString();
+        ChangeCenterText();
+    }
+
+    public void ChangeCenterText(){
+     ActionMenu.inst.center.text = ActionMenu.inst.currentState.ToString();
+     if( ActionMenu.inst.currentState == ActionMenuState.ROAM){
+           ActionMenu.inst.center.text = "ANALYSIS";
+     }
     }
 
 

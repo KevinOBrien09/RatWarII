@@ -65,7 +65,7 @@ public class Unit : MonoBehaviour
         StartCoroutine(Q());
 
         IEnumerator Q(){
-            yield   return new WaitForSeconds(.2f);
+            yield   return new WaitForSeconds(1);
             if(side == Side.PLAYER){
                 Texture2D tex= IconGraphicHolder.inst.dict[character.ID];
 
@@ -207,6 +207,7 @@ public class Unit : MonoBehaviour
     public virtual void Hit(int damage,CastArgs castArgs, bool bleed = false)
     {   
         int i = health.dmgAmount(damage);
+        i = PostMitDamage(i);
         ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go(i.ToString(),Color.white,transform.position);
         Vector3 v = new Vector3();
         bool ca = castArgs != null;
@@ -221,8 +222,8 @@ public class Unit : MonoBehaviour
         {
             if(ca)
             {Flip(v);}
-           
-            health.Hit(damage,c);
+           int d = PostMitDamage(damage);
+            health.Hit(d,c);
             
         if(bleed)
         {
@@ -233,12 +234,18 @@ public class Unit : MonoBehaviour
         AudioManager.inst.GetSoundEffect().Play(systemSounds[2]);});
     }
 
+    public int PostMitDamage(int premit)
+    {
+        int mod = MiscFunctions.GetPercentage(premit,stats().defence);
+        return premit -= mod;
+    }
+
     public void RemoveStatusEffect(StatusEffectEnum statusEffect){
         statusEffects[statusEffect].Clear();
     }
 
     public int BleedDamage(int howManyBleeds){
-float percent = (5f / 100f) * (float) health.maxHealth;
+        float percent = (5f / 100f) * (float) health.maxHealth;
         int bleed = 0;
         for (int i = 0; i < howManyBleeds; i++)
         {bleed += (int)percent;}

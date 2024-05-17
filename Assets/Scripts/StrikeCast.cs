@@ -14,7 +14,7 @@ public class StrikeCast : SkillCastBehaviour
     {
         BattleZoomer.inst.ZoomIn(args,(()=>
         { 
-            float percent = MiscFunctions.GetPercentage(args.caster.stats().strength,200);
+            float percent = MiscFunctions.GetPercentage(args.caster.stats().strength,100);
             args.target.Hit((int) percent,args);
             PlaySound(0,args.skill);
 

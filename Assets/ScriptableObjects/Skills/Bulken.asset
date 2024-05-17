@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: b06a4ba8-1215-4489-942b-9957b8a5eb77
   skillName: Bulken
-  desc: Raise the casters DEF by 10% for 2 turns.
+  desc: Raise the casters DEF by 25% for 2 turns.
   resourceCost: 2
   additionalMoveTokenCost: 0
   intendedResource: 2

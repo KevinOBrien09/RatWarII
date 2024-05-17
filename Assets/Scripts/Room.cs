@@ -12,6 +12,7 @@ public class EnemySpawnData{
 [System.Serializable]
 public class Room : MonoBehaviour
 {
+    public enum RoomAnchors{BOT_LEFT,TOP_LEFT,MIDDLE,BOT_RIGHT,TOP_RIGHT}
     public enum Content{EMPTY, ENEMY}
     public int roomID;
     public GenerationRoomType roomType;
@@ -24,6 +25,7 @@ public class Room : MonoBehaviour
     public List<EnemySpawnData> enemySpawnData = new List<EnemySpawnData>();
     public GenericDictionary<Direction,List<Wall>> wallDict = new GenericDictionary<Direction, List<Wall>>();
     bool contentMade;
+    public GenericDictionary<RoomAnchors,Slot> anchors = new GenericDictionary<RoomAnchors, Slot>();
     public void Init(int i)
     {
         wallDict.Add(Direction.UP,new List<Wall>());
@@ -33,8 +35,8 @@ public class Room : MonoBehaviour
       
         Transform t = transform.Find("Text");
         if(t != null){
-if(t.TryGetComponent<TextMeshPro>(out tmp)){
-  tmp.text = i.ToString();
+            if(t.TryGetComponent<TextMeshPro>(out tmp)){
+            tmp.text = i.ToString();
         }
         }
         
@@ -42,7 +44,20 @@ if(t.TryGetComponent<TextMeshPro>(out tmp)){
         roomID = i;
         transform.name =  "Room :" + i;
         transform.SetParent(MapManager.inst.map.transform);
+        
+    }
 
+    public void SortAnchors(){
+        if(slots.Count > 0){
+        anchors.Add(RoomAnchors.BOT_LEFT,slots[0]);
+        int truCount = slots.Count-1;
+        anchors.Add(RoomAnchors.MIDDLE,slots[(int) truCount/2]);
+        anchors.Add(RoomAnchors.TOP_RIGHT,slots[truCount]);
+        }
+        else{
+            Debug.LogWarning("Room has no slots!");
+        }
+    
     }
     
     public void AddRoomContent()

@@ -36,6 +36,10 @@ public static class MiscFunctions{
         return Random.Range(0,2) == 1;
     }
 
+    public static void RandomYRotation(Transform t){
+        t.rotation = Quaternion.Euler(t.transform.rotation.eulerAngles.x,Random.Range(0,360),t.transform.rotation.eulerAngles.z);
+    }
+
     public static Vector3 FindCenterOfTransforms(List<Transform> transforms)
     {
         var bound = new Bounds(transforms[0].position, Vector3.zero);

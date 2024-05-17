@@ -39,6 +39,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
     public SideTerrain sideTerrainPrefab;
     public Material wallMat;
     public GameObject tree;
+    public GameObject ruins;
     public override void Generate(LocationInfo li = null)
     {
         MapGenerator.inst.genGrid.fNodeRadius = roomSizeDict[GenerationRoomType.NORMAL].x/2;
@@ -253,6 +254,11 @@ public class ForestGenerationBrain : MapGeneratorBrain
             SpawnSlots(dict);
             MapManager.inst.map.UpdateGrid();
             yield return new WaitForSeconds(.1f);
+            foreach (var item in MapManager.inst.map.rooms)
+            {
+                item.SortAnchors();
+                
+            }
             PerimeterSlots();
             MapManager.inst.map.UpdateGrid();
             yield return new WaitForSeconds(.1f);
@@ -578,16 +584,29 @@ public class ForestGenerationBrain : MapGeneratorBrain
             }
         }
 
+      
 
         foreach (var item in MapManager.inst.map.rooms)
         {
-            item.AddRoomContent();
+            if(MiscFunctions.FiftyFifty()){
+                item.AddRoomContent();
         
-            Slot s = item.RandomSlot();
-            s.cont.wall = true;
-            s.MakeSpecial(mushrooms);
-        }
+                Slot s = item.RandomSlot();
+                s.cont.wall = true;
+                s.MakeSpecial(mushrooms);
+                Transform t = s.cont.specialSlot .transform.GetChild(0);
+                
+                MiscFunctions.RandomYRotation(t);
+            }
 
+            if(item.roomID % 2 == 0 && item.roomType == GenerationRoomType.NORMAL)
+            {
+                if(10 >= Random.Range(0,100))
+                {
+                    Instantiate(ruins,MapManager.inst.map.RandomRoom().anchors[Room.RoomAnchors.MIDDLE].transform.position,Quaternion.identity); 
+                }
+            }
+        }
     }
     
     public  (Node,Node) FurthestTwoNodes(List<Node> nodeList)

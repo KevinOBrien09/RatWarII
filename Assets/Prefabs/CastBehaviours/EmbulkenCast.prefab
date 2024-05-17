@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bef35424f46a3694dba7974812dcee3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  change: 10
+  change: 25
   statToChange: 6
   turnDuration: 2

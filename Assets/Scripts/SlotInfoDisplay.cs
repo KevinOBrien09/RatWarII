@@ -179,9 +179,9 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
         string speedModColour = normal;
         if(u.stats().speed > u.character.baseStats.speed)
         {speedModColour = increase;}
-        else if(u.stats().defence < u.character.baseStats.speed)
+        else if(u.stats().speed < u.character.baseStats.speed)
         {speedModColour = decrease;}
-        speed.text = "SPEED:" + speedModColour + u.stats().speed.ToString() + end;
+        speed.text = "SPD:" + speedModColour + u.stats().speed.ToString() + end;
 
         string strModColour = normal;
         if(u.stats().strength > u.character.baseStats.strength)
@@ -195,7 +195,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
         {moveModColour = increase;}
         else if(u.stats().moveRange < u.character.baseStats.moveRange)
         {moveModColour = decrease;}
-        moveRange.text = "MOVE:" + moveModColour + u.stats().moveRange.ToString() + end;
+        moveRange.text = "MVE:" + moveModColour + u.stats().moveRange.ToString() + end;
 
         string mgkModColour = normal;
         if(u.stats().magic > u.character.baseStats.magic)

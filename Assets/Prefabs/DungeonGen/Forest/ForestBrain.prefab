@@ -107,3 +107,4 @@ MonoBehaviour:
     type: 3}
   wallMat: {fileID: 2100000, guid: a3c4a5ebda72f8d4d8b79001a4723d93, type: 2}
   tree: {fileID: 9212318915716405995, guid: 4fe87181dd4794e4e95d348d4b5e2adf, type: 3}
+  ruins: {fileID: 2845336701759172193, guid: f814960ded4045846a50abb259ae8731, type: 3}

@@ -46,7 +46,7 @@ public class BattleManager : Singleton<BattleManager>
        
 
         turn++;
-         Debug.LogAssertion("XD" + turn);
+    
         UnitIteration();
        
     }
@@ -185,6 +185,8 @@ SceneManager.LoadScene("Hub");
      
         IEnumerator q(){
             SkillAimer.inst.validSlots.Clear();
+
+            UnitMover.inst.validSlots.Clear();
             if(turnOrder.Count > 0)
             { 
                 ActionMenu.inst.FUCKOFF = false;

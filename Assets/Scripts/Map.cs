@@ -13,4 +13,8 @@ public class Map : Grid_
         startRoom = a;
         endRoom = b;
     }
+
+    public Room RandomRoom(){
+        return rooms[UnityEngine. Random.Range(0,rooms.Count)];
+    }
 }
