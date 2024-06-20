@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using NavMeshPlus.Components;
 public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPointerExitHandler
 {
     public SlotContainer cont = new SlotContainer();
@@ -19,8 +21,10 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public MeshRenderer mesh;
     public MeshFilter mf;
     public bool isWater,isBoat;
+    public NavMeshSurface surface;
     void Awake()
     {
+
         cont.slot = this;
         func.slot = this;
     }

@@ -496,9 +496,9 @@ public class CastleGeneratorBrain : MapGeneratorBrain
                     if(dirs.Count == 1){
                         perimeterSlots.Add(item);
                         item.IsWall();
-                        Wall w = Instantiate(wall,item.transform.position,Quaternion.identity);
-                        item.room.wallDict[dirs[0]].Add(w);
-                        w.transform.SetParent(item.room.transform);
+                      //  Wall w = Instantiate(wall,item.transform.position,Quaternion.identity);
+                      //  item.room.wallDict[dirs[0]].Add(w);
+                      //  w.transform.SetParent(item.room.transform);
                         item.gameObject.SetActive(false);
                         
                     }
@@ -511,8 +511,8 @@ public class CastleGeneratorBrain : MapGeneratorBrain
             List<Direction> dirs = item.func.CheckIfSideSlot();
             if(dirs.Count > 0)
             {   item.IsWall();
-                Wall w = Instantiate(wall,item.transform.position,Quaternion.identity);
-                perimeterSlots.Add(item); w.transform.SetParent(item.room.transform);
+                //Wall w = Instantiate(wall,item.transform.position,Quaternion.identity);
+           //     perimeterSlots.Add(item); w.transform.SetParent(item.room.transform);
                 item.gameObject.SetActive(false);
             }
         }
@@ -640,9 +640,9 @@ public class CastleGeneratorBrain : MapGeneratorBrain
             s.Remove(doorSlotB);
             foreach (var slot in s)
             {
-                Wall w = Instantiate(wall,slot.transform.position,Quaternion.identity);
-                border.walls.Add(w);
-                slot.IsWall();
+                // Wall w = Instantiate(wall,slot.transform.position,Quaternion.identity);
+                // border.walls.Add(w);
+                // slot.IsWall();
             }
             Door door =  Instantiate(doorPrefab,MiscFunctions.FindCenterOfTransforms(t),Quaternion.identity);
             door.Init(border,doorSlotA,doorSlotB);

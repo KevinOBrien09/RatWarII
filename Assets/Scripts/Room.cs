@@ -13,7 +13,10 @@ public class EnemySpawnData{
 public class Room : MonoBehaviour
 {
     public enum RoomAnchors{BOT_LEFT,TOP_LEFT,MIDDLE,BOT_RIGHT,TOP_RIGHT}
+    public enum RoomPosition {ZERO_ENT,ONE_ENT,TWO_ENT,THREE_ENT,FOUR_ENT}
+    public RoomPosition roomPosition;
     public enum Content{EMPTY, ENEMY}
+    public DungeonNode dungNode;
     public int roomID;
     public GenerationRoomType roomType;
     public List<Slot> slots = new List<Slot>();
@@ -59,7 +62,9 @@ public class Room : MonoBehaviour
         }
     
     }
-    
+    public void SetRoomPosition(){
+        roomPosition = dungNode.GetRoomPosition();
+    }
     public void AddRoomContent()
     {
         if(roomType == GenerationRoomType.SIDEHALL | roomType == GenerationRoomType.VERTHALL)

@@ -20,8 +20,9 @@ MonoBehaviour:
   decoPrefab: {fileID: 7269279807310001578, guid: caed01c7b18a0b24bbd4c8a37814c64e,
     type: 3}
   locationMusic: {fileID: 8300000, guid: a408feafba46b53488d7e299450e0d5b, type: 3}
-  brain: {fileID: -6948342892267616774, guid: f18f5175b98e67040b2a2e72db0e9a1a, type: 3}
-  mapSize: {x: 500, y: 250}
+  battleMusic: {fileID: 8300000, guid: eb629735fd6c2b64fbc28c977e5fc0d2, type: 3}
+  brain: {fileID: 8777964450933838180, guid: 2798c5dffd615bb4c890c78d6b07fca6, type: 3}
+  mapSize: {x: 250, y: 250}
   enemies:
   - {fileID: 11400000, guid: 8778a7949cf0c8c488617f1e9ce66781, type: 2}
   travelSting:

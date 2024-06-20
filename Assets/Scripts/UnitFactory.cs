@@ -9,6 +9,7 @@ using DG.Tweening;
 public class UnitFactory : Singleton<UnitFactory>
 {
     public Unit unitPrefab;
+    public OverworldUnit overworldUnitPrefab;
     public List<DefinedCharacter> enemies = new List<DefinedCharacter>();
    
     public bool debug;
@@ -77,6 +78,18 @@ public class UnitFactory : Singleton<UnitFactory>
         return u;
     }
 
+    public OverworldUnit CreateOverworldUnit(Character c)
+    {
+        OverworldUnit oU =  Instantiate(overworldUnitPrefab);
+        CharacterGraphic graphic =  CharacterBuilder.inst.GenerateGraphic(c);
+        graphic.transform.SetParent(oU.graphicHolder. transform);
+        graphic.transform.localPosition = Vector3.zero;
+        graphic.transform.localRotation = Quaternion.Euler(30,0,0);
+        graphic.KillCamera();
+
+        return oU;
+    }
+
     public Unit CreateNPC(Slot slot,DefinedCharacter npc)
     {
         Unit u =  CreateEnemyUnit(slot,npc);
@@ -121,7 +134,7 @@ e = dc;
     }
 
     public void ReposUnit(Unit u,Slot slot){
-        u.transform.position = new Vector3(slot.transform.position.x,u.transform.position.y,slot.transform.position.z);
+        u.transform.position = new Vector3(slot.transform.position.x,0,slot.transform.position.z);
         u.Reposition(slot);
         slot.cont.unit = u;  
          MapManager.inst.map.UpdateGrid();

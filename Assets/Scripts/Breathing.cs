@@ -39,7 +39,13 @@ public class Breathing : MonoBehaviour
         
         transform.DOScaleY(min,exhaleTime).OnComplete(()=>
         {
-            StartCoroutine(q());
+            if(gameObject.activeSelf){
+  StartCoroutine(q());
+            }
+            else{
+                Debug.LogWarning("Object off no breathing");
+            }
+          
             IEnumerator q(){
                 yield return new WaitForSeconds(inhaleTime);
                 transform.DOScaleY(full,inhaleTime).OnComplete(()=>

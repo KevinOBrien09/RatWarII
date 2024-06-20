@@ -20,7 +20,7 @@ public class DirectionIndicator : Singleton<DirectionIndicator>
         lineRenderer.enabled = true;
         List<Vector3> v = new List<Vector3>();
 		foreach (var item in nodes)
-        { v.Add(new Vector3( item.slot.transform.position.x,-1, item.slot.transform.position.z));}
+        { v.Add(new Vector3( item.slot.transform.position.x,1f, item.slot.transform.position.z));}
         lineRenderer .positionCount = v.Count;
        	lineRenderer.SetPositions(v.ToArray());
 	}

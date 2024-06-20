@@ -13,9 +13,9 @@ public class CamFollow : Singleton<CamFollow>
     public float smoothspeed = 0.125f;
     public Vector3 offset;
     public CameraState currentState;
-  
+    public CharacterController controller;
     public GenericDictionary<Direction,bool> allowedCameraMovement = new GenericDictionary<Direction, bool>();
-    
+    public float moveSpeed = 20;
 
     public bool STOPMOVING,disableEdgeMovement;
     public float baseFOV;
@@ -122,61 +122,72 @@ public class CamFollow : Singleton<CamFollow>
     
         if(InputManager.inst.AnyWASDKeyHeld())
         {
+
+            Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"),Input.GetAxisRaw("Vertical"));
+            Vector3 move = transform.right * input.x + transform.forward * input.y;
+            move = move * moveSpeed * Time.deltaTime;
+            Vector3.Normalize(move);
+            controller.Move(move);
+            Vector3 v = transform.position;
+            transform.position = new Vector3(v.x,offset.y,v.z);
+
+
+        }
             
-            if(allowedCameraMovement[Direction.UP])
-            {
-                if(InputManager.inst.player.GetButton("Up"))
-                {transform.Translate(Vector3.forward*Time.deltaTime*smoothspeed,Space.World); }
-            }
+        //     if(allowedCameraMovement[Direction.UP])
+        //     {
+        //         if(InputManager.inst.player.GetButton("Up"))
+        //         {transform.Translate(Vector3.forward*Time.deltaTime*smoothspeed,Space.World); }
+        //     }
         
-            if(allowedCameraMovement[Direction.DOWN])
-            {
-                if(InputManager.inst.player.GetButton("Down"))
-                {transform.Translate(-Vector3.forward*Time.deltaTime*smoothspeed,Space.World);}
-            }
+        //     if(allowedCameraMovement[Direction.DOWN])
+        //     {
+        //         if(InputManager.inst.player.GetButton("Down"))
+        //         {transform.Translate(-Vector3.forward*Time.deltaTime*smoothspeed,Space.World);}
+        //     }
 
-            if(allowedCameraMovement[Direction.RIGHT])
-            {
-                if(InputManager.inst.player.GetButton("Right"))
-                {transform.Translate(Vector3.right*Time.deltaTime*smoothspeed,Space.World);}  
-            }
+        //     if(allowedCameraMovement[Direction.RIGHT])
+        //     {
+        //         if(InputManager.inst.player.GetButton("Right"))
+        //         {transform.Translate(Vector3.right*Time.deltaTime*smoothspeed,Space.World);}  
+        //     }
 
-            if(allowedCameraMovement[Direction.LEFT])
-            {
-                if(InputManager.inst.player.GetButton("Left"))
-                {transform.Translate(-Vector3.right*Time.deltaTime*smoothspeed,Space.World);}
-            }
-        }
-        else
-        {
-            if(disableEdgeMovement)
-            {return;}
+        //     if(allowedCameraMovement[Direction.LEFT])
+        //     {
+        //         if(InputManager.inst.player.GetButton("Left"))
+        //         {transform.Translate(-Vector3.right*Time.deltaTime*smoothspeed,Space.World);}
+        //     }
+        // }
+        // else
+        // {
+        //     if(disableEdgeMovement)
+        //     {return;}
 
 
-            if(allowedCameraMovement[Direction.UP])
-            {
-                if(Input.mousePosition.y >= Screen.height * upAndLeftBarrier)
-                { transform.Translate(Vector3.forward*Time.deltaTime*smoothspeed,Space.World); }
-            }
+        //     if(allowedCameraMovement[Direction.UP])
+        //     {
+        //         if(Input.mousePosition.y >= Screen.height * upAndLeftBarrier)
+        //         { transform.Translate(Vector3.forward*Time.deltaTime*smoothspeed,Space.World); }
+        //     }
 
-            if(allowedCameraMovement[Direction.DOWN])
-            {
-                if(Input.mousePosition.y <= Screen.height * downAndRightBarrier)
-                { transform.Translate(-Vector3.forward*Time.deltaTime*smoothspeed,Space.World); }
-            }
+        //     if(allowedCameraMovement[Direction.DOWN])
+        //     {
+        //         if(Input.mousePosition.y <= Screen.height * downAndRightBarrier)
+        //         { transform.Translate(-Vector3.forward*Time.deltaTime*smoothspeed,Space.World); }
+        //     }
             
-            if(allowedCameraMovement[Direction.RIGHT])
-            {
-                if(Input.mousePosition.x >= Screen.width * downAndRightBarrier)
-                { transform.Translate(Vector3.right*Time.deltaTime*smoothspeed,Space.World); }
-            }
+        //     if(allowedCameraMovement[Direction.RIGHT])
+        //     {
+        //         if(Input.mousePosition.x >= Screen.width * downAndRightBarrier)
+        //         { transform.Translate(Vector3.right*Time.deltaTime*smoothspeed,Space.World); }
+        //     }
 
-            if(allowedCameraMovement[Direction.LEFT])
-            {
-                if(Input.mousePosition.x <= Screen.width * upAndLeftBarrier)
-                { transform.Translate(-Vector3.right*Time.deltaTime*smoothspeed,Space.World); }
-            }
-        }
+        //     if(allowedCameraMovement[Direction.LEFT])
+        //     {
+        //         if(Input.mousePosition.x <= Screen.width * upAndLeftBarrier)
+        //         { transform.Translate(-Vector3.right*Time.deltaTime*smoothspeed,Space.World); }
+        //     }
+        // }
        
 
     }

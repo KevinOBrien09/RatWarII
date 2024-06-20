@@ -33328,6 +33328,11 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   camFOV: 40
+  disable: 0
+  error:
+    audioClip: {fileID: 0}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
 --- !u!1 &6768236946578625435
 GameObject:
   m_ObjectHideFlags: 0
@@ -80137,6 +80142,11 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   camFOV: 40
+  disable: 1
+  error:
+    audioClip: {fileID: 8300000, guid: 712f1155e9620bf4191a0b11bacebfb0, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
 --- !u!114 &8882804980392791617
 MonoBehaviour:
   m_ObjectHideFlags: 0

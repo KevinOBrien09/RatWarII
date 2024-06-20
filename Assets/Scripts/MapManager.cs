@@ -7,7 +7,7 @@ using System.Linq;
 public enum MapQuirk{NONE,ROOMS,ISLANDS}
 public class MapManager : Singleton<MapManager>
 {
-    public Map map;
+    public BattleArenaManager map;
     public List<Slot> allSlots = new List<Slot>();
     public List<Slot> intrustiveSlotsCurrentlyMadeTransparent = new List<Slot>();
     public Room currentRoom;

@@ -13,7 +13,12 @@ public class LoadDungeon : MonoBehaviour,IPointerEnterHandler
 
     public void Click()
     {
-        if(PartyManager .inst.parties[PartyManager .inst.currentParty]. members.Count ==0){
+        if(PartyManager .inst.parties.Count ==0){
+ Debug.Log("No parties");
+            AudioManager.inst.GetSoundEffect().Play(error); 
+        }
+        else{
+if(PartyManager .inst.parties[PartyManager .inst.currentParty]. members.Count ==0){
             Debug.Log("No party members");
             AudioManager.inst.GetSoundEffect().Play(error); 
         }
@@ -21,6 +26,8 @@ public class LoadDungeon : MonoBehaviour,IPointerEnterHandler
             GameManager.inst.LoadQuest(q);
             SceneManager.LoadScene("Arena");
         }
+        }
+        
         
     }
 

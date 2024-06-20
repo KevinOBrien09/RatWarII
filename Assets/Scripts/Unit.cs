@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using DG.Tweening;
 using UnityEngine.Events;
 public enum Side{PLAYER,ENEMY,NEITHER,BOTH}
@@ -8,6 +9,7 @@ public class Unit : MonoBehaviour
 {
     
     public CharacterGraphic graphic;
+    
     public Character character;
     public Slot slot;
     public SpriteRenderer spriteRenderer;
@@ -39,7 +41,7 @@ public class Unit : MonoBehaviour
     public float moveSpeed = .1f;
     public int baseLineMoveTokens,currentMoveTokens;
     public SpriteRenderer minimapIcon;
-
+    public OverworldUnit overworldUnit;
     void Start()
     {
         baseLineMoveTokens = 2;
@@ -50,15 +52,20 @@ public class Unit : MonoBehaviour
     
     }
 
+  
+
+
+ 
+
     public void RecieveGraphic(CharacterGraphic _graphic)
     {
         graphic = _graphic;
         graphic.transform.parent = this.transform;
         if(_graphic.unit.side == Side.PLAYER){
-        graphic.transform.localPosition = new Vector3(0,-2.25f,0);
+        graphic.transform.localPosition = new Vector3(0,0,0);
         }
     
-        graphic.transform.localRotation = Quaternion.Euler(0,0,0);
+        graphic.transform.localRotation = Quaternion.Euler(30,0,0);
         character = graphic.character;
         healthBar.gameObject.transform.parent.gameObject.SetActive(false);
         //
@@ -269,15 +276,15 @@ public class Unit : MonoBehaviour
         });
     }
 
-    public void ShieldBreak(){
-        if(shieldGraphic != null){
- Destroy(shieldGraphic.gameObject);
-        shieldKill.gameObject.SetActive(true);
-        shieldKill.Play();
-        shieldGraphic = null;
+    public void ShieldBreak()
+    {
+        if(shieldGraphic != null)
+        {
+            Destroy(shieldGraphic.gameObject);
+            shieldKill.gameObject.SetActive(true);
+            shieldKill.Play();
+            shieldGraphic = null;
         }
-       
-       
     }
 
     public virtual void Die()
@@ -298,10 +305,12 @@ public class Unit : MonoBehaviour
             }
             else if(side == Side.PLAYER)
             {
-                if(PartyManager .inst.currentParty != string.Empty){
-      PartyManager .inst.parties[PartyManager .inst.currentParty]. KillMember(character);
+                if(PartyManager .inst.currentParty != string.Empty)
+                {
+                    PartyManager .inst.parties[PartyManager .inst.currentParty]. KillMember(character);
                 }
-                else {
+                else 
+                {
                     Debug.LogWarning("Character died in debug mode, hence there is no save to remove them from. This warning should not happen in build.");
                 }
           

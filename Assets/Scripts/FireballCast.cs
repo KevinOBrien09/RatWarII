@@ -16,7 +16,8 @@ public class FireballCast : SkillCastBehaviour
         args.caster.Flip(args.targetSlot.transform.position);
         GameObject fb = Instantiate(fireballPrefab);
         fb.transform. GetChild(1).GetComponent<DamageUnitPassThrough>().Init(args,traDmg);
-        fb.transform.position = args.caster.transform.position;
+    
+        fb.transform.position = MiscFunctions.SetY(args.caster.transform.position,1) ;
 
         CamFollow.inst.Focus(fb.transform,(()=>
         {
@@ -32,7 +33,7 @@ public class FireballCast : SkillCastBehaviour
         IEnumerator q()
         {
             yield return new WaitForSeconds(.7f);
-            fb.transform.DOMove(args.targetSlot.transform.position,.25f).OnComplete(()=>
+            fb.transform.DOMove(MiscFunctions.SetY(args.targetSlot.transform.position,1) ,.25f).OnComplete(()=>
             {   
 
                 StartCoroutine(c());

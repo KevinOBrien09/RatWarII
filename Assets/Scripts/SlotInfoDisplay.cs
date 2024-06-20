@@ -35,77 +35,14 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
         { 
             if(slot.cont.unit.isEntity())
             {
-                healthBar.health = slot.cont.unit.health;
-                healthBar.gameObject.SetActive(true);
-                resourceBar.gameObject.SetActive(true);
-                healthBar.Refresh();
-             
-                if(!gameObject.activeSelf){
-                    gameObject.SetActive(true);
-                    rt.DOAnchorPos(hidden,0);
-                    rt.DOAnchorPos(shown,.2f);
-                }
-                else{      gameObject.SetActive(true);
-                    rt.DOAnchorPos(shown,.2f);
-                }
-                
-                if( ! GameManager.inst.checkGameState(GameState.PLAYERUI) && ! GameManager.inst.checkGameState(GameState.INTERACT)) 
-                {
-                    if(ActionMenu.inst.currentState == ActionMenuState.ROAM){
-                    CamFollow.inst.Focus(slot.transform,()=>{CamFollow.inst.ChangeCameraState(CameraState.FREE);});
-                    }
-                    else{
-                        CamFollow.inst.Focus(slot.transform,()=>{});
-                    }
-                
-                }
-                
-                Unit u = slot.cont.unit;
-                Character c = slot.cont.unit.character;
-                charName.text = c.characterName.fullName();
-            
-                level.text = c.exp.level.ToString();
-                if(slot.cont.unit.side == Side.PLAYER && !sl.cont.unit.isHostage){
-                    speciesClass.text = c.job.ToString() + " "+ c.species.ToString();
-                }
-                else{
-                    speciesClass.text = slot.cont.unit.enemy.tagLine;
-                }
-                stackHandler.Kill();
-                stackHandler.Spawn(u);
-                List<SlotContents> sc = new List<SlotContents>(u.slot.cont.slotContents);
-
+               
+                ApplyUnit(slot.cont.unit);
                 if(slot.cont.specialSlot != null){
+                    List<SlotContents> sc = new List<SlotContents>(slot.cont.slotContents);
                     sc.Add(slot.cont.specialSlot.slotContents);
-                }
-                resourceFill.sprite = resBarDict[u.skillResource.catagory];
-                resourceFill.DOFillAmount((float)u.skillResource.current/(float)u.skillResource.max,0);
-                resource.text = u.skillResource.abbrv() + u.skillResource.current.ToString() +"/" + u.skillResource.max.ToString();
-                stackHandler.SlotContents(sc);
-                SetStats(u);
-                icon.gameObject.SetActive(true);
-                if(slot.cont.unit.side == Side.PLAYER)
-                {
-                if(slot.cont.unit.isHostage) 
-                {
-                icon.texture = slot.cont.unit.enemy.icon;
-                }
-                else{
-    
-                    icon.texture = IconGraphicHolder.inst.dict[u.character.ID];
-                }
-                
-                }
-                else{
-                    icon.texture = slot.cont.unit.enemy.icon;
-                }
 
-                moveTokenCount.text = " MT:"+ u.currentMoveTokens.ToString();
-                foreach (var item in moveTokes)
-                {item.SetActive(false);}
-                for (int i = 0; i < u.currentMoveTokens; i++)
-                { moveTokes[i].SetActive(true); }
-                
+                    stackHandler.SlotContents(sc);
+                }
             }
         }
          else
@@ -156,6 +93,84 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
             }
     }
 
+
+
+    public void ApplyUnit(Unit u)
+    {
+        healthBar.health = u.health;
+            healthBar.gameObject.SetActive(true);
+            resourceBar.gameObject.SetActive(true);
+            healthBar.Refresh();
+            
+            if(!gameObject.activeSelf){
+                gameObject.SetActive(true);
+                rt.DOAnchorPos(hidden,0);
+                rt.DOAnchorPos(shown,.2f);
+            }
+            else{      gameObject.SetActive(true);
+                rt.DOAnchorPos(shown,.2f);
+            }
+            
+            if( ! GameManager.inst.checkGameState(GameState.PLAYERUI) && ! GameManager.inst.checkGameState(GameState.INTERACT)) 
+            {
+                if(CamFollow.inst.gameObject.activeSelf){
+
+                    if(ActionMenu.inst.currentState == ActionMenuState.ROAM){
+                    CamFollow.inst.Focus(u. transform,()=>{CamFollow.inst.ChangeCameraState(CameraState.FREE);});
+                    }
+                    else{
+                        CamFollow.inst.Focus(u.transform,()=>{});
+                    }
+
+                }
+               
+            
+            }
+            
+           
+            Character c = u.character;
+            charName.text = c.characterName.fullName();
+        
+            level.text = c.exp.level.ToString();
+            if(u.side == Side.PLAYER ){ //&& !sl.cont.unit.isHostage
+                speciesClass.text = c.job.ToString() + " "+ c.species.ToString();
+            }
+            else{
+                speciesClass.text = u.enemy.tagLine;
+            }
+            stackHandler.Kill();
+            stackHandler.Spawn(u);
+            
+
+            
+            resourceFill.sprite = resBarDict[u.skillResource.catagory];
+            resourceFill.DOFillAmount((float)u.skillResource.current/(float)u.skillResource.max,0);
+            resource.text = u.skillResource.abbrv() + u.skillResource.current.ToString() +"/" + u.skillResource.max.ToString();
+            
+            SetStats(u);
+            icon.gameObject.SetActive(true);
+            if(u.side == Side.PLAYER)
+            {
+            if(u.isHostage) 
+            {
+            icon.texture = u.enemy.icon;
+            }
+            else{
+
+                icon.texture = IconGraphicHolder.inst.dict[u.character.ID];
+            }
+            
+            }
+            else{
+                icon.texture = u.enemy.icon;
+            }
+
+            moveTokenCount.text = " MT:"+ u.currentMoveTokens.ToString();
+            foreach (var item in moveTokes)
+            {item.SetActive(false);}
+            for (int i = 0; i < u.currentMoveTokens; i++)
+            { moveTokes[i].SetActive(true); }
+    }
     public void Disable()
     {
         

@@ -13,7 +13,8 @@ public class DungeonNode : MonoBehaviour
     public Transform spawnPoint;
     public bool isHall;
     public float rayDist = 25;
-
+    public GenericDictionary<Room.RoomPosition,Material> posMat = new GenericDictionary<Room.RoomPosition, Material>();
+    public MeshRenderer meshRenderer;
     void Start(){
         spawnPoint = transform;
     }
@@ -84,6 +85,37 @@ public class DungeonNode : MonoBehaviour
         transform.position = MiscFunctions.FindCenterOfTransforms(tran);
         roomType = GenerationRoomType.VERTDOUBLE;
            spawnPoint = transform;
+    }
+
+    public Room.RoomPosition GetRoomPosition()
+    {
+        Room.RoomPosition p = Room.RoomPosition.ZERO_ENT;
+        
+
+        switch (neighbours.Count)
+        {
+            case 0:
+            p = Room.RoomPosition.ZERO_ENT;
+            break;
+            case 1:
+            p = Room.RoomPosition.ONE_ENT;
+            break;
+            case 2:
+            p = Room.RoomPosition.TWO_ENT;
+            break;
+            case 3:
+            p = Room.RoomPosition.THREE_ENT;
+            break;
+            case 4:
+            p = Room.RoomPosition.FOUR_ENT;
+            break;
+            default:
+            Debug.LogAssertion("DEFAULT CASE!!!");
+            break;
+        }
+  
+        meshRenderer.material = posMat[p];
+        return p;
     }
 
   

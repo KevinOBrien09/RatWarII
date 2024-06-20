@@ -27,8 +27,9 @@ public class UnitMover : Singleton<UnitMover>
             selectedUnit = sSlot.cont. unit;
             unitStartRot = selectedUnit.transform.rotation;
             if(selectedUnit.side == Side.PLAYER)
-            { Minimap.inst.ResizeFOV(sSlot.cont. unit.stats().moveRange);
-            Minimap.inst.Show();
+            { 
+            //     Minimap.inst.ResizeFOV(sSlot.cont. unit.stats().moveRange);
+            // Minimap.inst.Show();
                 BattleTicker.inst.Type("Preparing Move...");
             }
             CamFollow.inst.Focus(sSlot.cont. unit.transform,()=>
@@ -130,7 +131,7 @@ public class UnitMover : Singleton<UnitMover>
         if(!slot.isBoat){
             selectedUnit.transform.SetParent(null);
         }
-         Minimap.inst.Hide();
+         //Minimap.inst.Hide();
         GameManager.inst.ChangeGameState(GameState.UNITMOVE);
         CamFollow.inst.target =  selectedUnit.transform;
         Cursor.lockState = CursorLockMode.Locked;

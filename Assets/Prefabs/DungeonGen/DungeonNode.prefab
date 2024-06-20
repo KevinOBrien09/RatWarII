@@ -145,6 +145,20 @@ MonoBehaviour:
   spawnPoint: {fileID: 5183120452575869890}
   isHall: 0
   rayDist: 50
+  posMat:
+    list:
+    - Key: 0
+      Value: {fileID: 2100000, guid: e337fc37c353efa4dbc2bd04076e1246, type: 2}
+    - Key: 1
+      Value: {fileID: 2100000, guid: 410ca8fd0dc7fc64ebbe32707f061ad6, type: 2}
+    - Key: 2
+      Value: {fileID: 2100000, guid: 36e62a2952da19b44984d53478d9f0e5, type: 2}
+    - Key: 3
+      Value: {fileID: 2100000, guid: 1d097a99613314c45922f8211e3f0f7c, type: 2}
+    - Key: 4
+      Value: {fileID: 2100000, guid: acc884ceceb55794ea95d774b41a4b76, type: 2}
+    keyCollision: 0
+  meshRenderer: {fileID: 5183120452424350255}
 --- !u!65 &1956725805246451363
 BoxCollider:
   m_ObjectHideFlags: 0

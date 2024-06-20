@@ -37,7 +37,7 @@ public class ActionMenu : Singleton<ActionMenu>
 
         if(!FUCKOFF)
         {
-            Minimap.inst.Hide();
+          //  Minimap.inst.Hide();
             slot = s;
             CamFollow.inst.Focus(s.cont.unit.transform,()=>
             { 

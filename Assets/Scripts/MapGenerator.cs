@@ -23,8 +23,8 @@ public class MapGenerator : Singleton<MapGenerator>
     public void BeginGeneration(LocationInfo LI)
     {
         if(LI != null){
-            genGrid.ResizeGrid(LI.mapSize);
-            MapManager.inst.map.ResizeGrid(LI.mapSize);
+          //  genGrid.ResizeGrid(LI.mapSize);
+           // MapManager.inst.map.ResizeGrid(LI.mapSize);
             generating = true;
             brain = Instantiate(LI.brain);
        
@@ -44,8 +44,21 @@ public class MapGenerator : Singleton<MapGenerator>
 
     public void WrapUp()
     {
-        generating = false;
-        GameManager.inst.GameSetUp();
+        StartCoroutine(q());
+        IEnumerator q(){
+            //MapManager.inst.map.surface.BuildNavMesh();
+            // foreach (var item in MapManager.inst.allSlots)
+            // {
+            //     if(item.surface != null){
+            //         item.surface.BuildNavMesh();
+            //     }
+            // }
+            yield return new WaitForSeconds(.3f);
+            generating = false;
+            GameManager.inst.GameSetUp();
+            
+        }
+       
         // Destroy(brain.gameObject);
         // Destroy(gameObject);
     }

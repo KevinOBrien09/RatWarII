@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using UnityEngine.EventSystems;
 public enum GameState{PLAYERHOVER,PLAYERUI,PLAYERSELECT, UNITMOVE,ENEMYTURN,INTERACT}
 public class GameManager : Singleton<GameManager>
@@ -64,11 +65,12 @@ public class GameManager : Singleton<GameManager>
         {
             while(MapGenerator.inst.generating)
             {yield return null;}
-            MapManager.inst.InitStartRoom();
+            //MapManager.inst.InitStartRoom();
             if(!doNotGenObjective){
                 ObjectiveManager.inst.GenerateObjective();
             }
-            CreateStartingUnits();
+            CreateOverworldAndBattleUnits();
+            //CreateStartingUnits();
             if(MapGenerator.inst.brain != null)
             {
                 if(MapGenerator.inst.brain.overrideLocationInfoMusic != null)
@@ -92,34 +94,66 @@ public class GameManager : Singleton<GameManager>
                 }
             }
 
-                  MusicManager.inst.ChangeAmbience( LocationManager.inst.locationTravelingTo.ambience.audioClip);
+            MusicManager.inst.ChangeAmbience( LocationManager.inst.locationTravelingTo.ambience.audioClip);
+            // PartyController.inst.GrabUnits();    
+            BattleManager.inst.overworld.SetActive(true);
+            MapManager.inst.map.gameObject.SetActive(false);
+            foreach (var item in BattleManager.inst.playerUnits)
+            {
+                item.gameObject.SetActive(false);
                 
-            BattleManager.inst.Begin();
+            }
+            PartyController.inst.TakeControl();  
+            //BattleManager.inst.Begin();
 
 
             BlackFade.inst.FadeOut();
        }
     }
 
-
-    public void CreateStartingUnits()
-    {
-        List<Slot> shuffle = MapManager.inst.StartingRadius();
+    public void CreateOverworldAndBattleUnits(){
+        
         if(!GameManager.inst.loadFromFile)
         {
-            for (int i = 0; i < 3; i++)
-            { UnitFactory.inst. CreatePlayerUnit(shuffle[i]);}
+            List<Character> chars = new List<Character>();
+            int howMany = 3;
+            for (int i = 0; i < howMany; i++)
+            {
+                Character c = CharacterBuilder.inst.GenerateCharacter();
+                chars.Add(c);
+                
+            }
+            int w = 0;
+            List<Slot> s = MapManager.inst.map.startRoom.slots;
+            System.Random rng = new System.Random();
+            var r = s.OrderBy(_ => rng.Next()).ToList();
+            foreach (var item in chars)
+            {
+                
+                Unit u = UnitFactory.inst. CreatePlayerUnit(r[w],item);
+                OverworldUnit o = UnitFactory.inst.CreateOverworldUnit(item);
+               
+                u.overworldUnit = o;
+                o.battleUnit = u;
+                PartyController.inst.playerUnits.Add(o);
+                w ++;
+            }
+
+
+
         }
         else
         {
-            int i = 0;
             foreach (var item in  PartyManager .inst.parties[PartyManager .inst.currentParty]. members)
             {
-                UnitFactory.inst.CreatePlayerUnit(shuffle[i],item.Value.character);
-                i++;
+                UnitFactory.inst.CreatePlayerUnit(null,item.Value.character);
+              
             }
         }
     }
+
+
+  
    
     
     public void ChangeGameState(GameState newGameState)

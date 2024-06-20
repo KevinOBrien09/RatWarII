@@ -14,5 +14,6 @@ public class StartingStats : ScriptableObject
     public int moveRange;
     public Skill bnbSkill;
     public List<Skill> otherSkills = new List<Skill>();
+    public BattlePosition battlePosition;
 
 }

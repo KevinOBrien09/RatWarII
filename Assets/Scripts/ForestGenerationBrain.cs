@@ -40,6 +40,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
     public Material wallMat;
     public GameObject tree;
     public GameObject ruins;
+    public SpecialSlot prisionBar,lever;
     public override void Generate(LocationInfo li = null)
     {
         MapGenerator.inst.genGrid.fNodeRadius = roomSizeDict[GenerationRoomType.NORMAL].x/2;
@@ -103,16 +104,13 @@ public class ForestGenerationBrain : MapGeneratorBrain
         }
         else
         {
-
             foreach (var item in ogList)
             {
                 if(!item.isBlocked && !filtered.Contains(item)){
                     Spawn(blockage,item);
                 }
             }
-           
             return (filtered,startEnd.n1,startEnd.n2);
-            
         }
         Debug.LogAssertion("LIST IS NULL!!!");
         return (null,null,null);
@@ -123,15 +121,14 @@ public class ForestGenerationBrain : MapGeneratorBrain
         {
             foreach (var item in gos)
             {Destroy(item.gameObject);}
-            
-          
             MapGenerator.inst.genGrid.UpdateGrid();
         }
     }
 
 
-    public void SpawnDungeonNodes(List<Node> layout){
-   foreach (var item in layout)
+    public void SpawnDungeonNodes(List<Node> layout)
+    {
+        foreach (var item in layout)
         {
             DungeonNode dn = Instantiate(dungeonNodePrefab,item.vPosition,Quaternion.identity);
             dn.originalNode = item;
@@ -221,7 +218,6 @@ public class ForestGenerationBrain : MapGeneratorBrain
 
     public void SpawnSpacers() /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     { 
-
         StartCoroutine(q());
         IEnumerator q()
         {
@@ -232,6 +228,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
             {
                 GameObject spacer = Instantiate(roomSpacerPrefab,item.spawnPoint.position,Quaternion.identity);
                 Room r = item.gameObject.AddComponent<Room>();
+                r.dungNode = item;
                 r.Init(i);
                 r.roomType = item.roomType;
                 dict.Add(spacer,r);
@@ -239,7 +236,6 @@ public class ForestGenerationBrain : MapGeneratorBrain
                 spacers.Add(spacer,v );
                 i++;
             }
-
             MapGenerator.inst.genGrid.UpdateGrid();
             GetWalledSlots();
             yield return new WaitForSeconds(.1f);
@@ -248,72 +244,53 @@ public class ForestGenerationBrain : MapGeneratorBrain
                 Vector2 v = item.Value;
                 item.Key.transform.localScale = new Vector3(v.x,1,v.y);
             }
-
             MapGenerator.inst.genGrid.enabled = false;
             yield return new WaitForSeconds(.1f);
+            foreach (var item in dict)
+            { item.Value.SetRoomPosition(); }
             SpawnSlots(dict);
             MapManager.inst.map.UpdateGrid();
             yield return new WaitForSeconds(.1f);
             foreach (var item in MapManager.inst.map.rooms)
-            {
-                item.SortAnchors();
-                
-            }
+            { item.SortAnchors(); }
             PerimeterSlots();
             MapManager.inst.map.UpdateGrid();
             yield return new WaitForSeconds(.1f);
-        
-            if(CheckIfValid()){
-                yield return new WaitForSeconds(.1f);
-            
-                AssignStartEndRooms();
-                yield return new WaitForEndOfFrame();
-                //BordersAndDoors();
-                RoomContent();
-                foreach (var item in spacers)
-                {  
-                    Destroy(item.Key);
-                }
-                foreach (var item in gos)
-                {
-                    Destroy(item.gameObject);
-                }
-                BuildBounds();
-                BattleManager.inst.hasAmbush = true;
-                BattleManager.inst. iterationsTilAmbush = 2;
-                UnitFactory.inst.enemies =new List<DefinedCharacter>(locationInfo.enemies) ;
-                //Random.Range(5,10);
-                foreach (var item in walledGenSlots)
-                {
-                    SideTerrain st =   Instantiate(sideTerrainPrefab,item.vPosition,Quaternion.identity);
-                    st.Init();
-                }
-                yield return new WaitForEndOfFrame();
-                MapManager.inst.map.UpdateGrid();
-                MapGenerator.inst.WrapUp();
-            }
-            else
+            BordersAndDoors();
+            yield return new WaitForSeconds(.1f);
+            AssignStartEndRooms();
+            yield return new WaitForEndOfFrame();
+            RoomContent();
+            foreach (var item in spacers)
+            { Destroy(item.Key);  }
+            foreach (var item in gos)
+            { Destroy(item.gameObject); }
+            BuildBounds();
+            BattleManager.inst.hasAmbush = true;
+            BattleManager.inst. iterationsTilAmbush = 2;
+            UnitFactory.inst.enemies =new List<DefinedCharacter>(locationInfo.enemies);
+            foreach (var item in walledGenSlots)
             {
-                Debug.LogAssertion("NOT ALL SLOTS ARE ACCESSIBILE!! RESTTING!!");
-                Reset();
+                SideTerrain st =   Instantiate(sideTerrainPrefab,item.vPosition,Quaternion.identity);
+                st.Init();
             }
-            
+            yield return new WaitForEndOfFrame();
+            MapManager.inst.map.UpdateGrid();
+            MapGenerator.inst.WrapUp();
         }
     }
 
-    public void GetWalledSlots(){
+    public void GetWalledSlots()
+    {
         foreach (var item in  MapGenerator.inst.genGrid.NodeArray)
         {
-            if(item.isBlocked){
-                walledGenSlots .Add(item);
-            }
-            
+            if(item.isBlocked)
+            { walledGenSlots .Add(item); }
         }
     }
 
     void SpawnSlots(  Dictionary<GameObject,Room> dict)
     {
-       
         foreach (var item in  MapManager.inst.map.NodeArray)
         {
             var g = Physics.OverlapSphere(item.vPosition,.1f,layerMask:reAlignMask);
@@ -321,62 +298,43 @@ public class ForestGenerationBrain : MapGeneratorBrain
             if(g.Length == 1)
             {
                 Room r = dict[g[0].gameObject];
-                if(r == null){
-                    Debug.LogAssertion("THE ROOM IS NULL!!!");
-                
-                }
+                if(r == null)
+                { Debug.LogAssertion("THE ROOM IS NULL!!!"); }
                 int i =  GetIdUsingPerlin(item.iGridX, item.iGridY);
                 CreateSlot(item, r,i);
-            
-              
             }
             else if(g.Length > 1)
             {Debug.LogAssertion("TWO OVERLAPPING SLOT COLLIDERS!!!");}
             else
-            {    
-                CreateWall(item);
-             
-            }
+            { CreateWall(item); }
         }
 
         foreach (var item in dict)
         {MapManager.inst.map.rooms. Add(item.Value);}
     }
 
-    void CreateWall(Node item){
-           Wall w = null;
-             
-            
-                // if(MapManager.inst.canGivePremadeWall()){
-                //     w = MapManager.inst.GiveWall();
-                //     w.gameObject.SetActive(true);
-                //     w.transform.SetParent(null);
-                //     w.transform.position = item.vPosition;
-                //     w.transform.rotation = Quaternion.identity;
-                // }
-                // else{
-                  w=     Instantiate(wall,item.vPosition,Quaternion.identity);
-             // }
-                ForestWall fw = w as ForestWall;
-                fw.ApplyDeco();
-                w.ChangeMat(wallMat); 
+    void CreateWall(Node item)
+    {
+        Wall w = null;
+        w = Instantiate(wall,item.vPosition,Quaternion.identity);
+        ForestWall fw = w as ForestWall;
+        fw.ApplyDeco();
+        w.ChangeMat(wallMat); 
     }
-
- 
-
+    
     void CreateSlot(Node item, Room r,int i)
     {
         Slot s = null;
-        if(MapManager.inst.canGivePremadeSlot()){
+        if(MapManager.inst.canGivePremadeSlot())
+        {
             s = MapManager.inst.GivePremade();
             s.gameObject.SetActive(true);
             s.transform.SetParent(null);
             s.transform.position = item.vPosition;
             s.transform.rotation = Quaternion.identity;
         }
-        else{
-            s = Instantiate(slotPrefab,item.vPosition,Quaternion.identity);
-      }
+        else
+        {s = Instantiate(slotPrefab,item.vPosition,Quaternion.identity);}
        
         r.slots.Add(s);
         s.gameObject.name = r.roomID +"|"+r.slots.Count;
@@ -385,7 +343,6 @@ public class ForestGenerationBrain : MapGeneratorBrain
         item.slot = s;
         s.node = item;
         s.transform.SetParent(r.transform);
-        
         s.mesh.material = materialDictionary[i];
     }
 
@@ -394,7 +351,6 @@ public class ForestGenerationBrain : MapGeneratorBrain
 
     void PerimeterSlots()
     {
-     
         foreach (var item in  MapManager.inst.allSlots)
         {
             List<Direction> dirs = item.func.CheckIfSideSlot();
@@ -402,28 +358,30 @@ public class ForestGenerationBrain : MapGeneratorBrain
             {
                 if(!perimeterSlots.Contains(item))
                 {
-                    if(item.gameObject.activeSelf){
-                        if(dirs.Count == 1){
-                        perimeterSlots.Add(item);
-                        if(!dirs.Contains(Direction.DOWN)){
-                            GameObject g = Instantiate(tree,item.transform.position,Quaternion.identity);
-                            g.transform.rotation = Quaternion.Euler(  g.transform.rotation.eulerAngles.x,Random.Range(0,360), g.transform.rotation.eulerAngles.z);
-                            int i = Random.Range(0,g.transform.childCount);
-                            GameObject bush =  g.transform.GetChild(i).gameObject;
-                            bush.SetActive(true);
+                    if(item.gameObject.activeSelf)
+                    {
+                        if(dirs.Count == 1)
+                        {
+                            perimeterSlots.Add(item);
+                            if(!dirs.Contains(Direction.DOWN)){
+                                GameObject g = Instantiate(tree,item.transform.position,Quaternion.identity);
+                                g.transform.rotation = Quaternion.Euler(  g.transform.rotation.eulerAngles.x,Random.Range(0,360), g.transform.rotation.eulerAngles.z);
+                                int i = Random.Range(0,g.transform.childCount);
+                                GameObject bush =  g.transform.GetChild(i).gameObject;
+                                bush.SetActive(true);
+                                
+                                bush.GetComponent<SortingGroup>().sortingOrder = -item.node.iGridX;
+                            }
+                            item.IsWall();
+                            Wall w = Instantiate(wall,item.transform.position,Quaternion.identity);
+                            ForestWall fw = w as ForestWall;
+                            fw.ApplyDeco();
+                            w.ChangeMat(wallMat);
+                            item.room.wallDict[dirs[0]].Add(w);
+                            w.transform.SetParent(item.room.transform);
+                            item.gameObject.SetActive(false);
                             
-                            bush.GetComponent<SortingGroup>().sortingOrder = -item.node.iGridX;
                         }
-                        item.IsWall();
-                        Wall w = Instantiate(wall,item.transform.position,Quaternion.identity);
-                        ForestWall fw = w as ForestWall;
-                        fw.ApplyDeco();
-                        w.ChangeMat(wallMat);
-                        item.room.wallDict[dirs[0]].Add(w);
-                        w.transform.SetParent(item.room.transform);
-                        item.gameObject.SetActive(false);
-                        
-                    }
                     }
                     
                 }
@@ -443,58 +401,68 @@ public class ForestGenerationBrain : MapGeneratorBrain
         }
     }
 
-    public bool CheckIfValid()
+
+
+    public override void Reset()
     {
-        // Slot s = MapManager.inst.map.rooms[0].RandomSlot();
-        // bool b = (bool)MapGenerator.inst.genGrid;
-        // Debug.Log("b:" + b);
-        // List<Slot>  filteredSlots = s.func .FilterUnadjacents(MapManager.inst.allSlots,new List<Slot>(),true);
-        // foreach (var item in MapManager.inst.allSlots )
-        // {
-        //     if(!filteredSlots.Contains(item) && !perimeterSlots.Contains(item))
-        //     {
-                
-               
-        //         return false;
-        //     }
-            
-        // }
-      
-        // bool playerSelectedRetrevial = GameManager.inst.chosenObjective == Objective.ObjectiveEnum.RETRIEVAL && GameManager.inst.chosenQuest;
-        // bool debugSelectedRetrevial = ObjectiveManager.inst.predecideObjective && ObjectiveManager.inst.predecidedObjective == Objective.ObjectiveEnum.RETRIEVAL;
-        // if(playerSelectedRetrevial |debugSelectedRetrevial)
-        // {
-        //     if(MapManager.inst.map.rooms.Count <= 4)
-        //     {
-        //         Debug.LogAssertion("NOT ENOUGH ROOMS FOR RETRIEVAL MISSION");
-        //         Reset();
-        //         return false;
-        //     }
-
-        // }
-
-        return true;
-    }
-
-    public override void Reset(){
         Debug.Log("RESET");
         if(!debug){
             StopAllCoroutines();
             BattleManager.inst.StopAllCoroutines();
             SceneManager.LoadScene("Arena");
-        }
+         }
 
     }
-
-
+    
     void AssignStartEndRooms()
     {
-        (Room,Room) r = FurthestTwoRooms(MapManager.inst.map.rooms);
-        MapManager.inst.map.AssignStartEnd(r.Item1,r.Item2);
-      
+        List<Room> rooms = new List<Room>();
+        foreach (var item in MapManager.inst.map.rooms)
+        {
+            if(item.roomPosition == Room.RoomPosition.ONE_ENT){
+                rooms.Add(item);
+            }
+        }
+
+        if(rooms.Count == 1 | rooms.Count == 0){
+            rooms =  MapManager.inst.map.rooms;
+            Debug.LogWarning("Not enough 1 enterance rooms in map, failsafe triggered!");
+        }
+
+
+        (Room,Room) r = FurthestTwoRooms(rooms);
+        Room start = r.Item1;
+        Room end = r.Item2;
+        MapManager.inst.map.AssignStartEnd(start,end);
+        
+        Instantiate(ruins,start.anchors[Room.RoomAnchors.MIDDLE].transform.position,Quaternion.identity);
+        Instantiate(ruins,end.anchors[Room.RoomAnchors.MIDDLE].transform.position,Quaternion.identity);
+        Debug.Log( end.borders.Count);
+        foreach (var item in end.borders)
+        {
+            foreach (var slot in item.slots)
+            {
+                slot.MakeSpecial(prisionBar);
+                //Instantiate(ruins,slot.transform.position,Quaternion.identity);
+            }   
+        }
+        List<Room> rq = new List<Room>();
+        foreach (var item in MapManager.inst.map.rooms)
+        {
+            if(item != start && item != end)
+            { rq.Add(item); }
+        }
+
+        List<Room> XD = new List<Room>(rq);
+        System.Random rng = new System.Random();
+        XD = new List<Room>(XD.OrderBy(_ => rng.Next()).ToList());
+        int leverCount = 3;
+        for (int i = 0; i < leverCount; i++)
+        {
+            XD[i].RandomSlot().MakeSpecial(lever);
+        }
     }
-
-
+    
     void BordersAndDoors()
     {
         List<Slot> borderSlots = new List<Slot>();
@@ -510,7 +478,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
                 int id = int.Parse(a.ToString()+b.ToString());
                 if(!borderDict.ContainsKey(id))
                 {
-                    Border border =  Instantiate(borderPrefab);
+                    Border border = Instantiate(borderPrefab);
                     border.borderID = id;
                     border.roomA = room;
                     border.roomB = bRoom;
@@ -541,17 +509,17 @@ public class ForestGenerationBrain : MapGeneratorBrain
             t.Add(doorSlotA.transform);
             t.Add(doorSlotB.transform);
           
-            s.Remove(doorSlotA);
-            s.Remove(doorSlotB);
-            foreach (var slot in s)
-            {
-                Wall w = Instantiate(wall,slot.transform.position,Quaternion.identity);
-                border.walls.Add(w);
-                slot.IsWall();
-            }
-            Door door =  Instantiate(doorPrefab,MiscFunctions.FindCenterOfTransforms(t),Quaternion.identity);
-            door.Init(border,doorSlotA,doorSlotB);
-            border.doors.Add(door);
+            // s.Remove(doorSlotA);
+            // s.Remove(doorSlotB);
+            // foreach (var slot in s)
+            // {
+            //     Wall w = Instantiate(wall,slot.transform.position,Quaternion.identity);
+            //     border.walls.Add(w);
+            //     slot.IsWall();
+            // }
+            // Door door =  Instantiate(doorPrefab,MiscFunctions.FindCenterOfTransforms(t),Quaternion.identity);
+            // door.Init(border,doorSlotA,doorSlotB);
+            // border.doors.Add(door);
         }
     }
 
@@ -579,8 +547,11 @@ public class ForestGenerationBrain : MapGeneratorBrain
         {
             int i = Random.Range(0,10);
             if(i == 5){
-               Slot s =   MapManager.inst.RandomSlot();
-                s.MakeSpecial(grass);
+                Slot s =   MapManager.inst.RandomSlot();
+                if(s.cont.walkable()){
+                    s.MakeSpecial(grass);
+                }
+                
             }
         }
 
@@ -588,23 +559,25 @@ public class ForestGenerationBrain : MapGeneratorBrain
 
         foreach (var item in MapManager.inst.map.rooms)
         {
-            if(MiscFunctions.FiftyFifty()){
+            if(MiscFunctions.FiftyFifty())
+            {
                 item.AddRoomContent();
-        
                 Slot s = item.RandomSlot();
-                s.cont.wall = true;
-                s.MakeSpecial(mushrooms);
-                Transform t = s.cont.specialSlot .transform.GetChild(0);
-                
-                MiscFunctions.RandomYRotation(t);
+                if(s.cont.walkable())
+                {
+                    s.cont.wall = true;
+                    s.MakeSpecial(mushrooms);
+                    Transform t = s.cont.specialSlot .transform.GetChild(0);
+                    MiscFunctions.RandomYRotation(t);
+                }
             }
 
-            if(item.roomID % 2 == 0 && item.roomType == GenerationRoomType.NORMAL)
+            if(item.roomPosition == Room.RoomPosition.ONE_ENT)
             {
-                if(10 >= Random.Range(0,100))
-                {
-                    Instantiate(ruins,MapManager.inst.map.RandomRoom().anchors[Room.RoomAnchors.MIDDLE].transform.position,Quaternion.identity); 
-                }
+                // if(10 >= Random.Range(0,100))
+                // {
+                    //Instantiate(ruins,item.anchors[Room.RoomAnchors.MIDDLE].transform.position,Quaternion.identity); 
+              //  }
             }
         }
     }
@@ -650,10 +623,7 @@ public class ForestGenerationBrain : MapGeneratorBrain
         }
         return (n1,n2);
     }
-
- 
- 
-
+    
     int GetIdUsingPerlin(int x, int y)
     {
        

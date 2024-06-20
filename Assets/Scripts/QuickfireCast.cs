@@ -65,7 +65,7 @@ public class QuickfireCast : SkillCastBehaviour
     arcHeight = arcHeight * distance;
     // This is one divided by the total flight duration, to help convert it to 0-1 progress.
     _stepScale = arrowSpeed / distance;
-    targetPos = new Vector3(args.targetSlot.transform.position.x,-1.4f,args.targetSlot.transform.position.z);
+    targetPos = new Vector3(args.targetSlot.transform.position.x,.5f,args.targetSlot.transform.position.z);
     _arrow = arrow.transform;
    
     //    arrow.transform.DOMove(new Vector3(args.targetSlot.transform.position.x,-1.5f,args.targetSlot.transform.position.z) ,.25f);

@@ -8,8 +8,10 @@ using TMPro;
 public class BattleTicker : Singleton<BattleTicker>
 {
     public TMP_Typewriter typewriter;
+    public GameObject parent;
     void Start()
-    {Wipe();}
+    {Wipe();
+    parent.SetActive(false);}
 
     public void Type(string s)
     {

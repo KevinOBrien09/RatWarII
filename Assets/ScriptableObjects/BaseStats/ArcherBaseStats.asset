@@ -22,3 +22,6 @@ MonoBehaviour:
   otherSkills:
   - {fileID: 11400000, guid: 9c5002f7d21ac1d408daf22adcaffa93, type: 2}
   - {fileID: 11400000, guid: 16917c1a7be7b06458702f59123812f8, type: 2}
+  battlePosition:
+    x: 1
+    y: 2

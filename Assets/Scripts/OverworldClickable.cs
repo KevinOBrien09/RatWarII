@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+public class OverworldClickable: MonoBehaviour,IPointerClickHandler
+{
+   	public OverworldUnit owner;
+ 	public void OnPointerClick(PointerEventData eventData)
+    {
+       SlotInfoDisplay.inst.ApplyUnit(owner. battleUnit);
+    }
+}

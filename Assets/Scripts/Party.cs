@@ -9,8 +9,58 @@ public class CharacterHolder{
     public Character character;
     public string lastPartyID;
     public Vector2 mapTileID;
-  
     public int position;
+    public Vector2 battlePosition;
+}
+public enum XBattlePos{RIGHT,CENTER,LEFT}
+public enum YBattlePos{FORWARD,MIDDLE,BACK}
+[System.Serializable]
+public struct BattlePosition{
+    
+    public XBattlePos x;
+    public YBattlePos y;
+
+    public BattlePosition(BattlePosition bp){
+        x = bp.x;
+        y = bp.y;
+    }
+
+    public Vector2 ToVector2()
+    { return new Vector2(XToFloat(x),YToFloat(y)); }
+
+    public  float XToFloat(XBattlePos x){
+        switch(x)
+        {
+            case XBattlePos.LEFT:
+            return 0;
+           
+            case XBattlePos.CENTER:
+            return 1;
+            
+            case XBattlePos.RIGHT:
+            return 2;
+            
+        }
+        Debug.LogAssertion("AHH");
+        return 0;
+    }
+
+    public  float YToFloat(YBattlePos y){
+        switch(y)
+        {
+            case YBattlePos.FORWARD:
+            return 0;
+           
+            case YBattlePos.MIDDLE:
+            return 1;
+            
+            case YBattlePos.BACK:
+            return 2;
+            
+        }
+        Debug.LogAssertion("AHH");
+        return 0;
+    }
 }
 
 [System.Serializable]
@@ -51,9 +101,9 @@ public class Party
     public string ID;
     public string partyName;
     public GenericDictionary<string, CharacterHolder> members = new GenericDictionary<string, CharacterHolder>();
-
+    public GenericDictionary<Vector2,string> battlePositions = new GenericDictionary<Vector2,string>();
  // public UnityEvent onPartyEdit;
-    public int partySize = 3;
+    public int partySize = 4;
 
     public void ChangeMapLocation(Vector2 v){
         mapTileID = v;
@@ -128,10 +178,20 @@ public class Party
     {
         if(members.ContainsKey(c.ID) )
         {
+            CharacterHolder oldHolder = members[c.ID];
+
             CharacterHolder holder = new CharacterHolder();
             holder.mapTileID = LocationManager.inst.currentLocation;
             holder.character = c;
             holder.position = -5;
+            if(battlePositions.ContainsKey(oldHolder.battlePosition)){
+                battlePositions.Remove(oldHolder.battlePosition);
+            }
+            else{
+                Debug.LogAssertion( c.ID + ":NOT IN BP DICTIONARY: " + oldHolder.battlePosition );
+            }
+           
+            holder.battlePosition = CharacterBuilder.inst.jobDict[ c.job].battlePosition.ToVector2();
             PartyManager.inst.benched.Add(c.ID,holder);
             members.Remove(c.ID);
             InvokePartyEdit();
@@ -157,9 +217,49 @@ public class Party
             holder.mapTileID = LocationManager.inst.currentLocation;
             holder.character = c;
             holder.position = i;
+            Vector2 bp = GetValidBattlePosition(CharacterBuilder.inst.jobDict[ c.job].battlePosition);
+            Debug.Log(bp + "bp");
+            if( !battlePositions.ContainsKey(bp)){
+battlePositions.Add(bp,c.ID);
+            }
+            
+            holder.battlePosition = bp;
             members.Add(c.ID,holder);
             PartyManager.inst.benched.Remove(c.ID);
             InvokePartyEdit();
+        }
+    }
+
+    public Vector2 GetValidBattlePosition(BattlePosition bp)
+    {
+        Vector2 v = bp.ToVector2();
+        if(!battlePositions.ContainsKey(v)){
+            return v;
+        }
+        else
+        {
+            float oldY = v.y;
+            foreach(XBattlePos x in System.Enum.GetValues(typeof(XBattlePos)))
+            {
+                Vector2 XD = new Vector2(bp.XToFloat(x),oldY);
+                if(!battlePositions.ContainsKey(XD)) 
+                {
+                    return  XD;
+                }
+                
+            } // check if slot in preffered vertical pos
+            foreach(YBattlePos y in System.Enum.GetValues(typeof(YBattlePos))) //if no valid preffered vert pos just place it anywhere valid
+            {
+                foreach(XBattlePos x in System.Enum.GetValues(typeof(XBattlePos)))
+                {
+                    Vector2 XD = new Vector2(bp.XToFloat(x),bp.YToFloat(y));
+                    if(!battlePositions.ContainsKey(XD)) 
+                    { return  XD; }
+                }
+            }
+
+            Debug.LogAssertion("NO VALID START SLOTS!?1");
+            return Vector2.zero;
         }
     }
 
@@ -169,6 +269,7 @@ public class Party
           InvokePartyEdit();
     }
 
+    
 
     public int lastOpenPosition()
     {

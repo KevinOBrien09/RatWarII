@@ -13,6 +13,8 @@ public class WorldInteractable : WorldTile
     bool hasOutline,hasHoverObject;
     public UnityEvent a;
     public float camFOV = 40;
+    public bool disable;
+    public SoundData error;
    IEnumerator Start()
     {
         hasOutline = outline != null;
@@ -25,6 +27,9 @@ public class WorldInteractable : WorldTile
     }
     public override void Click()
     {
+        if(disable)
+        {AudioManager.inst.GetSoundEffect().Play(error);
+            return;}
         if(  HubStateHandler.inst.currentState ==  HubStateHandler.HubState.HOVER&& !WorldHubCamera.inst.fuckOff)
         {  
             WorldHubCamera.inst.fuckOff = true;

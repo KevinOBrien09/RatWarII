@@ -132,10 +132,13 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
         
         foreach (var item in pTabs)
         { item.Value.ChangeBorderColour(Color.black); }
+        if(pTabs.Count > 0){
         if(PartyManager.inst.parties.ContainsKey(editingParty .ID))
         { pTabs[editingParty .ID].ChangeBorderColour( pTabs[editingParty .ID].yellow); }
         else
         { pTabs[PartyManager.inst.currentParty].ChangeBorderColour( pTabs[PartyManager.inst.currentParty].yellow); }
+        }
+     
         
             
         HubCharacterDisplay.inst.RemoveListeners();
@@ -218,10 +221,11 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
             p.PartyToBench(item.Value.character);
         }
      
-        PartyManager.inst.RemoveParty(p);
+ 
         Destroy(pTabs[p.ID].gameObject);
         pTabs.Remove(p.ID);
-             KillTabs();
+        PartyManager.inst.RemoveParty(p);
+        KillTabs();
         SpawnTabs();      
         LeaveEdit();
     }

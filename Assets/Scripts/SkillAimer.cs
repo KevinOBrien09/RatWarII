@@ -50,7 +50,7 @@ public class SkillAimer : Singleton<SkillAimer>
                item.ChangeColour(item.normalColour);
                     
                 }
-                Minimap.inst.Hide();
+             //   Minimap.inst.Hide();
                 BattleManager.inst.currentUnit.slot.DisableHover();
                 castDecided = true;  
                 BattleTicker.inst.Type(_skill.skillName);
@@ -135,8 +135,8 @@ public class SkillAimer : Singleton<SkillAimer>
     {
         if(BattleManager.inst.currentUnit.side == Side.PLAYER){
             currentState = Aim.PROJECTILE;
-                Minimap.inst.ResizeFOV(skill.howManyTiles);
-            Minimap.inst.Show();
+            //     Minimap.inst.ResizeFOV(skill.howManyTiles);
+            // Minimap.inst.Show();
             CamFollow.inst.ChangeCameraState(CameraState.FREE);
             Cursor.lockState = CursorLockMode.Confined;
        
@@ -193,10 +193,10 @@ public class SkillAimer : Singleton<SkillAimer>
     public void RadiusAim(RadiusSkill skill)
     {
         currentState = Aim.RADIUS;
-        if(BattleManager.inst.currentUnit.side == Side.PLAYER){
-Minimap.inst.ResizeFOV(skill.radius);
-        Minimap.inst.Show();
-        }
+//         if(BattleManager.inst.currentUnit.side == Side.PLAYER){
+// // Minimap.inst.ResizeFOV(skill.radius);
+// //         Minimap.inst.Show();
+//         }
         
        
         Character casterChar = caster.character;
