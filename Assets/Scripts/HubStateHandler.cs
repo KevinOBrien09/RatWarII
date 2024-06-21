@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 public class HubStateHandler: Singleton<HubStateHandler>
 {
-    public enum HubState {HOVER,QUEST,RECRUIT,ORGANIZER,LEAVE,MAP,INMAPTILE,PARTYEDIT,STATSHEET}
+    public enum HubState {HOVER,QUEST,RECRUIT,ORGANIZER,LEAVE,MAP,INMAPTILE,PARTYEDIT,STATSHEET,BATTLE_POSITIONS}
     public HubState currentState;
 
     public TextMeshProUGUI location,date,state;
@@ -94,6 +94,12 @@ public class HubStateHandler: Singleton<HubStateHandler>
                 CharacterStatSheet.inst.Close();
                 return;
             }
+            if(currentState == HubState.BATTLE_POSITIONS){
+                BackbenchHandler.inst.battlePositionEditor.Close();
+                //CharacterStatSheet.inst.Close();
+                return;
+            }
+           
            
             if(currentState != HubState.HOVER)
             {RetunToHover();}

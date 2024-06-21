@@ -123,13 +123,16 @@ public class GameManager : Singleton<GameManager>
                 chars.Add(c);
                 
             }
+
+            
             int w = 0;
             List<Slot> s = MapManager.inst.map.startRoom.slots;
             System.Random rng = new System.Random();
             var r = s.OrderBy(_ => rng.Next()).ToList();
+            
             foreach (var item in chars)
             {
-                
+                    
                 Unit u = UnitFactory.inst. CreatePlayerUnit(r[w],item);
                 OverworldUnit o = UnitFactory.inst.CreateOverworldUnit(item);
                
@@ -138,17 +141,26 @@ public class GameManager : Singleton<GameManager>
                 PartyController.inst.playerUnits.Add(o);
                 w ++;
             }
-
-
-
+            if(loadFromFile){
+                PartyController.inst.Organize();
+            }
+            
         }
         else
         {
+
+            Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetStartingSlots();
             foreach (var item in  PartyManager .inst.parties[PartyManager .inst.currentParty]. members)
             {
-                UnitFactory.inst.CreatePlayerUnit(null,item.Value.character);
-              
+                Character c = item.Value.character;
+                Unit u = UnitFactory.inst.CreatePlayerUnit(d[item.Value.battlePosition],item.Value.character);
+                OverworldUnit o = UnitFactory.inst.CreateOverworldUnit(c);
+                u.overworldUnit = o;
+                o.battleUnit = u;
+                PartyController.inst.playerUnits.Add(o);
+                 //w ++;
             }
+            PartyController.inst.Organize();
         }
     }
 

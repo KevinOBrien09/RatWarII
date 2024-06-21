@@ -12,7 +12,7 @@ public class CharacterHolder{
     public int position;
     public Vector2 battlePosition;
 }
-public enum XBattlePos{RIGHT,CENTER,LEFT}
+public enum XBattlePos{LEFT,CENTER,RIGHT}
 public enum YBattlePos{FORWARD,MIDDLE,BACK}
 [System.Serializable]
 public struct BattlePosition{
@@ -67,7 +67,7 @@ public struct BattlePosition{
 public class HolderSaveData{
     public CharacterSaveData charSave;
     public Vector2 mapTileID;
-   
+    public Vector2 battlePos;
     public int position;
 }
 
@@ -135,7 +135,8 @@ public class Party
             hsd.mapTileID = mapTileID;
             hsd.position = item.Value.position;
             hsd.charSave = item.Value.character.Save();
-          //  hsd.unitSaveData = PartyManager.inst. GetUnitData(item.Value.character,item.Value);
+            hsd.battlePos = item.Value.battlePosition;
+      
             ips.members.Add(hsd);
         }
         return ips;
@@ -149,13 +150,17 @@ public class Party
         {PartyManager.inst.deadCharacters .Add(c.ID,members[c.ID]);}
 
         if(members.ContainsKey(c.ID))
-        {members.Remove(c.ID);}
+        {
+            battlePositions.Remove(members[c.ID].battlePosition);
+            members.Remove(c.ID);
+        }
         if(members.Count <=0)
         {
             AllMembersDead();
         }
-        
-        SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyManager.inst.PartyUpdateSave());
+      
+        SavePartyEdit();
+        //SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyManager.inst.PartyUpdateSave());
         InvokePartyEdit();
     }
 
@@ -217,10 +222,10 @@ public class Party
             holder.mapTileID = LocationManager.inst.currentLocation;
             holder.character = c;
             holder.position = i;
-            Vector2 bp = GetValidBattlePosition(CharacterBuilder.inst.jobDict[ c.job].battlePosition);
+            Vector2 bp = GetValidBattlePosition(CharacterBuilder.inst.jobDict[c.job].battlePosition);
             Debug.Log(bp + "bp");
             if( !battlePositions.ContainsKey(bp)){
-battlePositions.Add(bp,c.ID);
+                battlePositions.Add(bp,c.ID);
             }
             
             holder.battlePosition = bp;
@@ -268,26 +273,7 @@ battlePositions.Add(bp,c.ID);
         members[c.ID].position = i;     
           InvokePartyEdit();
     }
-
     
-
-    public int lastOpenPosition()
-    {
-        List<CharacterHolder> h = new List<CharacterHolder>();
-        foreach (var item in members)
-        {h.Add(item.Value);}
-
-        for (int i = 0; i < partySize; i++)
-        {
-            if(h.ElementAtOrDefault(i) != null)
-            {
-                if(h[i].position != i)
-                {return i;}
-            }
-        }
-        return 0;
-    }
-
     public void SavePartyEdit() //??
     {SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyManager.inst.PartyUpdateSave()); }
 

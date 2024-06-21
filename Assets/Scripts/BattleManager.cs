@@ -26,6 +26,20 @@ public class BattleManager : Singleton<BattleManager>
     public GameObject overworld;
     public bool inBattle;
     public SoundData enterBattleSlam;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        #if UNITY_EDITOR
+        if(GameManager.inst. loadFromFile && PartyManager.inst.currentParty == ""){
+            Debug.LogWarning("LOADING FROM BATTLEMANAGER");
+            GameManager.inst.Load();
+        }
+        #endif
+
+    }
+
+
     public IEnumerator Start()
     {
         if(!skipFadeIn)
@@ -38,6 +52,21 @@ public class BattleManager : Singleton<BattleManager>
         MapManager.inst.map.Generate();
     }
 
+
+    public void ResetUnitPositions(){
+        Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetStartingSlots();
+        foreach (var item in  playerUnits)
+        {
+            Vector2 v = PartyManager.inst.parties[PartyManager.inst.currentParty].members[item.character.ID].battlePosition;
+            Unit u = item;
+            Slot s = d[v];
+            u.transform.position =  new Vector3(s.transform.position.x,u.transform.position.y ,s.transform.position.z);
+            u.Reposition(s);
+          
+                //w ++;
+        }
+    }
+
  
     public void Begin()
     {
@@ -45,6 +74,7 @@ public class BattleManager : Singleton<BattleManager>
             return;
         }
         inBattle = true;
+        ResetUnitPositions();
         MusicManager.inst.ChangeMusic(LocationManager.inst.locationTravelingTo.battleMusic);
         AudioManager.inst.GetSoundEffect().Play(enterBattleSlam);
         BlackFade.inst.WhiteFlash();

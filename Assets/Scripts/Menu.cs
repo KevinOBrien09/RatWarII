@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 public enum State{ITEM,PARTY,OPTIONS}
 public class Menu : Singleton<Menu>
 {
@@ -14,16 +15,25 @@ public class Menu : Singleton<Menu>
     public List<MenuPartyTab> partyTabs = new List<MenuPartyTab>();
     public MenuStatScreen menuStatScreen;
     public float partyTabOG;
+    public BattlePositionEditor battlePositionEditor;
+    public TextMeshProUGUI partyName;
+    public GameObject otherShit;
     void Start()
     {
         partyTabOG = partyTabHolder.anchoredPosition.x;
         holder.SetActive(false);
         open = false;
         SwapToItemState();
+        if(PartyManager.inst.currentParty != string.Empty){
+            battlePositionEditor.party = PartyManager.inst.parties[PartyManager.inst.currentParty];
+        }
+        partyName.text = "Party:" + battlePositionEditor.party.partyName;
+       
     }
 
     public void SwapToItemState()
     {
+        
         currentState = State.ITEM;
         Apply();
     }
@@ -40,13 +50,23 @@ public class Menu : Singleton<Menu>
             MenuPartyTab mpt = Instantiate(partyTabPrefab,partyTabHolder);
             mpt.Init(item);
             partyTabs.Add(mpt);
+            
         }
+        if(GameManager.inst.loadFromFile){
+            battlePositionEditor.Reset();
+            battlePositionEditor.party = PartyManager.inst.parties[PartyManager.inst.currentParty];
+        
+            battlePositionEditor.SpawnDraggers();
+        }
+       
         Apply();
     }
 
     public void SwapToOptionsState()
     {
+       
         currentState = State.OPTIONS;
+        
         Apply();
     }
 
@@ -70,6 +90,7 @@ public class Menu : Singleton<Menu>
         if(open)
         {
             open = false;  
+           
             holder.SetActive(false);
         }
         else
@@ -82,10 +103,12 @@ public class Menu : Singleton<Menu>
     public void ShowStatScreen(Unit u){
         partyTabHolder.DOAnchorPosX(-875,.2f);
         menuStatScreen.Load(u);
+          otherShit.SetActive(false);
         //-875
     }   
 
     public void HideStateScreen(){
+        otherShit.SetActive(true);
         partyTabHolder.DOAnchorPosX(partyTabOG,.2f);
         menuStatScreen.gameObject.SetActive(false);
     }

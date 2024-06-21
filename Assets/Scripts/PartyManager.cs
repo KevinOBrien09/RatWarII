@@ -104,14 +104,16 @@ public class PartyManager : Singleton<PartyManager>
         p.ID = ips.id;
         p.mapTileID = ips.mapTileID;
         p.partyName = ips.partyName;
+        p.battlePositions = new GenericDictionary<Vector2, string>();
         foreach (var item in ips.members)
         {
             CharacterHolder holder = new CharacterHolder();
             holder.position = item.position;
             holder.mapTileID = item.mapTileID;
             holder.character = CharacterBuilder.inst.GenerateFromSave(item.charSave);
-         
+            holder.battlePosition = item.battlePos;
             p.members.Add(item.charSave.ID,holder); 
+            p.battlePositions.Add(holder.battlePosition,holder.character.ID);
         }
         parties.Add(p.ID,p);
     }
@@ -130,7 +132,7 @@ public class PartyManager : Singleton<PartyManager>
             hsd.mapTileID = item.Value.mapTileID;
             hsd.position = item.Value.position;
             hsd.charSave = item.Value.character.Save();
-            
+            hsd.battlePos = item.Value.battlePosition;
             psd.benched.Add(hsd);
         }
         foreach (var item in deadCharacters)
@@ -139,7 +141,7 @@ public class PartyManager : Singleton<PartyManager>
             hsd.mapTileID = item.Value.mapTileID;
             hsd.position = -10;
             hsd.charSave = item.Value.character. Save();
-           
+            hsd.battlePos = item.Value.battlePosition;
             psd.deceased.Add(hsd);
         }
         return psd;

@@ -22,6 +22,13 @@ public class PartyController : Singleton<PartyController>
     { 
         //playerUnits = new List<Unit>(BattleManager.inst.playerUnits);
     }
+
+    public void Organize(){
+        Party p = PartyManager.inst.parties[PartyManager.inst.currentParty];
+        playerUnits = playerUnits.OrderBy(o=> p.members [ o.battleUnit.character.ID].position).ToList();
+        playerUnits.Reverse();
+    }
+
     public void TakeControl()
     {
     
@@ -40,22 +47,26 @@ public class PartyController : Singleton<PartyController>
         run = true;
     }
 
-    void Update(){
+    void Update()
+    {
         if(run)
         {
-            GetInput();
-            if(firstclick){
-                leader.Move(newPos);
-                OverworldUnit lastGuy = leader;
-                for (int i = 1; i < playerUnits.Count; i++)
+            if(!BattleManager.inst.inBattle)
+            {
+                GetInput();
+                if(firstclick)
                 {
-                    OverworldUnit u = playerUnits[i];
-                    u.followTarget = lastGuy;
-                    u.Move(lastGuy.transform.position);
-                    lastGuy = u;
+                    leader.Move(newPos);
+                    OverworldUnit lastGuy = leader;
+                    for (int i = 1; i < playerUnits.Count; i++)
+                    {
+                        OverworldUnit u = playerUnits[i];
+                        u.followTarget = lastGuy;
+                        u.Move(lastGuy.transform.position);
+                        lastGuy = u;
+                    }
                 }
             }
-            
         }
 
         if(Input.GetKeyDown(KeyCode.Q)){

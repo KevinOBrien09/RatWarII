@@ -22,11 +22,13 @@ public class Breathing : MonoBehaviour
                     yield return new WaitForSeconds(inhaleTime);
                     transform.DOScaleY(full,inhaleTime).OnComplete(()=>
                     {
+                         if(gameObject.activeInHierarchy){
                         StartCoroutine(w());
                         IEnumerator w(){
                             yield return new WaitForSeconds(exhaleTime);
                             Breathe();
                         }
+                         }
                     });
                 }
             });
@@ -39,22 +41,31 @@ public class Breathing : MonoBehaviour
         
         transform.DOScaleY(min,exhaleTime).OnComplete(()=>
         {
-            if(gameObject.activeSelf){
-  StartCoroutine(q());
+            if(gameObject.activeInHierarchy)
+            {
+                StartCoroutine(q());
             }
-            else{
+            else
+            {
                 Debug.LogWarning("Object off no breathing");
             }
           
-            IEnumerator q(){
+            IEnumerator q()
+            {
                 yield return new WaitForSeconds(inhaleTime);
+            
                 transform.DOScaleY(full,inhaleTime).OnComplete(()=>
                 {
+                     if(gameObject.activeInHierarchy){
                     StartCoroutine(w());
-                    IEnumerator w(){
+                    IEnumerator w()
+                    {
                         yield return new WaitForSeconds(exhaleTime);
+                       
                         Breathe();
+                        }
                     }
+                 
                 });
             }
         });

@@ -30,6 +30,7 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
     public UnityEvent onPartyEdit;
     public Party partyToBeDeleted;
     public Character characterToBeDismissed;
+    public BattlePositionEditor battlePositionEditor;
     void Start(){
        rt.DOAnchorPosX(hidden,0);  
        currentPartyRT.DOAnchorPosY(partyHidden,0).OnComplete(()=>{
@@ -310,6 +311,7 @@ public class BackbenchHandler : Singleton<BackbenchHandler>
         
         capacityText.text = tabs.Count +"/12";
     }
+    
 
    
 
