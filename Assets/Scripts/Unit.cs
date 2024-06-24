@@ -25,6 +25,7 @@ public class Unit : MonoBehaviour
     public  ParticleSystemRenderer shieldGraphic,shieldKillRend;
     public ParticleSystem shieldKill,bleedVFX;
     public List<SoundData> systemSounds = new List<SoundData>();
+    public List<SoundData> hitSounds = new List<SoundData>();
     //public bool movedThisTurn;
     public bool inKnockback;
     public bool stunned;
@@ -109,11 +110,11 @@ public class Unit : MonoBehaviour
     }
     public void MoveAlongPath(Queue<Slot> q,Slot finalSlot,UnityAction end = null)
     {    
-        if(currentMoveTokens == baseLineMoveTokens) 
-        {
+        // if(currentMoveTokens == baseLineMoveTokens) 
+        // {
             if(sounds != null)
             {AudioManager.inst.GetSoundEffect().Play(sounds.move);}
-        }
+     //   }
         loop();
         moving = true;
         void loop()
@@ -162,21 +163,21 @@ public class Unit : MonoBehaviour
                 if(side == Side.PLAYER)
                 { 
                    
-                    if(isHostage)
-                    {
-                        if(!ObjectiveManager.inst.CheckIfComplete())
-                        {
+                    // if(isHostage)
+                    // {
+                    //     if(!ObjectiveManager.inst.CheckIfComplete())
+                    //     {
                             
-                            BattleManager.inst.EndTurn(); 
+                    //         BattleManager.inst.EndTurn(); 
                             
-                        }
-                        else{
-                            BattleManager.inst.Win();
-                        }
-                    }
-                    else{
+                    //     }
+                    //     else{
+                    //         BattleManager.inst.Win();
+                    //     }
+                    // }
+                    // else{
                     BattleManager.inst.EndTurn();
-                    }
+                    //}
                    
                        
                               
@@ -224,12 +225,13 @@ public class Unit : MonoBehaviour
         }
 
         CastArgs c= castArgs;
-        Debug.Log(c.caster.name);
+        //Debug.Log(c.caster.name); //bugged
         graphic.RedFlash(()=>
         {
             if(ca)
             {Flip(v);}
-           int d = PostMitDamage(damage);
+            int d = PostMitDamage(damage);
+            AudioManager.inst.GetSoundEffect().Play(hitSounds[Random.Range(0,hitSounds.Count)]);
             health.Hit(d,c);
             
         if(bleed)
@@ -294,11 +296,11 @@ public class Unit : MonoBehaviour
             if(isHostage)
             {
                 BattleManager.inst.lossReason = "The hostage has died.";
-                BattleManager.inst.gameOver = true;
+          
             }
             if(side == Side.ENEMY){
                 if(ObjectiveManager.inst.objective.objectiveEnum == Objective.ObjectiveEnum.CLEARAREA){
-                    ObjectiveManager.inst.CheckIfComplete();
+                    //ObjectiveManager.inst.CheckIfComplete();
                     int i =BattleManager.inst.enemyUnits.Count-1 ;
                     ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" + i + " Left!" );
                 }
@@ -307,17 +309,23 @@ public class Unit : MonoBehaviour
             {
                 if(PartyManager .inst.currentParty != string.Empty)
                 {
-                    PartyManager .inst.parties[PartyManager .inst.currentParty]. KillMember(character);
+                    PartyManager .inst.parties[PartyManager .inst.currentParty].KillMember(character);
                 }
                 else 
                 {
                     Debug.LogWarning("Character died in debug mode, hence there is no save to remove them from. This warning should not happen in build.");
                 }
+
+                PartyController.inst.Kill(this);
           
             }
             dead = true;
             BattleManager.inst.UnitIsDead(this);
             Corpse c =  ObjectPoolManager.inst.Get<Corpse>(ObjectPoolTag.CORPSE);
+            foreach (var item in tempTerrainCreated)
+            {
+                item.Kill();
+            }
              //Instantiate(corpsePrefab,new Vector3(slot. transform.position.x,0,slot. transform.position.z) ,transform.rotation);
             c.Spawn(this,this.slot);
             if(sounds != null)

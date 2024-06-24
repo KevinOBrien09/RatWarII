@@ -108,27 +108,56 @@ public class SkillAimer : Singleton<SkillAimer>
     }
 
     public void Finish(bool wasSkipped = false){
-        validTargets.Clear();
-        BattleManager.inst.ToggleHealthBars(false);
-    
-      //  Debug.Log("Finish");
-        aiming = false;
+      if(!BattleManager.inst.CheckForWin())  {
+
+            validTargets.Clear();
+            BattleManager.inst.ToggleHealthBars(false);
         
-        if(skillCastBehaviour != null){
- Destroy(skillCastBehaviour.gameObject);
-        }
-        else{
-            Debug.LogWarning("Skill cast behaviour was already killed.");
-        }
-       
-        skillCastBehaviour = null;
-        foreach (var item in validSlots)
-        {item.ChangeColour(item.normalColour);}
-        castDecided = false;
-        _skill = null;
-        validSlots.Clear();
-        SkillHandler.inst.  Close();
-        BattleManager.inst.EndTurn(wasSkipped);
+        //  Debug.Log("Finish");
+            aiming = false;
+            
+            if(skillCastBehaviour != null){
+            Destroy(skillCastBehaviour.gameObject);
+            }
+            else{
+                Debug.LogWarning("Skill cast behaviour was already killed.");
+            }
+        
+            skillCastBehaviour = null;
+            foreach (var item in validSlots)
+            {item.ChangeColour(item.normalColour);}
+            castDecided = false;
+            _skill = null;
+            validSlots.Clear();
+            SkillHandler.inst.  Close();
+            BattleManager.inst.EndTurn(wasSkipped);
+
+      }
+      else{
+             validTargets.Clear();
+            BattleManager.inst.ToggleHealthBars(false);
+        
+        //  Debug.Log("Finish");
+            aiming = false;
+            
+            if(skillCastBehaviour != null){
+            Destroy(skillCastBehaviour.gameObject);
+            }
+            else{
+                Debug.LogWarning("Skill cast behaviour was already killed.");
+            }
+        
+            skillCastBehaviour = null;
+            foreach (var item in validSlots)
+            {item.ChangeColour(item.normalColour);}
+            castDecided = false;
+            _skill = null;
+            validSlots.Clear();
+            SkillHandler.inst.  Close();
+            BattleManager.inst.Win();
+      }
+
+      
     }
     
     public void ProjectileAim(ProjectileSkill skill)

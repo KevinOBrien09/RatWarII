@@ -16,13 +16,13 @@ public class CamFollow : Singleton<CamFollow>
     public CharacterController controller;
     public GenericDictionary<Direction,bool> allowedCameraMovement = new GenericDictionary<Direction, bool>();
     public float moveSpeed = 20;
-
+    public Camera cam;
     public bool STOPMOVING,disableEdgeMovement;
     public float baseFOV;
 
     void Start()
     {
-        baseFOV = Camera.main.fieldOfView;
+        baseFOV = cam.fieldOfView;
     }
     
     public void ChangeCameraState(CameraState newState)
@@ -63,16 +63,14 @@ public class CamFollow : Singleton<CamFollow>
             {FreeRoam();}
             else if(CheckCameraState(CameraState.LOCK))
             {LockOn();}
-            if(!SkillAimer.inst.castDecided){
-            Zoom();
-            }
+          
            
         }
         
     }
 
     public void ForceFOV(float fov){
-        Camera.main.DOFieldOfView(fov,.25f);
+       cam.DOFieldOfView(fov,.25f);
     }
 
     public void Focus(Transform newTarget,UnityAction a)
@@ -90,19 +88,16 @@ public class CamFollow : Singleton<CamFollow>
         
     }
 
+     public void FOVChange(float target, UnityAction a){
+        cam.DOFieldOfView(target,.3f).OnComplete(()=>{a.Invoke();});
+    }
+
     public void ZoomOut()
     {
-        Camera.main.DOFieldOfView(baseFOV,.25f);
+       cam.DOFieldOfView(baseFOV,.25f);
     }
     
-    void Zoom(){
-        var fov  = Camera.main.fieldOfView;
- 
-        float i =  InputManager.inst.player.GetAxis("ScrollWheel")/10;
-        fov -=  i * 55;
-        fov = Mathf.Clamp(fov, 16, baseFOV);
-        Camera.main.fieldOfView = fov;
-    }
+   
 
     void LockOn(){
         if(target != null){
@@ -117,7 +112,7 @@ public class CamFollow : Singleton<CamFollow>
     void FreeRoam()
     {  
         
-        if(STOPMOVING)
+        if(STOPMOVING|| !BattleManager.inst.inBattle)
         {return;}
     
         if(InputManager.inst.AnyWASDKeyHeld())

@@ -193,7 +193,7 @@ MonoBehaviour:
   chosenObjective: 0
   doNotGenObjective: 0
   chosenQuest: 0
-  loadFromFile: 0
+  loadFromFile: 1
   saveSlotIndex: 999
 --- !u!114 &8191127639272312099
 MonoBehaviour:

@@ -12,7 +12,7 @@ public class CharacterHolder{
     public int position;
     public Vector2 battlePosition;
 }
-public enum XBattlePos{LEFT,CENTER,RIGHT}
+public enum XBattlePos{FAR_LEFT,LEFT,CENTER,RIGHT,FAR_RIGHT}
 public enum YBattlePos{FORWARD,MIDDLE,BACK}
 [System.Serializable]
 public struct BattlePosition{
@@ -30,15 +30,17 @@ public struct BattlePosition{
 
     public  float XToFloat(XBattlePos x){
         switch(x)
-        {
-            case XBattlePos.LEFT:
+        {   
+            case XBattlePos.FAR_LEFT:
             return 0;
-           
-            case XBattlePos.CENTER:
+            case XBattlePos.LEFT:
             return 1;
-            
-            case XBattlePos.RIGHT:
+            case XBattlePos.CENTER:
             return 2;
+            case XBattlePos.RIGHT:
+            return 3;
+            case XBattlePos.FAR_RIGHT:
+            return 4;
             
         }
         Debug.LogAssertion("AHH");
@@ -235,37 +237,70 @@ public class Party
         }
     }
 
+    public void FakePartyAdd(Character c,int i)
+    {
+        CharacterHolder holder = new CharacterHolder();
+        holder.mapTileID = LocationManager.inst.currentLocation;
+        holder.character = c;
+        holder.position = i;
+        Vector2 bp = GetValidBattlePosition(CharacterBuilder.inst.jobDict[c.job].battlePosition);
+        Debug.Log(bp + "bp");
+        if( !battlePositions.ContainsKey(bp)){
+            battlePositions.Add(bp,c.ID);
+        }
+        
+        holder.battlePosition = bp;
+        members.Add(c.ID,holder);
+    }
+
     public Vector2 GetValidBattlePosition(BattlePosition bp)
     {
         Vector2 v = bp.ToVector2();
-        if(!battlePositions.ContainsKey(v)){
+        Vector2 fakeTopLeft = new Vector2(0,0);
+        Vector2 fakeTopRight = new Vector2(4,0);
+        List<XBattlePos> xOrder = new List<XBattlePos>();
+        xOrder.Add(XBattlePos.FAR_LEFT);
+        xOrder.Add(XBattlePos.CENTER);
+        xOrder.Add(XBattlePos.FAR_RIGHT);
+        xOrder.Add(XBattlePos.LEFT);
+        xOrder.Add(XBattlePos.RIGHT);
+        if(!battlePositions.ContainsKey(v))
+        {
+            if(v==fakeTopLeft ||v==fakeTopRight )
+            {goto filter; }
             return v;
         }
-        else
+        
+        filter:
+        float oldY = v.y;
+        foreach(XBattlePos x in xOrder)
         {
-            float oldY = v.y;
-            foreach(XBattlePos x in System.Enum.GetValues(typeof(XBattlePos)))
-            {
-                Vector2 XD = new Vector2(bp.XToFloat(x),oldY);
-                if(!battlePositions.ContainsKey(XD)) 
-                {
-                    return  XD;
-                }
-                
-            } // check if slot in preffered vertical pos
-            foreach(YBattlePos y in System.Enum.GetValues(typeof(YBattlePos))) //if no valid preffered vert pos just place it anywhere valid
-            {
-                foreach(XBattlePos x in System.Enum.GetValues(typeof(XBattlePos)))
-                {
-                    Vector2 XD = new Vector2(bp.XToFloat(x),bp.YToFloat(y));
-                    if(!battlePositions.ContainsKey(XD)) 
-                    { return  XD; }
-                }
-            }
+            if(bp.y == YBattlePos.FORWARD  && x == XBattlePos.FAR_LEFT || bp.y == YBattlePos.FORWARD && x == XBattlePos.FAR_RIGHT)
+            { continue; }
 
-            Debug.LogAssertion("NO VALID START SLOTS!?1");
-            return Vector2.zero;
+            Vector2 XD = new Vector2(bp.XToFloat(x),oldY);
+            if(!battlePositions.ContainsKey(XD)) 
+            {
+                return  XD;
+            }
+            
+        } // check if slot in preffered vertical pos
+        foreach(YBattlePos y in System.Enum.GetValues(typeof(YBattlePos))) //if no valid preffered vert pos just place it anywhere valid
+        {
+            foreach(XBattlePos x in xOrder)
+            {
+                if(y == YBattlePos.FORWARD && x == XBattlePos.FAR_LEFT || y == YBattlePos.FORWARD  && x == XBattlePos.FAR_RIGHT)
+                { continue; }
+
+                Vector2 XD = new Vector2(bp.XToFloat(x),bp.YToFloat(y));
+                if(!battlePositions.ContainsKey(XD)) 
+                { return  XD; }
+            }
         }
+
+        Debug.LogAssertion("NO VALID START SLOTS!?1");
+        return new Vector2(99,99);
+        
     }
 
     public void UpdatePosition(Character c, int i)
@@ -275,7 +310,11 @@ public class Party
     }
     
     public void SavePartyEdit() //??
-    {SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyManager.inst.PartyUpdateSave()); }
+    {
+      
+        SaveLoad.Save(GameManager.inst.saveSlotIndex,PartyManager.inst.PartyUpdateSave()); 
+        
+    }
 
    
 }

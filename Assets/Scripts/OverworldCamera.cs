@@ -12,9 +12,17 @@ public class OverworldCamera : Singleton<OverworldCamera>
     public Transform target;
     public float smoothspeed = 0.125f;
     public Vector3 offset;
+   public float baseFOV;
+    void Start(){
+        baseFOV = cam.fieldOfView;
+    }
     void Update()
     {
         LockOn();
+        if(!BattleManager.inst.inBattle){
+      Zoom();
+        }
+  
     }
 
     void LockOn()
@@ -29,6 +37,17 @@ public class OverworldCamera : Singleton<OverworldCamera>
     }
     public void FOVChange(float target, UnityAction a){
         cam.DOFieldOfView(target,.3f).OnComplete(()=>{a.Invoke();});
+    }
+
+
+
+     void Zoom(){
+        var fov  = Camera.main.fieldOfView;
+ 
+        float i =  InputManager.inst.player.GetAxis("ScrollWheel")/10;
+        fov -=  i * 55;
+        fov = Mathf.Clamp(fov, 16, baseFOV);
+        Camera.main.fieldOfView = fov;
     }
 
 }

@@ -7,9 +7,16 @@ public class Breathing : MonoBehaviour
     public float full = 1;
     public float min = .95f;
     public float inhaleTime,pauseTime,exhaleTime;
-    IEnumerator Start()
+    void Start()
     {
-        yield return new WaitForSeconds(Random.Range(.1f,1.5f));
+       
+        Reset();
+    }
+
+    public void Reset(){
+        StartCoroutine(q());
+        IEnumerator q(){
+             yield return new WaitForSeconds(Random.Range(.1f,1.5f));
         bool b =    Random.Range(0,2) == 1;
         if(b){
     Breathe();
@@ -33,7 +40,9 @@ public class Breathing : MonoBehaviour
                 }
             });
         }
-    
+
+        }
+        
     }
 
     public void Breathe()

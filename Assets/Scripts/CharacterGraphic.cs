@@ -21,7 +21,10 @@ public class CharacterGraphic : MonoBehaviour
         character = c;
     }
 
-    public void EnemyInit(DefinedCharacter e){}
+    public void EnemyInit(DefinedCharacter e)
+    {
+        
+    }
 
     public void Orginize(Character c)
     {

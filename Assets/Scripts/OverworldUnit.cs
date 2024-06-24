@@ -11,6 +11,7 @@ public class OverworldUnit: MonoBehaviour
     public bool facingRight;
     public Transform graphicHolder;
     public Animator animator;
+    public CharacterGraphic graphic;
     public void Move(Vector3 targetPos){
         agent.SetDestination(targetPos);
         Flip(targetPos);

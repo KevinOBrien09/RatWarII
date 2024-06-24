@@ -11,7 +11,8 @@ public class AmbushHandler : Singleton<AmbushHandler>
     
     public void SpawnAmbush()
     {
-        List<Slot> candidates = BattleManager.inst.currentUnit.slot.func.GetRadiusSlots(6,null,true);
+        List<Slot> candidates = GetEnemyStart();
+        //BattleManager.inst.currentUnit.slot.func.GetRadiusSlots(6,null,true);
         // foreach (var item in candidates)
         // {
         //     item.areaIndicator.gameObject.SetActive(true);
@@ -19,7 +20,7 @@ public class AmbushHandler : Singleton<AmbushHandler>
         // }
         System.Random rng = new System.Random();
         candidates = candidates.OrderBy(_ => rng.Next()).ToList();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 1; i++)
         {
             Slot s =  candidates[i];
             if(s.cont.walkable())
@@ -31,5 +32,19 @@ public class AmbushHandler : Singleton<AmbushHandler>
         }
         BattleManager.inst.ResetTurnOrder();
         Debug.Log("SpawnAmbush");   
+    }
+
+    public  List<Slot> GetEnemyStart(){
+         List<Slot> s = new List<Slot>();
+        for (int x = 0; x < MapManager.inst.map.iGridSizeX; x++)
+        {
+            for (int y = MapManager.inst.map.iGridSizeY-3; y < MapManager.inst.map.iGridSizeY; y++)
+            {
+                s.Add( MapManager.inst.map.NodeArray[x,y].slot);
+            }
+            
+        }
+
+        return s;
     }
 }

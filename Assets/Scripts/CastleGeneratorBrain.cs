@@ -30,7 +30,7 @@ public class CastleGeneratorBrain : MapGeneratorBrain
     
     public override void Generate(LocationInfo li = null)
     {
-        MapManager.inst.mapQuirk = MapQuirk.ROOMS;
+        //MapManager.inst.mapQuirk = MapQuirk.ROOMS;
         (List<Node> path,Node startNode,Node endNode) layout = DrawLayout();
         SpawnDungeonNodes(layout.path);
         ParseLayout(layout.startNode,layout.endNode);

@@ -52,12 +52,12 @@ public class Menu : Singleton<Menu>
             partyTabs.Add(mpt);
             
         }
-        if(GameManager.inst.loadFromFile){
+        // if(GameManager.inst.loadFromFile){
             battlePositionEditor.Reset();
             battlePositionEditor.party = PartyManager.inst.parties[PartyManager.inst.currentParty];
         
             battlePositionEditor.SpawnDraggers();
-        }
+      //  }
        
         Apply();
     }

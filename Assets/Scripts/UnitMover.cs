@@ -46,8 +46,8 @@ public class UnitMover : Singleton<UnitMover>
             selectedSlot = sSlot;
             int  moveRange =sSlot.cont. unit.stats().moveRange;
            
-            if(MapManager.inst.mapQuirk == MapQuirk.ROOMS &&  !BattleManager.inst.roomLockDown)
-            {moveRange = 99;}
+            // if(MapManager.inst.mapQuirk == MapQuirk.ROOMS &&  !BattleManager.inst.roomLockDown)
+            // {moveRange = 99;}
             validSlots =sSlot.func.GetRadiusSlots(moveRange,null,false);
             if(selectedUnit.side == Side.PLAYER){
             SelectionUI(sSlot);
@@ -88,7 +88,7 @@ public class UnitMover : Singleton<UnitMover>
     
     public void ExitSelectionMode()
     {
-        if(CamFollow.inst.CheckCameraState(CameraState.FOCUS)|BattleManager.inst.gameOver)
+        if(CamFollow.inst.CheckCameraState(CameraState.FOCUS))
         {return; }
 
         if( GameManager.inst.checkGameState(GameState.ENEMYTURN) || GameManager.inst.checkGameState(GameState.PLAYERSELECT)||GameManager.inst.checkGameState(GameState.UNITMOVE) && !inCoro)

@@ -47,7 +47,7 @@ public class DoorInteractable : Interactable
             for (int i = 0; i < BattleManager.inst.playerUnits.Count; i++)
             {BattleManager.inst.playerUnits[i].graphic.gameObject.SetActive(false);}
             AudioManager.inst.GetSoundEffect().Play(open);
-            MapManager.inst.ChangeRoom(room,door);
+            //MapManager.inst.ChangeRoom(room,door);
             slot.DisableHover();
         }
     }

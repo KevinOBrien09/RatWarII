@@ -75,16 +75,31 @@ public class BattlePositionDragger : Draggable
                     slot.Remove();
                     cell.Take(this);
                 }
-                else{ 
+                else if(cell.dragger != this)
+                { 
                     Debug.Log("QWERTY");
                     BattlePositionSlot slotA = slot;
                     BattlePositionSlot slotB = cell;
+                   
                     BattlePositionDragger other = cell.dragger;
+                    Character charA = character;
+                    Character charB = other.character;
                     slotA.Remove();
                     slotB.Remove();
                     
-                    slotB.Take(this);
-                    slotA.Take(other);
+                    slotB.Take(this,true);
+                    slotA.Take(other,true);
+                  
+                    Party xd =  PartyManager.inst.parties[PartyManager.inst.currentParty];
+                    xd.battlePositions.Remove(xd.members[charA.ID].battlePosition);
+                    xd.battlePositions.Remove(xd.members[charB.ID].battlePosition);
+                  
+                    xd.battlePositions.Add(xd.members[charA.ID].battlePosition,charA.ID);
+                    xd.battlePositions.Add(xd.members[charB.ID].battlePosition,charB.ID);
+                    xd.SavePartyEdit();
+                }
+                else if(cell.dragger == this){
+                    NoCell();
                 }
                
                 return;

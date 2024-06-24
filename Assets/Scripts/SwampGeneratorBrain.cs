@@ -27,7 +27,7 @@ public class SwampGeneratorBrain : PerlinGeneratorBrain
     public override void Generate(LocationInfo li = null)
     {
         locationInfo = li;
-        MapManager.inst.mapQuirk = MapQuirk.ISLANDS;
+        //MapManager.inst.mapQuirk = MapQuirk.ISLANDS;
         StartCoroutine(q());
         IEnumerator q()
         {

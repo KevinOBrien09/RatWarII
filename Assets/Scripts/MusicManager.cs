@@ -49,7 +49,7 @@ public class MusicManager : Singleton<MusicManager>
 
     public void FadeToSilence(float t = .5f){
         source.DOFade(0,t);
-        ambience.DOFade(0,t);
+        //ambience.DOFade(0,t);
     }
 
 }

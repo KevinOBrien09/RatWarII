@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public enum MapQuirk{NONE,ROOMS,ISLANDS}
+
 public class MapManager : Singleton<MapManager>
 {
     public BattleArenaManager map;
@@ -13,7 +13,6 @@ public class MapManager : Singleton<MapManager>
     public Room currentRoom;
     public SoundData enemySpawnHit;
     public bool doNotSpawnEnemies;
-    public MapQuirk mapQuirk;
     public List<Slot> premadeSlots;
     public Queue<Slot> premadeSlotQ = new Queue<Slot>();
     public List<Wall> premadeWalls;
@@ -54,7 +53,7 @@ public class MapManager : Singleton<MapManager>
         currentRoom.roomClear = true;
         MusicManager.inst.ChangeMusic( MusicManager.inst.peace);
   
-        HideInactiveRooms();
+   
     }
 
     public void SetDoors(){
@@ -73,102 +72,8 @@ public class MapManager : Singleton<MapManager>
         }
     }
 
-    public void  ChangeRoom(Room newRoom,Door d)
-    {
-        currentRoom = newRoom;
-       SetDoors();
-       
-        for (int i = 0; i < BattleManager.inst.playerUnits.Count; i++)
-        {
-            Slot s = d.landingSlots[newRoom][i];
-            Unit u = BattleManager.inst.playerUnits[i];
-            u.Reposition(s);
-            Vector3 v =  new Vector3(s.transform.position.x,u. transform.position.y ,s.transform.position.z);
-            u.transform.position = v;
+   
 
-        }
-        HideInactiveRooms();
-        StartCoroutine(q());
-        IEnumerator q()
-        {
-            if(ObjectiveManager.inst.objective.objectiveEnum == Objective.ObjectiveEnum.HOSTAGE)
-            {
-                if(ObjectiveManager.inst.hostageInPlayerPossession())
-                {
-                    if(currentRoom == map.startRoom)
-                    {
-                        foreach (var item in HostageSlots())
-                        {
-                            item.ActivateAreaIndicator( new Color32(0,255,255,55));
-                        }
-                    }
-                 
-                }
-         
-            }
-
-            yield return new WaitForSeconds(.65f);
-            CamFollow.inst.enabled = true;
-            DoorInteractable di = d.currentSpecialSlot.interactable as DoorInteractable;
-            AudioManager.inst.GetSoundEffect().Play(di.close);
-            for (int i = 0; i < BattleManager.inst.playerUnits.Count; i++)
-            {BattleManager.inst.playerUnits[i].graphic.gameObject.SetActive(true);}
-            
-            yield return new WaitForSeconds(.3f);
-           
-
-            
-            if(currentRoom.roomContent == Room.Content.ENEMY)
-            {
-                if(!currentRoom.roomClear && !doNotSpawnEnemies)
-                {
-                    CamFollow.inst.Focus(currentRoom.transform,(()=>
-                    {
-                    
-                        StartCoroutine(spawnEnemies());
-                        IEnumerator spawnEnemies()
-                        {  
-                        
-                            LockDownRooms();
-                            BattleManager.inst.roomLockDown = true;
-                            BattleTicker.inst.Type("Enemies have appeared!");
-                            foreach (var item in currentRoom.enemySpawnData)
-                            {UnitFactory.inst. CreateEnemyUnit(item.spawnSlot,item.enemy);}
-                            
-                            AudioManager.inst.GetSoundEffect().Play(enemySpawnHit);
-                            MusicManager.inst.ChangeMusic( MusicManager.inst.battle);
-                            yield return new WaitForSeconds(1f);
-                            BattleManager.inst.ResetTurnOrder();
-                            BattleManager.inst.EndTurn();
-                        }
-                            
-                        
-                    }));
-                }
-                else{
-                    currentRoom.roomClear = true;
-                    BattleManager.inst.EndTurn();
-                }
-            }
-            else if(currentRoom.roomContent == Room.Content.EMPTY)
-            {
-                BattleManager.inst.EndTurn();
-            }
-        }
-    }
-
-    public void LockDownRooms(){
-         if(mapQuirk == MapQuirk.ROOMS){
-        foreach (var item in currentRoom.borders)
-        {
-            foreach (var dr in item.doors)
-            {
-                dr.metalFence.gameObject.SetActive(true);
-                dr.LockDown();
-            }
-        }
-         }
-    }
 
     public void CheckForIntrusions()
     {
@@ -190,38 +95,13 @@ public class MapManager : Singleton<MapManager>
         }
     }
 
-    public void HideInactiveRooms()
-    {
-        if(mapQuirk == MapQuirk.ROOMS){
-foreach (var item in map.rooms)
-        {
-            foreach (var s in item.slots)
-            {  s.ActivateAreaIndicator(new Color32(0,0,0,200));
-                s.border.gameObject.SetActive(false);
-                    s.DisableHover();
-                s.dormant = true;
-            }
-              
-        }
-        foreach (var s in currentRoom.slots)
-        {
-            s.DectivateAreaIndicator();
-            s.border.gameObject.SetActive(true);
-        
-            s.dormant = false;
-        }
-        }
-        
-    }
+  
 
-    public bool slotBelongsToGrid(Slot s)
+    public bool slotBelongsToGrid(Slot s) //
     {
-        if(mapQuirk == MapQuirk.ROOMS){
-        return currentRoom.slots.Contains(s); 
-        }
-        else{
-            return true;
-        }
+       
+        return true;
+        
     }
 
     public bool nodeIsValid(Vector2 v)

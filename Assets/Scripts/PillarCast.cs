@@ -21,11 +21,12 @@ public class PillarCast :  SkillCastBehaviour
             pillar.slot = args.targetSlot;
             pillar.slot.cont.wall = true;
             //pillar.slot.cont.slotContents.Add(pillar.slotContents);
-            CamFollow.inst.target = args.targetSlot.transform;
+             CamFollow.inst.ChangeCameraState(CameraState.LOCK);
+          //  CamFollow.inst.target = args.targetSlot.transform;
             CamFollow.inst.Focus(args.targetSlot.transform,()=>
             { 
-                CamFollow.inst.ChangeCameraState(CameraState.LOCK);
-                pillar.transform.DOMoveY(0,.25F);
+               
+                pillar.transform.DOMoveY(2,.25F);
                 MapManager.inst.map.UpdateGrid();
             
             });

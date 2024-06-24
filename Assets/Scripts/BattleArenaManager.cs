@@ -42,17 +42,24 @@ public class BattleArenaManager : Map
     {
         Dictionary<Vector2,Slot> d = new Dictionary<Vector2, Slot>();
         int X = iGridSizeX/2;
-        d.Add(new Vector2(2,2),NodeArray[X+1,0].slot);
-        d.Add(new Vector2(1,2),NodeArray[X,0].slot);
-        d.Add(new Vector2(0,2),NodeArray[X-1,0].slot);
+        
+        d.Add(new Vector2(1,0),NodeArray[X-1,2].slot);
+        d.Add(new Vector2(2,0),NodeArray[X,2].slot);
+        d.Add(new Vector2(3,0),NodeArray[X+1,2].slot);
+      
+        d.Add(new Vector2(0,1),NodeArray[X-2,1].slot);
+        d.Add(new Vector2(1,1),NodeArray[X-1,1].slot);
+        d.Add(new Vector2(2,1),NodeArray[X,1].slot);
+        d.Add(new Vector2(3,1),NodeArray[X+1,1].slot);
+        d.Add(new Vector2(4,1),NodeArray[X+2,1].slot);
 
-        d.Add(new Vector2(2,1),NodeArray[X+1,1].slot);
-        d.Add(new Vector2(1,1),NodeArray[X,1].slot);
-        d.Add(new Vector2(0,1),NodeArray[X-1,1].slot);
+     
+        d.Add(new Vector2(0,2),NodeArray[X-2,0].slot);
+        d.Add(new Vector2(1,2),NodeArray[X-1,0].slot);
+        d.Add(new Vector2(2,2),NodeArray[X,0].slot);
+        d.Add(new Vector2(3,2),NodeArray[X+1,0].slot);
+        d.Add(new Vector2(4,2),NodeArray[X+2,0].slot);
 
-        d.Add(new Vector2(2,0),NodeArray[X+1,2].slot);
-        d.Add(new Vector2(1,0),NodeArray[X,2].slot);
-        d.Add(new Vector2(0,0),NodeArray[X-1,2].slot);
         
         return d;
     }

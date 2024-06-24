@@ -35,4 +35,4 @@ MonoBehaviour:
   passThrough: 0
   goThroughWalls: 0
   projectilePath: 0
-  howManyTiles: 6
+  howManyTiles: 99

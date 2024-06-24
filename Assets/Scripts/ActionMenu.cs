@@ -82,7 +82,7 @@ public class ActionMenu : Singleton<ActionMenu>
     
     void Update()
     {
-        if(GameManager.inst.checkGameState(GameState.ENEMYTURN) || BattleManager.inst.gameOver||MapGenerator.inst.generating)
+        if(GameManager.inst.checkGameState(GameState.ENEMYTURN) ||MapGenerator.inst.generating)
         {return;}
         if(!FUCKOFF)
         {

@@ -16,7 +16,7 @@ public class BattleManager : Singleton<BattleManager>
     public int turn;
     public Queue<Unit> turnOrder = new Queue<Unit>();
     public bool roomLockDown;
-    public bool gameOver,looping;
+    public bool looping;
     public GameObject questComplete;
     public SoundData roomUnlockSting;
     public string lossReason = "REASON UNCLEAR";
@@ -26,7 +26,7 @@ public class BattleManager : Singleton<BattleManager>
     public GameObject overworld;
     public bool inBattle;
     public SoundData enterBattleSlam;
-
+    public List<GameObject> shitToKill = new List<GameObject>();
     protected override void Awake()
     {
         base.Awake();
@@ -38,8 +38,7 @@ public class BattleManager : Singleton<BattleManager>
         #endif
 
     }
-
-
+    
     public IEnumerator Start()
     {
         if(!skipFadeIn)
@@ -53,20 +52,7 @@ public class BattleManager : Singleton<BattleManager>
     }
 
 
-    public void ResetUnitPositions(){
-        Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetStartingSlots();
-        foreach (var item in  playerUnits)
-        {
-            Vector2 v = PartyManager.inst.parties[PartyManager.inst.currentParty].members[item.character.ID].battlePosition;
-            Unit u = item;
-            Slot s = d[v];
-            u.transform.position =  new Vector3(s.transform.position.x,u.transform.position.y ,s.transform.position.z);
-            u.Reposition(s);
-          
-                //w ++;
-        }
-    }
-
+   
  
     public void Begin()
     {
@@ -74,23 +60,45 @@ public class BattleManager : Singleton<BattleManager>
             return;
         }
         inBattle = true;
+        foreach (var item in MapManager.inst.map.startRoom.slots)
+        { item.cont.unit = null; }
+        foreach (var item in allUnits())
+        {
+            foreach (var t in   item.tempTerrainCreated)
+            { t.Kill(); }
+        }
+
         ResetUnitPositions();
+        SkillHandler.inst.Close();
+        //ActionMenu.inst.Reset();
+     
         MusicManager.inst.ChangeMusic(LocationManager.inst.locationTravelingTo.battleMusic);
         AudioManager.inst.GetSoundEffect().Play(enterBattleSlam);
         BlackFade.inst.WhiteFlash();
         OverworldCamera.inst.FOVChange(179,(()=>
         {
+            AmbushHandler.inst.SpawnAmbush();
+           
             foreach (var item in playerUnits)
-            { item.gameObject.SetActive(true); }
+            { 
+                item.gameObject.SetActive(true); 
+                item.graphic.breathing.Reset();
+                item.skillResource.Regain(item.skillResource.regen);
+            }
 
             foreach (var item in PartyController.inst.playerUnits)
-            { item.gameObject.SetActive(false); }
-            
+            { 
+                item.gameObject.SetActive(false); 
+                item.agent.enabled = false;
+                 
+            }
+            ResetTurnOrder();
             BattleTicker.inst.parent.SetActive(true);
             overworld.SetActive(false);
             MapManager.inst.map.gameObject.SetActive(true);
             OverworldCamera.inst.gameObject.SetActive(false);
             CamFollow.inst.gameObject.SetActive(true);
+        
             ToggleHealthBars(false);
             NewTurn();
 
@@ -107,6 +115,22 @@ public class BattleManager : Singleton<BattleManager>
         turn++;
         UnitIteration();
     }
+
+    public void ResetUnitPositions()
+    {
+        Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetStartingSlots();
+        foreach (var item in  playerUnits)
+        {
+            Vector2 v = PartyManager.inst.parties[PartyManager.inst.currentParty].members[item.character.ID].battlePosition;
+            
+            Unit u = item;
+            u.slot = null;
+            Slot s = d[v];
+            u.transform.position =  new Vector3(s.transform.position.x,u.transform.position.y ,s.transform.position.z);
+            u.Reposition(s);
+        }
+    }
+
 
     public void ResetTurnOrder()
     {
@@ -135,29 +159,8 @@ public class BattleManager : Singleton<BattleManager>
         }
     }
 
-    public bool UnitHasMoveTokens()
-    {
-        if(currentUnit != null) 
-        {
-          return currentUnit.currentMoveTokens > 0;
-        }
-
-
-        return false;
-    }
-
-    public bool checkForAmbush(){
-        if(hasAmbush && !inAmbush)
-        {
-            if( iterationsTilAmbush <= 0)
-            {
-                AmbushHandler.inst.SpawnAmbush();
-                inAmbush = true;
-                return true;
-            }
-        }
-        return false;
-    }
+ 
+ 
 
     public void EndTurn(bool wasSkipped = false)
     {
@@ -196,11 +199,11 @@ public class BattleManager : Singleton<BattleManager>
             if(hasAmbush){
                  iterationsTilAmbush--;
             }
-            if(MapManager.inst.mapQuirk == MapQuirk.ROOMS){
+       
                 if(wasSkipped &&!roomLockDown){
                     currentUnit = turnOrder.Dequeue();
                 }
-            }
+            
             
             if(BattleManager.inst.turn != 0)
             {BattleManager.inst.UnitIteration();}
@@ -209,40 +212,23 @@ public class BattleManager : Singleton<BattleManager>
         }
        
     }
-
-    public void Win(){
-        BattleTicker.inst.Type("Win");
-        gameOver = true;
-        PartyManager .inst.AddGold(350);
-        Cursor.lockState = CursorLockMode.Confined;
-        questComplete.SetActive(true);
-    }
-
-    public void LeaveScene(){
-SceneManager.LoadScene("Hub");
-    }
-
-    public void CheckForTurnEnd(){
-        if(currentUnit.currentMoveTokens <= 0){
-            EndTurn();
-        }
-    }
-
+    
     public void UnitIteration()
     {
-        if(playerLose()|gameOver)
+        if(playerLose())
         {Lose();}
         else
         {
-            CheckForUnlock();
-            if(!ObjectiveManager.inst.CheckIfComplete())
+            if(!CheckForWin())
             {StartCoroutine(q());}
+            else
+            { Win(); }
         }
         
      
-        IEnumerator q(){
+        IEnumerator q()
+        {
             SkillAimer.inst.validSlots.Clear();
-
             UnitMover.inst.validSlots.Clear();
             if(turnOrder.Count > 0)
             { 
@@ -250,28 +236,23 @@ SceneManager.LoadScene("Hub");
                 
                 yield return new WaitForSeconds(.25f);
                 currentUnit = turnOrder.Dequeue();
-            //     if(MapManager.inst.mapQuirk != MapQuirk.ROOMS){
                 
-            //     }
-            //    else if(BattleManager.inst.roomLockDown||currentUnit == null  ){
-            //     currentUnit = turnOrder.Dequeue();
-            //     }
-
                 foreach (var item in allUnits())
                 {
-                  item.activeUnitIndicator.gameObject.SetActive(false);
+                    item.activeUnitIndicator.gameObject.SetActive(false);
                 }
 
                 currentUnit.activeUnitIndicator.gameObject.SetActive(true);
                
                 unitsIDontCareAboutInTurnReset.Add(currentUnit);
-                if(!MapManager.inst.doNotSpawnEnemies){
-                    if(checkForAmbush()){
-                    iterationsTilAmbush = Random.Range(5,10);
-                    yield return new WaitForSeconds(1);
-                    ResetTurnOrder();
-                  
-                }
+                if(!MapManager.inst.doNotSpawnEnemies)
+                {
+                    if(checkForAmbush())
+                    {
+                        iterationsTilAmbush = Random.Range(5,10);
+                        yield return new WaitForSeconds(1);
+                        ResetTurnOrder();
+                    }
                 }
                
                 
@@ -341,7 +322,7 @@ SceneManager.LoadScene("Hub");
                             yield break;
                         }
                     }
-                   // CamFollow.inst.ForceFOV(20);
+              
                 }
                 CamFollow.inst.ForceFOV(CamFollow.inst.baseFOV);
                 MapManager.inst.CheckForIntrusions();
@@ -365,7 +346,7 @@ SceneManager.LoadScene("Hub");
                 {
                     BattleTicker.inst.Type(BattleManager.inst. TurnState());
 
-                    CamFollow.inst.target = currentUnit. transform;
+                    CamFollow.inst.target = currentUnit.slot. transform;
                     if(currentUnit.side == Side.PLAYER)
                     {       
                         CamFollow.inst.Focus(currentUnit.transform,()=>{});
@@ -401,7 +382,7 @@ SceneManager.LoadScene("Hub");
                         SlotInfoDisplay.inst.Apply(currentUnit.slot);
                         GameManager.inst.ChangeGameState(GameState.ENEMYTURN);
                         yield return new WaitForSeconds(.25f);
-                        if(    currentUnit.charAI != null){
+                        if(currentUnit.charAI != null){
                             
                             currentUnit.charAI.ConductTurn();
                         }
@@ -418,48 +399,8 @@ SceneManager.LoadScene("Hub");
             }
         }
     }
-
-    void CheckForUnlock(){
-        if(enemyUnits.Count ==0 && roomLockDown)
-        {
-           // MapManager.inst.OpenRoomsFromLockdown();
-            MapManager.inst.currentRoom.roomClear = true;
-            MusicManager.inst.ChangeMusic(MusicManager.inst.peace);
-            AudioManager.inst.GetSoundEffect().Play(roomUnlockSting);
-            roomLockDown = false;
-           
-        }
-    }
-
-    public bool playerLose()
-    {
-        bool b = playerUnits.Count == 0;
-        if(b){
-  lossReason = "The adventurers have perished...";
-        }
-     
-        return b;
-    }
-
-    public void Lose()
-    {
-        BattleTicker.inst.Type(lossReason);
-        MusicManager.inst.source.DOFade(0,1);
-        LocationManager.inst.inTravel = false;
-        BlackFade.inst.FadeInEvent(()=>
-        {
-            StartCoroutine(q());
-            IEnumerator q()
-            {
-                yield return new WaitForSeconds(1);
-                SceneManager.LoadScene("Hub");
-            }
-          
-        });
-       
-    }
-
-    public void StatusEffectLoop(Unit u) //THIS IS BAAADDDD
+    
+    public void StatusEffectLoop(Unit u)
     {
         looping = true;
         Queue<StatusEffectEnum> statusEffects = new Queue<StatusEffectEnum>();
@@ -570,6 +511,103 @@ SceneManager.LoadScene("Hub");
             }
         }
     }
+    
+    public void LeaveBattle()
+    {
+        MusicManager.inst.ChangeMusic(LocationManager.inst.locationTravelingTo.locationMusic);
+        AudioManager.inst.GetSoundEffect().Play(enterBattleSlam);
+        ActionMenu.inst.Reset();
+        Cursor.lockState =   CursorLockMode.Confined;
+        BlackFade.inst.WhiteFlash();
+        MapManager.inst.map.gameObject.SetActive(false); CamFollow.inst.gameObject.SetActive(false);
+        OverworldCamera.inst.gameObject.SetActive(true);
+        OverworldCamera.inst.FOVChange(OverworldCamera.inst.baseFOV,(()=>{ PartyController.inst. TakeControl();   inBattle = false; }));
+        foreach (var item in playerUnits)
+        { item.gameObject.SetActive(false); }
+        ResetUnitPositions();
+        enemyUnits.Clear();
+        foreach (var item in PartyController.inst.playerUnits)
+        { 
+            item.gameObject.SetActive(true); 
+            item.agent.enabled = true;
+            item.graphic.breathing.Reset();
+        }
+        
+        foreach (var item in ObjectPoolManager.inst.dict[ObjectPoolTag.CORPSE])
+        {
+            foreach (var q in ObjectPoolManager.inst.dict[ObjectPoolTag.CORPSE])
+            { q.gameObject.SetActive(false); }
+           
+        }
+        List<GameObject> g = new List<GameObject>(shitToKill);
+        foreach (var item in g)
+        {Destroy(item); }
+        shitToKill.Clear();
+        BattleTicker.inst.parent.SetActive(false);
+        overworld.SetActive(true);
+        ToggleHealthBars(false);
+        turn = 0;
+    }
+    
+    public void Win()
+    {
+        BattleTicker.inst.Type("Win");
+        Cursor.lockState =   CursorLockMode.Confined;
+        StartCoroutine(q());
+        IEnumerator q(){
+            MusicManager.inst.FadeToSilence(.5f);
+            yield return new WaitForSeconds(1);
+            BattleEndPopUp.inst.Show();
+        }
+    }
+    
+    public void Lose()
+    {
+        BattleTicker.inst.Type(lossReason);
+        MusicManager.inst.source.DOFade(0,1);
+        LocationManager.inst.inTravel = false;
+        BlackFade.inst.FadeInEvent(()=>
+        {
+            StartCoroutine(q());
+            IEnumerator q()
+            {
+                yield return new WaitForSeconds(1);
+                SceneManager.LoadScene("Hub");
+            }
+          
+        });
+       
+    }
+
+
+    public bool checkForAmbush(){
+        if(hasAmbush && !inAmbush)
+        {
+            if( iterationsTilAmbush <= 0)
+            {
+                AmbushHandler.inst.SpawnAmbush();
+                inAmbush = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public bool playerLose()
+    {
+        bool b = playerUnits.Count == 0;
+        if(b)
+        {
+            lossReason = "The adventurers have perished...";
+        }
+     
+        return b;
+    }
+
+    public bool CheckForWin()
+    {return enemyUnits.Count == 0;}
+
 
     public void AddNewUnit(Unit u,Side side)
     {
@@ -578,9 +616,18 @@ SceneManager.LoadScene("Hub");
         else
         {playerUnits.Add(u);}
         u.side = side;
-        // List<Unit> XD = new List<Unit>();
-        // XD.Add(u);
-        // turnOrder = new Queue<Unit>(turnOrder.Where(x => !XD.Contains(x)));
+    }
+
+
+    public bool UnitHasMoveTokens()
+    {
+        if(currentUnit != null) 
+        {
+          return currentUnit.currentMoveTokens > 0;
+        }
+
+
+        return false;
     }
     
     public void UnitIsDead(Unit u)

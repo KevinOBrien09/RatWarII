@@ -18,6 +18,7 @@ public class QuickfireCast : SkillCastBehaviour
     {
         args.caster.Flip(args.targetSlot.transform.position);
         GameObject arrow = Instantiate(projectilePrefab);
+        BattleManager.inst.shitToKill.Add(arrow);
         arrow.transform.position = args.caster.transform.position;
         
         CamFollow.inst.target = arrow.transform;

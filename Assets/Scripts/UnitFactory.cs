@@ -82,6 +82,7 @@ public class UnitFactory : Singleton<UnitFactory>
     {
         OverworldUnit oU =  Instantiate(overworldUnitPrefab);
         CharacterGraphic graphic =  CharacterBuilder.inst.GenerateGraphic(c);
+        oU.graphic = graphic;
         graphic.transform.SetParent(oU.graphicHolder. transform);
         graphic.transform.localPosition = Vector3.zero;
         graphic.transform.localRotation = Quaternion.Euler(30,0,0);

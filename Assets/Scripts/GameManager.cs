@@ -116,34 +116,36 @@ public class GameManager : Singleton<GameManager>
         if(!GameManager.inst.loadFromFile)
         {
             List<Character> chars = new List<Character>();
-            int howMany = 3;
+            int howMany = 4;
             for (int i = 0; i < howMany; i++)
             {
                 Character c = CharacterBuilder.inst.GenerateCharacter();
                 chars.Add(c);
                 
             }
-
-            
+            Party p = new Party();
+            p.Create();
+            PartyManager.inst.AddNewParty(p);
+            PartyManager.inst.currentParty = p.ID;
             int w = 0;
-            List<Slot> s = MapManager.inst.map.startRoom.slots;
-            System.Random rng = new System.Random();
-            var r = s.OrderBy(_ => rng.Next()).ToList();
-            
+           
+            Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetStartingSlots();
             foreach (var item in chars)
             {
-                    
-                Unit u = UnitFactory.inst. CreatePlayerUnit(r[w],item);
+                w ++;
+                p.FakePartyAdd(item,w);
+                Unit u = UnitFactory.inst. CreatePlayerUnit(d[p.members[item.ID].battlePosition] ,item);
                 OverworldUnit o = UnitFactory.inst.CreateOverworldUnit(item);
                
                 u.overworldUnit = o;
                 o.battleUnit = u;
                 PartyController.inst.playerUnits.Add(o);
-                w ++;
+               
+             
             }
-            if(loadFromFile){
-                PartyController.inst.Organize();
-            }
+           
+            PartyController.inst.Organize();
+            
             
         }
         else

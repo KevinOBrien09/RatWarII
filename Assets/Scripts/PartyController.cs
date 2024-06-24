@@ -18,12 +18,8 @@ public class PartyController : Singleton<PartyController>
     void Start(){
         CamFollow.inst.gameObject.SetActive(false);
     }
-    public void GrabUnits()
-    { 
-        //playerUnits = new List<Unit>(BattleManager.inst.playerUnits);
-    }
 
-    public void Organize(){
+     public void Organize(){
         Party p = PartyManager.inst.parties[PartyManager.inst.currentParty];
         playerUnits = playerUnits.OrderBy(o=> p.members [ o.battleUnit.character.ID].position).ToList();
         playerUnits.Reverse();
@@ -34,17 +30,19 @@ public class PartyController : Singleton<PartyController>
     
         Cursor.lockState = CursorLockMode.Confined;
         leader = playerUnits[0];
-        float baseSpeed = playerUnits[0].agent.speed;
+        leader.agent.stoppingDistance = 0;
+        float baseSpeed = 15;
         float newSpeed = baseSpeed;
         for (int i = 1; i < playerUnits.Count; i++)
         {
-            playerUnits[i].agent.stoppingDistance = 10;
+            playerUnits[i].agent.stoppingDistance = 7.5f;
             newSpeed = baseSpeed - .5f;
             playerUnits[i].agent.speed = baseSpeed;
         }
-       OverworldCamera.inst.target = leader.transform;
+        OverworldCamera.inst.target = leader.transform;
+        
       //  CamFollow.inst.ChangeCameraState(CameraState.LOCK);
-        run = true;
+            run = true;
     }
 
     void Update()
@@ -72,6 +70,22 @@ public class PartyController : Singleton<PartyController>
         if(Input.GetKeyDown(KeyCode.Q)){
             BattleManager.inst.Begin();
         }
+    }
+
+    public void Kill(Unit u)
+    {
+        OverworldUnit ou = null;
+        foreach (var item in playerUnits)
+        {
+            if(item.battleUnit == u){
+                ou = item;
+                break;
+            }
+        }
+
+        playerUnits.Remove(ou);
+        Destroy(ou.gameObject);
+      
     }
 
     public void GetInput()

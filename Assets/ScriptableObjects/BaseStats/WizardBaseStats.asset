@@ -23,5 +23,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bc53671835068c249a159a29ce7509e4, type: 2}
   - {fileID: 11400000, guid: d503c0f2fd05b5e43915de3732ab8466, type: 2}
   battlePosition:
-    x: 1
+    x: 2
     y: 1
