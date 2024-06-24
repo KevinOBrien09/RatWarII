@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7298460539969542036}
-  - component: {fileID: 2470462201534096068}
+  - component: {fileID: -4583110169853117745}
   m_Layer: 0
   m_Name: EmbulkenCast
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2470462201534096068
+--- !u!114 &-4583110169853117745
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,9 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7912667170490690984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bef35424f46a3694dba7974812dcee3b, type: 3}
+  m_Script: {fileID: 11500000, guid: cf089d05e5b6ce64f8463d4c7e26090e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   change: 25
   statToChange: 6
   turnDuration: 2
+  pSystem: {fileID: 7454758666212883914, guid: 3e2226b0718f88b40ad98d970390f416, type: 3}

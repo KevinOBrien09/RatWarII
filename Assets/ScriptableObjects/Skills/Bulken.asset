@@ -19,11 +19,14 @@ MonoBehaviour:
   additionalMoveTokenCost: 0
   intendedResource: 2
   side: 0
-  skillCastBehaviour: {fileID: 2470462201534096068, guid: e823589ae908dbb4db6322d905814907,
+  skillCastBehaviour: {fileID: -4583110169853117745, guid: e823589ae908dbb4db6322d905814907,
     type: 3}
   doesntNeedUnitInSlot: 0
   statusEffectIcon: {fileID: 0}
-  sounds: []
+  sounds:
+  - audioClip: {fileID: 8300000, guid: 99442b87ed7ea1742af3d5680bce26a9, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 0.8
   value: 
   canHitBreakableSlots: 0
   radius: 0

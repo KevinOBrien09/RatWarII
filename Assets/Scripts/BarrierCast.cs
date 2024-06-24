@@ -20,6 +20,7 @@ public class BarrierCast : SkillCastBehaviour
                 GameObject s = Instantiate(shield,args.caster.transform);
                 float ogX = s.transform.localScale.x;
                 s.transform.localScale = new Vector3(0,s.transform.localScale.y,s.transform.localScale.z);
+                s.transform.localRotation = args.caster.graphic.transform.localRotation;
                 s.transform.DOScale(new Vector3(ogX,s.transform.localScale.y,s.transform.localScale.z),.25f);
                 s.name = "shield";
                 args.caster.shieldGraphic = s.GetComponent<ParticleSystemRenderer>();

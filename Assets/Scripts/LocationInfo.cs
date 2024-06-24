@@ -16,6 +16,7 @@ public class LocationInfo :ScriptableObject
     public List<DefinedCharacter> enemies = new List<DefinedCharacter>();
     public SoundData travelSting;
     public SoundData ambience;
+    public List<Ambush> ambushes = new List<Ambush>();
     [TextArea(10,10)] public string desc;
 
 

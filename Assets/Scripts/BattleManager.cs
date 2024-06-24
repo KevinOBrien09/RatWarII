@@ -27,12 +27,15 @@ public class BattleManager : Singleton<BattleManager>
     public bool inBattle;
     public SoundData enterBattleSlam;
     public List<GameObject> shitToKill = new List<GameObject>();
+    public List<Ambush> ambushes = new List<Ambush>();
+    public List<StatusEffect> statusEffectBin = new List<StatusEffect>();
+
     protected override void Awake()
     {
         base.Awake();
         #if UNITY_EDITOR
         if(GameManager.inst. loadFromFile && PartyManager.inst.currentParty == ""){
-            Debug.LogWarning("LOADING FROM BATTLEMANAGER");
+            Debug.LogWarning("LOADING FROMs BATTLEMANAGER");
             GameManager.inst.Load();
         }
         #endif
@@ -77,7 +80,7 @@ public class BattleManager : Singleton<BattleManager>
         BlackFade.inst.WhiteFlash();
         OverworldCamera.inst.FOVChange(179,(()=>
         {
-            AmbushHandler.inst.SpawnAmbush();
+            AmbushHandler.inst.SpawnAmbush(ambushes[Random.Range(0,ambushes.Count)]);
            
             foreach (var item in playerUnits)
             { 
@@ -118,7 +121,7 @@ public class BattleManager : Singleton<BattleManager>
 
     public void ResetUnitPositions()
     {
-        Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetStartingSlots();
+        Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetPlayerStartingSlots();
         foreach (var item in  playerUnits)
         {
             Vector2 v = PartyManager.inst.parties[PartyManager.inst.currentParty].members[item.character.ID].battlePosition;
@@ -200,9 +203,9 @@ public class BattleManager : Singleton<BattleManager>
                  iterationsTilAmbush--;
             }
        
-                if(wasSkipped &&!roomLockDown){
-                    currentUnit = turnOrder.Dequeue();
-                }
+                // if(wasSkipped &&!roomLockDown){
+                //     currentUnit = turnOrder.Dequeue();
+                // }
             
             
             if(BattleManager.inst.turn != 0)
@@ -245,15 +248,15 @@ public class BattleManager : Singleton<BattleManager>
                 currentUnit.activeUnitIndicator.gameObject.SetActive(true);
                
                 unitsIDontCareAboutInTurnReset.Add(currentUnit);
-                if(!MapManager.inst.doNotSpawnEnemies)
-                {
-                    if(checkForAmbush())
-                    {
-                        iterationsTilAmbush = Random.Range(5,10);
-                        yield return new WaitForSeconds(1);
-                        ResetTurnOrder();
-                    }
-                }
+                // if(!MapManager.inst.doNotSpawnEnemies)
+                // {
+                //     if(checkForAmbush())
+                //     {
+                //         iterationsTilAmbush = Random.Range(5,10);
+                //         yield return new WaitForSeconds(1);
+                //         ResetTurnOrder();
+                //     }
+                // }
                
                 
                 bool terrainShit = false;
@@ -393,8 +396,17 @@ public class BattleManager : Singleton<BattleManager>
                     }
                 }
             }
-            else
+            else //end turn
             {
+                foreach (var item in statusEffectBin)
+                { 
+                    if(item != null)
+                    {
+                        if(item.unit != null)
+                        { item.Remove(); }
+                    }
+                }
+                statusEffectBin.Clear();
                 NewTurn();
             }
         }
@@ -403,111 +415,82 @@ public class BattleManager : Singleton<BattleManager>
     public void StatusEffectLoop(Unit u)
     {
         looping = true;
-        Queue<StatusEffectEnum> statusEffects = new Queue<StatusEffectEnum>();
-        Queue<StatusEffect> holyfuckingshit = new Queue<StatusEffect>();
-        List<StatusEffect> bin = new List<StatusEffect>();
-        GenericDictionary<StatusEffectEnum, int> xd = new GenericDictionary<StatusEffectEnum,int>();
-        var values = System.Enum.GetValues(typeof(StatusEffectEnum));
-        foreach (StatusEffectEnum item in values)
-        {xd.Add(item,0);}
+        List<StatusEffect> dotBin = new List<StatusEffect>();
+        Dictionary<StatusEffectEnum,int> dotStatusEffects = new Dictionary<StatusEffectEnum, int>();
+        Queue<StatusEffectEnum> q = new Queue<StatusEffectEnum>();
         foreach (var catagory in u.statusEffects)
         {
-            foreach (var statusEffect in catagory.Value)
+            StatusEffectEnum e = catagory.Key;
+          
+            foreach (var effect in catagory.Value)
             {
-                if(BattleManager.inst.turn > statusEffect.turnToKill)
+                if(effect.statusEffectEnum == StatusEffectEnum.BLEED) //if status effect triggers on turn start add it to the q
                 {
-                    if(!bin.Contains(statusEffect))
-                    {bin.Add(statusEffect);}
-                }
-                else
-                {
-                    if(statusEffect.tick != null)
+                    if(!dotStatusEffects.ContainsKey(StatusEffectEnum.BLEED))
                     {
-                        holyfuckingshit.Enqueue(statusEffect);
-                        if(!statusEffects.Contains(statusEffect.statusEffectEnum))
-                        {
-                            statusEffects.Enqueue(statusEffect.statusEffectEnum);
-                            xd[statusEffect.statusEffectEnum]++;
-                        }
-                        else
-                        {xd[statusEffect.statusEffectEnum]++;}
+                        dotStatusEffects.Add(StatusEffectEnum.BLEED,1);
+                        q.Enqueue(StatusEffectEnum.BLEED);
                         
-                    }
-                }
-            }
-        }
-        
-        if(statusEffects.Count == 0)
-        { 
-            foreach (var catagory in u.statusEffects)
-            {
-                foreach (var statusEffect in catagory.Value)
-                {
-                    if(BattleManager.inst.turn == statusEffect.turnToKill)
-                    {
-                        if(!bin.Contains(statusEffect))
-                        {bin.Add(statusEffect);}
-                    }
-                }
-            }
-            foreach (var item in bin)
-            { item.Remove(); }
-            looping = false;
-        }
-        else
-        {
-            Execute();
-            void Execute()
-            {
-                StartCoroutine(delay());
-                IEnumerator delay()
-                {
-                    if( 0 >= currentUnit.health.currentHealth)
-                    {
-                        looping = false;
-                        yield break;
-                    }
-
-                   
-                    if(statusEffects.Count > 0)
-                    {
-                        StatusEffectEnum se = statusEffects.Dequeue();
-                        
-                        switch (se)
-                        {
-                            case StatusEffectEnum.BARRIER:
-                            Debug.LogAssertion("BARRIER SHOULD NOT TICK");
-                            break;
-                            case StatusEffectEnum.BLEED:
-                            BattleTicker.inst.Type("Bleed");
-                            currentUnit.Bleed(xd[StatusEffectEnum.BLEED]);
-                            break;
-                            case StatusEffectEnum.BILE:
-                            Debug.LogAssertion("BILE SHOULD NOT TICK");
-                            break;
-                            default:
-                            Debug.LogAssertion("DEFAULT CASE");
-                            break;
-                        }
-                        yield return new WaitForSeconds(.75f);
-                        Execute();
                     }
                     else
+                    {dotStatusEffects[StatusEffectEnum.BLEED]++;}
+                   
+                }
+                if(effect.TurnsLeft() == 0)
+                {
+                    if(effect.statusEffectEnum == StatusEffectEnum.BLEED){
+                        dotBin.Add(effect);
+                    }
+                    else{
+                        statusEffectBin.Add(effect);
+                    }
+                    
+                }
+            }
+        }
+        StartCoroutine(DOTLoop());
+        
+        IEnumerator DOTLoop()
+        {
+            if(q.Count > 0)
+            {
+                yield return new WaitForSeconds(.5f);
+                StatusEffectEnum se = q.Dequeue();
+                
+                switch (se)
+                {
+                    case StatusEffectEnum.BARRIER:
+                    Debug.LogAssertion("BARRIER SHOULD NOT TICK");
+                    break;
+                    case StatusEffectEnum.BLEED:
+                    BattleTicker.inst.Type("Bleed");
+                    currentUnit.Bleed(dotStatusEffects[StatusEffectEnum.BLEED]);
+                    break;
+                    case StatusEffectEnum.BILE:
+                    Debug.LogAssertion("BILE SHOULD NOT TICK");
+                    break;
+                    default:
+                    Debug.LogAssertion("DEFAULT CASE");
+                    break;
+                }
+             
+                yield return new WaitForSeconds(.5f);
+                StartCoroutine(DOTLoop());
+            }
+            else
+            {
+                foreach (var item in dotBin)
+                {
+                    if(item != null)
                     {
-                        foreach (var item in bin)
-                        { item.Remove(); }
-                        for (int i = 0; i <  holyfuckingshit.Count; i++)
+                        if(item.unit != null)
                         {
-                            if(holyfuckingshit.Count > 0)
-                            {
-                                StatusEffect  se =  holyfuckingshit.Dequeue();
-                                se.CheckForKill();
-                            }
+                            
+                            item.Remove();
                         }
-                      
-                        looping = false;
                     }
                 }
+                looping = false;
             }
         }
     }
@@ -580,18 +563,18 @@ public class BattleManager : Singleton<BattleManager>
     }
 
 
-    public bool checkForAmbush(){
-        if(hasAmbush && !inAmbush)
-        {
-            if( iterationsTilAmbush <= 0)
-            {
-                AmbushHandler.inst.SpawnAmbush();
-                inAmbush = true;
-                return true;
-            }
-        }
-        return false;
-    }
+    // public bool checkForAmbush(){
+    //     if(hasAmbush && !inAmbush)
+    //     {
+    //         if( iterationsTilAmbush <= 0)
+    //         {
+    //             AmbushHandler.inst.SpawnAmbush();
+    //             inAmbush = true;
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
 
 
     public bool playerLose()

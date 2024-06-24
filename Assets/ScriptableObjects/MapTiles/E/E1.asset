@@ -19,8 +19,8 @@ MonoBehaviour:
   locationPic: {fileID: 21300000, guid: b7fc564796bd9af4594bd446b8dbe6cf, type: 3}
   decoPrefab: {fileID: 7269279807310001578, guid: caed01c7b18a0b24bbd4c8a37814c64e,
     type: 3}
-  locationMusic: {fileID: 8300000, guid: 2d533dc1e301d9847b7b97bded49d04b, type: 3}
-  battleMusic: {fileID: 8300000, guid: 52f242959fb65ab448a93e76222dfc4c, type: 3}
+  locationMusic: {fileID: 8300000, guid: a408feafba46b53488d7e299450e0d5b, type: 3}
+  battleMusic: {fileID: 8300000, guid: 8604b649653724a428add57860b71807, type: 3}
   brain: {fileID: 8777964450933838180, guid: 2798c5dffd615bb4c890c78d6b07fca6, type: 3}
   mapSize: {x: 250, y: 250}
   enemies:
@@ -33,5 +33,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 76a7df2fd675184499d3b9e3d0f8b403, type: 3}
     pitchRange: {x: 0.9, y: 1.1}
     volume: 1
+  ambushes:
+  - {fileID: 11400000, guid: fc3ab20926f80304da4b43e85677ec71, type: 2}
   desc: 'Enterance to the great forest. Locals report sightings of "funny little
     creatures" at night. '

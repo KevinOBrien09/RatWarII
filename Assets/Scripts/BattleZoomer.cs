@@ -233,6 +233,7 @@ public class BattleZoomer : Singleton<BattleZoomer>
         CamFollow.inst.STOPMOVING = true;
         CamFollow.inst.target = args.caster.slot.transform;
         Unit u = args.caster;
+        
         float  ogY = u.transform.position.y;
         Transform ogParent = u.transform.parent;
         u.transform.SetParent(BattleZoomer.inst.center);

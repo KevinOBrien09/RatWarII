@@ -13,8 +13,10 @@ public class PartyController : Singleton<PartyController>
     public OverworldUnit leader;
     public bool run;
     public Vector3 newPos;
+    public SoundData footstep;
     bool firstclick;
-
+    float timestamp;
+   public float footstepFreq = .2f;
     void Start(){
         CamFollow.inst.gameObject.SetActive(false);
     }
@@ -62,6 +64,15 @@ public class PartyController : Singleton<PartyController>
                         u.followTarget = lastGuy;
                         u.Move(lastGuy.transform.position);
                         lastGuy = u;
+                    }
+                }
+                foreach (var item in playerUnits)
+                {
+                    
+                
+                    if(timestamp < Time.time && item.agent.velocity.magnitude > .1f){
+                        AudioManager.inst.GetSoundEffect().Play(footstep);
+                        timestamp = Time.time + footstepFreq;
                     }
                 }
             }

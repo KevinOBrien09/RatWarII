@@ -9,24 +9,31 @@ public class AmbushHandler : Singleton<AmbushHandler>
 {
     public ParticleSystem dig;
     
-    public void SpawnAmbush()
+    public void SpawnAmbush(Ambush ambush)
     {
-        List<Slot> candidates = GetEnemyStart();
-        //BattleManager.inst.currentUnit.slot.func.GetRadiusSlots(6,null,true);
-        // foreach (var item in candidates)
-        // {
-        //     item.areaIndicator.gameObject.SetActive(true);
-        //     item.areaIndicator.color = Color.magenta;
-        // }
-        System.Random rng = new System.Random();
-        candidates = candidates.OrderBy(_ => rng.Next()).ToList();
-        for (int i = 0; i < 1; i++)
+        Dictionary<Vector2,DefinedCharacter> enemyDict = new Dictionary<Vector2, DefinedCharacter>();
+        foreach (var item in ambush.datas)
         {
-            Slot s =  candidates[i];
+            if(enemyDict.ContainsKey(item.battlePosition.ToVector2())){
+                Debug.LogAssertion(ambush.name + " HAS TWO IDENTICAL POSITIONS!!!");
+            }
+            else{
+                enemyDict.Add(item.battlePosition.ToVector2(),item.enemy);
+            }
+
+        }
+        Dictionary<Vector2,Slot> candidates = MapManager.inst.map.GetEnemyStartingSlots();
+       
+        foreach(var item in enemyDict)
+        {
+            Slot s =  candidates[item.Key];
             if(s.cont.walkable())
             {
-                UnitFactory.inst.CreateEnemyUnit(s);
+                UnitFactory.inst.CreateEnemyUnit(s,item.Value);
                 
+            }
+            else{
+                Debug.LogAssertion("SLOT WAS NOT WALKABLE!!!");
             }
            
         }
@@ -34,8 +41,9 @@ public class AmbushHandler : Singleton<AmbushHandler>
         Debug.Log("SpawnAmbush");   
     }
 
-    public  List<Slot> GetEnemyStart(){
-         List<Slot> s = new List<Slot>();
+    public  List<Slot> GetEnemyStart()
+    {
+        List<Slot> s = new List<Slot>();
         for (int x = 0; x < MapManager.inst.map.iGridSizeX; x++)
         {
             for (int y = MapManager.inst.map.iGridSizeY-3; y < MapManager.inst.map.iGridSizeY; y++)

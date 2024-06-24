@@ -99,14 +99,14 @@ public class CharacterGraphic : MonoBehaviour
         
     }
 
-    public void GreenFlash(UnityAction action)
+    public void CustomColourFlash(UnityAction action,Color32 c)
     {
         StartCoroutine(q());
         IEnumerator q()
         {
             foreach (var item in allRenderers)
             {
-                item.DOColor(Color.green,0);
+                item.DOColor(c,0);
             }
             action.Invoke();
             yield return new WaitForSeconds(0);
@@ -118,6 +118,8 @@ public class CharacterGraphic : MonoBehaviour
         }
 
     }
+
+    
 
     public void WhiteFlash(UnityAction a){
 

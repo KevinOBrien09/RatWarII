@@ -22,7 +22,7 @@ public class SkillHandler : Singleton<SkillHandler>
     public Image resourceIcon;
     void Start(){
         Close();
-        Debug.Log(gameObject.name);
+       
     }
     public void Open()
     {

@@ -13,20 +13,20 @@ public static class StatusEffects
     public static void Barrier(Unit u,Skill skill, int howManyTurns,int shieldAmount)
     {
         StatusEffect barrier = new StatusEffect();
-        int kill = BattleManager.inst.turn + howManyTurns;
+        
         barrier.Init
         (
             _add: ()=>{u.health.GainShield(barrier,shieldAmount,u);},
             _tick:null,
             _remove:()=>{u.health.RemoveShield(barrier);},
-           u,kill,skill,StatusEffectEnum.BARRIER
+           u,howManyTurns,skill,StatusEffectEnum.BARRIER
         );
        u.AddStatusEffect(barrier);
     }
 
     public static void StatMod(Unit u,Skill skill, int howManyTurns,int change, StatEnum statEnum){
         StatusEffect statMod = new StatusEffect();
-        int kill = BattleManager.inst.turn + howManyTurns;
+    
         statMod.statEnum = statEnum;
         statMod.Init
         (
@@ -44,7 +44,7 @@ public static class StatusEffects
                 {i = System.Math.Abs(change);}
                 u.statMods.Edit(statEnum,i);
             },
-           u,kill,skill,StatusEffectEnum.STATMOD
+           u,howManyTurns,skill,StatusEffectEnum.STATMOD
         );
         u.AddStatusEffect(statMod);
     }
@@ -53,14 +53,14 @@ public static class StatusEffects
     public static void Bleed(Unit u,Skill skill, int howManyTurns)
     {
         StatusEffect bleed = new StatusEffect();
-        int kill = BattleManager.inst.turn + howManyTurns;
+        
         bleed.Init
         (
             _add: ()=>{},
             _tick:()=>
             { },
             _remove:()=>{},
-            u,kill,skill,StatusEffectEnum.BLEED
+            u,howManyTurns,skill,StatusEffectEnum.BLEED
         );
         u.AddStatusEffect(bleed);
        // ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go("BLEED!",Color.red,u.transform.position);

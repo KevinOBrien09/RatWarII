@@ -24,7 +24,7 @@ public class QuickfireCast : SkillCastBehaviour
         CamFollow.inst.target = arrow.transform;
         if(args.target != null){
              if(args.target.healthBar  != null){
- args.target.healthBar.gameObject.transform.parent.gameObject. SetActive(true);
+                args.target.healthBar.gameObject.transform.parent.gameObject. SetActive(true);
              } 
        
         }

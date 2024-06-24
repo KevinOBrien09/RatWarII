@@ -8,6 +8,6 @@ public class OverworldClickable: MonoBehaviour,IPointerClickHandler
    	public OverworldUnit owner;
  	public void OnPointerClick(PointerEventData eventData)
     {
-       SlotInfoDisplay.inst.ApplyUnit(owner. battleUnit);
+       //SlotInfoDisplay.inst.ApplyUnit(owner. battleUnit);
     }
 }

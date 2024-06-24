@@ -269,13 +269,13 @@ public class Unit : MonoBehaviour
     }
 
     public void Heal(int amount){
-        graphic.GreenFlash(()=>
+        graphic.CustomColourFlash(()=>
         {
             int i =health.healAmount(amount);
             AudioManager.inst.GetSoundEffect().Play(systemSounds[1]);
             ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go(i.ToString(),Color.green,transform.position);
             health.Heal(amount);
-        });
+        },Color.green);
     }
 
     public void ShieldBreak()

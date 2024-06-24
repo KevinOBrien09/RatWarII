@@ -76,6 +76,7 @@ MonoBehaviour:
   facingRight: 0
   graphicHolder: {fileID: 3683789677560770925}
   animator: {fileID: 2219731133137884587}
+  graphic: {fileID: 0}
 --- !u!1 &1998665284746788410
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,6 +230,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3683789677560770925}
   - component: {fileID: 2219731133137884587}
+  - component: {fileID: 7924977107712892936}
   m_Layer: 12
   m_Name: GraphicHolder
   m_TagString: Untagged
@@ -271,3 +273,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7924977107712892936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5622842200468764548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94118fac7230d064ebcc4fd7c68889ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sd:
+    audioClip: {fileID: 8300000, guid: abfc13b1d2ddbae46a9ddfd62e2f8640, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 0.5

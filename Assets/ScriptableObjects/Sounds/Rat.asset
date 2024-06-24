@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf0fd85696f1894eb5b90fc5ebac9f3, type: 3}
+  m_Name: Rat
+  m_EditorClassIdentifier: 
+  ID: e747869d-f395-4ed9-86f4-4d2011dc648a
+  turnStart:
+    audioClip: {fileID: 8300000, guid: 9066a812a8444e244bdb8d052f216738, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
+  move:
+    audioClip: {fileID: 8300000, guid: 7f618866adce0984eb4f21c2ddb51218, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 0.8
+  die:
+    audioClip: {fileID: 8300000, guid: 5c573ddeb6508544d871d81202d1454b, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1

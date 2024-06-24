@@ -95,6 +95,7 @@ public class GameManager : Singleton<GameManager>
             }
 
             MusicManager.inst.ChangeAmbience( LocationManager.inst.locationTravelingTo.ambience.audioClip);
+            BattleManager.inst.ambushes = new List<Ambush>(LocationManager.inst.locationTravelingTo.ambushes);
             // PartyController.inst.GrabUnits();    
             BattleManager.inst.overworld.SetActive(true);
             MapManager.inst.map.gameObject.SetActive(false);
@@ -129,7 +130,7 @@ public class GameManager : Singleton<GameManager>
             PartyManager.inst.currentParty = p.ID;
             int w = 0;
            
-            Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetStartingSlots();
+            Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetPlayerStartingSlots();
             foreach (var item in chars)
             {
                 w ++;
@@ -151,7 +152,7 @@ public class GameManager : Singleton<GameManager>
         else
         {
 
-            Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetStartingSlots();
+            Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetPlayerStartingSlots();
             foreach (var item in  PartyManager .inst.parties[PartyManager .inst.currentParty]. members)
             {
                 Character c = item.Value.character;
