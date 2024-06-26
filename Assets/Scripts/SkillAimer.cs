@@ -25,7 +25,10 @@ public class SkillAimer : Singleton<SkillAimer>
          validTargets.Clear();
                 _skill = null;
         BattleManager.inst. ToggleHealthBars(false);
-        BattleManager.inst.StartCoroutine(SkillHandler.inst.SetObject(SkillHandler.inst.hoveredBehaviour.gameObject));
+        if(SkillHandler.inst.hoveredBehaviour != null){
+    BattleManager.inst.StartCoroutine(SkillHandler.inst.SetObject(SkillHandler.inst.hoveredBehaviour.gameObject));
+        }
+    
         ActionMenu.inst.Show(slot);
         aiming = false;
         }
@@ -73,6 +76,7 @@ public class SkillAimer : Singleton<SkillAimer>
                     skillCastBehaviour  = Instantiate( _skill.skillCastBehaviour);
                     int realCost = BattleManager.inst.currentUnit.skillResource.Convert(_skill.intendedResource,_skill.resourceCost);
                     BattleManager.inst.currentUnit.skillResource.Spend(realCost);
+                    caster.battleTokens.DeductActionToken();
                     skillCastBehaviour.Go(args);
                     Cursor.lockState = CursorLockMode.Locked;
                 }
@@ -86,6 +90,7 @@ public class SkillAimer : Singleton<SkillAimer>
         
         _skill = s;
         caster = BattleManager.inst.currentUnit;
+     
         slot = caster.slot;
         if(BattleManager.inst.currentUnit.side == Side.PLAYER){
             GameManager.inst.ChangeGameState(GameState.PLAYERSELECT);

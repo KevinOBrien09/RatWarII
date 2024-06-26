@@ -149,12 +149,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
             else if(SkillAimer.inst.validSlots.Contains(this))
             { hoverBorderOn(); }
         }
-        else if(GameManager.inst.checkGameState(GameState.INTERACT))
-        {
-            if(InteractHandler.inst.slots.Contains(this))
-            { hoverBorderOn();
-            SlotInfoDisplay.inst.Apply(this); }
-        }
+      
     }
     
     public void SlotSelect()
@@ -201,12 +196,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
             }
             break;
          
-            case GameState.INTERACT:
-            if(InteractHandler.inst.slots.Contains(this)){
-                InteractHandler.inst.TakeInteraction(this);
-            }
-     
-            break;
+          
 
             case GameState.ENEMYTURN:
             return;

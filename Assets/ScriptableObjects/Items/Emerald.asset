@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a67ed1981a1a1a418fe222a81935efd, type: 3}
+  m_Name: Emerald
+  m_EditorClassIdentifier: 
+  ID: 0dd9fe86-f750-4f37-8c84-b979a730e677
+  itemName:
+    list:
+    - Key: 0
+      Value: Emerald
+    keyCollision: 0
+  itemDesc:
+    list:
+    - Key: 0
+      Value: A shiny green gem.
+    keyCollision: 0
+  sellValue: 20
+  icon: {fileID: 21300000, guid: 3e03404270c9987458f16df4ef74fc83, type: 3}

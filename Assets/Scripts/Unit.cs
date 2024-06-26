@@ -40,13 +40,15 @@ public class Unit : MonoBehaviour
     public SoundData footstep;
     public bool isHostage;
     public float moveSpeed = .1f;
-    public int baseLineMoveTokens,currentMoveTokens;
+    public BattleTokens battleTokens;
+    public BattleTokens baselineTokens;
+  //  public int baseLineMoveTokens,currentMoveTokens;
     public SpriteRenderer minimapIcon;
     public OverworldUnit overworldUnit;
     void Start()
     {
-        baseLineMoveTokens = 2;
-        currentMoveTokens = baseLineMoveTokens;
+        // baseLineMoveTokens = 2;
+        // currentMoveTokens = baseLineMoveTokens;
         var values = System.Enum.GetValues(typeof(StatusEffectEnum));
         foreach (StatusEffectEnum item in values)
         {statusEffects.Add(item,new List<StatusEffect>());}
@@ -176,6 +178,8 @@ public class Unit : MonoBehaviour
                     //     }
                     // }
                     // else{
+                   
+                    battleTokens.DeductMoveToken();
                     BattleManager.inst.EndTurn();
                     //}
                    
@@ -207,9 +211,9 @@ public class Unit : MonoBehaviour
         stunIndicator.SetActive(false);
     }
 
-    public void DeductMoveToken(){
-        currentMoveTokens--;
-    }
+    // public void DeductMoveToken(){
+    //     currentMoveTokens--;
+    // }
 
 
     public virtual void Hit(int damage,CastArgs castArgs, bool bleed = false)
@@ -222,6 +226,11 @@ public class Unit : MonoBehaviour
         if(ca){
            v = castArgs.caster.transform.position;
          
+        }
+        if(side == Side.PLAYER){
+            float str = (float)damage/100;
+            Debug.Log(str);
+            CameraShake.inst.Shake(.3f,str);
         }
 
         CastArgs c= castArgs;
@@ -304,6 +313,8 @@ public class Unit : MonoBehaviour
                     int i =BattleManager.inst.enemyUnits.Count-1 ;
                     ObjectiveProgressIndicator.inst.Show("Quest Progress:<br>" + i + " Left!" );
                 }
+
+                
             }
             else if(side == Side.PLAYER)
             {
@@ -319,7 +330,9 @@ public class Unit : MonoBehaviour
                 PartyController.inst.Kill(this);
           
             }
+
             dead = true;
+            
             BattleManager.inst.UnitIsDead(this);
             Corpse c =  ObjectPoolManager.inst.Get<Corpse>(ObjectPoolTag.CORPSE);
             foreach (var item in tempTerrainCreated)

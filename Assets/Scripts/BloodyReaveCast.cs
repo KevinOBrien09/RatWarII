@@ -20,6 +20,7 @@ public class BloodyReaveCast : SkillCastBehaviour
             
             bool dead = args.target.health.willUnitDie(damage);
             args.target.Hit(damage,args);
+            
             PlaySound(0,args.skill);
             if(bleed){
             BattleManager.inst.StartCoroutine(q());

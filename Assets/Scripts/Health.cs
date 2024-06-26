@@ -138,7 +138,12 @@ public class Health : MonoBehaviour
             {
                 if(castArgs.caster.side == Side.PLAYER)
                 {
-                    castArgs.caster.character.exp.AddExp(10);
+                    castArgs.caster.battleTokens.godToken++;
+                    if(SlotInfoDisplay.inst!=null){
+                            SlotInfoDisplay.inst.doGodTokenShine = true;
+                    }
+                    Debug.Log("GOD TOKEN TO: " + castArgs.caster.character.characterName.fullName());
+                    //.exp.AddExp(10);
                 }
             }
             else

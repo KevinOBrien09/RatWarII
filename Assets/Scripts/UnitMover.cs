@@ -155,7 +155,7 @@ public class UnitMover : Singleton<UnitMover>
 
     void LateUpdate()
     {
-        if(GameManager.inst.checkGameState(GameState.PLAYERSELECT) && !inCoro && !ActionMenu.inst.FUCKOFF && !SkillAimer.inst.castDecided)
+        if(GameManager.inst.checkGameState(GameState.PLAYERSELECT) && !inCoro && !ActionMenu.inst.FUCKOFF && !SkillAimer.inst.castDecided && ActionMenu.inst.currentState != ActionMenuState.SKIP)
         {
             if(InputManager.inst.player. GetButtonDown("Cancel"))
             {

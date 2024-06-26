@@ -18,6 +18,7 @@ public class Menu : Singleton<Menu>
     public BattlePositionEditor battlePositionEditor;
     public TextMeshProUGUI partyName;
     public GameObject otherShit;
+    public InventoryViewer inventoryViewer;
     void Start()
     {
         partyTabOG = partyTabHolder.anchoredPosition.x;
@@ -35,12 +36,14 @@ public class Menu : Singleton<Menu>
     {
         
         currentState = State.ITEM;
+        inventoryViewer.Load();
         Apply();
     }
 
     public void SwapToPartyState()
     {
         currentState = State.PARTY;
+         inventoryViewer.Exit();
         menuStatScreen.gameObject.SetActive(false);
         foreach (var item in partyTabs)
         {Destroy(item.gameObject);}
@@ -66,7 +69,7 @@ public class Menu : Singleton<Menu>
     {
        
         currentState = State.OPTIONS;
-        
+         inventoryViewer.Exit();
         Apply();
     }
 
@@ -90,7 +93,7 @@ public class Menu : Singleton<Menu>
         if(open)
         {
             open = false;  
-           
+            inventoryViewer.Exit();
             holder.SetActive(false);
         }
         else

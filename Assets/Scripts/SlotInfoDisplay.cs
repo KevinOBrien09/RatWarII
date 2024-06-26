@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Linq;
 
 public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
 {
@@ -17,9 +18,13 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
     public RectTransform rt;
     public StatusEffectStackHandler stackHandler;
     public HealthBar healthBar;
+    public Transform moveTokenHolder;
     public List<GameObject>moveTokes = new List<GameObject>();
     public Slot sl;
-
+    public GameObject actionTokenPrefab,moveTokenPrefab,godTokenPrefab;
+    public bool doGodTokenShine;
+    public List<Image> godTokenImages = new List<Image>();
+    public SoundData refundSFX;
     void Start()
     {
         shown = rt.anchoredPosition;
@@ -56,7 +61,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                     rt.DOAnchorPos(shown,.2f);
                 }
             
-                if( !GameManager.inst.checkGameState(GameState.PLAYERUI)&& ! GameManager.inst.checkGameState(GameState.INTERACT)) 
+                if( !GameManager.inst.checkGameState(GameState.PLAYERUI)) 
                 {
                     if(ActionMenu.inst.currentState == ActionMenuState.ROAM)
                     {CamFollow.inst.Focus(slot.transform,()=>{CamFollow.inst.ChangeCameraState(CameraState.FREE);});}
@@ -111,7 +116,7 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 rt.DOAnchorPos(shown,.2f);
             }
             
-            if( ! GameManager.inst.checkGameState(GameState.PLAYERUI) && ! GameManager.inst.checkGameState(GameState.INTERACT)) 
+            if( ! GameManager.inst.checkGameState(GameState.PLAYERUI)) 
             {
                 if(CamFollow.inst.gameObject.activeSelf){
 
@@ -165,12 +170,79 @@ public class SlotInfoDisplay : Singleton<SlotInfoDisplay>
                 icon.texture = u.enemy.icon;
             }
 
-            moveTokenCount.text = " MT:"+ u.currentMoveTokens.ToString();
-            foreach (var item in moveTokes)
-            {item.SetActive(false);}
-            for (int i = 0; i < u.currentMoveTokens; i++)
-            { moveTokes[i].SetActive(true); }
+        MoveTokens(u);
     }
+
+    public void MoveTokens(Unit u){
+        foreach (var item in moveTokes)
+        {
+            Destroy(item.gameObject);
+        }
+        moveTokes.Clear();
+        moveTokenCount.text = " BT:"+ u.battleTokens.total().ToString();
+        BattleTokens bt = u.battleTokens;
+
+        for (int i = 0; i < bt.moveToken; i++)
+        {
+            GameObject g = Instantiate(moveTokenPrefab,moveTokenHolder);
+            moveTokes.Add(g);
+        }
+
+        for (int i = 0; i < bt.actionToken; i++)
+        {
+            GameObject g = Instantiate(actionTokenPrefab,moveTokenHolder);
+            moveTokes.Add(g);
+        }
+        
+        for (int i = 0; i < bt.godToken; i++)
+        {
+            GameObject g = Instantiate(godTokenPrefab,moveTokenHolder);
+            moveTokes.Add(g);
+            if(doGodTokenShine){
+                godTokenImages.Add(g.GetComponent<Image>());
+            }
+        }
+     
+        if(doGodTokenShine && godTokenImages.Count > 0)
+        {
+            StartCoroutine(z());
+            IEnumerator z()
+            {
+                yield return new WaitForSeconds(.3f);
+                doGodTokenShine = false;
+                Image gT =   godTokenImages.Last();
+                Color co = gT.color;
+                gT.transform.localRotation = Quaternion.Euler(0,0,-90);
+                gT.transform.DOLocalRotate(Vector3.zero,.2f).OnComplete(()=>
+                {
+                    StartCoroutine(q());
+                    IEnumerator q(){
+                    yield return new WaitForSeconds(.2f);
+                    gT.transform.DOScale(new Vector3(.5f,.5f,.5f),.2f);
+                }});
+                
+                AudioManager.inst.GetSoundEffect().Play(refundSFX);
+                gT.transform.DOScale(new Vector3(.6f,.6f,.6f),.2f).OnComplete(()=>
+                {
+                   
+                StartCoroutine(q());
+                IEnumerator q(){
+                    gT.DOColor(Color.white,0);
+                    yield return new WaitForSeconds(refundSFX.audioClip.length + .3f);
+                  
+                    gT.DOColor(co,.2f);
+                      godTokenImages.Clear();
+                }
+                });
+            }
+            }
+        
+        
+      
+
+        
+    }
+    
     public void Disable()
     {
         

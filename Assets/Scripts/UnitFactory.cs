@@ -53,7 +53,7 @@ public class UnitFactory : Singleton<UnitFactory>
 
         
         u.skillResource.SetCatagory(u.character.job);
-
+        u.baselineTokens = new BattleTokens(u.character.battleData.baselineBattleTokens);
         u.gameObject.name = graphic.character.characterName.fullName();
         ReposUnit(u,slot);
         if(CharacterBuilder.inst.sfxDict.ContainsKey(u.character.species))

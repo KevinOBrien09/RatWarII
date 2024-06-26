@@ -74,16 +74,19 @@ public class CharacterBattleData
 {
     public int currentHP;
     public int currentResource;
+    public BattleTokens baselineBattleTokens;
     public void Load(CharacterBattleData cbd)
     {
         currentHP = cbd.currentHP;
         currentResource = cbd.currentResource;
+        baselineBattleTokens  = new BattleTokens(cbd.baselineBattleTokens);
     }
 
     public CharacterBattleData Save(){
         CharacterBattleData cbd = new CharacterBattleData();
         cbd.currentHP = currentHP;
         cbd.currentResource = currentResource;
+        cbd.baselineBattleTokens = new BattleTokens(baselineBattleTokens);
         return cbd;
     }
 }

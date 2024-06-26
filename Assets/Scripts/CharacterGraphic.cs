@@ -91,7 +91,7 @@ public class CharacterGraphic : MonoBehaviour
                 }
             }
             else{
-                  action.Invoke();
+                  //action.Invoke(); was there a reason???
                 t.Kill();
             }
        

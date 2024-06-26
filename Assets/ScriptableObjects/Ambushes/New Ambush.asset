@@ -16,8 +16,12 @@ MonoBehaviour:
   - battlePosition:
       x: 1
       y: 0
-    enemy: {fileID: 11400000, guid: 7369d0e9183f8264ca7185c61aa1f2fb, type: 2}
+    enemy: {fileID: 11400000, guid: 28bf5ffd724f78242a01c09310e0ba01, type: 2}
   - battlePosition:
-      x: 4
-      y: 2
+      x: 3
+      y: 0
+    enemy: {fileID: 11400000, guid: 28bf5ffd724f78242a01c09310e0ba01, type: 2}
+  - battlePosition:
+      x: 2
+      y: 0
     enemy: {fileID: 11400000, guid: 28bf5ffd724f78242a01c09310e0ba01, type: 2}

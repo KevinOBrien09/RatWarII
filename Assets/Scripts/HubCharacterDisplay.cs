@@ -75,12 +75,18 @@ public class HubCharacterDisplay : Singleton<HubCharacterDisplay>
         }
         else
         {
-            if(PartyManager.inst.parties.ContainsKey(PartyManager.inst.currentParty)){
+            if(PartyManager.inst.parties.Count > 0){
+if(PartyManager.inst.parties.ContainsKey(PartyManager.inst.currentParty)){
             p = PartyManager.inst.parties[PartyManager.inst.currentParty];
             }
             else{
               Debug.LogWarning("NO CURRENT PARTY!");
             }
+            }
+            else{
+                Debug.LogWarning("NO PARTIES!!!");
+            }
+            
             
         }
         

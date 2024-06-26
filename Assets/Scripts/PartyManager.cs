@@ -7,20 +7,12 @@ using UnityEngine.Events;
 
 public class PartyManager : Singleton<PartyManager>
 {
-    public int gold;
-    
     public string currentParty;
     public GenericDictionary<string,Party> parties = new GenericDictionary<string, Party>();
     public GenericDictionary<string, CharacterHolder> benched = new GenericDictionary<string, CharacterHolder>();
     public GenericDictionary<string, CharacterHolder> deadCharacters = new GenericDictionary<string, CharacterHolder>();
     public Names partyNameSO;
 
-    void Start()
-    {
-        gold = 900;
-        Refresh();
-        
-    }
 
     
     public void Wipe(){
@@ -28,28 +20,10 @@ public class PartyManager : Singleton<PartyManager>
         parties.Clear();
         benched.Clear();
         deadCharacters.Clear();
-        gold = 0;
+       
     }
 
-    public bool canAfford(int i)
-    {return gold >= i;}
-
-    public void AddGold(int i){
-        gold += i;
-       Refresh();
-        
-    }
-
-     void Refresh()
-    {
-        if(GoldText.inst != null)
-        { GoldText.inst.Refresh(); }
-    }
-
-    public void RemoveGold(int i){
-        gold -= i;
-        Refresh();
-    }
+    
 
 
     public bool characterBelongsInLocation(Character c)

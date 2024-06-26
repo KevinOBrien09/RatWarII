@@ -99,6 +99,10 @@ MonoBehaviour:
   color2:
     serializedVersion: 2
     rgba: 4280821914
+  hoverSFX:
+    audioClip: {fileID: 8300000, guid: 326941374cb0b704da86422baad6c83b, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
 --- !u!1 &8977180948019299818
 GameObject:
   m_ObjectHideFlags: 0

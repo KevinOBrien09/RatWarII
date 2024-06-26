@@ -5,7 +5,7 @@ using DG.Tweening;
 using UnityEngine.UI;
 using TMPro;
 
- public enum ActionMenuState{SKILL,MOVE,INTERACT,ROAM}
+ public enum ActionMenuState{SKILL,MOVE,ITEM,ROAM,SKIP}
 public class ActionMenu : Singleton<ActionMenu>
 {
    
@@ -15,10 +15,11 @@ public class ActionMenu : Singleton<ActionMenu>
     public RectTransform rt,border;
     public Vector2 hidden,shown;
     public bool FUCKOFF;
-    public Image moveIcon,moveIconFade;
+    public Image moveIcon,moveIconFade,skillIcon,skillIconFade;
     public SoundData error;
     public TextMeshProUGUI center;
     public ActionMenuState currentState;
+    public Skill wait;
     Slot slot;
     public bool open;
     void Start()
@@ -35,10 +36,30 @@ public class ActionMenu : Singleton<ActionMenu>
         if(GameManager.inst.checkGameState(GameState.UNITMOVE))
         {return;}
 
+
         if(!FUCKOFF)
         {
           //  Minimap.inst.Hide();
             slot = s;
+
+            
+            if(slot.cont.unit.battleTokens.canMove())
+            {
+                ResetMoveOption();
+            }   
+            else{
+                RemoveMoveOption();
+            }
+
+            if(slot.cont.unit.battleTokens.canAct())
+            {
+                ResetSkillOption();
+            }   
+            else{
+                RemoveSkillOption();
+            }
+
+
             CamFollow.inst.Focus(s.cont.unit.transform,()=>
             { 
                 if(ActionMenu.inst.currentState != ActionMenuState.SKILL)
@@ -62,6 +83,16 @@ public class ActionMenu : Singleton<ActionMenu>
     public void ResetMoveOption(){
         moveIcon.color =  new Color(1,1,1,.75f);
         moveIconFade.enabled = false;
+    }
+
+    public void RemoveSkillOption(){
+        skillIcon.color = new Color(0,0,0,.75f);
+        skillIconFade.enabled = true;
+    }
+
+    public void ResetSkillOption(){
+        skillIcon.color =  new Color(1,1,1,.75f);
+        skillIconFade.enabled = false;
     }
 
     IEnumerator q()
@@ -112,6 +143,19 @@ public class ActionMenu : Singleton<ActionMenu>
                     Show(slot);
                 }
             }
+
+            if(currentState == ActionMenuState.SKIP && !open && !SkillAimer.inst.castDecided)
+            {  
+                if(InputManager.inst.player.GetButtonDown("Cancel"))
+                {
+                    foreach (var item in MapManager.inst.allSlots)
+                    { item. DisableHover();}
+                    GameManager.inst.ChangeGameState(GameState.PLAYERUI);
+                    SkillAimer.inst.Leave();
+                    SkillHandler.inst.hoveredSkill = null;
+                    Show(slot);
+                }
+            }
         } 
     }
 
@@ -120,34 +164,51 @@ public class ActionMenu : Singleton<ActionMenu>
         switch(currentState)
         {
             case ActionMenuState.SKILL:
-            if(!SkillHandler.inst.open)
+            if(slot.cont.unit.battleTokens.canAct())
             {
-                SkillHandler.inst.Open();
-              currentFormation.HideIcons();
+                if(!SkillHandler.inst.open)
+                {
+                    SkillHandler.inst.Open();
+                    currentFormation.HideIcons();
+                }
+            }
+            else
+            {
+                AudioManager.inst.GetSoundEffect().Play(error);
+                Debug.Log("Error Noise");
             }
             break;
 
             case ActionMenuState.MOVE:
-            // if(!slot.cont.unit.movedThisTurn)
-            // {
+            if(slot.cont.unit.battleTokens.canMove())
+            {
                 FUCKOFF = true;
                 rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
                 { FUCKOFF = false; open = false;});
                 UnitMover.inst.EnterSelectionMode(slot);
                 Cursor.lockState = CursorLockMode.Confined;
-            // }
-            // else
-            // {
-            //     AudioManager.inst.GetSoundEffect().Play(error);
-            //     Debug.Log("Error Noise");
-            // }
+            }
+            else
+            {
+                AudioManager.inst.GetSoundEffect().Play(error);
+                Debug.Log("Error Noise");
+            }
             break;
 
-            case ActionMenuState.INTERACT:
-            FUCKOFF = true;
-            rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
-            { FUCKOFF = false; open = false;});
-            InteractHandler.inst.Open();
+            case ActionMenuState.ITEM:
+            // FUCKOFF = true;
+            // rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
+            // { FUCKOFF = false; open = false;});
+            // InteractHandler.inst.Open();
+            Debug.Log("ITEM");
+            break;
+
+            case ActionMenuState.SKIP:
+            
+            Hide();
+         
+            SkillAimer.inst.Go(wait);
+            Debug.Log("SKIP");
             break;
 
             case ActionMenuState.ROAM:

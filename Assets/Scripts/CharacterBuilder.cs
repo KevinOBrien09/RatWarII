@@ -50,8 +50,9 @@ public class CharacterBuilder : Singleton<CharacterBuilder>
         { IconGraphicHolder.inst.MakeIcon(character);}
         character.battleData = new CharacterBattleData();
         character.battleData.currentHP = character.stats().hp;
-       
         character.battleData.currentResource = character.stats().resource;
+        character.battleData.baselineBattleTokens = new BattleTokens();
+        character.battleData.baselineBattleTokens.Set(1,1,0);
         
         return character;
     }

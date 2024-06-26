@@ -19,7 +19,7 @@ public class OverworldCamera : Singleton<OverworldCamera>
     void Update()
     {
         LockOn();
-        if(!BattleManager.inst.inBattle){
+        if(!BattleManager.inst.inBattle && !Menu.inst.open){
       Zoom();
         }
   

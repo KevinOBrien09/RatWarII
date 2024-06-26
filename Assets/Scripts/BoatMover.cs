@@ -52,7 +52,7 @@ public class BoatMover
             boat.Reposition(target);
             GameManager.inst.ChangeGameState(GameState.PLAYERUI);
             ActionMenu.inst.Reset();
-            BattleManager.inst.currentUnit.DeductMoveToken();
+            //BattleManager.inst.currentUnit.battleTokens
             //boat.movedThisTurn = true;
             ActionMenu.inst.Show(BattleManager.inst.currentUnit.slot);
             MapManager.inst.map.UpdateGrid();

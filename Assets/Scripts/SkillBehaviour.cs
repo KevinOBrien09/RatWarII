@@ -12,6 +12,7 @@ public class SkillBehaviour : Selectable
     public Image bg;
     public Skill skill;
     public Color32 color1,color2;
+    public SoundData hoverSFX;
 
   protected override  void Start(){
             txt.color = color2;
@@ -32,6 +33,7 @@ public class SkillBehaviour : Selectable
         SkillHandler.inst.hoveredSkill = skill;
         SkillHandler.inst.hoveredBehaviour = this;
         SkillHandler.inst.ChangeCostDetails(skill);
+        AudioManager.inst.GetSoundEffect().Play(hoverSFX);
     }
 
       public override void OnDeselect(BaseEventData eventData)

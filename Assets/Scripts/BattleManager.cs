@@ -29,7 +29,7 @@ public class BattleManager : Singleton<BattleManager>
     public List<GameObject> shitToKill = new List<GameObject>();
     public List<Ambush> ambushes = new List<Ambush>();
     public List<StatusEffect> statusEffectBin = new List<StatusEffect>();
-
+    //public SoundData tokenResetSFX;
     protected override void Awake()
     {
         base.Awake();
@@ -114,6 +114,7 @@ public class BattleManager : Singleton<BattleManager>
     {
         BattleTicker.inst.Type(BattleManager.inst. TurnState());
         unitsIDontCareAboutInTurnReset.Clear();
+      
         ResetTurnOrder();
         turn++;
         UnitIteration();
@@ -127,6 +128,7 @@ public class BattleManager : Singleton<BattleManager>
             Vector2 v = PartyManager.inst.parties[PartyManager.inst.currentParty].members[item.character.ID].battlePosition;
             
             Unit u = item;
+         
             u.slot = null;
             Slot s = d[v];
             u.transform.position =  new Vector3(s.transform.position.x,u.transform.position.y ,s.transform.position.z);
@@ -153,7 +155,7 @@ public class BattleManager : Singleton<BattleManager>
             if(!turnOrder.Contains(item))
             {
                 turnOrder.Enqueue(item);
-                item.currentMoveTokens = item.baseLineMoveTokens;
+                item.battleTokens = new BattleTokens(item.baselineTokens);
                 item.skillResource.Regain(item.skillResource.regen);
             }
             else{
@@ -177,9 +179,11 @@ public class BattleManager : Singleton<BattleManager>
            
             if(currentUnit.side == Side.PLAYER)
             {
-                currentUnit.DeductMoveToken();
+                //currentUnit.DeductMoveToken();
                 if(UnitHasMoveTokens())
                 {
+                    
+                  
                     GameManager.inst.ChangeGameState(GameState.PLAYERUI);
                     ActionMenu.inst.Reset();
                     ActionMenu.inst.Show(currentUnit.slot);
@@ -244,7 +248,7 @@ public class BattleManager : Singleton<BattleManager>
                 {
                     item.activeUnitIndicator.gameObject.SetActive(false);
                 }
-
+                SlotInfoDisplay.inst.doGodTokenShine = false;
                 currentUnit.activeUnitIndicator.gameObject.SetActive(true);
                
                 unitsIDontCareAboutInTurnReset.Add(currentUnit);
@@ -373,7 +377,7 @@ public class BattleManager : Singleton<BattleManager>
                             {AudioManager.inst.GetSoundEffect().Play(currentUnit.sounds.turnStart);}
                         
                             ActionMenu.inst.FUCKOFF = false;
-                            InteractHandler.inst.bleh = false;
+                            
                             GameManager.inst.ChangeGameState(GameState.PLAYERUI);
                             ActionMenu.inst.Reset();
                             ActionMenu.inst.Show(currentUnit.slot);
@@ -506,7 +510,28 @@ public class BattleManager : Singleton<BattleManager>
         OverworldCamera.inst.gameObject.SetActive(true);
         OverworldCamera.inst.FOVChange(OverworldCamera.inst.baseFOV,(()=>{ PartyController.inst. TakeControl();   inBattle = false; }));
         foreach (var item in playerUnits)
-        { item.gameObject.SetActive(false); }
+        { 
+            item.gameObject.SetActive(false); 
+            item.RemoveStun();
+            foreach (var statuEffectCollection in item.statusEffects)
+            {
+                List<StatusEffect> bin = new List<StatusEffect>();
+                if(statuEffectCollection.Key == StatusEffectEnum.BARRIER){
+                    foreach (var statusEffect in statuEffectCollection.Value)
+                    {
+                        bin.Add(statusEffect);
+                       
+                    }
+                    foreach (var trash in bin)
+                    {
+                        trash.Remove();
+                    }
+                }
+                
+            }
+        
+        
+        }
         ResetUnitPositions();
         enemyUnits.Clear();
         foreach (var item in PartyController.inst.playerUnits)
@@ -514,6 +539,8 @@ public class BattleManager : Singleton<BattleManager>
             item.gameObject.SetActive(true); 
             item.agent.enabled = true;
             item.graphic.breathing.Reset();
+
+           
         }
         
         foreach (var item in ObjectPoolManager.inst.dict[ObjectPoolTag.CORPSE])
@@ -561,22 +588,7 @@ public class BattleManager : Singleton<BattleManager>
         });
        
     }
-
-
-    // public bool checkForAmbush(){
-    //     if(hasAmbush && !inAmbush)
-    //     {
-    //         if( iterationsTilAmbush <= 0)
-    //         {
-    //             AmbushHandler.inst.SpawnAmbush();
-    //             inAmbush = true;
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
-
-
+    
     public bool playerLose()
     {
         bool b = playerUnits.Count == 0;
@@ -606,7 +618,13 @@ public class BattleManager : Singleton<BattleManager>
     {
         if(currentUnit != null) 
         {
-          return currentUnit.currentMoveTokens > 0;
+            if(currentUnit.battleTokens.total() != 0){
+                return true;
+            }
+            else{
+                return false;
+            }
+        
         }
 
 

@@ -8,7 +8,8 @@ public class ActionMenuFormation : MonoBehaviour
 {
     public GenericDictionary<ActionMenuState,RectTransform> icons = new GenericDictionary<ActionMenuState, RectTransform>();
     public ActionMenu.Formation formation;
-
+    public GameObject blank;
+    public RectTransform rt;
     public virtual void Activate()
     {Debug.Log("Activated:" + formation.ToString());}
     
@@ -32,6 +33,7 @@ public class ActionMenuFormation : MonoBehaviour
         ActionMenu.inst.center.gameObject.SetActive(false);
         foreach (var item in icons)
         {item.Value.gameObject.SetActive(false);}
+        blank.SetActive(false);
     }
 
     public virtual void ShowIcons()
@@ -39,5 +41,6 @@ public class ActionMenuFormation : MonoBehaviour
         ActionMenu.inst.center.gameObject.SetActive(true);
         foreach (var item in icons)
         {item.Value.gameObject.SetActive(true);}
+        blank.SetActive(true);
     }
 }

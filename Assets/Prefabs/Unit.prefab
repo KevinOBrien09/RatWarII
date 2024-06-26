@@ -667,9 +667,9 @@ MonoBehaviour:
     pitchRange: {x: 0.9, y: 1}
     volume: 0.6
   hitSounds:
-  - audioClip: {fileID: 8300000, guid: e1b131c4194b0164daee3d2fe4d51874, type: 3}
+  - audioClip: {fileID: 8300000, guid: bc44a7a8d190bb14baed5acd92af378b, type: 3}
     pitchRange: {x: 0.9, y: 1.1}
-    volume: 1
+    volume: 0.5
   inKnockback: 0
   stunned: 0
   whiteFlash: {fileID: 7621306211184561729, guid: 6ab5e72ad2c61d14abc048a95e471c81,

@@ -10,7 +10,7 @@ public class Door : MonoBehaviour
     public List<Slot> occupiedSlots = new List<Slot>();
     public SpecialSlot doorInteractablePrefab;
     public GameObject placeHolder;
-   public List<DoorInteractable> doorInteractables = new List<DoorInteractable>();
+ //  public List<DoorInteractable> doorInteractables = new List<DoorInteractable>();
     public  List<Slot> triggerSlots = new List<Slot>();
 
     public Dictionary<Room,List<Slot>> landingSlots = new Dictionary<Room, List<Slot>>();
@@ -45,14 +45,14 @@ public class Door : MonoBehaviour
                 item.cont.wall = true;
                 SpecialSlot ss =  Instantiate(doorInteractablePrefab,item.transform.position,Quaternion.identity);
                 currentSpecialSlot = ss;
-                DoorInteractable di = ss.interactable as DoorInteractable;
-                doorInteractables.Add(di);
-                di.door = this;
-                item. cont.specialSlot = ss;
-                if(item. cont.specialSlot.interactable != null)
-                {item.cont.specialSlot.interactable.slot = item;}
-                item.cont.specialSlot.slot = item;
-                item.cont.specialSlot.Init();
+                // DoorInteractable di = ss.interactable as DoorInteractable;
+                // doorInteractables.Add(di);
+                // di.door = this;
+                // item. cont.specialSlot = ss;
+                // if(item. cont.specialSlot.interactable != null)
+                // {item.cont.specialSlot.interactable.slot = item;}
+                // item.cont.specialSlot.slot = item;
+                // item.cont.specialSlot.Init();
            
             }
             else{
@@ -131,11 +131,11 @@ public class Door : MonoBehaviour
     }
 
     public void RotateDoor(float y){
-        foreach (var item in doorInteractables)
-        {
-           item.transform. localRotation = Quaternion.Euler(new Vector3(0,y,0));
-        }
-        metalFence.transform.localRotation = Quaternion.Euler(new Vector3(0,y,0));
+        // foreach (var item in doorInteractables)
+        // {
+        //    item.transform. localRotation = Quaternion.Euler(new Vector3(0,y,0));
+        // }
+        // metalFence.transform.localRotation = Quaternion.Euler(new Vector3(0,y,0));
        
     }
 

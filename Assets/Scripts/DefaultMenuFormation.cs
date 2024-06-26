@@ -6,6 +6,7 @@ using TMPro;
 
 public class DefaultMenuFormation : ActionMenuFormation
 {
+    public SoundData left,right;
     public override void Activate(){
         gameObject.SetActive(true);
     }
@@ -20,22 +21,27 @@ public class DefaultMenuFormation : ActionMenuFormation
         switch(ActionMenu.inst.currentState)
         {
             case ActionMenuState.SKILL:
-            ChangeState(ActionMenuState.INTERACT);
+            ChangeState(ActionMenuState.SKIP);
             break;
             
             case ActionMenuState.MOVE:
             ChangeState(ActionMenuState.SKILL);
             break;
             
-            case ActionMenuState.INTERACT:
+            case ActionMenuState.SKIP:
             ChangeState(ActionMenuState.ROAM);
             break;
             
             case ActionMenuState.ROAM:
+            ChangeState(ActionMenuState.ITEM);
+            break;
+
+            case ActionMenuState.ITEM:
             ChangeState(ActionMenuState.MOVE);
             break;
 
         }
+            AudioManager.inst.GetSoundEffect().Play(left);
          ChangeCenterText();
     }
 
@@ -45,20 +51,25 @@ public class DefaultMenuFormation : ActionMenuFormation
             case ActionMenuState.SKILL:
             ChangeState(ActionMenuState.MOVE);
             break;
-
+            
             case ActionMenuState.MOVE:
+            ChangeState(ActionMenuState.ITEM);
+            break;
+            
+            case ActionMenuState.ITEM:
             ChangeState(ActionMenuState.ROAM);
             break;
-
+            
             case ActionMenuState.ROAM:
-            ChangeState(ActionMenuState.INTERACT);
+            ChangeState(ActionMenuState.SKIP);
             break;
 
-            case ActionMenuState.INTERACT:
+            case ActionMenuState.SKIP:
             ChangeState(ActionMenuState.SKILL);
             break;
         }
-         ChangeCenterText();
+        AudioManager.inst.GetSoundEffect().Play(right);
+        ChangeCenterText();
     }
 
     public override void ChangeState(ActionMenuState newState)
@@ -67,45 +78,53 @@ public class DefaultMenuFormation : ActionMenuFormation
         switch(newState)
         {
             case ActionMenuState.SKILL:
-            ActionMenu.inst.border.DORotate(Vector3.zero,.25f);
-            icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,0),.25f);
-            icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,180),.25f);
-            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,-90),.25f);
-            icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,90),.25f);
+            rt.DORotate(Vector3.zero,.25f);
+            foreach (var item in icons)
+            {
+                item.Value.DOLocalRotate(Vector3.zero,.25f);
+            }
             break;
-
+            
             case ActionMenuState.MOVE:
-            ActionMenu.inst.border.DORotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,-90),.25f);
-            icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,180),.25f);
-            icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,0),.25f);
+            rt.DORotate(new Vector3(0,0,60),.25f);
+             foreach (var item in icons)
+            {
+                item.Value.DOLocalRotate(new Vector3(0,0,-60),.25f);
+            }
             break;
-
+            
+            case ActionMenuState.ITEM:
+            rt.DORotate(new Vector3(0,0,120),.25f);
+            foreach (var item in icons)
+            {
+                item.Value.DOLocalRotate(new Vector3(0,0,-120),.25f);
+            }
+            break;
+            
             case ActionMenuState.ROAM:
-            ActionMenu.inst.border.DORotate(new Vector3(0,0,180),.25f);
-            icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,180),.25f);
-            icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,0),.25f);
-            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,-90),.25f);
+            rt.DORotate(new Vector3(0,0,240),.25f);
+            foreach (var item in icons)
+            {
+                item.Value.DOLocalRotate(new Vector3(0,0,-240),.25f);
+            }
             break;
 
-            case ActionMenuState.INTERACT:
-            ActionMenu.inst.border.DORotate(new Vector3(0,0, -90),.25f);
-            icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,90),.25f);
-            icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,-90),.25f);
-            icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,0),.25f);
-            icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,180),.25f);
+            case ActionMenuState.SKIP:
+            rt.DORotate(new Vector3(0,0,300),.25f);
+            foreach (var item in icons)
+            {
+                item.Value.DOLocalRotate(new Vector3(0,0,-300),.25f);
+            }
             break;
         }
-         ChangeCenterText();
+        ChangeCenterText();
     }
 
-    public override void Reset(){
-        icons[ActionMenuState.SKILL].DOLocalRotate(new Vector3(0,0,0),.25f);
-        icons[ActionMenuState.ROAM].DOLocalRotate(new Vector3(0,0,180),.25f);
-        icons[ActionMenuState.INTERACT].DOLocalRotate(new Vector3(0,0,-90),.25f);
-        icons[ActionMenuState.MOVE].DOLocalRotate(new Vector3(0,0,90),.25f);
+    public override void Reset()
+    {
+        rt.DORotate(Vector3.zero,.25f);
+        foreach (var item in icons)
+        {item.Value.DOLocalRotate(Vector3.zero,.25f);}
         ChangeCenterText();
     }
 

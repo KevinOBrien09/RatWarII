@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.EventSystems;
-public enum GameState{PLAYERHOVER,PLAYERUI,PLAYERSELECT, UNITMOVE,ENEMYTURN,INTERACT}
+public enum Language{ENG,FR,SPA,CH,JP}
+public enum GameState{PLAYERHOVER,PLAYERUI,PLAYERSELECT, UNITMOVE,ENEMYTURN}
 public class GameManager : Singleton<GameManager>
 {
     public GameState currentGameState;
     public Objective.ObjectiveEnum chosenObjective;
     public bool doNotGenObjective,chosenQuest,loadFromFile;
     public int saveSlotIndex = 999;
-
+    public Language language;
 
     public void Wipe()
     {
