@@ -45,7 +45,7 @@ public class Objective
                 Slot s2 = r.RandomSlot();
                 
                 RetrevialData rd = objectiveData as RetrevialData;
-                s2.MakeSpecial(rd.prefab.GetComponent<SpecialSlot>());
+            
                 s2.cont.wall = true;
             }
             break;

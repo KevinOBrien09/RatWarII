@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 133483409346696749}
   - component: {fileID: 133483409346696746}
   m_Layer: 0
-  m_Name: Sticky Snare Cast
+  m_Name: TongueTugCast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,4 +46,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabberPrefab: {fileID: 9151325197117861138, guid: df4e20d27dd51e54cbc29c80c598c8c8,
     type: 3}
-  xScale: 3
+  slurp:
+    audioClip: {fileID: 8300000, guid: d98dad3cbef435d4da13bc56ae9f2497, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 1
+  inhale:
+    audioClip: {fileID: 8300000, guid: 0f3c37352b2338e4c9297b9bad25d41f, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 0.5
+  place:
+    audioClip: {fileID: 8300000, guid: 8b69cef569bc5654dba8d816ff6138d8, type: 3}
+    pitchRange: {x: 0.9, y: 1}
+    volume: 0.6

@@ -47,3 +47,4 @@ MonoBehaviour:
   shield: {fileID: 8051415790958093302, guid: ca5d9675f961ab145a044d3f58e70afc, type: 3}
   howManyTurns: 2
   shieldAmount: 15
+  zoomer: {fileID: 620317886848815591, guid: 28d80862d99d5ff49a17dd5f83683a7b, type: 3}

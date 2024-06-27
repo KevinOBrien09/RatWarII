@@ -65875,13 +65875,13 @@ MonoBehaviour:
   recuritPos: {fileID: 6768236947031853261}
   profileMenu: {fileID: 6768236946548063472}
   doorOpen:
-    audioClip: {fileID: 8300000, guid: 97f86b9350068704f808fe3ea84bcb2d, type: 3}
+    audioClip: {fileID: 8300000, guid: 9a9c48e59650033489b75aa0626c969c, type: 3}
     pitchRange: {x: 0.9, y: 1.1}
-    volume: 1
+    volume: 0.8
   doorShut:
-    audioClip: {fileID: 8300000, guid: 861718aaad37338479dfca95f7e79c78, type: 3}
+    audioClip: {fileID: 8300000, guid: f9d5179382c70f142b2455e66de62a3f, type: 3}
     pitchRange: {x: 0.9, y: 1.1}
-    volume: 1
+    volume: 0.8
   owlSpeech: {fileID: 2298289681229405169}
   owlStrings:
   - ...

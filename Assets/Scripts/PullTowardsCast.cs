@@ -6,27 +6,29 @@ using DG.Tweening;
 public class PullTowardsCast : SkillCastBehaviour
 {
     public GameObject grabberPrefab;
-   
+    public SoundData slurp,inhale,place;
     public override void Go(CastArgs args)
     {
         GameObject grabber = Instantiate(grabberPrefab,args.caster.slot.cont.unit.transform);
         Vector3 v =    grabber.transform.localPosition;
-        grabber.transform.localPosition = new Vector3(v.x,1,v.z);
+        AudioManager.inst.GetSoundEffect().Play(inhale);
+        grabber.transform.localPosition = new Vector3(v.x,6,v.z);
         Transform tip = grabber.transform. GetChild(0);
         args.caster.Flip(args.targetSlot.transform.position);
         
         CamFollow.inst.target = tip;
-        CamFollow.inst.ForceFOV(35);
+        //CamFollow.inst.ForceFOV(35);
 
         float distance = Vector3.Distance(args.caster.slot.transform.position, args.targetSlot.transform.position);
         float tilesTraveled =  (int)distance/5;
         float scale = .25f;
         for (int i = 0; i < tilesTraveled; i++)
         {scale +=.5f;}
-
+        CamFollow.inst.ForceFOV(CamFollow.inst.baseFOV);
         grabber.transform.DOScaleX(0,0);
         CamFollow.inst.Focus(tip,(()=>
-        {CamFollow.inst.ChangeCameraState(CameraState.LOCK);
+        {
+            CamFollow.inst.ChangeCameraState(CameraState.LOCK);
             grabber.transform.DOScaleX(scale,.33f).OnComplete(()=>
             {
                 CamFollow.inst.target = args.target.transform;
@@ -60,13 +62,16 @@ public class PullTowardsCast : SkillCastBehaviour
                 if(s!=null)
                 {
                     grabber.transform.DOScaleX(0,.2f).OnComplete(()=>{
+                   
                         Destroy(grabber.gameObject);
-                    });
+                    }); AudioManager.inst.GetSoundEffect().Play(place);
                     args.target.transform.DOMove(overShoot,.2f).OnComplete(()=>
-                    {args.target.transform.DOMove(p,.3f);});
+                    {args.target.transform.DOMove(p,.3f);    });
                     args.target.Reposition(s);
 
                     CamFollow.inst.ForceFOV(CamFollow.inst.baseFOV);
+                   // CamFollow.inst.ChangeCameraState(CameraState.FOCUS);
+                    AudioManager.inst.GetSoundEffect().Play(slurp);
                     StartCoroutine(q());
                 }
                 else
@@ -78,6 +83,7 @@ public class PullTowardsCast : SkillCastBehaviour
 
             IEnumerator q(){
                 yield return new WaitForSeconds(1f);
+                 CamFollow.inst.target = args.caster.transform;
                 SkillAimer.inst.Finish();
             }
            

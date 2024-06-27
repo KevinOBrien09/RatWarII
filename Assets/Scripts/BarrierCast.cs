@@ -12,9 +12,12 @@ public class BarrierCast : SkillCastBehaviour
     public GameObject shield;
     public int howManyTurns;
     public int shieldAmount = 25;
+    public Zoomer zoomer;
     public override void Go(CastArgs args)
     {
-        BattleZoomer.inst.SoloZoom(args,(()=>{
+        SoloZoomer sz = Instantiate(zoomer) as SoloZoomer;
+        sz.AttachToBattle();
+        sz.Go(args,(()=>{
             Transform t = args.caster.transform.Find("shield");
             if(t == null){
                 GameObject s = Instantiate(shield,args.caster.transform);

@@ -67,10 +67,12 @@ public class BattleManager : Singleton<BattleManager>
         { item.cont.unit = null; }
         foreach (var item in allUnits())
         {
-            foreach (var t in   item.tempTerrainCreated)
+            List<TempTerrain> tt = new List<TempTerrain>(item.tempTerrainCreated);
+            foreach (var t in   tt)
             { t.Kill(); }
+            item.tempTerrainCreated.Clear();
         }
-
+        //ZoomCameraSwap.inst.Attach(CamFollow.inst.gameObject);
         ResetUnitPositions();
         SkillHandler.inst.Close();
         //ActionMenu.inst.Reset();
@@ -506,9 +508,12 @@ public class BattleManager : Singleton<BattleManager>
         ActionMenu.inst.Reset();
         Cursor.lockState =   CursorLockMode.Confined;
         BlackFade.inst.WhiteFlash();
-        MapManager.inst.map.gameObject.SetActive(false); CamFollow.inst.gameObject.SetActive(false);
+        MapManager.inst.map.gameObject.SetActive(false); 
+        CamFollow.inst.gameObject.SetActive(false);
+      
         OverworldCamera.inst.gameObject.SetActive(true);
-        OverworldCamera.inst.FOVChange(OverworldCamera.inst.baseFOV,(()=>{ PartyController.inst. TakeControl();   inBattle = false; }));
+        //ZoomCameraSwap.inst.Attach(OverworldCamera.inst.gameObject);
+        OverworldCamera.inst.FOVChange(OverworldCamera.inst.baseFOV,(()=>{ PartyController.inst. TakeControl();   inBattle = false;   CamFollow.inst.transform.position = Vector3.zero;}));
         foreach (var item in playerUnits)
         { 
             item.gameObject.SetActive(false); 

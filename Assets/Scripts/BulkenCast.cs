@@ -10,9 +10,12 @@ using TMPro;
 public class BulkenCast : StatModifierCast
 {
     public ParticleSystem pSystem;
+    public Zoomer zoomer;
     public override void Go(CastArgs args)
     {   
-        BattleZoomer.inst.SoloZoom(args,(()=>
+        SoloZoomer sz = Instantiate(zoomer) as SoloZoomer;
+        sz.AttachToBattle();
+        sz.Go(args,(()=>
         {
             CamFollow.inst.Focus(args.caster.slot.transform,()=>
             { 

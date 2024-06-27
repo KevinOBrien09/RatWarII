@@ -8,9 +8,12 @@ public class BloodyReaveCast : SkillCastBehaviour
 {  
     public int damage = 35;
     public int bleedDuration;
+    public Zoomer zoomer;
     public override void Go(CastArgs args)
     {
-        BattleZoomer.inst.ZoomIn(args,(()=>
+        StrikeZoomer sz = Instantiate(zoomer) as StrikeZoomer;
+        sz.AttachToBattle();
+        sz.Go(args,(()=>
         { 
             bool bleed = true;
             //Random.Range(0,2) == 1;
@@ -36,7 +39,7 @@ public class BloodyReaveCast : SkillCastBehaviour
             }
 
 
-        }),true);
+        }));;
        
     }
 }

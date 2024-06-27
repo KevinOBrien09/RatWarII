@@ -7,8 +7,6 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 
-
-
 public class BattleArenaManager : Map
 {
     public Slot slotPrefab;

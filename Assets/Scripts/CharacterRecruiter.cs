@@ -34,7 +34,7 @@ public class CharacterRecruiter: Singleton<CharacterRecruiter>
         StartCoroutine(q());
         IEnumerator q()
         {
-            //AudioManager.inst.GetSoundEffect().Play(doorOpen); 
+            AudioManager.inst.GetSoundEffect().Play(doorOpen); 
             door.DOLocalRotate(new Vector3(0,-90,0),.25f).OnComplete(()=>{
                    WorldHubCamera.inst.Move(interiorCamPos,(()=>{
 
@@ -89,12 +89,12 @@ public class CharacterRecruiter: Singleton<CharacterRecruiter>
             
             WorldHubCamera.inst.Move(exteriorCamPos,(()=>
             {
-                 
+                
                 door.DOLocalRotate(new Vector3(0,0,0),.25f).OnComplete(() =>
-                {
+                {AudioManager.inst.GetSoundEffect().Play(doorShut);
                     owlSpeech.m_textUI.text = string.Empty;
                     HubStateHandler.inst.RetunToHover();
-                 //AudioManager.inst.GetSoundEffect().Play(doorShut);
+                  
                 }
                 );
             }));

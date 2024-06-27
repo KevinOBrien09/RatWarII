@@ -12,7 +12,7 @@ public class SpecialSlot : MonoBehaviour
     public SortingGroup sorter;
     public IntrusiveMeshHandler intrusiveMesh;
     public bool createdByUnit;
-    public Interactable interactable;
+    
     public bool sotTrigger;
 
     public virtual void Init(){

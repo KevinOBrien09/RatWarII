@@ -6,18 +6,14 @@ using DG.Tweening;
 
 public class SelfHealCast : SkillCastBehaviour
 {
-  
+    public Zoomer zoomer;
     public override void Go(CastArgs args)
     {
-        BattleZoomer.inst.SoloZoom(args,(()=>{
+        SoloZoomer sz = Instantiate(zoomer) as SoloZoomer;
+        sz.AttachToBattle();
+        sz.Go(args,(()=>{
        
             args.caster.Heal(args.skill.value[0]);
         }));
-
-
-        
-        //  CamFollow.inst.Focus(args.caster.slot.transform,()=>
-        //         { CamFollow.inst.ChangeCameraState(CameraState.LOCK); });
-        //  SkillAimer.inst.Skip();
     }
 }

@@ -34,6 +34,10 @@ public class PillarCast :  SkillCastBehaviour
             tt.onKill =()=>
             {
                 tt.createdByUnit = true;
+                if(tt.col == null){
+                    Debug.LogAssertion("PILLAR BUG?");
+                }
+                args.caster.tempTerrainCreated.Remove(tt);
                 Destroy( tt.col.gameObject);
                 tt.slot.cont.wall = false;
                // pillar.slot.cont.slotContents.Remove(pillar.slotContents);

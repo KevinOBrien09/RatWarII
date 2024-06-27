@@ -90,7 +90,6 @@ public class BossObjectiveData : ObjectiveData
 [System.Serializable]
 public class RetrevialData : ObjectiveData
 {
-    public RetrevialableObject prefab;
-    
+   
 
 }

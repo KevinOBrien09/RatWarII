@@ -112,8 +112,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
     public SpecialSlot MakeSpecial(SpecialSlot specialSlotPrefab)
     {
         cont.specialSlot = Instantiate(specialSlotPrefab,transform);
-        if(cont.specialSlot.interactable != null)
-        {cont.specialSlot.interactable.slot = this;}
+       
         cont.specialSlot.slot = this;
         cont.specialSlot.Init();
         return cont.specialSlot;
@@ -227,8 +226,7 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerClickHandler,IPoi
         }
         else if(cont.specialSlot != null && cont.unit == null)
         {
-            if(cont.specialSlot.interactable != null)
-            {hoverBorder.color = Color.magenta; }
+          hoverBorder.color = Color.magenta; 
         }
 
        

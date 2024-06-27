@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 25
+  zoomer: {fileID: 4271522151295394519, guid: 03e094dc58ec5ef43956f793bb6d0f16, type: 3}

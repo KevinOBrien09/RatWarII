@@ -17,6 +17,7 @@ public class PartyController : Singleton<PartyController>
     bool firstclick;
     float timestamp;
    public float footstepFreq = .2f;
+   public List<Transform> partyTransforms = new List<Transform>();
     void Start(){
         CamFollow.inst.gameObject.SetActive(false);
     }
@@ -41,7 +42,13 @@ public class PartyController : Singleton<PartyController>
             newSpeed = baseSpeed - .5f;
             playerUnits[i].agent.speed = baseSpeed;
         }
+        
         OverworldCamera.inst.target = leader.transform;
+        partyTransforms.Clear();
+        foreach (var item in playerUnits)
+        {
+            partyTransforms.Add(item.transform);
+        }
         
       //  CamFollow.inst.ChangeCameraState(CameraState.LOCK);
             run = true;
@@ -77,6 +84,11 @@ public class PartyController : Singleton<PartyController>
                 }
             }
         }
+        if(partyTransforms.Count > 0){
+            Vector3 center = MiscFunctions.FindCenterOfTransforms(partyTransforms);
+            transform.position = new Vector3(center.x,0,center.z);
+        }
+       
 
         if(Input.GetKeyDown(KeyCode.Q)){
             BattleManager.inst.Begin();
@@ -111,11 +123,11 @@ public class PartyController : Singleton<PartyController>
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if(Physics.Raycast(ray, out hit))
             { 
-                if(onNavmesh(hit.point))
-                {
+                // if(onNavmesh(hit.point))
+                // {
                     Vector3 v = hit.point;
                     ClickArrows.inst.Move(new Vector3(v.x,v.y + .1f,v.z));
-                }
+                //}
             }
         }
 
@@ -125,11 +137,11 @@ public class PartyController : Singleton<PartyController>
           
             if(Physics.Raycast(ray, out hit))
             { 
-                if(onNavmesh(hit.point))
-                {
+                // if(onNavmesh(hit.point))
+                // {
                     firstclick = true;
                     newPos = hit.point;
-                }
+               // }
             } 
         }
 
