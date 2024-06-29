@@ -18,6 +18,7 @@ public class PartyController : Singleton<PartyController>
     float timestamp;
    public float footstepFreq = .2f;
    public List<Transform> partyTransforms = new List<Transform>();
+   public OverworldUnit selected;
     void Start(){
         CamFollow.inst.gameObject.SetActive(false);
     }
@@ -26,6 +27,13 @@ public class PartyController : Singleton<PartyController>
         Party p = PartyManager.inst.parties[PartyManager.inst.currentParty];
         playerUnits = playerUnits.OrderBy(o=> p.members [ o.battleUnit.character.ID].position).ToList();
         playerUnits.Reverse();
+    }
+
+    public void ChangeSelected(OverworldUnit u){
+        foreach (var item in playerUnits)
+        {item.selectedSignifier.SetActive(false);}
+        u.selectedSignifier.SetActive(true);
+        selected = u;
     }
 
     public void TakeControl()
@@ -48,6 +56,9 @@ public class PartyController : Singleton<PartyController>
         foreach (var item in playerUnits)
         {
             partyTransforms.Add(item.transform);
+        }
+        if(selected == null){
+            ChangeSelected(leader);
         }
         
       //  CamFollow.inst.ChangeCameraState(CameraState.LOCK);

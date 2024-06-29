@@ -20,7 +20,7 @@ MonoBehaviour:
   decoPrefab: {fileID: 7269279807310001578, guid: caed01c7b18a0b24bbd4c8a37814c64e,
     type: 3}
   locationMusic: {fileID: 8300000, guid: a408feafba46b53488d7e299450e0d5b, type: 3}
-  battleMusic: {fileID: 8300000, guid: 8604b649653724a428add57860b71807, type: 3}
+  battleMusic: {fileID: 8300000, guid: dc2053d9f5f46984dbfc4fc750a68248, type: 3}
   brain: {fileID: 8777964450933838180, guid: 2798c5dffd615bb4c890c78d6b07fca6, type: 3}
   mapSize: {x: 250, y: 250}
   enemies:

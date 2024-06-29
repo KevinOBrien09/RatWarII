@@ -50,6 +50,10 @@ public static class MiscFunctions{
         return bound.center;
     }
 
+    public static bool randomChance(int chance){
+        return Random.Range(0,100) <= chance;
+    }
+
     public static (GameObject,GameObject) FindInList(List<GameObject> GameObjectList)
     {
         float FurthestDistance = 0;

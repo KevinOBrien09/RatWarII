@@ -94,11 +94,15 @@ public class Menu : Singleton<Menu>
         {
             open = false;  
             inventoryViewer.Exit();
+           
             holder.SetActive(false);
         }
         else
         {
-            open = true;  
+            open = true;   
+            if(currentState == State.ITEM){
+                inventoryViewer.BuildAll();
+            }
             holder.SetActive(true);
         }
     }

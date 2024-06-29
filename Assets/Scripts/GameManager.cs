@@ -130,7 +130,9 @@ public class GameManager : Singleton<GameManager>
             PartyManager.inst.AddNewParty(p);
             PartyManager.inst.currentParty = p.ID;
             int w = 0;
-           
+            p.inventory = new Inventory();
+            p.inventory.Init();
+            InventoryManager.inst.SetCurrentInventory(PartyManager.inst.parties[PartyManager.inst.currentParty].inventory);
             Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetPlayerStartingSlots();
             foreach (var item in chars)
             {
@@ -142,35 +144,35 @@ public class GameManager : Singleton<GameManager>
                 u.overworldUnit = o;
                 o.battleUnit = u;
                 PartyController.inst.playerUnits.Add(o);
+                PortraitManager.inst.CreatePortrait(u);
                
              
             }
-           
             PartyController.inst.Organize();
-            
-            
         }
         else
         {
-
             Dictionary<Vector2,Slot>  d =    MapManager.inst.map.GetPlayerStartingSlots();
+            List<CharacterHolder> holders = new List<CharacterHolder>();
             foreach (var item in  PartyManager .inst.parties[PartyManager .inst.currentParty]. members)
+            { holders.Add(item.Value); }
+            holders = holders.OrderBy(f => f.position).ToList();
+            holders.Reverse();
+            foreach (var item in  holders)
             {
-                Character c = item.Value.character;
-                Unit u = UnitFactory.inst.CreatePlayerUnit(d[item.Value.battlePosition],item.Value.character);
+                Character c = item.character;
+                Unit u = UnitFactory.inst.CreatePlayerUnit(d[item.battlePosition],item.character);
                 OverworldUnit o = UnitFactory.inst.CreateOverworldUnit(c);
                 u.overworldUnit = o;
                 o.battleUnit = u;
                 PartyController.inst.playerUnits.Add(o);
+                PortraitManager.inst.CreatePortrait(u);
                  //w ++;
             }
+            InventoryManager.inst.SetCurrentInventory(PartyManager.inst.parties[PartyManager.inst.currentParty].inventory);
             PartyController.inst.Organize();
         }
     }
-
-
-  
-   
     
     public void ChangeGameState(GameState newGameState)
     {

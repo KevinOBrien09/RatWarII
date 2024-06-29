@@ -15,6 +15,7 @@ public class Zoomer : MonoBehaviour
     
     }
 
+
     public virtual void AttachToBattle(){
         transform.SetParent(null);
         transform.SetParent(CamFollow.inst.transform);

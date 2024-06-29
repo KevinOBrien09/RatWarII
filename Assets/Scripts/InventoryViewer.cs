@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
-
+using System;
 public class InventoryViewer : MonoBehaviour
 {
     public ItemBehaviour itemBehaviourPrefab;
@@ -21,15 +21,21 @@ public class InventoryViewer : MonoBehaviour
     {
         Exit();
         BuildAll();
-        //Inventory.inst.onEdit.AddListener((()=>{BuildAll();}));
+       InventoryManager.inst.inventory.fakeEdit += XD;
     }
 
     public void Exit(){
-        Inventory.inst.onEdit.RemoveAllListeners(); 
+        InventoryManager.inst.inventory.RemoveAllEvents();
     }
 
-    public void BuildAll(){
+    public void XD(object sender,EventArgs args)
+    {
+        BuildAll();
+    }
 
+    
+    public void BuildAll(){
+        SetEmpty();
         Clear();
         foreach (var item in tabs)
         {
@@ -40,7 +46,7 @@ public class InventoryViewer : MonoBehaviour
            
         }
         catagory.text = "All";
-        foreach (var i in Inventory.inst.alltems)
+        foreach (var i in InventoryManager.inst.inventory.allItems)
         {
             if(behaviourDict.ContainsKey(i.ID))
             {
@@ -60,7 +66,15 @@ public class InventoryViewer : MonoBehaviour
         }
     }
 
+    public void SetEmpty(){
+        itemName.text =  string.Empty;
+        itemDesc.text = string.Empty;
+        sellValue.text =  string.Empty;
+        sprite.enabled = false;
+    }
+
     public void BuildCatagory(ItemCatagory catagory){
+        SetEmpty();
         Clear();
         foreach (var item in tabs)
         {
@@ -73,7 +87,7 @@ public class InventoryViewer : MonoBehaviour
            
         }
         this.catagory.text = catagory.ToString();
-        foreach (var iter in Inventory.inst.dict[catagory])
+        foreach (var iter in InventoryManager.inst.inventory.dict[catagory])
         {
             foreach (var i in iter.Value)
             {
@@ -101,6 +115,7 @@ public class InventoryViewer : MonoBehaviour
         itemName.text = i.itemName[GameManager.inst.language];
         itemDesc.text = i.itemDesc[GameManager.inst.language];
         sellValue.text = "Sells for:" + i.sellValue.ToString();
+        sprite.enabled = true;
         sprite.sprite = i.icon;
         foreach(var item in behaviourDict){
             item.Value.text.color = Color.white;

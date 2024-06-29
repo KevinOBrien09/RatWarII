@@ -84,6 +84,7 @@ public class PartySaveData
         public string partyName;
         public Vector2 mapTileID;
         public List<HolderSaveData> members = new List<HolderSaveData>();
+        public Inventory.InventorySave inventory;
 
     }
     
@@ -104,8 +105,8 @@ public class Party
     public string partyName;
     public GenericDictionary<string, CharacterHolder> members = new GenericDictionary<string, CharacterHolder>();
     public GenericDictionary<Vector2,string> battlePositions = new GenericDictionary<Vector2,string>();
- // public UnityEvent onPartyEdit;
     public int partySize = 4;
+    public Inventory inventory;
 
     public void ChangeMapLocation(Vector2 v){
         mapTileID = v;
@@ -121,6 +122,7 @@ public class Party
         b = end[Random.Range(0,end.Count)];
         partyName = a + " " + b;
         mapTileID = LocationManager.inst.currentLocation;
+        inventory = new Inventory();
     }
 
  
@@ -141,6 +143,7 @@ public class Party
       
             ips.members.Add(hsd);
         }
+        ips.inventory = inventory.Save();
         return ips;
     }
 

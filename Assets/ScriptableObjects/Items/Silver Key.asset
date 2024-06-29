@@ -9,20 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fd4c04b1d698f342a7fdc0efa2578cc, type: 3}
-  m_Name: Potion of Strength
+  m_Script: {fileID: 11500000, guid: ea0377da2aafd75478558dfb732321b2, type: 3}
+  m_Name: Silver Key
   m_EditorClassIdentifier: 
-  ID: 560bee62-ee6f-4bd4-93b9-22dcb664c9ad
+  ID: 4e30bd83-c460-4c66-bd61-752f2e1111bf
   itemName:
     list:
     - Key: 0
-      Value: Potion of Strength
+      Value: Silver Key
     keyCollision: 0
   itemDesc:
     list:
     - Key: 0
-      Value: Gain 10 STR for 2 turns.
+      Value: Can be used to open chests / insignificant doors.
     keyCollision: 0
-  sellValue: 50
-  icon: {fileID: 21300000, guid: 2f891795abf0d8e4a8ebf9e3be4768bd, type: 3}
+  sellValue: 25
+  icon: {fileID: 21300000, guid: 4e6e051ab98eadc4a95be14add7c0575, type: 3}
   catagory: 2

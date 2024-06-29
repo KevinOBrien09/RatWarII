@@ -89,6 +89,7 @@ public class PartyManager : Singleton<PartyManager>
             p.members.Add(item.charSave.ID,holder); 
             p.battlePositions.Add(holder.battlePosition,holder.character.ID);
         }
+        p.inventory = InventoryManager.inst.Load(ips.inventory);
         parties.Add(p.ID,p);
     }
     

@@ -24,7 +24,6 @@ public class TitleScreen : Singleton<TitleScreen>
     Tween t;
     public float logoTravelTime,mapTravelTime;
     public TMP_InputField inputField;
-
     public int saveToLoad;
     public CanvasGroup loadingScreen;
     void Start()
@@ -70,17 +69,14 @@ public class TitleScreen : Singleton<TitleScreen>
       
         if(InputManager.inst.player.GetAnyButtonDown() )
         {
-        if(currentState == TitleScreenState.TITLEFADEIN)
-        {
-            if(!pressedStart)
-            {SkipZoom();}
-        }
-        else if(currentState == TitleScreenState.PRESS_START){
-            BringUpOptions();
-        }
-                
-             
-            
+            if(currentState == TitleScreenState.TITLEFADEIN)
+            {
+                if(!pressedStart)
+                {SkipZoom();}
+            }
+            else if(currentState == TitleScreenState.PRESS_START){
+                BringUpOptions();
+            }
         }
     }
 
@@ -115,7 +111,7 @@ public class TitleScreen : Singleton<TitleScreen>
         currentState = TitleScreenState.NEWGAME;
         saveSlotHandler.NewGame();
         
-        Debug.Log("new game");
+  
     }
 
     public void LoadSave(){
@@ -124,7 +120,7 @@ public class TitleScreen : Singleton<TitleScreen>
         returnButton.gameObject.SetActive(true);
         currentState = TitleScreenState.LOADGAME;
         saveSlotHandler.LoadGame();
-        Debug.Log("load game");
+    
     }
 
     public void LoadScene(int i){

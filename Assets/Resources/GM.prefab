@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7847519054351021909}
-  - component: {fileID: 3965854551601458778}
+  - component: {fileID: 5994208737374749777}
   m_Layer: 0
   m_Name: Inventory
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 8191127639272312124}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3965854551601458778
+--- !u!114 &5994208737374749777
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,30 +41,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 889244404599512308}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf2ba670a765fe849b94c344c8c12b96, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a08f611cbec9f34e8bfa428c2bde228, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  alltems: []
-  dict:
+  everyItem:
+  - {fileID: 11400000, guid: 2c4defa8003867f429b3f54fe175b666, type: 2}
+  - {fileID: 11400000, guid: b944b0847910db240ba86357223a4af1, type: 2}
+  - {fileID: 11400000, guid: d14fb6bfe1d057a489e1c826807231ed, type: 2}
+  - {fileID: 11400000, guid: d841f71474cc25c42adeef1ce155e62d, type: 2}
+  - {fileID: 11400000, guid: bda510257a681154aa0909d30ed4e077, type: 2}
+  itemDict:
     list: []
     keyCollision: 0
-  itemOfEveryType:
-  - {fileID: 11400000, guid: b944b0847910db240ba86357223a4af1, type: 2}
-  - {fileID: 11400000, guid: bc605698482483e468e30e4bc47bdd96, type: 2}
-  allItems:
-  - {fileID: 11400000, guid: 2c4defa8003867f429b3f54fe175b666, type: 2}
-  - {fileID: 11400000, guid: 466beeeb42c37bf4f91cc30f41501646, type: 2}
-  - {fileID: 11400000, guid: b944b0847910db240ba86357223a4af1, type: 2}
-  - {fileID: 11400000, guid: bc605698482483e468e30e4bc47bdd96, type: 2}
-  - {fileID: 11400000, guid: 64ecd03495e6ebf4aaa1e5a9351d3f47, type: 2}
-  - {fileID: 11400000, guid: 9c789f810a3df2242a3d48182657a99d, type: 2}
-  - {fileID: 11400000, guid: c025275d49bbf074f8d24f43546628b0, type: 2}
-  - {fileID: 11400000, guid: d14fb6bfe1d057a489e1c826807231ed, type: 2}
-  - {fileID: 11400000, guid: bda510257a681154aa0909d30ed4e077, type: 2}
-  onEdit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &3045507458005438083
 GameObject:
   m_ObjectHideFlags: 0

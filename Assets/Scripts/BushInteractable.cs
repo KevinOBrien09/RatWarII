@@ -8,28 +8,61 @@ using DG.Tweening;
 public class BushInteractable : Interactable
 {
     public GameObject outOfRangeOutline;
-    public override void Go(){
-        InteractZoomer.inst.Zoom(transform.parent.gameObject,PartyController.inst.leader);
-    }
-    public override void OutlineToggle(bool state,bool inRange = false)
+    public Zoomer zoomer;
+    public ItemContainer itemContainer;
+    public override void Go()
     {
-        if(state)
-        {
-            if(inRange)
+        if(PartyController.inst.selected.battleUnit.character.job == Job.ARCHER){
+            if(!itemContainer.itemsGone)
             {
-                outline.SetActive(true);
-                outOfRangeOutline.SetActive(false);
+                BushInteractZoomer biz = Instantiate(zoomer) as BushInteractZoomer;
+                biz.AttachToOverworld();
+                biz.InteractZoom(itemContainer,PartyController.inst.selected);
+
+            }
+        }
+        else{
+            Debug.Log("Not an archer");
+        }
+        
+    }
+    
+    public override void OutlineToggle(bool state,bool inRange = false)
+    { 
+        if(!itemContainer.itemsGone){
+            if(state)
+            {
+                if(inRange)
+                {
+                    outline.SetActive(true);
+                    outOfRangeOutline.SetActive(false);
+                }
+                else
+                {
+                    outline.SetActive(false);
+                    outOfRangeOutline.SetActive(true);
+                }
             }
             else
             {
                 outline.SetActive(false);
-                outOfRangeOutline.SetActive(true);
+                outOfRangeOutline.SetActive(false);
             }
         }
-        else
-        {
-            outline.SetActive(false);
-            outOfRangeOutline.SetActive(false);
+    }
+
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        if(!itemContainer.itemsGone){
+        base.OnPointerEnter(eventData);
+        }
+   
+    }
+
+    public override void OnPointerExit(PointerEventData eventData)
+    {  
+        if(!itemContainer.itemsGone){
+       base.OnPointerExit(eventData);
         }
     }
 }

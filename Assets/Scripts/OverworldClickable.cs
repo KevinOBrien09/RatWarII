@@ -5,9 +5,9 @@ using UnityEngine.EventSystems;
 
 public class OverworldClickable: MonoBehaviour,IPointerClickHandler
 {
-   	public OverworldUnit owner;
- 	public void OnPointerClick(PointerEventData eventData)
-    {
-       //SlotInfoDisplay.inst.ApplyUnit(owner. battleUnit);
-    }
+   public OverworldUnit owner;
+   public void OnPointerClick(PointerEventData eventData)
+   {
+      PartyController.inst.ChangeSelected(owner);
+   }
 }

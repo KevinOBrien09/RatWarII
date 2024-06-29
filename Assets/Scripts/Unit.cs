@@ -362,14 +362,24 @@ public class Unit : MonoBehaviour
         {
             bool movingRight = transform.position.x <= v.x ;
             if(movingRight)
-            {transform.localScale = Vector3.one; 
-            healthBar.transform.parent. localScale = new Vector3(1,1,1);
-            facingRight = true;}
+            { LookRight(); }
             else
-            { transform.localScale = new Vector3(-1,1,1); 
-            healthBar.transform.parent.localScale = new Vector3(-1,1,1);
-            facingRight = false;}
+            { LookLeft(); }
         }
+    }
+
+    public void LookRight()
+    {
+        transform.localScale = Vector3.one; 
+        healthBar.transform.parent. localScale = new Vector3(1,1,1);
+        facingRight = true;
+    }
+
+    public void LookLeft()
+    {
+        transform.localScale = new Vector3(-1,1,1); 
+        healthBar.transform.parent.localScale = new Vector3(-1,1,1);
+        facingRight = false;
     }
 
     

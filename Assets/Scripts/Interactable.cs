@@ -13,12 +13,12 @@ public class Interactable : MonoBehaviour,IPointerEnterHandler,IPointerExitHandl
     float distToPlayer;
   
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
       InteractionManager.inst.SetInteractable(this);
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         InteractionManager.inst.RemoveInteractable();
     }
@@ -29,7 +29,7 @@ public class Interactable : MonoBehaviour,IPointerEnterHandler,IPointerExitHandl
 
     public float GetDistanceToPlayer()
     {
-        return Vector3.Distance(transform.position,PartyController.inst.leader .transform.position);
+        return Vector3.Distance(transform.position,PartyController.inst.transform.position);
     }
 
     public virtual void OutlineToggle(bool state,bool inRange = false)

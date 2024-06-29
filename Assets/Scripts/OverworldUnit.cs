@@ -12,6 +12,7 @@ public class OverworldUnit: MonoBehaviour
     public Transform graphicHolder;
     public Animator animator;
     public CharacterGraphic graphic;
+    public GameObject selectedSignifier;
     public void Move(Vector3 targetPos){
         agent.SetDestination(targetPos);
         Flip(targetPos);
@@ -32,14 +33,24 @@ public class OverworldUnit: MonoBehaviour
         {
             bool movingRight = transform.position.x <= v.x ;
             if(movingRight)
-            {transform.localScale = Vector3.one; 
-            
-            facingRight = true;}
+            { LookRight(); }
             else
-            { transform.localScale = new Vector3(-1,1,1); 
-         
-            facingRight = false;}
+            { LookLeft(); }
         }
+    }
+
+    public void LookRight()
+    {
+        transform.localScale = Vector3.one; 
+        
+        facingRight = true;
+    }
+
+    public void LookLeft()
+    {
+        transform.localScale = new Vector3(-1,1,1); 
+      
+        facingRight = false;
     }
 
 }

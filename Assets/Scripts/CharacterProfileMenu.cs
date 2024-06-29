@@ -100,10 +100,11 @@ public class CharacterProfileMenu : Singleton< CharacterProfileMenu>
     public void Hire()
     {
         if(CharacterRecruiter.inst.state == 2){
-            if(Inventory.inst.canAfford(300)|debug)
+            
+            if(InventoryManager.inst.canAfford(300)|debug)
             {
                 if(!debug){
-                Inventory.inst.RemoveGold(300);
+                InventoryManager.inst.RemoveGold(300);
                 }
                
                 Character c = characters[index];

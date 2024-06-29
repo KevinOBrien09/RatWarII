@@ -10,6 +10,7 @@ public class HealthBar : MonoBehaviour
     public TextMeshProUGUI hpCount;
     public Image fill,shieldFill;
     Tween tween;
+    public bool textJustShowsCurrent;
 void OnEnable(){
     if(health != null){
  shieldFill.fillAmount = (float)health.shield()/(float)health.maxHealth;
@@ -28,14 +29,31 @@ void OnEnable(){
         if(health.currentHealth < 0){
             health.currentHealth = 0;
         }
-        if(health.shield() > 0){
-   int i = health.currentHealth + health.shield();
-            hpCount.text = "HP:<b>"+ i +  "</b>/" +  health.maxHealth ;
+
+        if(hpCount != null)
+        {
+            if(health.shield() > 0)
+            {   
+                  int i = health.currentHealth + health.shield();
+                if(textJustShowsCurrent){
+                    hpCount.text = i.ToString();
+                }
+                else{
+                  
+                    hpCount.text = "HP:<b>"+ i +  "</b>/" +  health.maxHealth ;
+                }
+            }
+            else
+            {
+                if(textJustShowsCurrent)
+                { hpCount.text =  health.currentHealth.ToString()+":";;
+                }
+                else{
+                    hpCount.text = "HP:"+ health.currentHealth +  "/" +  health.maxHealth ;
+                }
+               
+            }
         }
-        else{
-           hpCount.text = "HP:"+ health.currentHealth +  "/" +  health.maxHealth ;
-        }
-      
     }
 
    
