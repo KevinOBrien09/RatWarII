@@ -14,7 +14,7 @@ public class Portrait : MonoBehaviour
     public ResourceBar resourceBar;
     Unit unit;
     public RectTransform rt;
-    public Image redFlash;
+    public Image redFlash,interactor;
     public HPBoxResizer hPBoxResizer;
     public void Init(Unit u)
     {

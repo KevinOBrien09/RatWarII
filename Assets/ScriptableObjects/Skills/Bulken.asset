@@ -13,21 +13,30 @@ MonoBehaviour:
   m_Name: Bulken
   m_EditorClassIdentifier: 
   ID: b06a4ba8-1215-4489-942b-9957b8a5eb77
-  skillName: Bulken
-  desc: Raise the casters DEF by 25% for 2 turns.
-  resourceCost: 2
-  additionalMoveTokenCost: 0
-  intendedResource: 2
-  side: 0
+  itemName:
+    list:
+    - Key: 0
+      Value: Bulken
+    keyCollision: 0
+  itemDesc:
+    list:
+    - Key: 0
+      Value:
+        str: Increases DEF by 25%.
+    keyCollision: 0
   skillCastBehaviour: {fileID: -4583110169853117745, guid: e823589ae908dbb4db6322d905814907,
     type: 3}
-  doesntNeedUnitInSlot: 0
+  value: 
   statusEffectIcon: {fileID: 0}
   sounds:
   - audioClip: {fileID: 8300000, guid: 99442b87ed7ea1742af3d5680bce26a9, type: 3}
     pitchRange: {x: 0.9, y: 1.1}
     volume: 0.8
-  value: 
+  resourceCost: 2
+  additionalMoveTokenCost: 0
+  intendedResource: 2
+  side: 0
+  doesntNeedUnitInSlot: 0
   canHitBreakableSlots: 0
   radius: 0
   castOnCasterSlot: 0

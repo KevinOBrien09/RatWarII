@@ -17,7 +17,7 @@ public class BushInteractZoomer : Zoomer
         AudioManager.inst.GetSoundEffect().Play(rustle);
     }
     public  void InteractZoom(ItemContainer bush,OverworldUnit overworldUnit)
-    {
+    {   
         Vector3 ogBushRot = bush.transform.rotation.eulerAngles;
         Vector3 ogBushPos = bush.transform.position;
         Vector3 ogUnitPos = overworldUnit.transform.position;
@@ -25,9 +25,14 @@ public class BushInteractZoomer : Zoomer
         InteractionManager.inst.enabled =false;
         InteractionManager.inst.currentInteractable.OutlineToggle(false,false);
         PartyController.inst.run = false;
+        foreach (var item in PartyController.inst.playerUnits)
+        {
+            item.agent.enabled = false;
+        }
+        overworldUnit.selectedSignifier.gameObject.SetActive(false);
         overworldUnit.animator.enabled = false;
         overworldUnit.transform.rotation =  Quaternion.Euler(0,0,0);
-        overworldUnit.agent.enabled = false;
+    
         OverworldCamera.inst.enabled = false;
         overworldUnit.transform.SetParent(unitHolder);
         overworldUnit.transform.DOLocalMove(Vector3.zero,.2f);
@@ -62,8 +67,12 @@ public class BushInteractZoomer : Zoomer
             bush.transform.DOLocalMove(ogBushPos,.3f);
             overworldUnit.transform.DOMove(ogUnitPos,.3f).OnComplete(()=>
             {
+                overworldUnit.selectedSignifier.gameObject.SetActive(true);
                 PartyController.inst.run = true;
-                overworldUnit.agent.enabled = true;
+                foreach (var item in PartyController.inst.playerUnits)
+                {
+                    item.agent.enabled = true;
+                }
                 OverworldCamera.inst.enabled = true;
                 overworldUnit.animator.enabled = true;
                 InteractionManager.inst.enabled = true;

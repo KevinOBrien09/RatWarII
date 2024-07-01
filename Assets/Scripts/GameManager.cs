@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.EventSystems;
-public enum Language{ENG,FR,SPA,CH,JP}
+public enum Language{ENG,FR,SPA,ITA,GER,CH,JP,RUS}
 public enum GameState{PLAYERHOVER,PLAYERUI,PLAYERSELECT, UNITMOVE,ENEMYTURN}
 public class GameManager : Singleton<GameManager>
 {
@@ -140,7 +140,7 @@ public class GameManager : Singleton<GameManager>
                 p.FakePartyAdd(item,w);
                 Unit u = UnitFactory.inst. CreatePlayerUnit(d[p.members[item.ID].battlePosition] ,item);
                 OverworldUnit o = UnitFactory.inst.CreateOverworldUnit(item);
-               
+                o.name = item.characterName.fullName() +" OVERWORLD";
                 u.overworldUnit = o;
                 o.battleUnit = u;
                 PartyController.inst.playerUnits.Add(o);

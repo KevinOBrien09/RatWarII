@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c603b92c96daa24088b1e84b0cbbbdd, type: 3}
+  m_Name: BlackberryEat
+  m_EditorClassIdentifier: 
+  ID: 09ceaadf-9b8b-4282-8a92-cd70b706e96b
+  itemName:
+    list:
+    - Key: 0
+      Value: Blackberry
+    keyCollision: 0
+  itemDesc:
+    list:
+    - Key: 0
+      Value:
+        str: Restores 5 HP.
+    keyCollision: 0
+  skillCastBehaviour: {fileID: 6002840981871312567, guid: dada3cb6fb468244daad3c84102d9c56,
+    type: 3}
+  value: 
+  statusEffectIcon: {fileID: 0}
+  sounds: []
+  resourceCost: 0
+  additionalMoveTokenCost: 0
+  intendedResource: 0
+  side: 0
+  doesntNeedUnitInSlot: 0
+  canHitBreakableSlots: 0
+  radius: 0
+  castOnCasterSlot: 1
+  showHealthBars: 1

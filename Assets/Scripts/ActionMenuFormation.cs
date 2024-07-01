@@ -27,6 +27,9 @@ public class ActionMenuFormation : MonoBehaviour
 
     public virtual void Reset()
     {Debug.Log("Reset Formation");}
+    public virtual void ItemReset()
+    {
+    }
 
     public virtual void HideIcons()
     {

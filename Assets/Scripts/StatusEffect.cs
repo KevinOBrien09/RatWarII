@@ -9,10 +9,10 @@ public class StatusEffect
     public Unit unit;
     public int turnsLeft;
     public UnityAction add, tick,remove;
-    public Skill skill;
+    public Castable skill;
     public StatusEffectEnum statusEffectEnum;
     public StatEnum statEnum;
-    public void Init(UnityAction _add,UnityAction _tick, UnityAction _remove,Unit u,int _turnsLeft,Skill _skill,StatusEffectEnum _statusEffectEnum)
+    public void Init(UnityAction _add,UnityAction _tick, UnityAction _remove,Unit u,int _turnsLeft,Castable _skill,StatusEffectEnum _statusEffectEnum)
     {
         //add.Invoke();
         add = _add;

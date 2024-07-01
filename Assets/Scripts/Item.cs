@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Item/Base")]
-public class Item : GUIDScriptableObject
+public class Item : Castable
 {
-    public GenericDictionary<Language,string> itemName = new GenericDictionary<Language, string>();
-    public GenericDictionary<Language,string> itemDesc = new GenericDictionary<Language, string>();
+    
     public int sellValue;
     public Sprite icon;
     public ItemCatagory catagory;
+    public bool canBeUsedInBattle;
+    public Skill cast;
     public int buyValue()
     {
         int third = MiscFunctions.GetPercentage(33,sellValue);

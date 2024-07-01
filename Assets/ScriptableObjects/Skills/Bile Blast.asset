@@ -13,13 +13,20 @@ MonoBehaviour:
   m_Name: Bile Blast
   m_EditorClassIdentifier: 
   ID: 474ee8e8-de55-4970-be05-94668f74df69
-  skillName: Bile Blast
-  desc: Deals 5 DMG and <i>weakens</i> the targert.
-  effects: []
-  side: 0
+  itemName:
+    list:
+    - Key: 0
+      Value: Bile Blast
+    keyCollision: 0
+  itemDesc:
+    list:
+    - Key: 0
+      Value:
+        str: Fire puke on an enemy dealing 5 DMG.
+    keyCollision: 0
   skillCastBehaviour: {fileID: 3133317868190428679, guid: c1b48f8e1132f9143a2306ddc07a0469,
     type: 3}
-  doesntNeedUnitInSlot: 0
+  value: 
   statusEffectIcon: {fileID: 0}
   sounds:
   - audioClip: {fileID: 8300000, guid: c7480a15a384b994b8aeccd211c2e833, type: 3}
@@ -28,7 +35,12 @@ MonoBehaviour:
   - audioClip: {fileID: 8300000, guid: 33b0a6c99069ab244b895bc93e9a138a, type: 3}
     pitchRange: {x: 0.9, y: 1.1}
     volume: 0
-  value: 
+  resourceCost: 0
+  additionalMoveTokenCost: 0
+  intendedResource: 0
+  side: 0
+  doesntNeedUnitInSlot: 0
+  canHitBreakableSlots: 0
   passThrough: 0
   goThroughWalls: 0
   projectilePath: 0

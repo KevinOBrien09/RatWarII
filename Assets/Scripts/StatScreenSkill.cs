@@ -13,7 +13,7 @@ public class StatScreenSkill : MonoBehaviour
     
     public void Init(Skill s)
     {
-        skillName.text = s.skillName;
+        skillName.text = s.GetName();
         skill = s;
     }
 

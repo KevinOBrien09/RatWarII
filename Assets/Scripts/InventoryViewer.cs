@@ -112,8 +112,8 @@ public class InventoryViewer : MonoBehaviour
     }
 
     public void ShowItem(Item i){
-        itemName.text = i.itemName[GameManager.inst.language];
-        itemDesc.text = i.itemDesc[GameManager.inst.language];
+        itemName.text = i.GetName();
+        itemDesc.text = i.GetDesc();
         sellValue.text = "Sells for:" + i.sellValue.ToString();
         sprite.enabled = true;
         sprite.sprite = i.icon;

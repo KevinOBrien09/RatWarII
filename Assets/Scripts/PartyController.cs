@@ -19,8 +19,14 @@ public class PartyController : Singleton<PartyController>
    public float footstepFreq = .2f;
    public List<Transform> partyTransforms = new List<Transform>();
    public OverworldUnit selected;
+    public SoundData error;
+    public bool pathAvailable;
+    public NavMeshPath navMeshPath;
+
+
     void Start(){
         CamFollow.inst.gameObject.SetActive(false);
+        navMeshPath = new NavMeshPath();
     }
 
      public void Organize(){
@@ -31,8 +37,13 @@ public class PartyController : Singleton<PartyController>
 
     public void ChangeSelected(OverworldUnit u){
         foreach (var item in playerUnits)
-        {item.selectedSignifier.SetActive(false);}
-        u.selectedSignifier.SetActive(true);
+        {item.selectedSignifier.gameObject. SetActive(false);}
+        foreach (var item in PortraitManager.inst.dict)
+        {
+           Portrait p = item.Value;
+           p.interactor.gameObject.SetActive(false);
+        }
+         u.ToggleSelected();
         selected = u;
     }
 
@@ -134,11 +145,27 @@ public class PartyController : Singleton<PartyController>
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if(Physics.Raycast(ray, out hit))
             { 
-                // if(onNavmesh(hit.point))
-                // {
-                    Vector3 v = hit.point;
+
+                Vector3 v = new Vector3();
+                 NavMeshHit filter;
+                if(!NavMesh.SamplePosition(hit.point, out filter, 50, NavMesh.AllAreas))
+                {
+                    firstclick = true;
+                    v = filter.position;
+                }
+                else{
+                    v = hit.point;
+                 
+                }
+                if(PathIsValid(filter.position)){
                     ClickArrows.inst.Move(new Vector3(v.x,v.y + .1f,v.z));
-                //}
+                }
+                else
+                {
+                    AudioManager.inst.GetSoundEffect().Play(error);
+                   
+                }
+               
             }
         }
 
@@ -148,18 +175,26 @@ public class PartyController : Singleton<PartyController>
           
             if(Physics.Raycast(ray, out hit))
             { 
-                // if(onNavmesh(hit.point))
-                // {
-                    firstclick = true;
-                    newPos = hit.point;
-               // }
+                NavMeshHit filter;
+                bool b = NavMesh.SamplePosition(hit.point, out filter, 100, -1);
+                if(b)
+                {
+                    if(PathIsValid(filter.position)){
+                        firstclick = true;
+                        newPos = filter.position;
+                    }
+                    else{
+                        Debug.Log("Path is not valid");
+                    }
+                   
+                }
             } 
         }
-
-        bool onNavmesh(Vector3 point)
-        {
-            NavMeshHit hit;
-            return  NavMesh.SamplePosition(point, out hit, 1.0f, NavMesh.AllAreas);
-        }
+    }
+    
+    bool PathIsValid(Vector3 target) 
+    {
+        leader.agent.CalculatePath(target, navMeshPath);
+        return navMeshPath.status == NavMeshPathStatus.PathComplete;
     }
 }

@@ -4,6 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "CharSounds")]
 public class CharacterSounds :GUIDScriptableObject
 {
-    public SoundData turnStart, move,die;
+    public SoundData turnStart,move,die,eat;
 
 }

@@ -56,7 +56,7 @@ public class SkillAimer : Singleton<SkillAimer>
              //   Minimap.inst.Hide();
                 BattleManager.inst.currentUnit.slot.DisableHover();
                 castDecided = true;  
-                BattleTicker.inst.Type(_skill.skillName);
+                BattleTicker.inst.Type(_skill.GetName());
                 GameManager.inst.ChangeGameState(GameState.UNITMOVE);
                 CastArgs args = new CastArgs();
                 args.caster = BattleManager.inst.currentUnit ;
@@ -69,7 +69,7 @@ public class SkillAimer : Singleton<SkillAimer>
                 args.skill = _skill;
                 
                 if(_skill.skillCastBehaviour == null)
-                {Debug.LogAssertion("No SkillCastBehaviour in " + _skill.skillName + "'s scriptable object. Game is now softlocked.");}
+                {Debug.LogAssertion("No SkillCastBehaviour in " + _skill.GetName() + "'s scriptable object. Game is now softlocked.");}
                 else
                 {
                     SkillHandler.inst.costTab.SetActive(false);
@@ -77,6 +77,20 @@ public class SkillAimer : Singleton<SkillAimer>
                     int realCost = BattleManager.inst.currentUnit.skillResource.Convert(_skill.intendedResource,_skill.resourceCost);
                     BattleManager.inst.currentUnit.skillResource.Spend(realCost);
                     caster.battleTokens.DeductActionToken();
+                    if(ActionMenu.inst.currentState == ActionMenuState.ITEM)
+                    {
+                        if(BattleManager.inst.currentUnit.side == Side.PLAYER)
+                        {
+                            if( ItemBattleHander.inst.itemToRemove != null)
+                            {
+                                Item i = ItemBattleHander.inst.itemToRemove;
+                                InventoryManager.inst.inventory.RemoveItem(i);
+                                ItemBattleHander.inst.itemToRemove = null;
+                                ItemBattleHander.inst.BuildInventory();
+                            }
+                            
+                        }
+                    }
                     skillCastBehaviour.Go(args);
                     Cursor.lockState = CursorLockMode.Locked;
                 }
@@ -95,7 +109,7 @@ public class SkillAimer : Singleton<SkillAimer>
         if(BattleManager.inst.currentUnit.side == Side.PLAYER){
             GameManager.inst.ChangeGameState(GameState.PLAYERSELECT);
         }
-        BattleTicker.inst.Type("Preparing " + s.skillName+"...");
+        BattleTicker.inst.Type("Preparing " + s.GetName()+"...");
        
         //BattleManager.inst.ToggleHealthBars(true);
         aiming = true;
@@ -112,9 +126,31 @@ public class SkillAimer : Singleton<SkillAimer>
        
     }
 
-    public void Finish(bool wasSkipped = false){
-      if(!BattleManager.inst.CheckForWin())  {
+    public void Finish(bool wasSkipped = false)
+    {
+        if(!BattleManager.inst.CheckForWin())  
+        {
+            validTargets.Clear();
+            BattleManager.inst.ToggleHealthBars(false);
+            aiming = false;
+            if(skillCastBehaviour != null)
+            {Destroy(skillCastBehaviour.gameObject);}
+            else
+            {Debug.LogWarning("Skill cast behaviour was already killed.");}
+        
+            skillCastBehaviour = null;
+            foreach (var item in validSlots)
+            {item.ChangeColour(item.normalColour);}
+            castDecided = false;
+            _skill = null;
+            validSlots.Clear();
+            SkillHandler.inst.Close();
+            ItemBattleHander.inst.Close();
+            BattleManager.inst.EndTurn(wasSkipped);
 
+        }
+        else
+        {
             validTargets.Clear();
             BattleManager.inst.ToggleHealthBars(false);
         
@@ -134,33 +170,10 @@ public class SkillAimer : Singleton<SkillAimer>
             castDecided = false;
             _skill = null;
             validSlots.Clear();
-            SkillHandler.inst.  Close();
-            BattleManager.inst.EndTurn(wasSkipped);
-
-      }
-      else{
-             validTargets.Clear();
-            BattleManager.inst.ToggleHealthBars(false);
-        
-        //  Debug.Log("Finish");
-            aiming = false;
-            
-            if(skillCastBehaviour != null){
-            Destroy(skillCastBehaviour.gameObject);
-            }
-            else{
-                Debug.LogWarning("Skill cast behaviour was already killed.");
-            }
-        
-            skillCastBehaviour = null;
-            foreach (var item in validSlots)
-            {item.ChangeColour(item.normalColour);}
-            castDecided = false;
-            _skill = null;
-            validSlots.Clear();
-            SkillHandler.inst.  Close();
+            SkillHandler.inst.Close();
+            ItemBattleHander.inst.Close();
             BattleManager.inst.Win();
-      }
+        }
 
       
     }

@@ -13,15 +13,27 @@ MonoBehaviour:
   m_Name: Sticky Snare
   m_EditorClassIdentifier: 
   ID: fe5ca1f6-a2c0-4239-8201-d66fbad0ecf1
-  skillName: Sticky Snare
-  desc: Grab and pull a <u>unit</u> towards the caster.
-  side: 0
+  itemName:
+    list:
+    - Key: 0
+      Value: Tongue Grab
+    keyCollision: 0
+  itemDesc:
+    list:
+    - Key: 0
+      Value:
+        str: Grab and pull a <b>unit</b> towards the caster.
+    keyCollision: 0
   skillCastBehaviour: {fileID: 133483409346696746, guid: 680d20cc32f4b7b499e8a50eb92e04d9,
     type: 3}
-  doesntNeedUnitInSlot: 0
+  value: 
   statusEffectIcon: {fileID: 0}
   sounds: []
-  value: 
+  resourceCost: 0
+  additionalMoveTokenCost: 0
+  intendedResource: 0
+  side: 0
+  doesntNeedUnitInSlot: 0
   canHitBreakableSlots: 1
   passThrough: 0
   goThroughWalls: 0

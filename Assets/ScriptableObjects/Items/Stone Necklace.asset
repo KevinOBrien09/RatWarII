@@ -21,8 +21,13 @@ MonoBehaviour:
   itemDesc:
     list:
     - Key: 0
-      Value: Necklace worn by lower nobilty.
+      Value:
+        str: 'A necklace worn by lower nobility. '
     keyCollision: 0
+  skillCastBehaviour: {fileID: 0}
+  value: 
+  statusEffectIcon: {fileID: 0}
+  sounds: []
   sellValue: 20
   icon: {fileID: 21300000, guid: 99ff59f896af27a4d8c1cf4a9ef97155, type: 3}
   catagory: 0

@@ -13,21 +13,30 @@ MonoBehaviour:
   m_Name: Retreating Slice
   m_EditorClassIdentifier: 
   ID: 468b3f0f-f9de-496b-88a3-28a288085cb6
-  skillName: Retreating Slice
-  desc: Slice an enemy for {STR200%} DMG,  knocking the caster back one tile.
-  resourceCost: 2
-  additionalMoveTokenCost: 0
-  intendedResource: 2
-  side: 1
+  itemName:
+    list:
+    - Key: 0
+      Value: Retreating Slice
+    keyCollision: 0
+  itemDesc:
+    list:
+    - Key: 0
+      Value:
+        str: 'Slice an enemy for 10 DMG, knocking the caster away 1 tile. '
+    keyCollision: 0
   skillCastBehaviour: {fileID: 688472123201566840, guid: 2a8098d002b753742a90d2c656a5fba2,
     type: 3}
-  doesntNeedUnitInSlot: 0
+  value: 
   statusEffectIcon: {fileID: 0}
   sounds:
   - audioClip: {fileID: 8300000, guid: 7cbd6cd765888ff418d01d98bd1ce9c2, type: 3}
     pitchRange: {x: 0.9, y: 1}
     volume: 1
-  value: 
+  resourceCost: 2
+  additionalMoveTokenCost: 0
+  intendedResource: 2
+  side: 1
+  doesntNeedUnitInSlot: 0
   canHitBreakableSlots: 0
   radius: 1
   canSelfCast: 0

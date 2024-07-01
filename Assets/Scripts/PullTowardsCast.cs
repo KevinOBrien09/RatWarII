@@ -64,7 +64,7 @@ public class PullTowardsCast : SkillCastBehaviour
                     grabber.transform.DOScaleX(0,.2f).OnComplete(()=>{
                    
                         Destroy(grabber.gameObject);
-                    }); AudioManager.inst.GetSoundEffect().Play(place);
+                    }); //AudioManager.inst.GetSoundEffect().Play(place);
                     args.target.transform.DOMove(overShoot,.2f).OnComplete(()=>
                     {args.target.transform.DOMove(p,.3f);    });
                     args.target.Reposition(s);

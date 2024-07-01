@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using  UnityEngine.AI;
+using DG.Tweening;
 public class OverworldUnit: MonoBehaviour
 {
     public Unit battleUnit;
@@ -12,7 +13,8 @@ public class OverworldUnit: MonoBehaviour
     public Transform graphicHolder;
     public Animator animator;
     public CharacterGraphic graphic;
-    public GameObject selectedSignifier;
+    public SpriteRenderer selectedSignifier;
+    public  SoundData selectClick;
     public void Move(Vector3 targetPos){
         agent.SetDestination(targetPos);
         Flip(targetPos);
@@ -25,6 +27,19 @@ public class OverworldUnit: MonoBehaviour
 
     void Update(){
         animator.SetFloat("Walk",agent.velocity.magnitude);
+    }
+
+    public void ToggleSelected(){
+        PortraitManager.inst.dict[battleUnit.character.ID].interactor.gameObject.SetActive(true);
+        selectedSignifier.gameObject.  SetActive(true);
+        selectedSignifier.DOFade(1,.1f).OnComplete(()=>{
+            AudioManager.inst.GetSoundEffect().Play(selectClick);
+            StartCoroutine(q());
+            IEnumerator q(){
+                yield return new WaitForSeconds(.1f);
+                selectedSignifier.DOFade(.3f,.1f);
+            }
+        });
     }
 
     public virtual void Flip(Vector3 v)

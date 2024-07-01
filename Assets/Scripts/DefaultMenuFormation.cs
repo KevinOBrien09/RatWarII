@@ -128,6 +128,16 @@ public class DefaultMenuFormation : ActionMenuFormation
         ChangeCenterText();
     }
 
+    public override void ItemReset()
+    {
+    rt.DORotate(new Vector3(0,0,120),0);
+            foreach (var item in icons)
+            {
+                item.Value.DOLocalRotate(new Vector3(0,0,-120),0);
+            }
+        ChangeCenterText();
+    }
+
     public void ChangeCenterText(){
      ActionMenu.inst.center.text = ActionMenu.inst.currentState.ToString();
      if( ActionMenu.inst.currentState == ActionMenuState.ROAM){

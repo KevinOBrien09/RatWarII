@@ -21,7 +21,13 @@ MonoBehaviour:
   itemDesc:
     list:
     - Key: 0
-      Value: A shiny green gem.
+      Value:
+        str: 'A glamorous green gem. '
     keyCollision: 0
+  skillCastBehaviour: {fileID: 0}
+  value: 
+  statusEffectIcon: {fileID: 0}
+  sounds: []
   sellValue: 20
   icon: {fileID: 21300000, guid: 3e03404270c9987458f16df4ef74fc83, type: 3}
+  catagory: 0

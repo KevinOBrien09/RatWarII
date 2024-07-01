@@ -103,7 +103,7 @@ public class BattleManager : Singleton<BattleManager>
             MapManager.inst.map.gameObject.SetActive(true);
             OverworldCamera.inst.gameObject.SetActive(false);
             CamFollow.inst.gameObject.SetActive(true);
-        
+            ItemBattleHander.inst.BuildInventory();
             ToggleHealthBars(false);
             NewTurn();
 
@@ -510,7 +510,7 @@ public class BattleManager : Singleton<BattleManager>
         BlackFade.inst.WhiteFlash();
         MapManager.inst.map.gameObject.SetActive(false); 
         CamFollow.inst.gameObject.SetActive(false);
-      
+        ItemBattleHander.inst.WipeInventory();
         OverworldCamera.inst.gameObject.SetActive(true);
         //ZoomCameraSwap.inst.Attach(OverworldCamera.inst.gameObject);
         OverworldCamera.inst.FOVChange(OverworldCamera.inst.baseFOV,(()=>{ PartyController.inst. TakeControl();   inBattle = false;   CamFollow.inst.transform.position = Vector3.zero;}));

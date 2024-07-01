@@ -10,7 +10,7 @@ public enum StatusEffectEnum{BARRIER,BLEED,BILE,STATMOD}
 public static class StatusEffects
 {
 
-    public static void Barrier(Unit u,Skill skill, int howManyTurns,int shieldAmount)
+    public static void Barrier(Unit u,Castable skill, int howManyTurns,int shieldAmount)
     {
         StatusEffect barrier = new StatusEffect();
         
@@ -24,7 +24,7 @@ public static class StatusEffects
        u.AddStatusEffect(barrier);
     }
 
-    public static void StatMod(Unit u,Skill skill, int howManyTurns,int change, StatEnum statEnum){
+    public static void StatMod(Unit u,Castable skill, int howManyTurns,int change, StatEnum statEnum){
         StatusEffect statMod = new StatusEffect();
     
         statMod.statEnum = statEnum;
@@ -50,7 +50,7 @@ public static class StatusEffects
     }
 
 
-    public static void Bleed(Unit u,Skill skill, int howManyTurns)
+    public static void Bleed(Unit u,Castable skill, int howManyTurns)
     {
         StatusEffect bleed = new StatusEffect();
         

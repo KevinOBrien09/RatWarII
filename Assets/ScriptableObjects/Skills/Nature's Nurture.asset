@@ -10,19 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c603b92c96daa24088b1e84b0cbbbdd, type: 3}
-  m_Name: Minor Respite
+  m_Name: Nature's Nurture
   m_EditorClassIdentifier: 
   ID: 1757dcc8-6197-43eb-8e02-f4f6947c5d24
-  skillName: Minor Respite
-  desc: Heal allies in a 1 tile radius for 15 HP.
-  effects: []
-  side: 0
+  itemName:
+    list:
+    - Key: 0
+      Value: Nature's Nurture
+    keyCollision: 0
+  itemDesc:
+    list:
+    - Key: 0
+      Value:
+        str: Heal allies in a 1 tile radius for 15HP.
+    keyCollision: 0
   skillCastBehaviour: {fileID: 4708588734185804875, guid: e23c2fa2d1346264faefc14e949b123f,
     type: 3}
-  doesntNeedUnitInSlot: 0
+  value: 
   statusEffectIcon: {fileID: 0}
   sounds: []
-  value: 
+  resourceCost: 0
+  additionalMoveTokenCost: 0
+  intendedResource: 0
+  side: 0
+  doesntNeedUnitInSlot: 0
+  canHitBreakableSlots: 0
   radius: 1
   castOnCasterSlot: 0
   showHealthBars: 1

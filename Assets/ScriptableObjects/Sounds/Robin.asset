@@ -25,3 +25,7 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: d6168bf4e4170a049861484a3d3aa1fe, type: 3}
     pitchRange: {x: 0.9, y: 1}
     volume: 1
+  eat:
+    audioClip: {fileID: 8300000, guid: d52357382d1135f4689b3fe272d7cf55, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
+    volume: 0.6

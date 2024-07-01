@@ -21,7 +21,13 @@ MonoBehaviour:
   itemDesc:
     list:
     - Key: 0
-      Value: A crimson red ruby.
+      Value:
+        str: A radiant red ruby.
     keyCollision: 0
+  skillCastBehaviour: {fileID: 0}
+  value: 
+  statusEffectIcon: {fileID: 0}
+  sounds: []
   sellValue: 75
   icon: {fileID: 21300000, guid: e6b7a822766e6f6478c44b2542e4a50f, type: 3}
+  catagory: 0

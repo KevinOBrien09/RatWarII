@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c95089a3db9ae439446bfc8efc71c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDamage: 5
+  baseDamage: 6
   tileTravelDamage: 2
   projectilePrefab: {fileID: 4508468215263952273, guid: f7f5e53881a1b1e4b85fc2ffcaf86161,
     type: 3}

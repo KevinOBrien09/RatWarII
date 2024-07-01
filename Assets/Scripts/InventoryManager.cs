@@ -48,6 +48,17 @@ public class InventoryManager : Singleton<InventoryManager>
         Refresh();
     }
 
+    public int BattleItemCount(){
+        int i = 0;
+        foreach (var item in inventory.allItems)
+        {
+            if(item.canBeUsedInBattle){
+                i++;
+            }
+        }
+        return i;
+    }
+
     public Inventory Load(Inventory.InventorySave inventorySave)
     {
         Inventory i = new Inventory();

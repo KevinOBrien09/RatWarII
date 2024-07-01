@@ -13,16 +13,28 @@ MonoBehaviour:
   m_Name: Regenerate
   m_EditorClassIdentifier: 
   ID: 5c532875-d3fc-47d6-8fdb-9def828b05ad
-  skillName: Regenerate
-  desc: Heal the caster for 15HP.
-  effects: []
-  side: 0
+  itemName:
+    list:
+    - Key: 0
+      Value: Regenerate
+    keyCollision: 0
+  itemDesc:
+    list:
+    - Key: 0
+      Value:
+        str: Heals the caster for 15HP.
+    keyCollision: 0
   skillCastBehaviour: {fileID: 5185063330075656956, guid: 62fe009137bbdc74f90d871813229937,
     type: 3}
-  doesntNeedUnitInSlot: 0
+  value: 0f000000
   statusEffectIcon: {fileID: 0}
   sounds: []
-  value: 0f000000
+  resourceCost: 0
+  additionalMoveTokenCost: 0
+  intendedResource: 0
+  side: 0
+  doesntNeedUnitInSlot: 0
+  canHitBreakableSlots: 0
   radius: 0
   castOnCasterSlot: 0
   showHealthBars: 0

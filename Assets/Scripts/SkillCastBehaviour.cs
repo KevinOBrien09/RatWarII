@@ -7,10 +7,10 @@ using DG.Tweening;
 public class SkillCastBehaviour : MonoBehaviour
 {
     public virtual void Go(CastArgs args){
-        Debug.LogWarning(args.skill.skillName + " was cast");
+        Debug.LogWarning(args.skill.GetName() + " was cast");
     }
 
-    public virtual void PlaySound(int i,Skill s)
+    public virtual void PlaySound(int i,Castable s)
     {AudioManager.inst.GetSoundEffect().Play(s.sounds[i]);}
 
   
@@ -21,7 +21,7 @@ public class CastArgs
 {
     public Unit caster;
     public Unit target;
-    public Skill skill;
+    public Castable skill;
     public Slot targetSlot;
   
 }

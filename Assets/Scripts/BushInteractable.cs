@@ -10,6 +10,7 @@ public class BushInteractable : Interactable
     public GameObject outOfRangeOutline;
     public Zoomer zoomer;
     public ItemContainer itemContainer;
+    public ClassInteractableIndicator classInteractableIndicator;
     public override void Go()
     {
         if(PartyController.inst.selected.battleUnit.character.job == Job.ARCHER){
@@ -22,6 +23,7 @@ public class BushInteractable : Interactable
             }
         }
         else{
+            classInteractableIndicator.Show();
             Debug.Log("Not an archer");
         }
         

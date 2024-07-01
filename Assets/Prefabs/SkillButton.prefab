@@ -99,10 +99,17 @@ MonoBehaviour:
   color2:
     serializedVersion: 2
     rgba: 4280821914
+  colour3:
+    serializedVersion: 2
+    rgba: 4278190080
+  colour4:
+    serializedVersion: 2
+    rgba: 4285050112
   hoverSFX:
     audioClip: {fileID: 8300000, guid: 326941374cb0b704da86422baad6c83b, type: 3}
     pitchRange: {x: 0.9, y: 1.1}
     volume: 1
+  itemCount: 0
 --- !u!1 &8977180948019299818
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +328,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Pee
+  m_text: BlackBerry X5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6ab5e72ad2c61d14abc048a95e471c81, type: 2}
   m_sharedMaterial: {fileID: 7621306211184561729, guid: 6ab5e72ad2c61d14abc048a95e471c81,
@@ -357,7 +364,7 @@ MonoBehaviour:
   m_fontSizeMax: 30
   m_fontStyle: 1
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 4096
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -385,7 +392,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 59.921104, y: 0, z: 69.73127, w: 0}
+  m_margin: {x: 59.921104, y: 2.7953968, z: 69.73127, w: 4.542532}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

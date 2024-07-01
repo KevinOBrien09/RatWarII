@@ -87,7 +87,7 @@ public class UnitFactory : Singleton<UnitFactory>
         graphic.transform.localPosition = Vector3.zero;
         graphic.transform.localRotation = Quaternion.Euler(30,0,0);
         graphic.KillCamera();
-
+        oU.name = c.characterName.fullName() + " OVERWORLD";
         return oU;
     }
 

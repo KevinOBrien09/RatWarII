@@ -12,7 +12,7 @@ public class SkillHandler : Singleton<SkillHandler>
     public List<SkillBehaviour> currentSkills = new List<SkillBehaviour>();
     public RectTransform holder;
     public bool open;
-    public Skill hoveredSkill;
+    public Castable hoveredSkill;
     public SkillBehaviour hoveredBehaviour;
     public ScrollRectAutoScroll scrollRectAutoScroll;
     public GameObject costTab;
@@ -20,32 +20,36 @@ public class SkillHandler : Singleton<SkillHandler>
     public GenericDictionary<SkillResource.Catagory,Sprite> dict = new GenericDictionary<SkillResource.Catagory, Sprite>();
     public List<TextMeshProUGUI> costText = new List<TextMeshProUGUI>();
     public Image resourceIcon;
-    void Start(){
+   
+    void Start()
+    {
         Close();
-       
     }
+
     public void Open()
     {
         gameObject.SetActive(true);
-        if(currentSkills.Count > 0){
-          
+        if(currentSkills.Count > 0)
+        {
             StartCoroutine(q(currentSkills[0].gameObject));
-           IEnumerator q(GameObject g)
+            IEnumerator q(GameObject g)
             {
                 EventSystem.current.SetSelectedGameObject(null);
                 yield return new WaitForEndOfFrame();
                 EventSystem.current.SetSelectedGameObject(g);
                 scrollRectAutoScroll.ScrollToSelected();
             }
-            
-     
         }
-    open = true;
-
+        open = true;
     }
 
     void Update()
     {
+        if(ItemBattleHander.inst.open)
+        {
+            return;
+        }
+
         if(open && !ActionMenu.inst.FUCKOFF)
         {
               
@@ -66,19 +70,26 @@ public class SkillHandler : Singleton<SkillHandler>
                 {
                     if(!SkillAimer.inst.aiming&& !ActionMenu.inst.FUCKOFF)
                     {
-                        if(SkillAimer.inst.canCast(BattleManager.inst.currentUnit,hoveredSkill)){
+                        Skill ability = hoveredSkill as Skill;
+                        Item item = hoveredSkill as Item;
+                        if(ability != null)
+                        {
+                            if(SkillAimer.inst.canCast(BattleManager.inst.currentUnit,ability))
+                            {
                             BattleManager.inst.StartCoroutine(SkillHandler.inst.SetObject(null));
-                            SkillAimer.inst.Go(hoveredSkill);
+                            SkillAimer.inst.Go(ability);
                         
                             ActionMenu.inst.Hide();
-                        }
-                        else{
-                            Debug.LogWarning("Cannot Cast " +hoveredSkill.skillName);
-                        }
-                     
+                            }   
+                            else
+                            {
+                                Debug.LogWarning("Cannot Cast " +hoveredSkill.GetName());
+                            }
+
                        
+                        }
                         
-                       
+                        
                     }
                 
                     // Close();
@@ -99,13 +110,13 @@ public class SkillHandler : Singleton<SkillHandler>
         foreach (var item in currentSkills)
         { Destroy(item.gameObject); }
         currentSkills.Clear();
-        int i = 0;
+   
         foreach (var item in u.character.skills)
         {
             SkillBehaviour sb = Instantiate(prefab,holder);
-            sb.Init(i,item);
+            sb.Init(item);
             currentSkills.Add(sb);
-            i++;
+         
             
         }
     }

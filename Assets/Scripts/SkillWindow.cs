@@ -24,8 +24,8 @@ public class SkillWindow : Singleton<SkillWindow>
     public void Open(Skill s,Character c){
         DOTween.Kill(gameObject);
         gameObject.SetActive(true);
-        skillName.text = s.skillName;
-        skilDesc.text = SkillParser.Parse(s.desc,c:c);
+        skillName.text = s.GetName();
+        skilDesc.text = SkillParser.Parse(s.GetDesc(),c:c);
        
         blackFade.DOFade(1,0);
         videoPlayer.clip = null;

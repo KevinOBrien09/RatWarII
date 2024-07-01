@@ -10,17 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c603b92c96daa24088b1e84b0cbbbdd, type: 3}
-  m_Name: Skip
+  m_Name: Wait
   m_EditorClassIdentifier: 
   ID: 718ac21d-535f-41ac-856e-cb018cfa695c
-  skillName: Wait
-  desc: Skips the turn.
-  effects:
-  - {fileID: 11400000, guid: cc44ba748b88f2848ac519f7a464d95f, type: 2}
-  side: 0
+  itemName:
+    list:
+    - Key: 0
+      Value: Wait
+    keyCollision: 0
+  itemDesc:
+    list:
+    - Key: 0
+      Value:
+        str: Skip the turn.
+    keyCollision: 0
   skillCastBehaviour: {fileID: 4520179443706313989, guid: a52841aef1d331543afa5995bc35a92f,
     type: 3}
-  doesntNeedUnitInSlot: 0
+  value: 
   statusEffectIcon: {fileID: 0}
+  sounds: []
+  resourceCost: 0
+  additionalMoveTokenCost: 0
+  intendedResource: 0
+  side: 0
+  doesntNeedUnitInSlot: 0
+  canHitBreakableSlots: 0
   radius: 0
   castOnCasterSlot: 0
+  showHealthBars: 0

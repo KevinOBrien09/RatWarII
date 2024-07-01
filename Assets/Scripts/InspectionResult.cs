@@ -75,7 +75,7 @@ public class InspectionResult : Singleton<InspectionResult>
 
     void Update(){
         if(detectClick){
-            if(InputManager.inst.player.GetButtonDown("Confirm")){
+            if(InputManager.inst.player.GetAnyButtonDown()){
                 if(unityAction!= null){
                      AudioManager.inst.GetSoundEffect().Play(clickSFX);
                     unityAction.Invoke();

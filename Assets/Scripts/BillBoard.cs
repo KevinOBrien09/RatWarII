@@ -9,6 +9,7 @@ public class BillBoard : MonoBehaviour
     public bool clampX;
     void LateUpdate()
     {
+       transform.LookAt(Camera.main.transform);
         if(billboard)
         {
           

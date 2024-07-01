@@ -12,10 +12,10 @@ public class ActionMenu : Singleton<ActionMenu>
     public enum Formation{DEFAULT,NOMOVE,PEACE}
     public GenericDictionary<Formation,ActionMenuFormation> formationDict = new GenericDictionary<Formation, ActionMenuFormation>();
     public ActionMenuFormation currentFormation;
-    public RectTransform rt,border;
+    public RectTransform rt;
     public Vector2 hidden,shown;
     public bool FUCKOFF;
-    public Image moveIcon,moveIconFade,skillIcon,skillIconFade;
+    public Image moveIcon,moveIconFade,skillIcon,skillIconFade,itemIcon,itemIconFade;
     public SoundData error;
     public TextMeshProUGUI center;
     public ActionMenuState currentState;
@@ -59,6 +59,11 @@ public class ActionMenu : Singleton<ActionMenu>
                 RemoveSkillOption();
             }
 
+            if(slot.cont.unit.battleTokens.canAct() && InventoryManager.inst.BattleItemCount() > 0)
+            {ResetItemOption();}
+            else
+            {RemoveItemOption();}
+
 
             CamFollow.inst.Focus(s.cont.unit.transform,()=>
             { 
@@ -95,6 +100,16 @@ public class ActionMenu : Singleton<ActionMenu>
         skillIconFade.enabled = false;
     }
 
+     public void RemoveItemOption(){
+        itemIcon.color = new Color(0,0,0,.75f);
+        itemIconFade.enabled = true;
+    }
+
+    public void ResetItemOption(){
+        itemIcon.color =  new Color(1,1,1,.75f);
+        itemIconFade.enabled = false;
+    }
+
     IEnumerator q()
     {
         yield return new WaitForSeconds(.35f);
@@ -119,7 +134,7 @@ public class ActionMenu : Singleton<ActionMenu>
         {
             if(open)
             {
-                if(!SkillHandler.inst.open)
+                if(!SkillHandler.inst.open && !ItemBattleHander.inst.open)
                 {
                     if(InputManager.inst.player.GetButtonDown("Right"))
                     {currentFormation.MoveRight();}
@@ -166,7 +181,7 @@ public class ActionMenu : Singleton<ActionMenu>
             case ActionMenuState.SKILL:
             if(slot.cont.unit.battleTokens.canAct())
             {
-                if(!SkillHandler.inst.open)
+                if(!SkillHandler.inst.open&& !ItemBattleHander.inst.open)
                 {
                     SkillHandler.inst.Open();
                     currentFormation.HideIcons();
@@ -196,11 +211,19 @@ public class ActionMenu : Singleton<ActionMenu>
             break;
 
             case ActionMenuState.ITEM:
-            // FUCKOFF = true;
-            // rt.DOAnchorPos(hidden,.2f).OnComplete(()=>
-            // { FUCKOFF = false; open = false;});
-            // InteractHandler.inst.Open();
-            Debug.Log("ITEM");
+            if(slot.cont.unit.battleTokens.canAct()&& InventoryManager.inst.BattleItemCount() > 0)
+            {
+                if(!SkillHandler.inst.open&& !ItemBattleHander.inst.open)
+                {
+                    ItemBattleHander.inst.Open();
+                    currentFormation.HideIcons();
+                }
+            }
+            else
+            {
+                AudioManager.inst.GetSoundEffect().Play(error);
+                Debug.Log("Error Noise");
+            }
             break;
 
             case ActionMenuState.SKIP:
@@ -227,7 +250,7 @@ public class ActionMenu : Singleton<ActionMenu>
     {
         BattleTicker.inst.Type(BattleManager.inst. TurnState());
         currentState = ActionMenuState.SKILL;
-        border.DORotate(Vector3.zero,0);
+    
         currentFormation.Reset();
     }
 
@@ -235,9 +258,19 @@ public class ActionMenu : Singleton<ActionMenu>
     {currentState = newState;}
     
     public void ReturnFromSkillMenu()
-    {BattleTicker.inst.Type(BattleManager.inst. TurnState());
+    {
+        BattleTicker.inst.Type(BattleManager.inst. TurnState());
         currentFormation.ShowIcons();
         Reset();
+    }
+
+    public void ReturnFromItemMenu(){
+        currentState = ActionMenuState.ITEM;
+        currentFormation.ShowIcons();
+        BattleTicker.inst.Type(BattleManager.inst. TurnState());
+       
+        //border.DORotate(new Vector3(0,0,120),0);
+        currentFormation.ItemReset();
     }
     
     public void Hide()
