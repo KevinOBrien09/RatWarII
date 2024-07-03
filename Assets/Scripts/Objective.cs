@@ -51,7 +51,7 @@ public class Objective
             break;
 
             case ObjectiveEnum.BOSS:
-            Debug.LogWarning("BOSS LOGIC NEEDS TO BE IMPLEMENTED!!");
+           // Debug.LogWarning("BOSS LOGIC NEEDS TO BE IMPLEMENTED!!");
             break;
             
             default:

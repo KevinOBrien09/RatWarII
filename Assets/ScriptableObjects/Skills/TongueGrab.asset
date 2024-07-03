@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26a0f7607b3fe9c4f825e10fd91e95af, type: 3}
-  m_Name: Sticky Snare
+  m_Name: TongueGrab
   m_EditorClassIdentifier: 
   ID: fe5ca1f6-a2c0-4239-8201-d66fbad0ecf1
   itemName:

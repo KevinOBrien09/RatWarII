@@ -20,8 +20,8 @@ public class UnitMover : Singleton<UnitMover>
             {
                 if(boatMover != null)
                 {boatMover.EnterSelection(sSlot);}
-                else
-                { Debug.LogAssertion("BOAT MOVER IS NULL!!!");}
+                // else
+                // { Debug.LogAssertion("BOAT MOVER IS NULL!!!");}
             }
             inCoro = true;
             selectedUnit = sSlot.cont. unit;
@@ -104,8 +104,8 @@ public class UnitMover : Singleton<UnitMover>
             
             if(boatMover != null)
             {boatMover.ExitSelection();}
-            else
-            { Debug.LogWarning("BOAT MOVER IS NULL (only matters in island level tho!!!)");}
+            // else
+            // { Debug.LogWarning("BOAT MOVER IS NULL (only matters in island level tho!!!)");}
             
             foreach (var item in  validSlots)
             { item.ChangeColour(item.normalColour); }

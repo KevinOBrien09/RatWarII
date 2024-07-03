@@ -231,7 +231,7 @@ public class ActionMenu : Singleton<ActionMenu>
             Hide();
          
             SkillAimer.inst.Go(wait);
-            Debug.Log("SKIP");
+   
             break;
 
             case ActionMenuState.ROAM:

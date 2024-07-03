@@ -309,13 +309,16 @@ public class SlotFunctions
                 }
                 else
                 {
-                    bool wallAndDontPass = s.cont.wall && !projectileSkill.goThroughWalls;
-                    bool unitInSlotNoPass = s.cont.unit != null && !projectileSkill.passThrough && s != slot;
-                    if(wallAndDontPass)
-                    {break;}
-                    if(unitInSlotNoPass){
-                        breakNextOne = true;
+                    if(projectileSkill != null){
+                        bool wallAndDontPass = s.cont.wall && !projectileSkill.goThroughWalls;
+                        bool unitInSlotNoPass = s.cont.unit != null && !projectileSkill.passThrough && s != slot;
+                        if(wallAndDontPass)
+                        {break;}
+                        if(unitInSlotNoPass){
+                            breakNextOne = true;
+                        }
                     }
+                   
                     
                     AddToCandidateSlots(s); 
                  

@@ -6,7 +6,10 @@ using UnityEngine;
 [System.Serializable]
 public struct BattleTokens
 {
-
+    public int actionToken;
+    public int moveToken;
+    public int godToken;
+    
     public BattleTokens(BattleTokens bt)
     {
         // if(bt != null){
@@ -91,8 +94,6 @@ public struct BattleTokens
         return actionToken + moveToken + godToken;
     }
 
-    public int actionToken;
-    public int moveToken;
-    public int godToken;
+    
 }
 

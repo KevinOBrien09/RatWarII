@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1460983a89d450149bcb7177ce59b1c3, type: 3}
+  m_Name: WizardSquirrel
+  m_EditorClassIdentifier: 
+  ID: 7cf22599-6703-4e26-aa1d-ecb163b69e34
+  names:
+  - Sandy
+  - Sammy
+  - Sqar
+  - Sauron
+  - Skratch
+  tagLine: WARLOCK SQUIRREL
+  startingStats: {fileID: 11400000, guid: e1f85b3cfce1bc44c80febf3fa5ba1c9, type: 2}
+  characterGraphic: {fileID: 4024648983392592908, guid: 23002401edc520845b691162ff953ebc,
+    type: 3}
+  icon: {fileID: 2800000, guid: b66c8dc09963edc4a9da4b8a96cd44bf, type: 3}
+  corpseHead: {fileID: 0}
+  bloodGradient:
+    serializedVersion: 2
+    rgba: 0
+  bloodSplatMat: {fileID: 0}
+  charAI: {fileID: 6417733474693308484, guid: 766ae8b0a49df2a419227969cd61abaa, type: 3}
+  sounds: {fileID: 11400000, guid: 42fc0b4ac68faf148a9d2ab506c4030d, type: 2}
+  skillResCat: 1

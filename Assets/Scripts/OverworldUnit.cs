@@ -57,14 +57,14 @@ public class OverworldUnit: MonoBehaviour
     public void LookRight()
     {
         transform.localScale = Vector3.one; 
-        
+        selectedSignifier.flipX = false;
         facingRight = true;
     }
 
     public void LookLeft()
     {
         transform.localScale = new Vector3(-1,1,1); 
-      
+      selectedSignifier.flipX = true;
         facingRight = false;
     }
 

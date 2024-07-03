@@ -54,10 +54,10 @@ public class Breathing : MonoBehaviour
             {
                 StartCoroutine(q());
             }
-            else
-            {
-                Debug.LogWarning("Object off no breathing");
-            }
+            // else
+            // {
+            //     Debug.LogWarning("Object off no breathing");
+            // }
           
             IEnumerator q()
             {

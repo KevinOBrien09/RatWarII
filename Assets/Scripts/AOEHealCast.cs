@@ -15,7 +15,8 @@ public class AOEHealCast : SkillCastBehaviour
         StartCoroutine(q());
         IEnumerator q()
         {
-            ParticleSystem ps =   Instantiate(healVFXPrefab,args.caster.slot.transform.position,Quaternion.identity);
+            Vector3 v = args.caster.slot.transform.position;
+            ParticleSystem ps =   Instantiate(healVFXPrefab,new Vector3(v.x,1,v.z),Quaternion.identity);
             ps.Play(); 
             
             Vector3 ogRot = args.caster.transform.rotation.eulerAngles;

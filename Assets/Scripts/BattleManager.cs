@@ -194,8 +194,10 @@ public class BattleManager : Singleton<BattleManager>
                     ActuallyEnd();
                 }
             }
-            else{
-                ActuallyEnd();
+            else
+            {
+                currentUnit.charAI.DoNextAction();
+                //ActuallyEnd();
             }
         }
         else{
