@@ -6,96 +6,26 @@ using UnityEngine.EventSystems;
 using System.Linq;
 public class EnemyWizardAI : CharacterAI
 {
-    public List<EnemyAction> possibleActions = new List<EnemyAction>();
+   
     public int comfortDistance;
-    Queue<EnemyAction> actionQ = new Queue<EnemyAction>();
-    public override void ConductTurn()
+    public int charge; 
+
+
+    public override List<EnemyAction>  WhatToDo()
     {
-        foreach (var item in possibleActions)
+        RadiusSkill rs = possibleActions["strike"][0].castable as RadiusSkill;
+        var v = PreRadiusSkill(rs);
+        if(v.allNearbyUnits.Count > 0)
         {
-            actionQ.Enqueue(item);
+            //attack if in correct pos or retreat then strike. 
+            return LockInRadiusSkill(v.allNearbyUnits,v.fullRange,rs,"strike");
         }
-        DoNextAction();
+        return null;
+
     }
-        
 
-    public override void DoNextAction()
-    {
-       StartCoroutine(q());
-        IEnumerator q()
-        {
-            yield return new WaitForSeconds(.2f);
-            if(actionQ.Count > 0)
-            {
-                EnemyAction ea = actionQ.Dequeue();
 
-                switch(ea.action){
-                    case E_Action.RUN_AWAY:
-                    unit.battleTokens.DeductMoveToken();
-                    Move(GetFurthestSlotToWalkTo());
-                    break;
-                    case E_Action.SKILL:
-                    unit.battleTokens.DeductActionToken();
-                    CastSkill(ea.castable as Skill);
-                    break;
-                    case E_Action.END:
-                
-                    BattleManager.inst.UnitIteration();
-                       MapManager.inst.map.UpdateGrid();
-                    break;
-                    default:
-               
-                    BattleManager.inst.UnitIteration();
-                       MapManager.inst.map.UpdateGrid();
-                    break;
-
-                }
-            }
-            else
-            {
-               
-                BattleManager.inst.UnitIteration();
-                   MapManager.inst.map.UpdateGrid();
-            }
-        }
-    }
-    
-
-    public virtual void WhatToDo()
-    {
-        if(PlayerUnitInRadiusDIST(2)) // run away
-        {
-            if(unit.battleTokens.canMove())
-            {
-                if(canMove())
-                {
-                    unit.battleTokens.DeductMoveToken();
-                    Move(GetFurthestSlotToWalkTo());
-                }
-                else
-                {
-                    if( unit.battleTokens. canAct()){
-                        Debug.Log("Attack");
-                        StartCoroutine(q());
-                        IEnumerator q()
-                        {
-                            yield return new WaitForSeconds(.1f);
-                            BattleManager.inst.UnitIteration();
-                        }
-                    }
-                    else
-                    {
-                        StartCoroutine(q());
-                        IEnumerator q()
-                        {
-                            yield return new WaitForSeconds(.1f);
-                            BattleManager.inst.UnitIteration();
-                        }
-                    }
-                }
-            }
-        }
-    }
+   
 
 
 

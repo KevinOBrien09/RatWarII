@@ -35,6 +35,9 @@ public class SlashCast : SkillCastBehaviour
             args.caster.transform.rotation = Quaternion.Euler(ogRot.x,ogRot.y,ogRot.z);
             foreach (var item in SkillAimer.inst.validSlots)
             {
+                Debug.Log("Slot");
+                // Debug.Log(item.cont.unit.side);
+                // Debug.Log(args.caster.side);
                 if(item != args.caster.slot)
                 {
                     

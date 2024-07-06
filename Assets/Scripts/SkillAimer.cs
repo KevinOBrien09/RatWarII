@@ -188,33 +188,7 @@ public class SkillAimer : Singleton<SkillAimer>
             Cursor.lockState = CursorLockMode.Confined;
        
         }
-   
-      //  Character casterChar = caster.character;
-    
-
-        switch(skill.projectilePath)
-        {
-            case ProjectileSkill.ProjectilePathShape.PLUS:
-            validSlots   = new List<Slot>(slot.func.GetSlotsInPlusShape(skill.howManyTiles,skill));
-            break;
-            case ProjectileSkill.ProjectilePathShape.VERT:
-            validSlots   = new List<Slot>( slot.func.GetVerticalSlots(skill.howManyTiles,skill));
-            break;
-            case ProjectileSkill.ProjectilePathShape.HORI:
-            validSlots   = new List<Slot>(slot.func.GetHorizontalSlots(skill.howManyTiles,skill));
-            break;
-            case ProjectileSkill.ProjectilePathShape.X:
-            validSlots   = new List<Slot>(slot.func.GetXSlots(skill.howManyTiles,skill));
-            break;
-             case ProjectileSkill.ProjectilePathShape.ASTERISK:
-            validSlots   = new List<Slot>(slot.func.GetAsteriskSlots(skill.howManyTiles,skill));
-            break;
-            default:
-            Debug.LogAssertion("PROJECTILE PATH NOT IMPLEMENTED!!");
-            break;
-
-        }
-
+        validSlots = slot.func.GetProjectilePath(skill);
         List<Slot> validClone = new List<Slot>(validSlots);
         foreach (var item in validClone)
         {

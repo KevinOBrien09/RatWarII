@@ -127,7 +127,7 @@ public class Unit : MonoBehaviour
                 Slot s= q.Dequeue();
                 Vector3 v =  new Vector3(s.transform.position.x, transform.position.y ,s.transform.position.z);
                 if(isEntity()){
-   graphic.ChangeSpriteSorting(s.node);
+                graphic.ChangeSpriteSorting(s.node);
                 
                 }
                 Flip(v);

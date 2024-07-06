@@ -4781,7 +4781,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1328432053
   m_SortingLayer: 2
-  m_SortingOrder: 55
+  m_SortingOrder: 999
   m_RenderMode: 2
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -9678,7 +9678,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1328432053
   m_SortingLayer: 2
-  m_SortingOrder: 55
+  m_SortingOrder: 999
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -14492,7 +14492,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1328432053
   m_SortingLayer: 2
-  m_SortingOrder: 55
+  m_SortingOrder: 999
   m_RenderMode: 5
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -19389,7 +19389,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1328432053
   m_SortingLayer: 2
-  m_SortingOrder: 55
+  m_SortingOrder: 999
   m_RenderMode: 1
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -24205,7 +24205,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1328432053
   m_SortingLayer: 2
-  m_SortingOrder: 55
+  m_SortingOrder: 999
   m_RenderMode: 2
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -29102,7 +29102,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1328432053
   m_SortingLayer: 2
-  m_SortingOrder: 55
+  m_SortingOrder: 999
   m_RenderMode: 1
   m_MeshDistribution: 0
   m_SortMode: 0
@@ -33914,7 +33914,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1328432053
   m_SortingLayer: 2
-  m_SortingOrder: 55
+  m_SortingOrder: 999
   m_RenderMode: 0
   m_MeshDistribution: 0
   m_SortMode: 0

@@ -38,7 +38,7 @@ MonoBehaviour:
   side: 1
   doesntNeedUnitInSlot: 0
   canHitBreakableSlots: 1
-  radius: 1
+  radius: 2
   canSelfCast: 0
   showHealthBars: 1
   cannotCastOnSpecialSlot: 0

@@ -44,13 +44,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd04a91a3d55aee4b9f84d8e4896b1fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  test:
+  - {fileID: -5744621664681488574, guid: 09411a9c38fb34c4c85b9812571d07b7, type: 3}
+  - {fileID: 2100000, guid: e337fc37c353efa4dbc2bd04076e1246, type: 2}
+  - {fileID: 2100000, guid: 63489f5a7b5c30d4c990f5949b6fb6f1, type: 2}
+  - {fileID: 2100000, guid: acc884ceceb55794ea95d774b41a4b76, type: 2}
+  - {fileID: -876546973899608171, guid: 60b6634b56dd6574aafcabe381b1fd69, type: 3}
+  - {fileID: 8457432598939410078, guid: 96e945e14db03954b981ba3b73d8d843, type: 3}
+  - {fileID: 2100000, guid: c35693c079f3840f7938a4a323096e84, type: 2}
+  - {fileID: 2100000, guid: 0edf9854a2c114c4f80f8c756315c7d6, type: 2}
   unit: {fileID: 0}
   strike: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
   possibleActions:
-  - action: 1
-    castable: {fileID: 0}
-  - action: 0
-    castable: {fileID: 11400000, guid: 3df21767c7cc7a343ac0196c5097b2fb, type: 2}
-  - action: 1
-    castable: {fileID: 0}
+    list:
+    - Key: repos-strike
+      Value:
+      - action: 3
+        castable: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
+      - action: 0
+        castable: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
+    - Key: strike
+      Value:
+      - action: 0
+        castable: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
+    - Key: wait
+      Value:
+      - action: 0
+        castable: {fileID: 11400000, guid: f1735efb0dc813e40b68097664d02688, type: 2}
+    keyCollision: 0
+  reposSlot: {fileID: 0}
+  targetSlot: {fileID: 0}
   comfortDistance: 0
+  charge: 0

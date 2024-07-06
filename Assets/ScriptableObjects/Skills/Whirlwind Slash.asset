@@ -38,6 +38,6 @@ MonoBehaviour:
   side: 1
   doesntNeedUnitInSlot: 0
   canHitBreakableSlots: 1
-  radius: 1
+  radius: 3
   castOnCasterSlot: 0
   showHealthBars: 1

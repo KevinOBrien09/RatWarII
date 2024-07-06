@@ -21,11 +21,14 @@ public class BulkenCast : StatModifierCast
             { 
                 CamFollow.inst.ChangeCameraState(CameraState.LOCK); 
             });
-            ParticleSystem p =  Instantiate(pSystem, args.caster.transform);
+            ParticleSystem p =  Instantiate(pSystem, args.caster.transform.parent);
+            p.transform.localPosition = Vector3.zero;
             args.caster.graphic.CustomColourFlash(()=>
             {
-                p.Play();
-                p.gameObject.GetComponent<ParticleSystemRenderer>().sortingOrder = args.caster.graphic.allRenderers[0].sortingOrder;
+                p.Play(); 
+             
+           
+               // p.gameObject.GetComponent<ParticleSystemRenderer>().sortingOrder = -999;
                 PlaySound(0,args.skill);
                 StatusEffects.StatMod(args.target,args.skill,turnDuration,change, statToChange);
                 ObjectPoolManager.inst.Get<BattleNumber>(ObjectPoolTag.BATTLENUMBER).Go("DEF <size=90%>^25",Color.yellow,args.caster.transform.position);

@@ -39,7 +39,7 @@ MonoBehaviour:
   resourceCost: 10
   additionalMoveTokenCost: 0
   intendedResource: 1
-  side: 0
+  side: 1
   doesntNeedUnitInSlot: 1
   canHitBreakableSlots: 1
   passThrough: 1

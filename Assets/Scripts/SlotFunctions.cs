@@ -118,12 +118,69 @@ public class SlotFunctions
         }
         return slots;
     }
- 
 
-    public List<Slot> GetRadiusSlots(int radius,Skill skill,bool fuckItWeBall)
+    public List<Slot> GetProjectilePath(ProjectileSkill skill)
+    {
+        switch(skill.projectilePath)
+        {
+            case ProjectileSkill.ProjectilePathShape.PLUS:
+            return new List<Slot>(GetSlotsInPlusShape(skill.howManyTiles,skill));
+            case ProjectileSkill.ProjectilePathShape.VERT:
+            return  new List<Slot>(GetVerticalSlots(skill.howManyTiles,skill));
+            case ProjectileSkill.ProjectilePathShape.HORI:
+            return new  List<Slot>(GetHorizontalSlots(skill.howManyTiles,skill));
+            case ProjectileSkill.ProjectilePathShape.X:
+            return  new List<Slot>(GetXSlots(skill.howManyTiles,skill));
+            case ProjectileSkill.ProjectilePathShape.ASTERISK:
+            return  new List<Slot>(GetAsteriskSlots(skill.howManyTiles,skill));
+            default:
+            Debug.LogAssertion("PROJECTILE PATH NOT IMPLEMENTED!!");
+            return null;
+        }
+    }
+
+    public List<Slot> GetProjectilePathIgnoreBlockage(ProjectileSkill skill)
+    {
+        switch(skill.projectilePath)
+        {
+            case ProjectileSkill.ProjectilePathShape.PLUS:
+            return new List<Slot>(GetSlotsInPlusShape(skill.howManyTiles,null));
+            case ProjectileSkill.ProjectilePathShape.VERT:
+            return  new List<Slot>(GetVerticalSlots(skill.howManyTiles,null));
+            case ProjectileSkill.ProjectilePathShape.HORI:
+            return new  List<Slot>(GetHorizontalSlots(skill.howManyTiles,null));
+            case ProjectileSkill.ProjectilePathShape.X:
+            return  new List<Slot>(GetXSlots(skill.howManyTiles,skill));
+            case ProjectileSkill.ProjectilePathShape.ASTERISK:
+            return  new List<Slot>(GetAsteriskSlots(skill.howManyTiles,skill));
+            default:
+            Debug.LogAssertion("PROJECTILE PATH NOT IMPLEMENTED!!");
+            return null;
+        }
+    }
+
+    public List<Slot> GetRing(int radius)
+    {
+        if(radius < 2)
+        {
+            Debug.LogWarning("RADIUS MUST BE OVER 2");
+            return GetRawRadiusSlots(1);
+        }
+        List<Slot> candidates = new List<Slot>();
+        List<Slot> fullRadius = GetRawRadiusSlots(radius);
+        List<Slot> cutOutRadius = GetRawRadiusSlots(radius-1);
+        foreach (var item in fullRadius)
+        {
+            if(!cutOutRadius.Contains(item))
+            {candidates.Add(item);}
+        }
+        return candidates;
+    }
+
+    public List<Slot> GetRawRadiusSlots(int radius)
     {
         List<Slot> candidateSlots = new List<Slot>();
-        List<Slot> validSlots = new List<Slot>();
+       
         Collider[] c = Physics.OverlapSphere(slot.transform.position,radius*5);
         foreach(var item in c)
         {
@@ -132,61 +189,71 @@ public class SlotFunctions
             }
             Slot s = null;
             bool v = item.TryGetComponent<Slot>(out s);
-            if(v && MapManager.inst.slotBelongsToGrid(s))  
-            {
-                if(fuckItWeBall){
-                    if(s.cont.walkable())
-                    {candidateSlots.Add(s);}
-                }
-                else if(skill != null)
-                {
-                    // if(s.cont.unit != null){
-                    //     if(!s.cont.unit.isEntity())
-                    //     {
-                    //         if(skill.canHitBreakableSlots)
-                    //         {
-                    //             candidateSlots.Add(s);
-                    //           //"Breakable and we can break"
-                    //             continue;
-                    //         }
-                    //         else
-                    //         {
-                    //            //"Current slot is occupied by breakable but we cannot break"
-                    //             continue;
-                    //         }
-                          
-                    //     }
-                      
-                    // }
+            if(v&& MapManager.inst.slotBelongsToGrid(s)){
+                candidateSlots.Add(s);
+            }
+        }
 
+        return candidateSlots;
+    }
+ 
 
-                    if(skill is RadiusSkill rSkill)
-                    {
-                        if(rSkill.cannotCastOnSpecialSlot) //temp terrain
-                        {
-                            if(s.cont.walkable() && s.cont.specialSlot == null)
-                            {
-                                candidateSlots.Add(s);
-                            }
-                        }
-                         else{
-                            
-                            candidateSlots.Add(s);
-                        }
-                        
-                    }
-                    else{
-                       candidateSlots.Add(s);
-                    }
-
-                  
-                }
-                else
+    public List<Slot> GetRadiusSlots(int radius,Skill skill,bool fuckItWeBall)
+    {
+        List<Slot> raw = GetRawRadiusSlots(radius);
+        List<Slot> candidateSlots = new List<Slot>();
+        // Collider[] c = Physics.OverlapSphere(slot.transform.position,radius*5);
+        foreach(var s in raw)
+        { 
+            if(fuckItWeBall){
+                if(s.cont.walkable())
                 {candidateSlots.Add(s);}
             }
-         
+            else if(skill != null)
+            {
+                // if(s.cont.unit != null){
+                //     if(!s.cont.unit.isEntity())
+                //     {
+                //         if(skill.canHitBreakableSlots)
+                //         {
+                //             candidateSlots.Add(s);
+                //           //"Breakable and we can break"
+                //             continue;
+                //         }
+                //         else
+                //         {
+                //            //"Current slot is occupied by breakable but we cannot break"
+                //             continue;
+                //         }
+                //}
+                //}
+                if(skill is RadiusSkill rSkill)
+                {
+                    if(rSkill.cannotCastOnSpecialSlot) //temp terrain
+                    {
+                        if(s.cont.walkable() && s.cont.specialSlot == null)
+                        {
+                            candidateSlots.Add(s);
+                        }
+                    }
+                        else{
+                        
+                        candidateSlots.Add(s);
+                    }
+                    
+                }
+                else{
+                    candidateSlots.Add(s);
+                }
+
+                
+            }
+            else
+            {candidateSlots.Add(s);}
         }
-     
+         
+        
+      
         List<Slot> ss = new List<Slot>(FilterUnadjacents(candidateSlots,new List<Slot>(),skill));
        
         if(ss.Contains(slot))

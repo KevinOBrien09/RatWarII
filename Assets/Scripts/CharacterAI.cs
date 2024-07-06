@@ -5,17 +5,19 @@ using UnityEngine.EventSystems;
 using System.Linq;
 public class CharacterAI : MonoBehaviour
 {
-//     public enum EnemyState{CHASING,INRANGE,RETREAT}
-  public Unit unit;
-  
-//     [Range(0,100)]  public int runAwayThreshhold = 20;
-//     public EnemyState enemyState;
-//     public Slot poi,loc;
+    public CharacterAIFunctions chrFunc;
+    public List<Material> test = new List<Material>();
+    public Unit unit;
     public Skill strike;
+    public GenericDictionary<string,List<EnemyAction>> possibleActions = new GenericDictionary<string, List<EnemyAction>>();
+    public Queue<EnemyAction> actionQ = new Queue<EnemyAction>();
+    public Slot reposSlot,targetSlot;
     public void Init(Unit u)
     {
+        chrFunc = new CharacterAIFunctions();
+        chrFunc.unit = u;
         unit = u;
-
+        
         unit.baselineTokens = new BattleTokens();
         unit.baselineTokens.actionToken = 1;
         unit.baselineTokens.moveToken = 1;
@@ -24,11 +26,84 @@ public class CharacterAI : MonoBehaviour
 
     public virtual void ConductTurn()
     {
-    
+        actionQ.Clear();
+        List<EnemyAction> e = WhatToDo();
+        if(e!= null){
+            foreach (var item in e)
+            { actionQ.Enqueue(item); }
+            DoNextAction();
+        }
+        else{
+            Debug.LogAssertion("ENEMY ACTIONS ARE NULL!!!");
+            DoNextAction();
+        }
+          
+   
     }
 
-    public virtual void DoNextAction(){
-   //BattleManager.inst.UnitIteration();
+    public virtual List<EnemyAction>  WhatToDo(){
+        
+        return possibleActions.First().Value;
+    }
+
+    public virtual void DoNextAction()
+    {
+       StartCoroutine(q());
+        IEnumerator q()
+        {
+            yield return new WaitForSeconds(.2f);
+            if(actionQ.Count > 0)
+            {
+                EnemyAction ea = actionQ.Dequeue();
+
+                switch(ea.action)
+                {
+                    case E_Action.RUN_AWAY:
+                    unit.battleTokens.DeductMoveToken();
+                   // Move(chrFunc.GetFurthestSlotToWalkTo());
+                    break;
+
+                    case E_Action.SKILL:
+                    unit.battleTokens.DeductActionToken();
+                    CastSkill(ea.castable as Skill);
+                    break;
+
+                    case E_Action.END:
+                    Fin();
+                    break;
+
+                    case E_Action.REPOS:
+                    if(reposSlot != null){
+                        unit.battleTokens.DeductMoveToken();
+                        Move(reposSlot);
+                        reposSlot = null;
+                    }
+                    else
+                    {
+                     
+                        Debug.LogAssertion("REPOS SLOT IS NULL!!!");
+                        Fin();
+                    }
+                    break;
+
+                    default:
+                    Fin();
+                    break;
+
+                }
+            }
+            else
+            {
+                Fin();
+            }
+
+           
+        }
+    }
+    void Fin()
+    {
+        BattleManager.inst.UnitIteration();
+        MapManager.inst.map.UpdateGrid();
     }
 
     
@@ -37,175 +112,59 @@ public class CharacterAI : MonoBehaviour
         StartCoroutine(q());
         IEnumerator q()
         {
-            yield return new WaitForSeconds(.5f);
+            yield return new WaitForSeconds(.2f);
             UnitMover.inst.EnterSelectionMode(BattleManager.inst.currentUnit.slot);
             UnitMover.inst.InitializeMove(slot);
             while(unit.moving)
             {yield return null;}
             SlotInfoDisplay.inst.Disable();
-            yield return new WaitForSeconds(.2f);
+            yield return new WaitForSeconds(.1f);
             UnitMover.inst.ExitSelectionMode();
-            yield return new WaitForSeconds(.2f);
+            yield return new WaitForSeconds(.1f);
             DoNextAction();
         }
     }
-
-    public Slot GetFurthestSlotToWalkTo(){
-        Slot sl = null;
-        List<Slot> candidates = new List<Slot>();
-        foreach (var item in unit.slot.func.GetRadiusSlots(unit.stats().moveRange,null,false))
-        {
-            if(CanWalkTo(item))
-            {
-                if(!candidates.Contains(item))
-                {candidates.Add(item);}
-            }
-        }
-        List<Slot>  orderedByclosest = candidates.Where(n => n && n != this).OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();
-        sl = orderedByclosest.Last();
-        return sl; 
-      
-    }
-
-    public bool canMove()
-    {
-        List<Slot> ss = unit.slot.func.GetRadiusSlots(unit.stats().moveRange,null,false);
-        foreach (var item in ss)
-        {
-            if(CanWalkTo(item))
-            {return true;}
-        }
-
-        return false;
-    }
-
-    public bool CanWalkTo(Slot s){
-        List<Node> n =  MapManager.inst.map.aStar.FindPath(unit.slot.node,s.node);
-        if(n.Contains(s.node))
-        {return true;}
-        else
-        {return false;}
-    }
     
-    public bool PlayerUnitInRadiusDIST(int radius)
+    
+
+    
+
+    public virtual Unit WhoToTarget(List<Unit> u)
     {
-        Dictionary<Unit,List<Slot>> playerUnitDict = PathsToPlayerUnits();
-        foreach (var item in playerUnitDict)
-        {
-            float a = Vector3.Distance(unit.slot.transform.position,item.Key.slot.transform.position);
-            int r = (int)a/5;
-            if(r <= radius)
-            {return true;}
-        }
-        return false;
+        return chrFunc.GetLowestHealth(u);
     }
 
-
-    public (Unit,List<Slot>) GetClosestUnit()
-    {
-        Unit u = null;
-        List<Slot> s = null;
-        Dictionary<Unit,List<Slot>> playerUnitDict = PathsToPlayerUnits();
-        
-        foreach (var item in playerUnitDict)
-        {
-            if(s == null){
-                u = item.Key;
-                s = item.Value;
-            }
-            else 
-            {
-                float a = Vector3.Distance(unit.transform.position, item.Key.transform.position);
-                float b = Vector3.Distance(unit.transform.position, u.transform.position);
-                if(a < b){
-                    u = item.Key;
-                    s = item.Value;
-                }
-            }
-        }
-        return (u,s);
-    }
-
-
-
-   public (Unit,List<Slot>) GetFurthestUnit()
-    {
-        Unit u = null;
-        List<Slot> s = null;
-        int i = 0;
-        foreach (var item in PathsToPlayerUnits())
-        {
-            if(i < item.Value.Count)
-            {
-                u = item.Key;
-                s = item.Value;
-            }
-        }
-        return (u,s);
-    }
-
-    public Dictionary<Unit,List<Slot>> PathsToPlayerUnits()
-    {return PathsToUnits(BattleManager.inst.playerUnits);}
-
-    public Dictionary<Unit,List<Slot>> PathsToEnemyUnits()
-    {
-        List<Unit> u = new List<Unit>(BattleManager.inst.enemyUnits);
-        if(u.Contains(unit))
-        {u.Remove(unit);}
-        return PathsToUnits(u);
-    }
-
-    public Dictionary<Unit,List<Slot>> PathsToUnits(List<Unit> u)
-    {
-        Dictionary<Unit,List<Slot>> d = new Dictionary<Unit, List<Slot>>();
-        foreach (var item in u)
-        {
-            d.Add(item,new List<Slot>());
-            Slot sl = GetSlotAdjacentToUnit(item);
-            if(sl != null){
-                List<Node> path =  MapManager.inst.map.aStar.FindPath(unit.slot.node,sl.node); 
-                if(path.Contains(unit.slot.node)) 
-                {path.Remove(unit.slot.node);}
-                
-                foreach (var node in path)
-                { d[item].Add(node.slot); }
-            }
-            
-        }   
-        return d;
-    }
-
-    public Slot GetSlotAdjacentToUnit(Unit u)
-    {
-        List<Slot> candidates = new List<Slot>();
-        foreach (var item in u.slot.func.GetSlotsInPlusShape(1))
-        {
-            if(item.cont.walkable() && !item.node.isBlocked)
-            {
-                candidates.Add(item);
-            }
-        }
-
-        List<Slot>  closest = candidates.Where(n => n && n != this).OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();
-        if(closest.Count > 0){
-            return closest.First();
-        }
-        else
-        {
-            Debug.Log("No valid slots next to: " + u.character.characterName.fullName()); 
-            return null;
-        }
-    }
-
-
+  
+    
     public  void CastSkill(Skill s)
     {
         if(s is SelfSkill selfSkill)
         {
             SkillAimer.inst._skill = s;
             CamFollow.inst.target = unit.slot.transform;
+            foreach (var item in unit.slot.func.GetRadiusSlots(selfSkill.radius,selfSkill,false))
+            {
+                SkillAimer.inst.validSlots.Add(item);
+            }
+        
             SkillAimer.inst.validSlots.Add(unit.slot);
             SkillAimer.inst.RecieveSlot(unit.slot);
+        }
+        else if(s is RadiusSkill radiusSkill)
+        {
+            if(targetSlot != null){
+                CamFollow.inst.target = unit.slot.transform;
+                SkillAimer.inst.validSlots.Add(targetSlot);
+                SkillAimer.inst._skill = s;
+                SkillAimer.inst.RecieveSlot(targetSlot);
+                targetSlot = null;
+            }
+            else{
+                Debug.LogAssertion("TARGET SLOT IS NULL");
+                Fin();
+
+            }
+           
         }
         // else if(s is ProjectileSkill proj)
         // {
@@ -214,49 +173,134 @@ public class CharacterAI : MonoBehaviour
         //     SkillAimer.inst._skill = s;
         //     SkillAimer.inst.RecieveSlot(poi);
         // }
-        // else if(s is RadiusSkill radiusSkill)
-        // {
-        //     CamFollow.inst.target = unit.slot.transform;
-        //     SkillAimer.inst.validSlots.Add(poi);
-        //     SkillAimer.inst._skill = s;
-        //     SkillAimer.inst.RecieveSlot(poi);
-        // }
+     
     }
 
 
 
-//     public bool canCast(Skill s)
-//     {
-//         if(s is SelfSkill selfSkill)
-//         {
-//             SkillAimer.inst.slot = unit.slot;
-//             SkillAimer.inst.caster = unit;
-           
-//             return true;
-//         }
-//         else if(s is ProjectileSkill proj)
-//         {
-//             SkillAimer.inst.slot = unit.slot;
-//             SkillAimer.inst.caster = unit;
-//             SkillAimer.inst.ProjectileAim(proj);
-//             if(SkillAimer.inst.validSlots.Contains(poi))
-//             {return true;}
-//             else
-//             {
-//                 SkillAimer.inst.validSlots.Clear();
-//                 return false;
-//             }
-//         }
-//         else if(s is RadiusSkill radiusSkill)
-//         {
-//             float dist = Vector3.Distance(unit.transform.position,poi.transform.position);
-//             float distToPOI = (int) dist/5;
-//             return distToPOI <= radiusSkill.radius;
-//         }
+     public (List<Slot> fullRange,List<Unit> allNearbyUnits) PreRadiusSkill(RadiusSkill rs)
+    {
+        int XD = rs.radius + unit.stats().moveRange + 1;
+        List<Slot> accounted = new List<Slot>();
+        List<Unit> allUnitsInRadius = new List<Unit>();
+        for (int i = 0; i < XD; i++)
+        {
+            var sl = unit.slot.func.GetRawRadiusSlots(i);
+            List<Unit> un = new List<Unit>();
+            foreach (var item in sl)
+            {
+                if(!accounted.Contains(item))
+                {
+                    if(item != unit.slot)
+                    {
+                        accounted.Add(item);
+                        Unit u = item.cont.unit;
+                        if(u !=null)
+                        {
+                            if(u.side == Side.PLAYER)
+                            { 
+                                un.Add(u); 
+                                allUnitsInRadius.Add(u);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-//         return false;
-//     }
+        return (accounted,allUnitsInRadius);
+    }
     
+
+  
+
+    public List<EnemyAction> LockInRadiusSkill(List<Unit> allNearbyUnits,List<Slot> fullRange,RadiusSkill rs,string actionTag)
+    {
+        bool nearbyEnemyUnit = false;
+        Unit closestUnit = null;
+        List<Slot> nearby = unit.slot.func.GetRawRadiusSlots(1);
+        foreach (var item in nearby)
+        {
+            if(item.cont.unit != null)
+            {
+                if(item.cont.unit.side == Side.PLAYER)
+                {
+                    Debug.Log(item.cont.unit.character.characterName.firstName);
+                    nearbyEnemyUnit = true;
+                }
+            }
+        }
+
+        if(nearbyEnemyUnit) //kinda workimg
+        {
+            Slot sl = null;
+            closestUnit = chrFunc.SortByClosest(allNearbyUnits,unit.transform.position).First();
+
+            Debug.Log(closestUnit.character.characterName.firstName + " is 1 tile away from caster!");
+
+             List<Slot> potentialMoveTos = closestUnit.slot.func.GetRing(rs.radius);
+            List<Slot>  orderedByclosest = potentialMoveTos.Where(n => n && n != this).OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();
+            orderedByclosest.Reverse();
+            foreach (var item in orderedByclosest)
+            {
+                if(fullRange.Contains(item))
+                {
+                    if(item.cont.walkable())
+                    {
+                        if(chrFunc.CanWalkTo(item))
+                        {
+                            reposSlot =  item;
+                            targetSlot = closestUnit.slot;
+                            return possibleActions["repos-"+actionTag];
+                        }
+                    }
+                }
+            }
+            //Slot sl = chrFunc.GetFurthestSlotFromPoint(unit.slot.func.GetRadiusSlots(move,null,false),closestUnit.slot);
+          
+
+        }
+        List<Slot> strikeRadius = unit.slot.func.GetRawRadiusSlots(rs.radius);
+        foreach (var pUnit in chrFunc.SortByLowestHealth(BattleManager.inst.playerUnits))
+        {
+            if(allNearbyUnits.Count > 0)
+            {
+                Unit target =  pUnit;
+                List<Slot> potentialMoveTos = target.slot.func.GetRing(rs.radius);
+                List<Slot>  orderedByclosest = potentialMoveTos.Where(n => n && n != this).OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();
+                if(potentialMoveTos.Contains(unit.slot))
+                {
+                    if(!nearbyEnemyUnit)
+                    {
+                        targetSlot = target.slot;
+                        return possibleActions[actionTag];
+                    }
+                   
+                }
+                
+                foreach (var item in orderedByclosest)
+                {
+                    if(fullRange.Contains(item))
+                    {
+                        if(item.cont.walkable())
+                        {
+                            if(chrFunc.CanWalkTo(item))
+                            {
+                                reposSlot =  item;
+                                targetSlot = target.slot;
+                                return possibleActions["repos-"+actionTag];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Debug.LogAssertion("NO POSSIBLE RADIUS CAST SCENARIO, VERY BAD!!!");
+        return null;
+    }
+
+
 
 
 
