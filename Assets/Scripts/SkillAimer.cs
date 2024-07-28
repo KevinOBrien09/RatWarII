@@ -76,7 +76,7 @@ public class SkillAimer : Singleton<SkillAimer>
                     skillCastBehaviour  = Instantiate( _skill.skillCastBehaviour);
                     int realCost = BattleManager.inst.currentUnit.skillResource.Convert(_skill.intendedResource,_skill.resourceCost);
                     BattleManager.inst.currentUnit.skillResource.Spend(realCost);
-                    caster.battleTokens.DeductActionToken();
+                    BattleManager.inst.currentUnit.battleTokens.DeductActionToken();
                     if(ActionMenu.inst.currentState == ActionMenuState.ITEM)
                     {
                         if(BattleManager.inst.currentUnit.side == Side.PLAYER)

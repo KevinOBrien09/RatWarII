@@ -196,6 +196,29 @@ public class SlotFunctions
 
         return candidateSlots;
     }
+
+    public List<Unit> GetSurrondingUnits(int radius){
+
+          List<Unit> cu = new List<Unit>();
+       //look radius
+        List<Slot> nearby = GetRawRadiusSlots(radius);
+        foreach (var item in nearby)
+        {
+            if(item.cont.unit != null)
+            {
+                Unit u = item.cont.unit;
+              
+                if(!cu.Contains(u))
+                {cu.Add(u); }
+                
+
+                
+            }
+        }
+        return cu;
+
+    }
+    
  
 
     public List<Slot> GetRadiusSlots(int radius,Skill skill,bool fuckItWeBall)

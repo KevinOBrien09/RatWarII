@@ -60,12 +60,18 @@ public class CharacterAI : MonoBehaviour
                 {
                     case E_Action.RUN_AWAY:
                     unit.battleTokens.DeductMoveToken();
-                   // Move(chrFunc.GetFurthestSlotToWalkTo());
+                    Move(GetRunAwaySlot(3));
                     break;
 
                     case E_Action.SKILL:
                     unit.battleTokens.DeductActionToken();
                     CastSkill(ea.castable as Skill);
+                    break;
+
+                    case E_Action.RUN_TOWARD:
+                    unit.battleTokens.DeductMoveToken();
+                    Move(reposSlot);
+                    reposSlot = null;
                     break;
 
                     case E_Action.END:
@@ -210,72 +216,165 @@ public class CharacterAI : MonoBehaviour
 
         return (accounted,allUnitsInRadius);
     }
-    
 
-  
-
-    public List<EnemyAction> LockInRadiusSkill(List<Unit> allNearbyUnits,List<Slot> fullRange,RadiusSkill rs,string actionTag)
-    {
-        bool nearbyEnemyUnit = false;
-        Unit closestUnit = null;
-        List<Slot> nearby = unit.slot.func.GetRawRadiusSlots(1);
-        foreach (var item in nearby)
+    public Slot RandomSlotInMoveRange(){
+        List<Slot> moveRadius = unit.slot.func.GetRadiusSlots(unit.stats().moveRange,null,false);
+        System.Random rng = new System.Random();
+        moveRadius =  moveRadius.OrderBy(_ => rng.Next()).ToList();
+        foreach (var item in moveRadius)
         {
-            if(item.cont.unit != null)
+            if(moveRadius.Contains(item))
             {
-                if(item.cont.unit.side == Side.PLAYER)
+                if(item.cont.walkable())
                 {
-                    Debug.Log(item.cont.unit.character.characterName.firstName);
-                    nearbyEnemyUnit = true;
-                }
-            }
-        }
-
-        if(nearbyEnemyUnit) //kinda workimg
-        {
-            Slot sl = null;
-            closestUnit = chrFunc.SortByClosest(allNearbyUnits,unit.transform.position).First();
-
-            Debug.Log(closestUnit.character.characterName.firstName + " is 1 tile away from caster!");
-
-             List<Slot> potentialMoveTos = closestUnit.slot.func.GetRing(rs.radius);
-            List<Slot>  orderedByclosest = potentialMoveTos.Where(n => n && n != this).OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();
-            orderedByclosest.Reverse();
-            foreach (var item in orderedByclosest)
-            {
-                if(fullRange.Contains(item))
-                {
-                    if(item.cont.walkable())
+                    if(chrFunc.CanWalkTo(item))
                     {
-                        if(chrFunc.CanWalkTo(item))
-                        {
-                            reposSlot =  item;
-                            targetSlot = closestUnit.slot;
-                            return possibleActions["repos-"+actionTag];
-                        }
+                        
+                        return item;
                     }
                 }
             }
-            //Slot sl = chrFunc.GetFurthestSlotFromPoint(unit.slot.func.GetRadiusSlots(move,null,false),closestUnit.slot);
-          
-
         }
+        Debug.LogAssertion("NO RNG SLOT");
+        return null;
+    }
+    
+    public Slot MoveTowardUnitGroup(List<Unit> units){
+        List<Slot> slots = new List<Slot>();
+        foreach (var item in units)
+        {
+            slots.Add(item.slot);
+        }
+
+        Slot mid = MapManager.inst.map.startRoom.GetCenterSlotInGroup(slots);
+        List<Slot> moveRadius = unit.slot.func.GetRadiusSlots(unit.stats().moveRange,null,false);
+        foreach (var item in  chrFunc.GetClosestSlotFromPoint(moveRadius,mid))
+        {
+            if(moveRadius.Contains(item))
+            {
+                if(item.cont.walkable())
+                {
+                    if(chrFunc.CanWalkTo(item))
+                    {
+                        
+                        return item;
+                    }
+                }
+            }
+        }
+        Debug.LogAssertion("NO MOVE TOWARD SLOT");
+        return null;
+    }
+  
+
+    public List<EnemyAction> ReposIntoRadiusSkillCAUTIOUS(List<Unit> allNearbyUnits,List<Slot> fullRange,RadiusSkill rs,string actionTag,int lookRadius = 3)
+    {
+        //tries to run away from surronding units whilst remaining in a cast radius
+        //targeting closest
+
+        bool awkward = false;
+        List<Unit> surrondingUnits = unit.slot.func.GetSurrondingUnits(lookRadius);
+        foreach (var item in chrFunc.GetAllyUnits())
+        {
+            if(surrondingUnits.Contains(item))
+            {surrondingUnits.Remove(item); }
+        }
+
+        awkward = surrondingUnits.Count >= 2;
+     
+        Unit closestUnit = null;
+        // 
+       var c = chrFunc.SortByClosest(allNearbyUnits,unit.transform.position);
+        closestUnit =   c[0];
+        //c[Random.Range(0,c.Count)];
+     //   [0,]
+        //.First();
+     
+        List<Slot> potentialMoveTos = closestUnit.slot.func.GetRing(rs.radius);
+        List<Slot>  orderedByclosest = potentialMoveTos.Where(n => n && n != this).OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();
+        orderedByclosest.Reverse();
+        List<Slot> enemyCenter = new List<Slot>();
+        if(surrondingUnits.Count == 0){
+            surrondingUnits = new List<Unit>(chrFunc.GetOpposingUnits());
+        }
+        foreach (var item in surrondingUnits)
+        {
+            enemyCenter.Add(item.slot);
+        }
+        Slot mid = MapManager.inst.map.startRoom.GetCenterSlotInGroup(enemyCenter);
+        foreach (var item in  chrFunc.GetFurthestSlotFromPoint(orderedByclosest,mid))
+        {
+            if(fullRange.Contains(item))
+            {
+                if(item.cont.walkable())
+                {
+                    if(chrFunc.CanWalkTo(item))
+                    {
+                        reposSlot =  item;
+                        targetSlot = closestUnit.slot;
+                        return possibleActions["repos-"+actionTag];
+                    }
+                }
+            }
+        }
+
+        Debug.LogWarning("No optimal slot to move to, casting on same slot. This should not happen.");
+        targetSlot = closestUnit.slot;
+        return possibleActions[actionTag];
+    }
+
+    public Slot GetRunAwaySlot(int radius)
+    {
+        List<Unit> surrondingUnits = unit.slot.func.GetSurrondingUnits(radius);
+        List<Slot> enemyCenter = new List<Slot>();
+        List<Slot> moveRadius = unit.slot.func.GetRadiusSlots(unit.stats().moveRange,null,false);
+        foreach (var item in surrondingUnits)
+        {
+            if(chrFunc.GetOpposingUnits().Contains(item)){
+                enemyCenter.Add(item.slot);
+            }
+           
+        }
+        Slot mid = MapManager.inst.map.startRoom.GetCenterSlotInGroup(enemyCenter);
+        foreach (var item in  chrFunc.GetFurthestSlotFromPoint(moveRadius,mid))
+        {
+            if(moveRadius.Contains(item))
+            {
+                if(item.cont.walkable())
+                {
+                    if(chrFunc.CanWalkTo(item))
+                    {
+                        return item;
+                    }
+                }
+            }
+        }
+        Debug.LogAssertion("RunAwaySlot");
+        return null;
+    }
+
+    public List<EnemyAction> ReposIntoRadiusSkillNORMAL(List<Unit> allNearbyUnits,List<Slot> fullRange,RadiusSkill rs,string actionTag,List<Unit> targets)
+    {
+        //tries and space out to the maximum skill cast radius
+        //if the target is already within range do not move and just cast instead.
+        
+        Unit closestUnit = null;
+        closestUnit = chrFunc.SortByClosest(allNearbyUnits,unit.transform.position).First();
+        List<Slot> potentialMoveTos = closestUnit.slot.func.GetRing(rs.radius);
+        Slot sl = chrFunc.GetFurthestSlotFromPoint(unit.slot.func.GetRadiusSlots(unit.stats().moveRange,null,false),closestUnit.slot).First();
         List<Slot> strikeRadius = unit.slot.func.GetRawRadiusSlots(rs.radius);
-        foreach (var pUnit in chrFunc.SortByLowestHealth(BattleManager.inst.playerUnits))
+        foreach (var pUnit in targets)
         {
             if(allNearbyUnits.Count > 0)
             {
                 Unit target =  pUnit;
-                List<Slot> potentialMoveTos = target.slot.func.GetRing(rs.radius);
-                List<Slot>  orderedByclosest = potentialMoveTos.Where(n => n && n != this).OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();
-                if(potentialMoveTos.Contains(unit.slot))
+                List<Slot> r = target.slot.func.GetRing(rs.radius);
+                
+                List<Slot>  orderedByclosest = r.Where(n => n && n != this).OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();
+                if( orderedByclosest.Contains(unit.slot))
                 {
-                    if(!nearbyEnemyUnit)
-                    {
-                        targetSlot = target.slot;
-                        return possibleActions[actionTag];
-                    }
-                   
+                    targetSlot = target.slot;
+                    return possibleActions[actionTag];
                 }
                 
                 foreach (var item in orderedByclosest)
@@ -298,7 +397,39 @@ public class CharacterAI : MonoBehaviour
 
         Debug.LogAssertion("NO POSSIBLE RADIUS CAST SCENARIO, VERY BAD!!!");
         return null;
+
     }
+
+    public bool NoNeedToReposRadius(List<Unit> allNearbyUnits,List<Slot> fullRange,RadiusSkill rs,string actionTag)
+    {
+        //tries and space out to the maximum skill cast radius whilst targeting the lowest health unit.
+        //if the target is already within range do not move and just cast instead.
+        
+        Unit closestUnit = null;
+        closestUnit = chrFunc.SortByClosest(allNearbyUnits,unit.transform.position).First();
+        List<Slot> potentialMoveTos = closestUnit.slot.func.GetRing(rs.radius);
+        Slot sl = chrFunc.GetFurthestSlotFromPoint(unit.slot.func.GetRadiusSlots(unit.stats().moveRange,null,false),closestUnit.slot).First();
+        List<Slot> strikeRadius = unit.slot.func.GetRawRadiusSlots(rs.radius);
+        foreach (var pUnit in chrFunc.SortByLowestHealth(BattleManager.inst.playerUnits))
+        {
+            if(allNearbyUnits.Count > 0)
+            {
+                Unit target =  pUnit;
+                List<Slot> r = target.slot.func.GetRing(rs.radius);
+                
+                List<Slot>  orderedByclosest = r.Where(n => n && n != this).OrderBy(n => (n.transform.position - unit.transform.position).sqrMagnitude).ToList();
+                if( orderedByclosest.Contains(unit.slot))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+    
 
 
 

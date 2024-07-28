@@ -15,7 +15,7 @@ public class CharacterAIFunctions
     }  
     
     public List<Unit> SortByLowestHealth(List<Unit> u)
-    {return  u.OrderBy(f => f.health.currentHealth).ToList();}
+    {return  u.OrderBy(f => f.health.HealthPercentage()).ToList();}
 
     public List<Unit> SortByClosest(List<Unit> u,Vector3 point)
     {return u.Where(n => n && n != unit).OrderBy(n => (n.transform.position - point).sqrMagnitude).ToList();}
@@ -173,27 +173,31 @@ public class CharacterAIFunctions
         }
     }
 
-    public Slot GetFurthestSlotFromPoint(List<Slot> slots,Slot point)
+    public List<Slot> GetFurthestSlotFromPoint(List<Slot> slots,Slot point)
     {
-        Slot sl = null;
+
+        List<Slot>  orderedByclosest = GetClosestSlotFromPoint(slots,point);
+        orderedByclosest.Reverse();
+        return orderedByclosest; 
+    }
+
+    public List<Slot> GetClosestSlotFromPoint(List<Slot> slots,Slot point)
+    {
         List<Slot> candidates = new List<Slot>();
         foreach (var item in slots)
         {
-            if(item.cont.walkable()){
-if(!candidates.Contains(item))
-            {candidates.Add(item);}
+            if(item.cont.walkable())
+            {
+                if(!candidates.Contains(item))
+                {candidates.Add(item);}
             }
-            
-            
         }
-        List<Slot>  orderedByclosest = candidates.Where(n => n && n != unit).OrderBy(n => (n.transform.position - point.transform.position).sqrMagnitude).ToList();
-        sl = orderedByclosest.Last();
-        return sl; 
-
-        
+        List<Slot>  orderedByclosest = candidates.Where(n => n && n != unit).OrderBy(n => (
+            new Vector3(n.transform.position.x,0,n.transform.position.z)  - 
+             new Vector3(point.transform.position.x,0,point.transform.position.z)).sqrMagnitude).ToList();
+        return orderedByclosest; 
     }
     
-
     public bool canMove()
     {
         List<Slot> ss = unit.slot.func.GetRadiusSlots(unit.stats().moveRange,null,false);

@@ -356,27 +356,24 @@ public class BattleManager : Singleton<BattleManager>
                 else
                 {
                     BattleTicker.inst.Type(BattleManager.inst. TurnState());
-
+                    CamFollow.inst.Focus(currentUnit.transform,()=>{});
+                    ActionMenu.inst.ResetMoveOption();
+                
+                    yield return new WaitForSeconds(.25f);
+                    StatusEffectLoop(currentUnit);
+                    while(looping)
+                    {yield return null;}
+                   
                     CamFollow.inst.target = currentUnit.slot. transform;
-                    if(currentUnit.side == Side.PLAYER)
-                    {       
-                        CamFollow.inst.Focus(currentUnit.transform,()=>{});
-                        ActionMenu.inst.ResetMoveOption();
-                    
-                        yield return new WaitForSeconds(.25f);
-                        StatusEffectLoop(currentUnit);
-                        while(looping)
-                        {yield return null;}
-                    
-                       
-                        if(0 >= currentUnit.health.currentHealth)
-                        {
-                            Debug.Log("Unit Died from bleed");
-                            UnitIteration();
-                        }
-                        else
-                        {
-                        
+                    if(0 >= currentUnit.health.currentHealth)
+                    {
+                        Debug.Log("Unit Died from bleed");
+                        UnitIteration();
+                    }
+                    else
+                    {
+                        if(currentUnit.side == Side.PLAYER)
+                        {       
                             if(currentUnit. sounds != null)
                             {AudioManager.inst.GetSoundEffect().Play(currentUnit.sounds.turnStart);}
                         
@@ -386,20 +383,21 @@ public class BattleManager : Singleton<BattleManager>
                             ActionMenu.inst.Reset();
                             ActionMenu.inst.Show(currentUnit.slot);
                             SkillHandler.inst.NewUnit(currentUnit);
-                        }
-                    }
-                    else
-                    {   
-                        SlotInfoDisplay.inst.Apply(currentUnit.slot);
-                        GameManager.inst.ChangeGameState(GameState.ENEMYTURN);
-                        yield return new WaitForSeconds(.25f);
-                        if(currentUnit.charAI != null){
                             
-                            currentUnit.charAI.ConductTurn();
                         }
-                        else{
-                            Debug.LogAssertion("NO ENEMY AI FOUND");
-                            UnitIteration();
+                        else
+                        {   
+                            SlotInfoDisplay.inst.Apply(currentUnit.slot);
+                            GameManager.inst.ChangeGameState(GameState.ENEMYTURN);
+                            yield return new WaitForSeconds(.25f);
+                            if(currentUnit.charAI != null){
+                                
+                                currentUnit.charAI.ConductTurn();
+                            }
+                            else{
+                                Debug.LogAssertion("NO ENEMY AI FOUND");
+                                UnitIteration();
+                            }
                         }
                     }
                 }

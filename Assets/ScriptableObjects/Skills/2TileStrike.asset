@@ -10,27 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ffa5ff9dd15893c45b0be18781db98f6, type: 3}
-  m_Name: Strike
+  m_Name: 2TileStrike
   m_EditorClassIdentifier: 
-  ID: d6bf4a4c-6af8-42e8-a16f-6310278651c7
+  ID: 7c9a7ae6-54db-44f6-88f3-09d9d1a44856
   itemName:
     list:
     - Key: 0
-      Value: Strike
+      Value: q
     keyCollision: 0
   itemDesc:
-    list:
-    - Key: 0
-      Value:
-        str: Deal {STR100%} DMG to an enemy.
+    list: []
     keyCollision: 0
   skillCastBehaviour: {fileID: 5895357610692576228, guid: 416e7d8f44b6171439d6d5f65a7028ee,
     type: 3}
   value: 
   statusEffectIcon: {fileID: 0}
   sounds:
-  - audioClip: {fileID: 8300000, guid: 1cd9fbc4bb2c19749aa2e61afd72aaaa, type: 3}
-    pitchRange: {x: 0.9, y: 1}
+  - audioClip: {fileID: 8300000, guid: daa023bacd834204d80032566b612b06, type: 3}
+    pitchRange: {x: 0.9, y: 1.1}
     volume: 1
   resourceCost: 0
   additionalMoveTokenCost: 0
@@ -38,7 +35,7 @@ MonoBehaviour:
   side: 1
   doesntNeedUnitInSlot: 0
   canHitBreakableSlots: 1
-  radius: 1
+  radius: 2
   canSelfCast: 0
   showHealthBars: 1
   cannotCastOnSpecialSlot: 0

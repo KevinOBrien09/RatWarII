@@ -229,7 +229,7 @@ public class Unit : MonoBehaviour
         }
         if(side == Side.PLAYER){
             float str = (float)damage/100;
-            Debug.Log(str);
+           // Debug.Log(str);
             CameraShake.inst.Shake(.3f,str);
         }
 
@@ -381,6 +381,8 @@ public class Unit : MonoBehaviour
         healthBar.transform.parent.localScale = new Vector3(-1,1,1);
         facingRight = false;
     }
+
+ 
 
     
 

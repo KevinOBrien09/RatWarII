@@ -38,7 +38,6 @@ public class AmbushHandler : Singleton<AmbushHandler>
            
         }
         BattleManager.inst.ResetTurnOrder();
-        Debug.Log("SpawnAmbush");   
     }
 
     public  List<Slot> GetEnemyStart()

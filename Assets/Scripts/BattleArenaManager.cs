@@ -68,7 +68,6 @@ public class BattleArenaManager : Map
         Dictionary<Vector2,Slot> d = new Dictionary<Vector2, Slot>();
         int X = iGridSizeX/2;
         int Y = iGridSizeY;
-        Debug.Log(Y-2 + " " + iGridSizeY);
         d.Add(new Vector2(1,0),NodeArray[X-1,Y-3].slot);
         d.Add(new Vector2(2,0),NodeArray[X,Y-3].slot);
         d.Add(new Vector2(3,0),NodeArray[X+1,Y-3].slot);

@@ -50,6 +50,31 @@ public class Room : MonoBehaviour
         
     }
 
+    public Slot GetCenterSlotInGroup(List<Slot> gr)
+    {
+        Slot slot = null;
+        List<Transform> tr = new List<Transform>();
+        foreach(var sl in gr){
+            tr.Add(sl.transform);
+        }
+       Vector3 v = MiscFunctions.FindCenterOfTransforms(tr);
+        Collider[] c = Physics.OverlapSphere(v,1);
+        foreach(var item in c)
+        {
+            Slot s = null;
+            bool g = item.TryGetComponent<Slot>(out s);
+            if(g&& MapManager.inst.slotBelongsToGrid(s))
+            {
+              
+                    return s;
+                
+            }
+        }
+   
+
+        return slot;
+    }
+
     public void SortAnchors(){
         if(slots.Count > 0){
         anchors.Add(RoomAnchors.BOT_LEFT,slots[0]);

@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   datas:
   - battlePosition:
-      x: 2
+      x: 3
+      y: 0
+    enemy: {fileID: 11400000, guid: d9972ab41ad249648b3918e034718103, type: 2}
+  - battlePosition:
+      x: 1
       y: 0
     enemy: {fileID: 11400000, guid: d9972ab41ad249648b3918e034718103, type: 2}

@@ -57,22 +57,57 @@ MonoBehaviour:
   strike: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
   possibleActions:
     list:
+    - Key: strike
+      Value:
+      - action: 0
+        castable: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
     - Key: repos-strike
       Value:
       - action: 3
         castable: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
       - action: 0
         castable: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
-    - Key: strike
+    - Key: 2strike
       Value:
       - action: 0
-        castable: {fileID: 11400000, guid: 33c838cef9823264ba718e4c8f92796c, type: 2}
-    - Key: wait
+        castable: {fileID: 11400000, guid: 01fa555454a99f448b6e13acb752fe48, type: 2}
+    - Key: repos-2strike
+      Value:
+      - action: 3
+        castable: {fileID: 11400000, guid: 01fa555454a99f448b6e13acb752fe48, type: 2}
+      - action: 0
+        castable: {fileID: 11400000, guid: 01fa555454a99f448b6e13acb752fe48, type: 2}
+    - Key: runaway
+      Value:
+      - action: 1
+        castable: {fileID: 11400000, guid: 01fa555454a99f448b6e13acb752fe48, type: 2}
+    - Key: charge
       Value:
       - action: 0
         castable: {fileID: 11400000, guid: f1735efb0dc813e40b68097664d02688, type: 2}
+    - Key: summon
+      Value:
+      - action: 0
+        castable: {fileID: 11400000, guid: 22799f4785781cf48bcde71b8f1ecaf0, type: 2}
+    - Key: runaway-charge
+      Value:
+      - action: 1
+        castable: {fileID: 11400000, guid: f1735efb0dc813e40b68097664d02688, type: 2}
+      - action: 0
+        castable: {fileID: 11400000, guid: f1735efb0dc813e40b68097664d02688, type: 2}
+    - Key: runaway-summon
+      Value:
+      - action: 1
+        castable: {fileID: 11400000, guid: 22799f4785781cf48bcde71b8f1ecaf0, type: 2}
+      - action: 0
+        castable: {fileID: 11400000, guid: 22799f4785781cf48bcde71b8f1ecaf0, type: 2}
+    - Key: movetoward
+      Value:
+      - action: 2
+        castable: {fileID: 11400000, guid: 22799f4785781cf48bcde71b8f1ecaf0, type: 2}
     keyCollision: 0
   reposSlot: {fileID: 0}
   targetSlot: {fileID: 0}
-  comfortDistance: 0
+  lookRadius: 2
   charge: 0
+  summonCD: 0

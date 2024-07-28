@@ -116,6 +116,10 @@ public class Health : MonoBehaviour
         return hp > 0;      
     }
 
+    public float HealthPercentage(){
+        return  ((float) currentHealth / (float)maxHealth) * 100;
+    }
+
     public void Hit(int damage,CastArgs castArgs)
     {   
         for (int i = 0; i < damage; i++)
